@@ -1,0 +1,4 @@
+[submodule "src/handbook"]
+	path = src/handbook
+	url = https://github.com/datalad-handbook/book.git
+	datalad-url = https://github.com/datalad-handbook/book.git
