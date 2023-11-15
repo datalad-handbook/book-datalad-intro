@@ -7,13 +7,14 @@ available for download at
 \sphinxurl{https://github.com/datalad-handbook/artwork/raw/main/src/datalad-cheatsheet.pdf}
 
 % force the cheatsheet on an even-numbered page
+\newgeometry{lmargin=15mm,rmargin=6mm,marginpar=0mm}
 \clearpage{\thispagestyle{empty}\cleardoublepage}
 {\thispagestyle{empty}%
-
-\noindent\sphinxincludegraphics[width=1.000\linewidth]{{datalad-cheatsheet_p1}.png}
+\noindent\sphinxincludegraphics[width=\linewidth]{{datalad-cheatsheet_p1}.png}
 
 } % end empty page style
-\newpage
+\restoregeometry
+%\newpage
 \clearpage{\thispagestyle{empty}\cleardoublepage}
 
 
