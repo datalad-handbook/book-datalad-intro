@@ -1,0 +1,879 @@
+\chapter{Distributing datasets}
+\label{\detokenize{basics/basics-thirdparty:distributing-datasets}}\label{\detokenize{basics/basics-thirdparty:chapter-thirdparty}}\label{\detokenize{basics/basics-thirdparty::doc}}
+\noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{clouds}.pdf}\hspace*{\fill}}
+
+\sphinxstepscope
+
+
+\section{Beyond shared infrastructure}
+\label{\detokenize{basics/101-138-sharethirdparty:beyond-shared-infrastructure}}\label{\detokenize{basics/101-138-sharethirdparty:sharethirdparty}}\label{\detokenize{basics/101-138-sharethirdparty::doc}}
+\sphinxAtStartPar
+Data sharing potentially involves a number of different elements.
+Other than the dataset you want to share, it can involve repository hosting services, third party storage services, or other computational infrastructure.
+As you experienced in the chapter {\hyperref[\detokenize{basics/basics-collaboration:chapter-collaboration}]{\sphinxcrossref{\DUrole{std,std-ref}{Collaboration}}}} (\autopageref*{\detokenize{basics/basics-collaboration:chapter-collaboration}}), users on a common, shared computational infrastructure such as an {\hyperref[\detokenize{glossary:term-SSH-server}]{\sphinxtermref{\DUrole{xref,std,std-term}{SSH server}}}}
+can share datasets via simple installations with paths, without any involvement of third party storage providers or repository hosting services.
+But at some point in a dataset’s life, you may want to share it with people that
+can’t access the computer or server your dataset lives on, store it on other infrastructure
+to save diskspace, or create a backup.
+When this happens, you will want to distribute your dataset to repository hosting
+services (for example, {\hyperref[\detokenize{glossary:term-GitHub}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitHub}}}}, {\hyperref[\detokenize{glossary:term-GitLab}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitLab}}}}, or {\hyperref[\detokenize{glossary:term-GIN}]{\sphinxtermref{\DUrole{xref,std,std-term}{GIN}}}})
+and/or third party storage providers (such as \sphinxhref{https://www.dropbox.com}{Dropbox}, \dlhbhref{G18}{Google},
+\dlhbhref{A2B}{Amazon S3 buckets},
+the \dlhbhref{O1}{Open Science Framework} (OSF), and many others).
+
+\sphinxAtStartPar
+This chapter walks through mostly conceptual aspects of dataset publishing:
+It illustrates general concepts of dataset publishing and the idea of using third party services as {\hyperref[\detokenize{glossary:term-special-remote}]{\sphinxtermref{\DUrole{xref,std,std-term}{special remote}}}}s from
+which annexed file contents can be retrieved via \sphinxcode{\sphinxupquote{datalad get}}.
+{\hyperref[\detokenize{basics/101-139-hostingservices:share-hostingservice}]{\sphinxcrossref{\DUrole{std,std-ref}{Publishing datasets to Git repository hosting}}}} (\autopageref*{\detokenize{basics/101-139-hostingservices:share-hostingservice}}) then demonstrates how to publish datasets to any kind of Git repository hosting service.
+The web version of the book extends this information with step\sphinxhyphen{}by\sphinxhyphen{}step instructions for various repository hosting and third party storage solutions, and showcases a variety of ways to distribute datasets and their contents to different services.
+
+
+\subsection{Leveraging third party infrastructure}
+\label{\detokenize{basics/101-138-sharethirdparty:leveraging-third-party-infrastructure}}
+\sphinxAtStartPar
+There are several ways to distribute datasets or make them available for others:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+You can \sphinxstylestrong{publish your dataset to a repository with annex support} such as {\hyperref[\detokenize{glossary:term-GIN}]{\sphinxtermref{\DUrole{xref,std,std-term}{GIN}}}} or the \dlhbhref{O1}{OSF}%
+\begin{footnote}\sphinxAtStartFootnote
+Requires the \dlhbhref{D1G}{datalad\sphinxhyphen{}osf extension}.
+%
+\end{footnote}. This is the easiest way to share datasets and all their contents. Read on in the online\sphinxhyphen{}handbook or consult the tutorials of the \dlhbhref{D1G}{datalad\sphinxhyphen{}osf extension} to learn how to do this.
+
+\item {} 
+\sphinxAtStartPar
+You can \sphinxstylestrong{publish your dataset to a repository hosting service}, and \sphinxstylestrong{configure an external resource that stores your annexed data}. Such a resource can be a private web server, but also a third party services cloud storage such as \sphinxhref{https://www.dropbox.com}{Dropbox}, \sphinxhref{https://www.google.com}{Google}, \sphinxhref{https://aws.amazon.com/s3}{Amazon S3 buckets}, \sphinxhref{https://www.box.com}{Box.com}, \sphinxhref{https://owncloud.com}{owncloud}, \dlhbhref{H1}{sciebo}, or many more.
+
+\item {} 
+\sphinxAtStartPar
+You can \sphinxstylestrong{export your dataset statically} as a snapshot to a service such as  \sphinxhref{https://figshare.com}{Figshare} or the \dlhbhref{O1}{OSF}.
+
+\item {} 
+\sphinxAtStartPar
+You can \sphinxstylestrong{publish your dataset to a repository hosting service} and ensure that
+all dataset contents are either available from pre\sphinxhyphen{}existing public sources or can be recomputed from a {\hyperref[\detokenize{glossary:term-run-record}]{\sphinxtermref{\DUrole{xref,std,std-term}{run record}}}}.
+
+\end{itemize}
+
+
+\subsection{Dataset contents and third party services influence sharing}
+\label{\detokenize{basics/101-138-sharethirdparty:dataset-contents-and-third-party-services-influence-sharing}}
+\sphinxAtStartPar
+Because DataLad datasets are {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}} repositories, it is possible to
+\sphinxcode{\sphinxupquote{datalad push}} datasets to any Git repository hosting service, such as
+{\hyperref[\detokenize{glossary:term-GitHub}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitHub}}}}, {\hyperref[\detokenize{glossary:term-GitLab}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitLab}}}}, {\hyperref[\detokenize{glossary:term-GIN}]{\sphinxtermref{\DUrole{xref,std,std-term}{GIN}}}}, {\hyperref[\detokenize{glossary:term-Bitbucket}]{\sphinxtermref{\DUrole{xref,std,std-term}{Bitbucket}}}}, \dlhbhref{G12}{Gogs},
+or \dlhbhref{G7}{Gitea}.
+You have already done this in section {\hyperref[\detokenize{basics/101-130-yodaproject:yoda-project}]{\sphinxcrossref{\DUrole{std,std-ref}{YODA\sphinxhyphen{}compliant data analysis projects}}}} (\autopageref*{\detokenize{basics/101-130-yodaproject:yoda-project}}) when you shared your \sphinxcode{\sphinxupquote{midterm\_project}} dataset via {\hyperref[\detokenize{glossary:term-GitHub}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitHub}}}}.
+
+\sphinxAtStartPar
+However, most Git repository hosting services do not support hosting the file content
+of the files managed by {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}}.
+For example, the the results of the analysis in section {\hyperref[\detokenize{basics/101-130-yodaproject:yoda-project}]{\sphinxcrossref{\DUrole{std,std-ref}{YODA\sphinxhyphen{}compliant data analysis projects}}}} (\autopageref*{\detokenize{basics/101-130-yodaproject:yoda-project}}),
+\sphinxcode{\sphinxupquote{pairwise\_comparisons.png}} and \sphinxcode{\sphinxupquote{prediction\_report.csv}}, were not published to
+GitHub: There was meta data about their file availability, but if a friend cloned
+this dataset and ran a \sphinxcode{\sphinxupquote{datalad get}} command, content retrieval would fail
+because their only known location is your private computer to which only you have access.
+Instead, they would need to be recomputed from the {\hyperref[\detokenize{glossary:term-run-record}]{\sphinxtermref{\DUrole{xref,std,std-term}{run record}}}} in the dataset.
+
+\sphinxAtStartPar
+When you are distributing DataLad datasets to other people or third party services,
+an important distinction thus lies in \sphinxstyleemphasis{annexed} versus \sphinxstyleemphasis{not\sphinxhyphen{}annexed} content, i.e.,
+files that stored in your dataset’s {\hyperref[\detokenize{glossary:term-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{annex}}}} versus files that are committed
+into {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}}.
+The third\sphinxhyphen{}party service of your choice may have support for both annexed and non\sphinxhyphen{}annexed files, or only one of them.
+
+\begin{figure}[tbp]
+\centering
+\capstart
+
+\noindent\sphinxincludegraphics[width=0.800\linewidth]{{publishing_network_publishparts2}.pdf}
+\caption{Schematic difference between the Git and git\sphinxhyphen{}annex aspect of your dataset, and where each part \sphinxstyleemphasis{usually} gets distributed to.}\label{\detokenize{basics/101-138-sharethirdparty:id5}}\end{figure}
+
+
+\subsubsection{The common case: Repository hosting without annex support and special remotes}
+\label{\detokenize{basics/101-138-sharethirdparty:the-common-case-repository-hosting-without-annex-support-and-special-remotes}}
+\sphinxAtStartPar
+Because DataLad datasets are {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}} repositories, it is possible to
+\sphinxcode{\sphinxupquote{datalad push}} datasets to any Git repository hosting service, such as
+{\hyperref[\detokenize{glossary:term-GitHub}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitHub}}}}, {\hyperref[\detokenize{glossary:term-GitLab}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitLab}}}}, {\hyperref[\detokenize{glossary:term-GIN}]{\sphinxtermref{\DUrole{xref,std,std-term}{GIN}}}}, {\hyperref[\detokenize{glossary:term-Bitbucket}]{\sphinxtermref{\DUrole{xref,std,std-term}{Bitbucket}}}}, \dlhbhref{G12}{Gogs},
+or \dlhbhref{G7}{Gitea}.
+But while anything that is managed by Git is accessible in repository hosting services, they usually don’t support storing annexed data%
+\begin{footnote}\sphinxAtStartFootnote
+In addition to not storing annexed data, most Git repository hosting services also have a size limit for files kept in Git. So while you could \sphinxstyleemphasis{theoretically} commit a sizable file into Git, this would not only negatively impact the performance of your dataset as Git doesn’t handle large files well, but it would also \dlhbhref{G3F}{prevent your dataset to be published to a Git repository hosting service like GitHub}.
+%
+\end{footnote}.
+
+\sphinxAtStartPar
+When you want to publish a dataset to a Git repository hosting service to allow others to easily find and clone it, but you also want others to be able to retrieve annexed files in this dataset via \sphinxcode{\sphinxupquote{datalad get}}, annexed contents need to be pushed to additional storage hosting services.
+The hosting services can be all kinds of private, institutional, or commercial services, and their location will be registered in the dataset under the concept of a {\hyperref[\detokenize{glossary:term-special-remote}]{\sphinxtermref{\DUrole{xref,std,std-term}{special remote}}}}. Check the \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-special-remote}} {\hyperref[\detokenize{basics/101-138-sharethirdparty:fom-special-remote}]{\sphinxcrossref{\DUrole{std,std-ref}{on this}}}} (\autopageref*{\detokenize{basics/101-138-sharethirdparty:fom-special-remote}}) for some background on this git\sphinxhyphen{}annex concept.
+
+\index{special remote@\spxentry{special remote}!git\sphinxhyphen{}annex concept@\spxentry{git\sphinxhyphen{}annex concept}}\index{git\sphinxhyphen{}annex concept@\spxentry{git\sphinxhyphen{}annex concept}!special remote@\spxentry{special remote}}\ignorespaces \begin{findoutmore}[label={fom-special-remote}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{What is a special remote}
+\label{\detokenize{basics/101-138-sharethirdparty:fom-special-remote}}
+
+\sphinxAtStartPar
+A special\sphinxhyphen{}remote is an extension to Git’s concept of remotes, and can
+enable {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}} to transfer data from and possibly to places that are not Git
+repositories (e.g., cloud services or external machines such as an HPC
+system). For example, an \sphinxstyleemphasis{s3} special remote uploads and downloads content
+to AWS S3, a \sphinxstyleemphasis{web} special remote downloads files from the web, the \sphinxstyleemphasis{datalad\sphinxhyphen{}archive} special remote
+extracts files from annexed archives, etc. Don’t envision a special\sphinxhyphen{}remote
+as merely a physical place or location \textendash{} a special\sphinxhyphen{}remote is a protocol that
+defines the underlying transport of your files to and/or from a specific location.
+
+
+\end{findoutmore}
+
+\sphinxAtStartPar
+To register a special remote in your dataset and use it for file storage, you need to configure the service of your choice and \sphinxstyleemphasis{publish} the annexed contents to it. Afterwards, the published dataset (e.g., via {\hyperref[\detokenize{glossary:term-GitHub}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitHub}}}} or {\hyperref[\detokenize{glossary:term-GitLab}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitLab}}}}) stores the information about where to obtain annexed file contents from such that
+\sphinxcode{\sphinxupquote{datalad get}} works.
+Once you have configured the service of your choice, you can push your datasets Git history to the repository hosting service and the annexed contents to the special remote. DataLad also makes it easy to push these different dataset contents exactly where they need to be automatically via a {\hyperref[\detokenize{glossary:term-publication-dependency}]{\sphinxtermref{\DUrole{xref,std,std-term}{publication dependency}}}}.
+The general workflow looks as follows:
+
+\sphinxAtStartPar
+From your perspective (as someone who wants to distribute datasets), you will
+need to
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+(potentially) install/setup the relevant \sphinxstyleemphasis{special\sphinxhyphen{}remote},
+
+\item {} 
+\sphinxAtStartPar
+create a dataset sibling on GitHub/GitLab/… for yourself or others to install from,
+
+\item {} 
+\sphinxAtStartPar
+set up a \sphinxstyleemphasis{publication dependency} between repository hosting and special remote, so that annexed contents are automatically pushed to the special remote when ever you update the sibling on the Git repository hosting site,
+
+\item {} 
+\sphinxAtStartPar
+publish your dataset.
+
+\end{itemize}
+
+\sphinxAtStartPar
+This gives you the freedom to decide where your data lives and
+who can have access to it. Once this set up is complete, updating and
+accessing a distributed dataset and its data is almost as easy as if it would
+lie on your own machine.
+
+\sphinxAtStartPar
+If you decide to share your dataset with others, a dataset consumer or collaborator will need to
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+(potentially) install the relevant \sphinxstyleemphasis{special\sphinxhyphen{}remote} (dependent on the third\sphinxhyphen{}party service you chose) and
+
+\item {} 
+\sphinxAtStartPar
+perform the standard \sphinxcode{\sphinxupquote{datalad clone}} and \sphinxcode{\sphinxupquote{datalad get}} commands
+as necessary.
+
+\end{itemize}
+
+\sphinxAtStartPar
+Thus, from a collaborator’s perspective, with the exception of potentially
+installing/setting up the relevant \sphinxstyleemphasis{special\sphinxhyphen{}remote}, obtaining your dataset and its
+data is as easy as with any public DataLad dataset.
+While you have to invest some setup effort in the beginning, once this
+is done, the workflows of yours and others are the same that you are already
+very familiar with.
+
+\sphinxAtStartPar
+If you are interested in learning how to set up different services as special remotes, you can take a look at handbook.datalad.org for concrete examples with DataLad datasets, and the general section {\hyperref[\detokenize{basics/101-139-hostingservices:share-hostingservice}]{\sphinxcrossref{\DUrole{std,std-ref}{Publishing datasets to Git repository hosting}}}} (\autopageref*{\detokenize{basics/101-139-hostingservices:share-hostingservice}}) on setting up dataset siblings.
+In addition, there are step\sphinxhyphen{}by\sphinxhyphen{}step walk\sphinxhyphen{}throughs in the documentation of git\sphinxhyphen{}annex for services such as \sphinxhref{https://git-annex.branchable.com/tips/public\_Amazon\_S3\_remote}{S3}, \dlhbhref{B1R}{Google Cloud Storage},
+\dlhbhref{B1S}{Box.com},
+\dlhbhref{B1Q}{Amazon Glacier},
+\dlhbhref{B1P}{OwnCloud}, and many more.
+Here is the complete list: \dlhbhref{B1N}{git\sphinxhyphen{}annex.branchable.com/special\_remotes}.
+
+
+\subsubsection{The easy case: Repository hosting with annex support}
+\label{\detokenize{basics/101-138-sharethirdparty:the-easy-case-repository-hosting-with-annex-support}}
+\sphinxAtStartPar
+There are a few Git repository hosting services with support for annexed contents, as illustrated in \hyperref[\detokenize{basics/101-138-sharethirdparty:fig-specialpublishing}]{Fig.\@ \ref{\detokenize{basics/101-138-sharethirdparty:fig-specialpublishing}}}.
+One of them is {\hyperref[\detokenize{glossary:term-GIN}]{\sphinxtermref{\DUrole{xref,std,std-term}{GIN}}}}.
+What makes them extremely convenient is that there is no need to configure a special remote \textendash{} creating a {\hyperref[\detokenize{glossary:term-sibling}]{\sphinxtermref{\DUrole{xref,std,std-term}{sibling}}}} and running \sphinxcode{\sphinxupquote{datalad push}} is enough.
+
+\begin{figure}[tbp]
+\centering
+\capstart
+
+\noindent\sphinxincludegraphics[width=0.800\linewidth]{{publishing_network_publishgin}.pdf}
+\caption{Some repository hosting services have annex support \sphinxhyphen{} they can host both the Git and git\sphinxhyphen{}annex parts of your dataset. And with some {\hyperref[\detokenize{glossary:term-DataLad-extension}]{\sphinxtermref{\DUrole{xref,std,std-term}{datalad extension}}}}s third party storage services can host Git repositories in addition to annexed contents.}\label{\detokenize{basics/101-138-sharethirdparty:id6}}\label{\detokenize{basics/101-138-sharethirdparty:fig-specialpublishing}}\end{figure}
+
+
+\subsubsection{The uncommon case: Special remotes with repository hosting support}
+\label{\detokenize{basics/101-138-sharethirdparty:the-uncommon-case-special-remotes-with-repository-hosting-support}}
+\sphinxAtStartPar
+Typically, storage hosting services such as cloud storage providers do not provide
+the ability to host Git repositories.
+Therefore, it is typically not possible to \sphinxcode{\sphinxupquote{datalad clone}} from a cloud storage.
+However, a number of {\hyperref[\detokenize{glossary:term-DataLad-extension}]{\sphinxtermref{\DUrole{xref,std,std-term}{datalad extension}}}}s have been created that equip cloud storage providers with the ability to also host Git repositories, as \hyperref[\detokenize{basics/101-138-sharethirdparty:fig-specialpublishing}]{Fig.\@ \ref{\detokenize{basics/101-138-sharethirdparty:fig-specialpublishing}}} illustrates.
+While they do not get the ability to display repositories the same way that pure
+Git repository hosting services like GitHub do, they do get the super power of becoming clonable.
+
+\sphinxAtStartPar
+One example for this is the Open Science Framework, which can become the home of datasets by using the \dlhbhref{D1G}{datalad\sphinxhyphen{}osf extension}.
+As long as you and your collaborators have the extension installed, annexed dataset
+contents and the Git repository part of your dataset can be pushed or cloned in one go.
+
+\sphinxAtStartPar
+Please take a look at the documentation and tutorials of the \dlhbhref{D1G}{datalad\sphinxhyphen{}osf extension} for examples and more information.
+
+
+\subsubsection{The creative case: Ensuring availability using only repository hosting}
+\label{\detokenize{basics/101-138-sharethirdparty:the-creative-case-ensuring-availability-using-only-repository-hosting}}
+\sphinxAtStartPar
+When you only want to use pure Git repository hosting services without annex support, you can still allow others to obtain (some) file contents with some creativity:
+
+\sphinxAtStartPar
+For one, you can use commands such as \sphinxcode{\sphinxupquote{datalad download\sphinxhyphen{}url}} or \sphinxcode{\sphinxupquote{datalad addurls}}  to retrieve files from web sources and register their location automatically.
+The first Chapter {\hyperref[\detokenize{basics/basics-datasets:chapter-datasets}]{\sphinxcrossref{\DUrole{std,std-ref}{DataLad datasets}}}} (\autopageref*{\detokenize{basics/basics-datasets:chapter-datasets}}) demonstrates \sphinxcode{\sphinxupquote{datalad download\sphinxhyphen{}url}}.
+
+\sphinxAtStartPar
+Other than this, you can rely on digital provenance in the form of {\hyperref[\detokenize{glossary:term-run-record}]{\sphinxtermref{\DUrole{xref,std,std-term}{run record}}}}s that allow consumers of your dataset to recompute a result instead of \sphinxcode{\sphinxupquote{datalad get}}ing it.
+The midterm\sphinxhyphen{}project example in section {\hyperref[\detokenize{basics/101-130-yodaproject:yoda-project}]{\sphinxcrossref{\DUrole{std,std-ref}{YODA\sphinxhyphen{}compliant data analysis projects}}}} (\autopageref*{\detokenize{basics/101-130-yodaproject:yoda-project}}) has been an example for this.
+
+
+\subsubsection{The static case: Exporting dataset snapshots}
+\label{\detokenize{basics/101-138-sharethirdparty:the-static-case-exporting-dataset-snapshots}}
+\sphinxAtStartPar
+While DataLad datasets have the great advantage that they carry a history with all kinds of useful digital provenance and previous versions of files, it may not in all cases be necessary to make use of this advantage.
+Sometimes, you may just want to share or archive the most recent state of the dataset as a snapshot.
+
+\sphinxAtStartPar
+DataLad provides the ability to do this out of the box to arbitrary locations, and support for specific services such as \dlhbhref{F2}{Figshare} that you can read more about in the web version of this book.
+Other than that, some {\hyperref[\detokenize{glossary:term-DataLad-extension}]{\sphinxtermref{\DUrole{xref,std,std-term}{datalad extension}}}}s allow an export to additional services such as the Open Science Framework.
+
+
+\subsection{General information on publishing datasets}
+\label{\detokenize{basics/101-138-sharethirdparty:general-information-on-publishing-datasets}}
+\sphinxAtStartPar
+Beyond concrete examples of distributing datasets, some general information may be useful in addition:
+The section {\hyperref[\detokenize{basics/101-141-push:push}]{\sphinxcrossref{\DUrole{std,std-ref}{The datalad push command}}}} (\autopageref*{\detokenize{basics/101-141-push:push}}) illustrates the DataLad command \sphinxcode{\sphinxupquote{datalad push}}, a command that handles every publication operation, regardless of the type of published content or its destination.
+In addition to this, the section {\hyperref[\detokenize{basics/101-139-privacy:privacy}]{\sphinxcrossref{\DUrole{std,std-ref}{Keeping (some) dataset contents private}}}} (\autopageref*{\detokenize{basics/101-139-privacy:privacy}}) contains tips and strategies on publishing datasets without leaking potentially private contents or information.
+
+\sphinxstepscope
+
+
+\section{Publishing datasets to Git repository hosting}
+\label{\detokenize{basics/101-139-hostingservices:publishing-datasets-to-git-repository-hosting}}\label{\detokenize{basics/101-139-hostingservices:share-hostingservice}}\label{\detokenize{basics/101-139-hostingservices::doc}}
+\sphinxAtStartPar
+Because DataLad datasets are {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}} repositories, it is possible to
+\sphinxcode{\sphinxupquote{datalad push}} datasets to any Git repository hosting service, such as
+{\hyperref[\detokenize{glossary:term-GitHub}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitHub}}}}, {\hyperref[\detokenize{glossary:term-GitLab}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitLab}}}}, {\hyperref[\detokenize{glossary:term-GIN}]{\sphinxtermref{\DUrole{xref,std,std-term}{GIN}}}}, {\hyperref[\detokenize{glossary:term-Bitbucket}]{\sphinxtermref{\DUrole{xref,std,std-term}{Bitbucket}}}}, \sphinxhref{https://gogs.io}{Gogs}, or \dlhbhref{G7}{Gitea}.
+These published datasets are ordinary {\hyperref[\detokenize{glossary:term-sibling}]{\sphinxtermref{\DUrole{xref,std,std-term}{sibling}}}}s of your dataset, and among other advantages, they can constitute a back\sphinxhyphen{}up, an entry\sphinxhyphen{}point to retrieve your dataset for others or yourself, the backbone for collaboration on datasets, or the means to enhance visibility, findability and citeability of your work%
+\begin{footnote}\sphinxAtStartFootnote
+Many repository hosting services have useful features to make your work citeable.
+For example, {\hyperref[\detokenize{glossary:term-GIN}]{\sphinxtermref{\DUrole{xref,std,std-term}{gin}}}} is able to assign a {\hyperref[\detokenize{glossary:term-DOI}]{\sphinxtermref{\DUrole{xref,std,std-term}{DOI}}}} to your dataset, and GitHub allows \sphinxcode{\sphinxupquote{CITATION.cff}} files. At the same time, archival services such as \dlhbhref{Z1}{Zenodo} often integrate with published repositories, allowing you to preserve your dataset with them.
+%
+\end{footnote}.
+This section contains a brief overview on how to publish your dataset to different services.
+
+
+\subsection{Git repository hosting and annexed data}
+\label{\detokenize{basics/101-139-hostingservices:git-repository-hosting-and-annexed-data}}
+\sphinxAtStartPar
+As outlined in a number of sections before, Git repository hosting sites typically do not support dataset annexes \sphinxhyphen{} some, like {\hyperref[\detokenize{glossary:term-GIN}]{\sphinxtermref{\DUrole{xref,std,std-term}{GIN}}}} however, do.
+Depending on whether or not an annex is supported, you can push either only your Git history to the sibling, or the complete dataset including annexed file contents.
+You can find out whether a sibling on a remote hosting services carries an annex or not by running the \sphinxcode{\sphinxupquote{datalad siblings}} command.
+A \sphinxcode{\sphinxupquote{+}}, \sphinxcode{\sphinxupquote{\sphinxhyphen{}}}, or \sphinxcode{\sphinxupquote{?}} sign in parenthesis indicates whether the sibling carries an annex, does not carry an annex, or whether this information isn’t yet known.
+In the example below you can see that the public GitHub repository \dlhbhref{G2O}{github.com/psychoinformatics\sphinxhyphen{}de/studyforrest\sphinxhyphen{}data\sphinxhyphen{}phase2} does not carry an annex on GitHub (the sibling \sphinxcode{\sphinxupquote{origin}}), but that the annexed data are served from an additional sibling \sphinxcode{\sphinxupquote{mddatasrc}} (a {\hyperref[\detokenize{glossary:term-special-remote}]{\sphinxtermref{\DUrole{xref,std,std-term}{special remote}}}} with annex support).
+Even though the dataset sibling on GitHub does not serve the data, it constitutes a simple, findable access point to retrieve the dataset, and can be used to provide updates and fixes via {\hyperref[\detokenize{glossary:term-pull-request}]{\sphinxtermref{\DUrole{xref,std,std-term}{pull request}}}}s, issues, etc.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} a clone of github/psychoinformatics/studyforrest\PYGZhy{}data\PYGZhy{}phase2 has the following siblings:}
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }siblings
+\PYG{g+go}{.: here(+) [git]}
+\PYG{g+go}{.: mddatasrc(+)  [https://datapub.fz\PYGZhy{}juelich.de/studyforrest/studyforrest/phase2/.git (git)]}
+\PYG{g+go}{.: origin(\PYGZhy{}) [git@github.com:psychoinformatics\PYGZhy{}de/studyforrest\PYGZhy{}data\PYGZhy{}phase2.git (git)]}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+There are multiple ways to create a dataset sibling on a repository hosting site to push your dataset to.
+
+
+\subsection{How to add a sibling on a Git repository hosting site: The manual way}
+\label{\detokenize{basics/101-139-hostingservices:how-to-add-a-sibling-on-a-git-repository-hosting-site-the-manual-way}}\begin{enumerate}
+\sphinxsetlistlabels{\arabic}{enumi}{enumii}{}{.}%
+\item {} 
+\sphinxAtStartPar
+Create a new repository via the webinterface of the hosting service of your choice. Their webinterface usually has an intuitive interface for this.
+The new repository does not need to have the same name as your local dataset, but it helps to associate local dataset and remote siblings.
+
+\item {} 
+\sphinxAtStartPar
+Afterwards, copy the {\hyperref[\detokenize{glossary:term-SSH}]{\sphinxtermref{\DUrole{xref,std,std-term}{SSH}}}} or {\hyperref[\detokenize{glossary:term-https}]{\sphinxtermref{\DUrole{xref,std,std-term}{HTTPS}}}} URL of the repository. Usually, repository hosting services will provide you with a convenient way to copy it to your clipboard. An SSH URL takes the form \sphinxcode{\sphinxupquote{git@\textless{}hosting\sphinxhyphen{}service\textgreater{}:/\textless{}user\textgreater{}/\textless{}repo\sphinxhyphen{}name\textgreater{}.git}} and an HTTPS URL takes the form \sphinxcode{\sphinxupquote{https://\textless{}hosting\sphinxhyphen{}service\textgreater{}/\textless{}user\textgreater{}/\textless{}repo\sphinxhyphen{}name\textgreater{}.git}}. The type of URL you choose determines whether and how you will be able to \sphinxcode{\sphinxupquote{push}} to your repository. Note that many services will require you to use the SSH URL to your repository in order to do \sphinxcode{\sphinxupquote{datalad push}} operations, so make sure to take the {\hyperref[\detokenize{glossary:term-SSH}]{\sphinxtermref{\DUrole{xref,std,std-term}{SSH}}}} and not the {\hyperref[\detokenize{glossary:term-https}]{\sphinxtermref{\DUrole{xref,std,std-term}{HTTPS}}}} URL if this is the case.
+
+\item {} 
+\sphinxAtStartPar
+If you pick the {\hyperref[\detokenize{glossary:term-SSH}]{\sphinxtermref{\DUrole{xref,std,std-term}{SSH}}}} URL, make sure to have an {\hyperref[\detokenize{glossary:term-SSH-key}]{\sphinxtermref{\DUrole{xref,std,std-term}{SSH key}}}} set up. This usually requires generating an SSH key pair if you do not have one yet, and uploading the public key to the repository hosting service. The \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-sshkey}} {\hyperref[\detokenize{basics/101-139-hostingservices:fom-sshkey}]{\sphinxcrossref{\DUrole{std,std-ref}{on SSH keys}}}} (\autopageref*{\detokenize{basics/101-139-hostingservices:fom-sshkey}}) points to a useful tutorial for this.
+
+\item {} 
+\sphinxAtStartPar
+Use the URL to add the repository as a sibling. There are two commands that allow you to do that; both require you give the sibling a name of your choice (common name choices are \sphinxcode{\sphinxupquote{upstream}}, or a short\sphinxhyphen{}cut for your user name or the hosting platform, but its completely up to you to decide):
+\begin{enumerate}
+\sphinxsetlistlabels{\arabic}{enumii}{enumiii}{}{.}%
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{git remote add \textless{}name\textgreater{} \textless{}url\textgreater{}}}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{datalad siblings add \sphinxhyphen{}\sphinxhyphen{}dataset . \sphinxhyphen{}\sphinxhyphen{}name \textless{}name\textgreater{} \sphinxhyphen{}\sphinxhyphen{}url \textless{}url\textgreater{}}}
+
+\end{enumerate}
+
+\item {} 
+\sphinxAtStartPar
+Push your dataset to the new sibling: \sphinxcode{\sphinxupquote{datalad push \sphinxhyphen{}\sphinxhyphen{}to \textless{}name\textgreater{}}}
+
+\end{enumerate}
+
+\index{concepts@\spxentry{concepts}!SSH key@\spxentry{SSH key}}\index{SSH@\spxentry{SSH}!key@\spxentry{key}}\ignorespaces \phantomsection\label{\detokenize{basics/101-139-hostingservices:sshkey}}\begin{findoutmore}[label={fom-sshkey}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{What is an SSH key and how can I create one?}
+\label{\detokenize{basics/101-139-hostingservices:fom-sshkey}}
+
+\sphinxAtStartPar
+An SSH key is an access credential in the {\hyperref[\detokenize{glossary:term-SSH}]{\sphinxtermref{\DUrole{xref,std,std-term}{SSH}}}} protocol that can be used
+to login from one system to remote servers and services, such as from your private
+computer to an {\hyperref[\detokenize{glossary:term-SSH-server}]{\sphinxtermref{\DUrole{xref,std,std-term}{SSH server}}}}. For repository hosting services such as {\hyperref[\detokenize{glossary:term-GIN}]{\sphinxtermref{\DUrole{xref,std,std-term}{GIN}}}},
+{\hyperref[\detokenize{glossary:term-GitHub}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitHub}}}}, or {\hyperref[\detokenize{glossary:term-GitLab}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitLab}}}}, it can be used to connect and authenticate
+without supplying your username or password for each action.
+
+\sphinxAtStartPar
+A tutorial by GitHub at \dlhbhref{G3A}{docs.github.com/en/github/authenticating\sphinxhyphen{}to\sphinxhyphen{}github/connecting\sphinxhyphen{}to\sphinxhyphen{}github\sphinxhyphen{}with\sphinxhyphen{}ssh}
+has a detailed step\sphinxhyphen{}by\sphinxhyphen{}step instruction to generate and use SSH keys for authentication.
+You will also learn how add your public SSH key to your hosting service account
+so that you can install or clone datasets or Git repositories via \sphinxcode{\sphinxupquote{SSH}} (in addition
+to the \sphinxcode{\sphinxupquote{http}} protocol).
+
+\sphinxAtStartPar
+Don’t be intimidated if you have never done this before \textendash{} it is fast and easy:
+First, you need to create a private and a public key (an SSH key pair).
+All this takes is a single command in the terminal. The resulting files are
+text files that look like someone spilled alphabet soup in them, but constitute
+a secure password procedure.
+You keep the private key on your own machine (the system you are connecting from,
+and that \sphinxstylestrong{only you have access to}),
+and copy the public key to the system or service you are connecting to.
+On the remote system or service, you make the public key an \sphinxstyleemphasis{authorized key} to
+allow authentication via the SSH key pair instead of your password. This
+either takes a single command in the terminal, or a few clicks in a web interface
+to achieve.
+You should protect your SSH keys on your machine with a passphrase to prevent
+others \textendash{} e.g., in case of theft \textendash{} to log in to servers or services with
+SSH authentication%
+\begin{footnote}\sphinxAtStartFootnote
+Your private SSH key is incredibly valuable, and it is important to keep
+it secret!
+Anyone who gets your private key has access to anything that the public key
+is protecting. If the private key does not have a passphrase, simply copying
+this file grants a person access!
+%
+\end{footnote}, and configure an \sphinxcode{\sphinxupquote{ssh agent}}
+to handle this passphrase for you with a single command. How to do all of this
+is detailed in the tutorial.
+
+
+\end{findoutmore}
+
+
+\subsection{How to add a sibling on a Git repository hosting site: The automated way}
+\label{\detokenize{basics/101-139-hostingservices:how-to-add-a-sibling-on-a-git-repository-hosting-site-the-automated-way}}
+\sphinxAtStartPar
+DataLad provides \sphinxcode{\sphinxupquote{create\sphinxhyphen{}sibling\sphinxhyphen{}*}} commands to automatically create datasets on certain hosting sites.
+You can automatically create new repositories from the command line for {\hyperref[\detokenize{glossary:term-GitHub}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitHub}}}}, {\hyperref[\detokenize{glossary:term-GitLab}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitLab}}}}, {\hyperref[\detokenize{glossary:term-GIN}]{\sphinxtermref{\DUrole{xref,std,std-term}{GIN}}}}, \sphinxhref{https://gogs.io}{Gogs}, or \dlhbhref{G7}{Gitea}.
+This is implemented with a set of commands called \sphinxcode{\sphinxupquote{datalad create\sphinxhyphen{}sibling\sphinxhyphen{}github}}, \sphinxcode{\sphinxupquote{datalad create\sphinxhyphen{}sibling\sphinxhyphen{}gitlab}}, \sphinxcode{\sphinxupquote{datalad create\sphinxhyphen{}sibling\sphinxhyphen{}gin}}, \sphinxcode{\sphinxupquote{datalad create\sphinxhyphen{}sibling\sphinxhyphen{}gogs}}, and \sphinxcode{\sphinxupquote{datalad create\sphinxhyphen{}sibling\sphinxhyphen{}gitea}}.
+
+\sphinxAtStartPar
+Each command is slightly tuned towards the peculiarities of each particular platform, but the most important common parameters are streamlined across commands as follows:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{{[}REPONAME{]}}} (required): The name of the repository on the hosting site. It will be created under a user’s namespace, unless this argument includes an organization name prefix. For example, \sphinxcode{\sphinxupquote{datalad create\sphinxhyphen{}sibling\sphinxhyphen{}github my\sphinxhyphen{}awesome\sphinxhyphen{}repo}} will create a new repository under \sphinxcode{\sphinxupquote{github.com/\textless{}user\textgreater{}/my\sphinxhyphen{}awesome\sphinxhyphen{}repo}}, while \sphinxcode{\sphinxupquote{datalad create\sphinxhyphen{}sibling\sphinxhyphen{}github \textless{}orgname\textgreater{}/my\sphinxhyphen{}awesome\sphinxhyphen{}repo}} will create a new repository of this name under the GitHub organization \sphinxcode{\sphinxupquote{\textless{}orgname\textgreater{}}} (given appropriate permissions).
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{\sphinxhyphen{}s/\sphinxhyphen{}\sphinxhyphen{}name \textless{}name\textgreater{}}} (required): A name under which the sibling is identified. By default, it will be based on or similar to the hosting site. For example, the sibling created with \sphinxcode{\sphinxupquote{datalad create\sphinxhyphen{}sibling\sphinxhyphen{}github}} will  be called \sphinxcode{\sphinxupquote{github}} by default.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}credential \textless{}name\textgreater{}}} (optional): Credentials used for authentication are stored internally by DataLad under specific names. These names allow you to have multiple credentials, and flexibly decide which one to use. When \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}credential \textless{}name\textgreater{}}} is the name of an existing credential, DataLad tries to authenticate with the specified credential; when it does not yet exist DataLad will prompt interactively for a credential, such as an access token, and store it under the given \sphinxcode{\sphinxupquote{\textless{}name\textgreater{}}} for future authentications. By default, DataLad will name a credential according to the hosting service URL it used for, such as \sphinxcode{\sphinxupquote{datalad\sphinxhyphen{}api.github.com}} as the default for credentials used to authenticate against GitHub.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}access\sphinxhyphen{}protocol \{https|ssh|https\sphinxhyphen{}ssh\}}} (default \sphinxcode{\sphinxupquote{https}}): Whether to use {\hyperref[\detokenize{glossary:term-SSH}]{\sphinxtermref{\DUrole{xref,std,std-term}{SSH}}}} or {\hyperref[\detokenize{glossary:term-https}]{\sphinxtermref{\DUrole{xref,std,std-term}{HTTPS}}}} URLs, or a hybrid version in which HTTPS is used to \sphinxstyleemphasis{pull} and SSH is used to \sphinxstyleemphasis{push}. Using {\hyperref[\detokenize{glossary:term-SSH}]{\sphinxtermref{\DUrole{xref,std,std-term}{SSH}}}} URLs requires an {\hyperref[\detokenize{glossary:term-SSH-key}]{\sphinxtermref{\DUrole{xref,std,std-term}{SSH key}}}} setup, but is a very convenient authentication method, especially when pushing updates \textendash{} which would need manual input on user name and token with every \sphinxcode{\sphinxupquote{push}} over HTTPS.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}dry\sphinxhyphen{}run}} (optional): With this flag set, the command will not actually create the target repository, but only perform tests for name collisions and report repository name(s).
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}private}} (optional): A switch that, if set, makes sure that the created repository is private.
+
+\end{itemize}
+
+\sphinxAtStartPar
+Other streamlined arguments, such as \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}recursive}} or \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}publish\sphinxhyphen{}depends}} allow you to perform more complex configurations, such as publication of dataset hierarchies or connections to {\hyperref[\detokenize{glossary:term-special-remote}]{\sphinxtermref{\DUrole{xref,std,std-term}{special remote}}}}s.
+The web version of this book demonstrates several of them.
+
+\sphinxAtStartPar
+Self\sphinxhyphen{}hosted repository services, e.g., Gogs or Gitea instances, have an additional required argument, the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}api}} flag.
+It needs to point to the URL of the instance, for example
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }create\PYGZhy{}sibling\PYGZhy{}gogs\PYG{+w}{ }my\PYGZus{}repo\PYGZus{}on\PYGZus{}gogs\PYG{+w}{  }\PYGZhy{}\PYGZhy{}api\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}https://try.gogs.io\PYGZdq{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+{\hyperref[\detokenize{glossary:term-GitLab}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitLab}}}}’s internal organization differs from that of the other hosting services, and as there are multiple different GitLab instances, \sphinxcode{\sphinxupquote{create\sphinxhyphen{}sibling\sphinxhyphen{}gitlab}} requires slightly more configuration than the other commands.
+Thus, a short walk\sphinxhyphen{}through is available in the online\sphinxhyphen{}handbook.
+
+
+\subsection{Authentication by token}
+\label{\detokenize{basics/101-139-hostingservices:authentication-by-token}}\label{\detokenize{basics/101-139-hostingservices:token}}
+\sphinxAtStartPar
+To create or update repositories on remote hosting services you will need to set up appropriate authentication and permissions.
+In most cases, this will be in the form of an authorization token with a specific permission scope.
+
+
+\subsubsection{What is a token?}
+\label{\detokenize{basics/101-139-hostingservices:what-is-a-token}}
+\sphinxAtStartPar
+Personal access tokens are an alternative to authenticating via your password, and take the form of a long character string, associated with a human\sphinxhyphen{}readable name or description.
+If you are prompted for \sphinxcode{\sphinxupquote{username}} and \sphinxcode{\sphinxupquote{password}} in the command line, you would enter your token in place of the \sphinxcode{\sphinxupquote{password}}%
+\begin{footnote}\sphinxAtStartFootnote
+GitHub \dlhbhref{G9A}{deprecated user\sphinxhyphen{}password authentication} in favor of authentication via personal access token. Supplying a password instead of a token will fail to authenticate.
+%
+\end{footnote}.
+Note that you do not have to type your token at every authentication \textendash{} your token will be stored on your system the first time you have used it and automatically reused whenever relevant. Check the \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-credential-storage}} {\hyperref[\detokenize{basics/101-139-hostingservices:fom-credential-storage}]{\sphinxcrossref{\DUrole{std,std-ref}{on credential storage}}}} (\autopageref*{\detokenize{basics/101-139-hostingservices:fom-credential-storage}}) to learn how this is done.
+
+\index{credential@\spxentry{credential}!storage@\spxentry{storage}}\ignorespaces \begin{findoutmore}[label={fom-credential-storage}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{Where are credentials stored?}
+\label{\detokenize{basics/101-139-hostingservices:fom-credential-storage}}
+
+\sphinxAtStartPar
+Passwords, user names, tokens, or any other login information is stored in
+your system’s (encrypted) \dlhbhref{W1D}{keyring}.
+It is a built\sphinxhyphen{}in credential store, used in all major operating systems, and
+can store credentials securely.
+
+
+\end{findoutmore}
+
+\sphinxAtStartPar
+You can have multiple tokens, and each of them can get a different scope of permissions, but it is important to treat your tokens like passwords and keep them secret.
+
+
+\subsubsection{Which permissions do they need?}
+\label{\detokenize{basics/101-139-hostingservices:which-permissions-do-they-need}}
+\sphinxAtStartPar
+The most convenient way to generate tokens is typically via the webinterface of the hosting service of your choice.
+For creating and updating repositories with DataLad commands it is usually sufficient to grant only repository\sphinxhyphen{}related permissions.
+However, broader permission sets may also make sense.
+Should you employ GitHub workflows, for example, a token without “workflow” scope could not push changes to workflow files, resulting in errors like this one:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+go}{[remote rejected] (refusing to allow a Personal Access Token to create or update workflow `.github/workflows/benchmarks.yml` without `workflow` scope)]}
+\end{sphinxVerbatim}
+
+\sphinxstepscope
+
+
+\section{Keeping (some) dataset contents private}
+\label{\detokenize{basics/101-139-privacy:keeping-some-dataset-contents-private}}\label{\detokenize{basics/101-139-privacy:privacy}}\label{\detokenize{basics/101-139-privacy::doc}}
+\sphinxAtStartPar
+Datasets can contain information that you don’t want to share with others.
+Maybe the collection of pictures from your team\sphinxhyphen{}building event also contains those after\sphinxhyphen{}hour photos where you drunkenly kidnapped a tram.
+Or you are handling data with strict privacy requirements, such as patient data or
+medical imaging files.
+Whatever it may be, this short section summarizes strategies that help you to ensure
+to private information is not leaked, even when you publicly share datasets that contain it.
+
+
+\subsection{Strategy 1: Never save private information to Git}
+\label{\detokenize{basics/101-139-privacy:strategy-1-never-save-private-information-to-git}}
+\sphinxAtStartPar
+The most important strategy to keep in mind in handling datasets with potentially sensitive information is to \sphinxstylestrong{never save sensitive information into Git}. \sphinxstylestrong{NEVER}.
+Saving sensitive information into a dataset or Git repository that you intend to share is the equivalent of including your account password as an attachment to every email you write \textendash{} you don’t necessarily point out that there is private information, but it lies around for everyone to accidentally find.
+Once a file with sensitive contents has been saved in the version history, sharing this dataset may accidentally expose the sensitive information even if it has been removed in the most recent version \textendash{} the transparent revision history of a dataset allows to simply restore the file.
+
+\sphinxAtStartPar
+Thus, make sure to always manage sensitive files with {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}}, even if the file is just a small text file.
+Having the file annexed allows you to specifically not share its contents, even when you make your dataset publicly available.
+However, it is highly important to realize that while annexed file’s \sphinxstyleemphasis{contents} are not saved into Git, annex file’s \sphinxstyleemphasis{names} are.
+If private information such as a medical patients non\sphinxhyphen{}anonymized ID or other potentially identifying information becomes a part of the file name, this information is exposed in the Git history of the dataset.
+Keep in mind that this applies even if you renamed the file.
+Check the \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-uncommit}} {\hyperref[\detokenize{basics/101-139-privacy:fom-uncommit}]{\sphinxcrossref{\DUrole{std,std-ref}{on removing information committed to Git}}}} (\autopageref*{\detokenize{basics/101-139-privacy:fom-uncommit}}) in case sensitive would ever leak into one of your datasets.
+
+\index{remove sensitive information@\spxentry{remove sensitive information}!with Git@\spxentry{with Git}}\index{with Git@\spxentry{with Git}!remove sensitive information@\spxentry{remove sensitive information}}\ignorespaces \begin{findoutmore}[label={fom-uncommit}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{Help! I accidentally saved sensitive information to Git!}
+\label{\detokenize{basics/101-139-privacy:fom-uncommit}}
+
+\sphinxAtStartPar
+The only lasting way to remove contents from the dataset history completely is to substantially rewrite the dataset’s history via tools such as \sphinxcode{\sphinxupquote{git\sphinxhyphen{}filter\sphinxhyphen{}repo}} or \sphinxcode{\sphinxupquote{git filter\sphinxhyphen{}branch}}, two very dangerous and potentially destructive operations.
+
+
+\end{findoutmore}
+
+
+\subsection{Strategy 2: Restrict access via third party service or file system permissions}
+\label{\detokenize{basics/101-139-privacy:strategy-2-restrict-access-via-third-party-service-or-file-system-permissions}}
+\sphinxAtStartPar
+When you have a dataset and only authorized actors should be allowed to access it,
+it is possible to set access restrictions simply via choice of (third party) storage permissions.
+When it is an access restricted dataset on shared infrastructure, for example, a scientific dataset that only researchers who signed a data usage agreement should have access to, it could suffice to create specific \dlhbhref{W1E}{Unix groups} with authorized users, and give only those groups the necessary permissions.
+Depending on what permissions are set, unauthorized actors would not be able to retrieve file contents, or be able to clone the dataset at all.
+
+\sphinxAtStartPar
+The ability of repository hosting services to make datasets private and only allow select collaborators access is yet another method of keeping complete datasets as private as necessary, even though you should think twice on whether or not you should host sensitive repositories at all on these services.
+
+\sphinxAtStartPar
+One method to exert potentially fine\sphinxhyphen{}grained access control over file contents is via choice of (third party) hosting service for some or all annexed file contents.
+If you chose a service only selected people have access to, and publish annexed contents exclusively there, then only those selected people can perform a successful \sphinxcode{\sphinxupquote{datalad get}}.
+For example, when it is a dataset with content hosted on third party cloud storage such as S3 buckets, permission settings in the storage locations would allow data providers to specify or limit who is able to retrieve the file contents.
+
+
+\subsection{Strategy 3: Selective publishing}
+\label{\detokenize{basics/101-139-privacy:strategy-3-selective-publishing}}
+\sphinxAtStartPar
+If it is individual files that you do not want to share, you can selectively publish the contents of all files you want others to have, and withhold the data of the files you do not want to share.
+This can be done by providing paths to the data that should be published, or a \dlhbhref{B1H}{git\sphinxhyphen{}annex\sphinxhyphen{}wanted} configuration and the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}data auto}} option.
+
+\sphinxAtStartPar
+Let’s say you have a dataset with three files:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{experiment.txt}}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{subject\_1.dat}}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{subject\_2.data}}
+
+\end{itemize}
+
+\sphinxAtStartPar
+Consider that all of these files are annexed. While the information in \sphinxcode{\sphinxupquote{experiment.txt}} is fine for everyone to see, \sphinxcode{\sphinxupquote{subject\_1.dat}} and \sphinxcode{\sphinxupquote{subject\_2.dat}} contain personal and potentially identifying data that cannot be shared.
+Nevertheless, you want collaborators to know that these files exist.
+By publishing only the file contents of \sphinxcode{\sphinxupquote{experiment.txt}} with
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }push\PYG{+w}{ }\PYGZhy{}\PYGZhy{}to\PYG{+w}{ }github\PYG{+w}{ }experiment.txt
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+only meta data about file availability of \sphinxcode{\sphinxupquote{subject\_1.dat}} and \sphinxcode{\sphinxupquote{subject\_2.dat}} exists, but as these files’ annexed data is not published, a \sphinxcode{\sphinxupquote{datalad get}}
+will fail.
+Note, though, that \sphinxcode{\sphinxupquote{datalad push}} will publish the complete dataset history (unless you specify a commit range with the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}since}} option \textendash{} see the \dlhbhref{D1B}{manual} for more information).
+
+\sphinxstepscope
+
+\index{push@\spxentry{push}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!push@\spxentry{push}}\ignorespaces 
+
+\section{The datalad push command}
+\label{\detokenize{basics/101-141-push:the-datalad-push-command}}\label{\detokenize{basics/101-141-push:push}}\label{\detokenize{basics/101-141-push:index-0}}\label{\detokenize{basics/101-141-push::doc}}
+\sphinxAtStartPar
+Previous contents on publishing DataLad datasets have each
+shown you crucial aspects of the functions of dataset publishing with
+\sphinxcode{\sphinxupquote{datalad push}}. This section wraps them all together.
+
+
+\subsection{The general overview}
+\label{\detokenize{basics/101-141-push:the-general-overview}}
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{datalad push}} is the command to turn to when you want to publish datasets.
+It is capable of publishing all dataset content, i.e., files stored in {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}},
+and files stored with {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}}, to a known dataset {\hyperref[\detokenize{glossary:term-sibling}]{\sphinxtermref{\DUrole{xref,std,std-term}{sibling}}}}.
+
+\index{push@\spxentry{push}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!push@\spxentry{push}}\ignorespaces \begin{gitusernote}[label={index-1}, before title={\thetcbcounter\ }, check odd page=true]{Push internals}
+\label{\detokenize{basics/101-141-push:index-1}}
+
+\sphinxAtStartPar
+The \sphinxcode{\sphinxupquote{datalad push}} uses \sphinxcode{\sphinxupquote{git push}}, and \sphinxcode{\sphinxupquote{git annex copy}} under
+the hood. Publication targets need to either be configured remote Git repositories,
+or git\sphinxhyphen{}annex special remotes (if they support data upload).
+
+
+\end{gitusernote}
+
+\sphinxAtStartPar
+In order to publish a dataset, the dataset needs to have a sibling to push to.
+This, for instance, can be a {\hyperref[\detokenize{glossary:term-GitHub}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitHub}}}}, {\hyperref[\detokenize{glossary:term-GitLab}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitLab}}}}, or {\hyperref[\detokenize{glossary:term-GIN}]{\sphinxtermref{\DUrole{xref,std,std-term}{GIN}}}}
+repository, but it can also be a Remote Indexed Archive (RIA) store for backup
+or storage of datasets%
+\begin{footnote}\sphinxAtStartFootnote
+RIA siblings are file system based, scalable storage solutions for
+DataLad datasets. You can find out more about them in the online\sphinxhyphen{}handbook.
+%
+\end{footnote}, or a regular clone.
+See the \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-all-siblings}} {\hyperref[\detokenize{basics/101-141-push:fom-all-siblings}]{\sphinxcrossref{\DUrole{std,std-ref}{on configuring siblings}}}} (\autopageref*{\detokenize{basics/101-141-push:fom-all-siblings}}) for an overview.
+
+\index{create\sphinxhyphen{}sibling\sphinxhyphen{}github@\spxentry{create\sphinxhyphen{}sibling\sphinxhyphen{}github}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!create\sphinxhyphen{}sibling\sphinxhyphen{}github@\spxentry{create\sphinxhyphen{}sibling\sphinxhyphen{}github}}\index{create\sphinxhyphen{}sibling\sphinxhyphen{}gitlab@\spxentry{create\sphinxhyphen{}sibling\sphinxhyphen{}gitlab}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!create\sphinxhyphen{}sibling\sphinxhyphen{}gitlab@\spxentry{create\sphinxhyphen{}sibling\sphinxhyphen{}gitlab}}\index{create\sphinxhyphen{}sibling\sphinxhyphen{}ria@\spxentry{create\sphinxhyphen{}sibling\sphinxhyphen{}ria}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!create\sphinxhyphen{}sibling\sphinxhyphen{}ria@\spxentry{create\sphinxhyphen{}sibling\sphinxhyphen{}ria}}\index{GitHub@\spxentry{GitHub}!dataset hosting@\spxentry{dataset hosting}}\index{dataset hosting@\spxentry{dataset hosting}!GitHub@\spxentry{GitHub}}\index{GitLab@\spxentry{GitLab}!dataset hosting@\spxentry{dataset hosting}}\index{dataset hosting@\spxentry{dataset hosting}!GitLab@\spxentry{GitLab}}\index{RIA@\spxentry{RIA}!dataset hosting@\spxentry{dataset hosting}}\index{dataset hosting@\spxentry{dataset hosting}!RIA@\spxentry{RIA}}\index{create sibling@\spxentry{create sibling}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!create sibling@\spxentry{create sibling}}\ignorespaces \begin{findoutmore}[label={fom-all-siblings}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{All of the ways to configure siblings}
+\label{\detokenize{basics/101-141-push:fom-all-siblings}}
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Add an existing repository as a sibling with the \sphinxcode{\sphinxupquote{datalad siblings}}
+command. Here are common examples:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} to a remote repository}
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }siblings\PYG{+w}{ }add\PYG{+w}{ }\PYGZhy{}\PYGZhy{}name\PYG{+w}{ }github\PYGZhy{}repo\PYG{+w}{ }\PYGZhy{}\PYGZhy{}url\PYG{+w}{ }\PYGZlt{}url.to.github\PYGZgt{}
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} to a local path}
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }siblings\PYG{+w}{ }add\PYG{+w}{ }\PYGZhy{}\PYGZhy{}name\PYG{+w}{ }local\PYGZhy{}sibling\PYG{+w}{ }\PYGZhy{}\PYGZhy{}url\PYG{+w}{ }/path/to/sibling/ds
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} to a clone on an SSH\PYGZhy{}accessible machine}
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }siblings\PYG{+w}{ }add\PYG{+w}{ }\PYGZhy{}\PYGZhy{}name\PYG{+w}{ }server\PYGZhy{}sibling\PYG{+w}{ }\PYGZhy{}\PYGZhy{}url\PYG{+w}{ }\PYG{o}{[}user@\PYG{o}{]}hostname:/path/to/sibling/ds
+\end{sphinxVerbatim}
+
+\item {} 
+\sphinxAtStartPar
+Create a sibling on an external hosting service from scratch, right from
+within your repository:
+This can be done with the commands \sphinxcode{\sphinxupquote{datalad create\sphinxhyphen{}sibling\sphinxhyphen{}github}} (for GitHub)
+or \sphinxcode{\sphinxupquote{datalad create\sphinxhyphen{}siblings\sphinxhyphen{}gitlab}} (for GitLab), or
+\sphinxcode{\sphinxupquote{datalad create\sphinxhyphen{}sibling\sphinxhyphen{}ria}} (for a remote indexed archive dataset store).
+Note that \sphinxcode{\sphinxupquote{datalad create\sphinxhyphen{}sibling\sphinxhyphen{}ria}} can add an existing store as a sibling
+or create a new one from scratch.
+
+\item {} 
+\sphinxAtStartPar
+Create a sibling on a local or SSH accessible Unix machine with
+\sphinxcode{\sphinxupquote{datalad create\sphinxhyphen{}sibling}}.
+
+\end{itemize}
+
+
+\end{findoutmore}
+
+\sphinxAtStartPar
+In order to publish dataset content, DataLad needs to know to which sibling
+content shall be pushed. This can be specified with the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}to}} option directly
+from the command line:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }push\PYG{+w}{ }\PYGZhy{}\PYGZhy{}to\PYG{+w}{ }\PYGZlt{}sibling\PYGZgt{}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+If you have more than one {\hyperref[\detokenize{glossary:term-branch}]{\sphinxtermref{\DUrole{xref,std,std-term}{branch}}}} in your dataset, note that a
+\sphinxcode{\sphinxupquote{datalad push}} command will by default update only the current branch.
+If updating multiple branches is relevant for your workflow, please check out
+the \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-push-branch}} {\hyperref[\detokenize{basics/101-141-push:fom-push-branch}]{\sphinxcrossref{\DUrole{std,std-ref}{about this}}}} (\autopageref*{\detokenize{basics/101-141-push:fom-push-branch}}).
+
+\sphinxAtStartPar
+By default, \sphinxcode{\sphinxupquote{datalad push}} will make the last saved state of the dataset
+available. Consequently, if the sibling is in the same state as the dataset,
+no push is attempted.
+Additionally, \sphinxcode{\sphinxupquote{datalad push}} will attempt to automatically decide what type
+of dataset contents are going to be published. With a sibling that has a
+{\hyperref[\detokenize{glossary:term-special-remote}]{\sphinxtermref{\DUrole{xref,std,std-term}{special remote}}}} configured as a {\hyperref[\detokenize{glossary:term-publication-dependency}]{\sphinxtermref{\DUrole{xref,std,std-term}{publication dependency}}}},
+or a sibling that contains an annex (such as a GIN repository or a
+{\hyperref[\detokenize{glossary:term-Remote-Indexed-Archive-RIA-store}]{\sphinxtermref{\DUrole{xref,std,std-term}{Remote Indexed Archive (RIA) store}}}}), both the contents
+stored in Git (i.e., a dataset’s history) as well as file contents stored in
+git\sphinxhyphen{}annex will be published unless dataset configurations overrule this.
+Alternatively, one can enforce particular operations or push a subset of dataset
+contents. For one, when specifying a path in the \sphinxcode{\sphinxupquote{datalad push}} command,
+only data or changes for those paths are considered for a push.
+Additionally, one can select a particular mode of operation with the \sphinxcode{\sphinxupquote{\sphinxhyphen{}data}} option.
+Several different modes are possible:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{nothing}}: With this option, annexed contents are not published. This
+means that the sibling will have information on the annexed files’ names, but
+file contents will not be available, and thus \sphinxcode{\sphinxupquote{datalad get}} calls in the
+sibling would fail.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{anything}}: Transfer all annexed contents.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{auto}}: With this option, the decision which data is transferred is based on configurations that can determine rules on a per\sphinxhyphen{}file and per\sphinxhyphen{}sibling level.
+On a technical level, the \sphinxcode{\sphinxupquote{git annex copy}} call to publish file contents is called with its \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}auto}} option.
+With this option, only data that satisfies specific git\sphinxhyphen{}annex configurations gets transferred.
+Those configurations could be \sphinxcode{\sphinxupquote{numcopies}} settings (the number of copies available at different remotes), or \sphinxcode{\sphinxupquote{wanted}} settings (preferred contents for a specific remote), and need to be created by a user%
+\begin{footnote}\sphinxAtStartFootnote
+For information on the \sphinxcode{\sphinxupquote{numcopies}} and \sphinxcode{\sphinxupquote{wanted}} settings of git\sphinxhyphen{}annex see its documentation at \sphinxhref{https://git-annex.branchable.com/git-annex-wanted}{git\sphinxhyphen{}annex.branchable.com/git\sphinxhyphen{}annex\sphinxhyphen{}wanted/} and \dlhbhref{B1F}{git\sphinxhyphen{}annex.branchable.com/git\sphinxhyphen{}annex\sphinxhyphen{}numcopies/}.
+%
+\end{footnote} with git\sphinxhyphen{}annex commands. If you have files you want to keep private, or do not need published, these configurations are very useful.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{auto\sphinxhyphen{}if\sphinxhyphen{}wanted}} (Default): Unless a \sphinxcode{\sphinxupquote{wanted}} or \sphinxcode{\sphinxupquote{numcopies}} configuration exists in the dataset, all content are published. Should a \sphinxcode{\sphinxupquote{wanted}} or \sphinxcode{\sphinxupquote{numcopies}} configuration exist, the command enables \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}auto}} in the underlying \sphinxcode{\sphinxupquote{git annex copy}} call.
+
+\end{itemize}
+
+\sphinxAtStartPar
+Beyond different modes of transferring data, the \sphinxcode{\sphinxupquote{\sphinxhyphen{}f/\sphinxhyphen{}\sphinxhyphen{}force}} option allows to force specific publishing operations with three different modes.
+Be careful when using it, as its modes possibly overrule safety protections or optimizations:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{checkdatapresent}}: With this option, the underlying \sphinxcode{\sphinxupquote{git annex copy}} call to
+publish file contents is invoked without a \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}fast}} option. Usually, the
+\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}fast}} option increases the speed of the operation, as it disables a check
+whether the sibling already has content. This however, might skip copying content
+in some cases. Therefore, \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}force datatransfer}} is a slower, but more fail\sphinxhyphen{}safe
+option to publish annexed file contents.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{gitpush}}: This option triggers a \sphinxcode{\sphinxupquote{git push \sphinxhyphen{}\sphinxhyphen{}force}}. Be very careful using
+this option! If the changes on the dataset conflict with the changes that exist
+in the sibling, the changes in the sibling will be overwritten.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{all}}: The final mode, \sphinxcode{\sphinxupquote{all}}, combines all force modes \textendash{} thus attempting to really get your dataset contents published by any means.
+
+\end{itemize}
+
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{datalad push}} can publish available subdatasets recursively if the
+\sphinxcode{\sphinxupquote{\sphinxhyphen{}r/\sphinxhyphen{}\sphinxhyphen{}recursive}} flag is specified. Note that this requires that all subdatasets
+that should be published have sibling names identical to the sibling specified in
+the top\sphinxhyphen{}level \sphinxcode{\sphinxupquote{datalad push}} command, or that appropriate default publication
+targets are configured throughout the dataset hierarchy.
+
+\index{configure which branches to push@\spxentry{configure which branches to push}!with Git@\spxentry{with Git}}\index{with Git@\spxentry{with Git}!configure which branches to push@\spxentry{configure which branches to push}}\ignorespaces \begin{findoutmore}[label={fom-push-branch}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{Push more than the current branch}
+\label{\detokenize{basics/101-141-push:fom-push-branch}}
+
+\sphinxAtStartPar
+If you have more than one {\hyperref[\detokenize{glossary:term-branch}]{\sphinxtermref{\DUrole{xref,std,std-term}{branch}}}} in your
+dataset, a \sphinxcode{\sphinxupquote{datalad push \sphinxhyphen{}\sphinxhyphen{}to \textless{}sibling\textgreater{}}} will by default only push
+the current {\hyperref[\detokenize{glossary:term-branch}]{\sphinxtermref{\DUrole{xref,std,std-term}{branch}}}}, \sphinxstyleemphasis{unless} you provide configurations that alter
+this default. Here are two ways in which this can be achieved:
+
+\sphinxAtStartPar
+\sphinxstylestrong{Option 1:} Setting the \sphinxcode{\sphinxupquote{push.default}} configuration variable from
+\sphinxcode{\sphinxupquote{simple}} (the default) to \sphinxcode{\sphinxupquote{matching}} will configure the dataset such that
+\sphinxcode{\sphinxupquote{datalad push}} pushes \sphinxstyleemphasis{all} branches to the sibling.
+A concrete example: On a dataset level, this can be done using
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }config\PYG{+w}{ }\PYGZhy{}\PYGZhy{}local\PYG{+w}{ }push.default\PYG{+w}{ }matching
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+\sphinxstylestrong{Option 2:}
+\dlhbhref{G1E}{Tweaking the default push refspec} for the dataset allows to
+select a range of branches that should be pushed. The link above gives a
+thorough introduction into the refspec. For a hands\sphinxhyphen{}on example, consider how it is done for
+\dlhbhref{G2E}{the published DataLad\sphinxhyphen{}101 dataset}:
+
+\sphinxAtStartPar
+The published version of the DataLad\sphinxhyphen{}101 dataset is known its local clone
+as a {\hyperref[\detokenize{glossary:term-remote}]{\sphinxtermref{\DUrole{xref,std,std-term}{remote}}}} called \sphinxcode{\sphinxupquote{public}}, and each section of the book is identified
+with a custom branch name that corresponds to the section name. Whenever an
+update to the public dataset is pushed, apart from pushing only the \sphinxcode{\sphinxupquote{main}}
+branch, all branches starting with the section identifier \sphinxcode{\sphinxupquote{sct}} are pushed
+automatically as well. This configuration was achieved by specifying these branches
+(using {\hyperref[\detokenize{glossary:term-globbing}]{\sphinxtermref{\DUrole{xref,std,std-term}{globbing}}}} with \sphinxcode{\sphinxupquote{*}}) in the \sphinxcode{\sphinxupquote{push}} specification of this {\hyperref[\detokenize{glossary:term-remote}]{\sphinxtermref{\DUrole{xref,std,std-term}{remote}}}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }config\PYG{+w}{ }\PYGZhy{}\PYGZhy{}local\PYG{+w}{ }remote.public.push\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}refs/heads/sct*\PYGZsq{}}
+\end{sphinxVerbatim}
+
+
+\end{findoutmore}
+
+
+\subsection{Pushing errors}
+\label{\detokenize{basics/101-141-push:pushing-errors}}
+\sphinxAtStartPar
+If you are unfamiliar with Git, please be aware that cloning a dataset to a different place and subsequently pushing to it can lead to Git error messages if changes are pushed to a currently checked out {\hyperref[\detokenize{glossary:term-branch}]{\sphinxtermref{\DUrole{xref,std,std-term}{branch}}}} of the sibling (in technical Git terms: When pushing to a checked\sphinxhyphen{}out branch of a non\sphinxhyphen{}bare repository remote).
+As an example, consider what happens if we attempt a \sphinxcode{\sphinxupquote{datalad push}} to the sibling \sphinxcode{\sphinxupquote{roommate}} that we created in the chapter {\hyperref[\detokenize{basics/basics-collaboration:chapter-collaboration}]{\sphinxcrossref{\DUrole{std,std-ref}{Collaboration}}}} (\autopageref*{\detokenize{basics/basics-collaboration:chapter-collaboration}}):
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }push\PYG{+w}{ }\PYGZhy{}\PYGZhy{}to\PYG{+w}{ }roommate
+\PYG{g+go}{copy(ok): books/TLCL.pdf (file) [to roommate...]}
+\PYG{g+go}{copy(ok): books/bash\PYGZus{}guide.pdf (file) [to roommate...]}
+\PYG{g+go}{copy(ok): books/byte\PYGZhy{}of\PYGZhy{}python.pdf (file) [to roommate...]}
+\PYG{g+go}{publish(ok): . (dataset) [refs/heads/git\PYGZhy{}annex\PYGZhy{}\PYGZgt{}roommate:refs/heads/git\PYGZhy{}annex ✂FROM✂..✂TO✂]}
+\PYG{g+go}{publish(error): . (dataset) [refs/heads/main\PYGZhy{}\PYGZgt{}roommate:refs/heads/main [remote rejected] (branch is currently checked out)]}
+\PYG{g+go}{action summary:}
+\PYG{g+go}{  copy (ok: 3)}
+\PYG{g+go}{  publish (error: 1, ok: 1)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Publishing fails with the error message \sphinxcode{\sphinxupquote{{[}remote rejected{]} (branch is currently checked out)}}.
+This can be prevented with  \dlhbhref{G4A}{configuration settings} in Git versions 2.3 or higher, or by pushing to a branch of the sibling that is currently not checked\sphinxhyphen{}out.
+
+\sphinxstepscope
+
+
+\section{Summary}
+\label{\detokenize{basics/101-140-summary:summary}}\label{\detokenize{basics/101-140-summary:summaryshare}}\label{\detokenize{basics/101-140-summary::doc}}
+\sphinxAtStartPar
+Without access to the same computational infrastructure, you can distribute or share your
+DataLad datasets with friends and collaborators by leveraging third party
+services. DataLad integrates well with a variety of free or commercial services,
+and with many available service options this gives you freedom in deciding where
+you store your data and thus who can get access.
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+An easy, free, and fast option is {\hyperref[\detokenize{glossary:term-GIN}]{\sphinxtermref{\DUrole{xref,std,std-term}{GIN}}}}, a
+web\sphinxhyphen{}based repository store for scientific data management. If you are registered
+and have SSH authentication set up, you can create a new, empty repository,
+add it as a sibling to your dataset, and publish all dataset contents \textendash{} including
+annexed data, as GIN supports repositories with an annex.
+
+\item {} 
+\sphinxAtStartPar
+Other repository hosting services such as GitHub and GitLab%
+\begin{footnote}\sphinxAtStartFootnote
+Older versions of {\hyperref[\detokenize{glossary:term-GitLab}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitLab}}}} provide a git\sphinxhyphen{}annex configuration, but it is disabled
+by default, and to enable it you would need to have administrative
+access to the server and client side of your GitLab instance.
+%
+\end{footnote} do not support
+an annex. If a dataset is shared via one of those platforms, annexed data needs
+to be published to an external data store. The published dataset stores
+information about where to obtain annexed file contents from such that a
+\sphinxcode{\sphinxupquote{datalad get}} works.
+
+\item {} 
+\sphinxAtStartPar
+The external data store can be any of a variety of third party hosting providers.
+To enable data transfer to and from this service, you (may) need to configure an
+appropriate {\hyperref[\detokenize{glossary:term-special-remote}]{\sphinxtermref{\DUrole{xref,std,std-term}{special remote}}}}, and configure a publication dependency.
+
+\item {} 
+\sphinxAtStartPar
+The \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}data}} and \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}force}} options of \sphinxcode{\sphinxupquote{datalad push}} allows to override
+automatic decision making on to\sphinxhyphen{}be\sphinxhyphen{}published contents. If it isn’t specified,
+DataLad will attempt to figure out itself which and how dataset contents
+shall be published. With a path to files, directories, or subdatasets you
+can also publish only selected contents’ data.
+
+\end{itemize}
+
+\begin{figure}[tbp]
+\centering
+
+\noindent\sphinxincludegraphics[width=0.400\linewidth]{{going_up}.pdf}
+\end{figure}
+
+
+\subsection{Now what can I do with it?}
+\label{\detokenize{basics/101-140-summary:now-what-can-i-do-with-it}}
+\sphinxAtStartPar
+Finally you can share datasets and their annexed contents with others without the
+need for a shared computational infrastructure. It remains your choice where to
+publish your dataset to \textendash{} considerations of data access, safety, or potential
+costs will likely influence your choice of service.
+
+\sphinxstepscope
+
+

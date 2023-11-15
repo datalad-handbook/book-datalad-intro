@@ -1,0 +1,543 @@
+\chapter{Installation and configuration}
+\label{\detokenize{intro/installation:installation-and-configuration}}\label{\detokenize{intro/installation:install}}\label{\detokenize{intro/installation::doc}}
+\noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{interior_design}.pdf}\hspace*{\fill}}
+
+\index{installation@\spxentry{installation}!DataLad@\spxentry{DataLad}}\ignorespaces 
+
+\section{Install DataLad}
+\label{\detokenize{intro/installation:install-datalad}}\label{\detokenize{intro/installation:index-0}}\begin{importantnote}[before title={\thetcbcounter\ }, check odd page=true]{Feedback on installation instructions}
+
+\sphinxAtStartPar
+The installation methods presented in this chapter are based on experience
+and have been tested carefully. However, operating systems and other
+software are continuously evolving, and these guides might have become
+outdated. Be sure to check out the online\sphinxhyphen{}handbook for up\sphinxhyphen{}to\sphinxhyphen{}date information.
+
+
+\end{importantnote}
+
+\sphinxAtStartPar
+In general, the DataLad installation requires Python 3 (see the
+\textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-py2v3}} {\hyperref[\detokenize{intro/installation:fom-py2v3}]{\sphinxcrossref{\DUrole{std,std-ref}{on the difference between Python 2 and 3}}}} (\autopageref*{\detokenize{intro/installation:fom-py2v3}}) to learn
+why this is required), {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}}, and {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}}, and for some
+functionality \dlhbhref{71}{7\sphinxhyphen{}Zip}.  The instructions below detail how
+to install the core DataLad tool and its dependencies on common operating
+systems. They do not cover the various {\hyperref[\detokenize{glossary:term-DataLad-extension}]{\sphinxtermref{\DUrole{xref,std,std-term}{DataLad extension}}}}s that need to be installed separately, if desired.
+
+\index{determine version@\spxentry{determine version}!with Python@\spxentry{with Python}}\index{with Python@\spxentry{with Python}!determine version@\spxentry{determine version}}\ignorespaces \begin{findoutmore}[label={fom-py2v3}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{Python 2, Python 3, what’s the difference?}
+\label{\detokenize{intro/installation:fom-py2v3}}
+
+\sphinxAtStartPar
+DataLad requires Python 3.8, or a more recent version, to be installed on your system.
+The easiest way to verify that this is the case is to open a terminal and type \sphinxcode{\sphinxupquote{ python}} to start a Python session:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }python
+\PYG{g+go}{Python 3.9.1+ (default, Jan 20 2021, 14:49:22)}
+\PYG{g+go}{[GCC 10.2.1 20210110] on linux}
+\PYG{g+go}{Type \PYGZdq{}help\PYGZdq{}, \PYGZdq{}copyright\PYGZdq{}, \PYGZdq{}credits\PYGZdq{} or \PYGZdq{}license\PYGZdq{} for more information.}
+\PYG{g+go}{\PYGZgt{}\PYGZgt{}\PYGZgt{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+If this fails, or reports a Python version with a leading \sphinxcode{\sphinxupquote{2}}, such as \sphinxcode{\sphinxupquote{Python 2.7.18}}, try starting \sphinxcode{\sphinxupquote{ python3}}, which some systems use to disambiguate between Python 2 and Python 3.
+If this fails, too, you need to obtain a recent release of Python 3. On Windows, attempting to run commands that are not installed might cause a Windows Store window to pop up.
+If this happens, Python may not yet be installed. Please check the {\hyperref[\detokenize{intro/installation:windows-10-and-11}]{\sphinxcrossref{Windows 10 and 11}}} (\autopageref*{\detokenize{intro/installation:windows-10-and-11}}) installation instructions, and \sphinxstyleemphasis{do not} install Python via the Windows Store.
+
+\sphinxAtStartPar
+Python 2 is an outdated, in technical terms “deprecated”, version of Python.
+Although it still exist as the default Python version on many systems, it is no longer maintained since 2020, and thus, most software has dropped support for Python 2.
+If you only run Python 2 on your system, most Python software, including DataLad, will be incompatible, and hence unusable,  resulting in errors during installation and execution.
+
+\sphinxAtStartPar
+But does that mean that you should uninstall Python 2?  \sphinxstylestrong{No}!  Keep it installed, especially if you are using Linux or MacOS.
+Python 2 existed for 20 years and numerous software has been written for it.
+It is quite likely that some basic operating system components or legacy software on your computer is depending on it, and uninstalling a preinstalled Python 2 from your system will likely render it unusable.
+Install Python 3, and have both versions coexist peacefully.
+
+
+\end{findoutmore}
+
+\sphinxAtStartPar
+The following sections provide targeted installation instructions for a set of
+common scenarios, operating systems, or platforms.
+
+\noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{install}.pdf}\hspace*{\fill}}
+
+\index{install DataLad@\spxentry{install DataLad}!on Windows@\spxentry{on Windows}}\index{on Windows@\spxentry{on Windows}!install DataLad@\spxentry{install DataLad}}\ignorespaces 
+
+\subsection{Windows 10 and 11}
+\label{\detokenize{intro/installation:windows-10-and-11}}\label{\detokenize{intro/installation:index-2}}
+\sphinxAtStartPar
+There are countless ways to install software on Windows. Here we describe \sphinxstyleemphasis{one}
+possible approach that should work on any Windows computer, like one that you
+may have just bought.
+\begin{description}
+\sphinxlineitem{Python:}
+\index{install Python@\spxentry{install Python}!on Windows@\spxentry{on Windows}}\index{on Windows@\spxentry{on Windows}!install Python@\spxentry{install Python}}\index{installation@\spxentry{installation}!Python@\spxentry{Python}}\ignorespaces 
+\sphinxAtStartPar
+Windows itself does not ship with Python, it must be installed separately.
+If you already did that, please check the \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-py2v3}} {\hyperref[\detokenize{intro/installation:fom-py2v3}]{\sphinxcrossref{\DUrole{std,std-ref}{on Python
+versions}}}} (\autopageref*{\detokenize{intro/installation:fom-py2v3}}), if it matches the requirements. Otherwise, head over
+to the \dlhbhref{P8A}{download section of the Python website}, and download an installer. Unless you
+have specific requirements, go with the 64bit installer of the latest
+Python 3 release.
+\begin{windowswit}[before title={\thetcbcounter\ }, check odd page=true]{Avoid installing Python from the Windows store}
+
+\sphinxAtStartPar
+We recommend to \sphinxstylestrong{not} install Python via the Windows store, even if it
+opens after you typed \sphinxcode{\sphinxupquote{ python}}, as this version requires
+additional configurations by hand (in particular of your \sphinxcode{\sphinxupquote{\$PATH}}
+{\hyperref[\detokenize{glossary:term-environment-variable}]{\sphinxtermref{\DUrole{xref,std,std-term}{environment variable}}}}).
+
+
+\end{windowswit}
+
+\sphinxAtStartPar
+When you run the installer, make sure to select the \sphinxstyleemphasis{Add Python to PATH} option,
+as this is required for subsequent installation steps and interactive use later on.
+Other than that, using the default installation settings is just fine.
+\begin{windowswit}[before title={\thetcbcounter\ }, check odd page=true]{Verify Python installation}
+
+\sphinxAtStartPar
+It is not uncommon for multiple Python installations to co\sphinxhyphen{}exist on a Windows machine, because particular applications can ship their own.
+Such alternative installations may even be or become the default.
+This can cause confusing behavior, because each Python installation will have different package versions installed.
+
+\sphinxAtStartPar
+To verify if there are multiple installations, open the windows command line \sphinxcode{\sphinxupquote{cmd.exe}} and run \sphinxcode{\sphinxupquote{where python}}.
+This will list all variants of \sphinxcode{\sphinxupquote{python.exe}}.
+There will be one in \sphinxcode{\sphinxupquote{WindowsApps}}, which is only a link to the Windows app store.
+Make sure the Python version that you installed is listed too.
+
+\sphinxAtStartPar
+If there are multiple Python installation, you can tell which one is default by running this command in \sphinxcode{\sphinxupquote{cmd.exe}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{o}{\PYGZgt{}} \PYG{n}{python} \PYG{o}{\PYGZhy{}}\PYG{n}{c} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{import sys; print(sys.executable)}\PYG{l+s+s2}{\PYGZdq{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This will print the path of the default \sphinxcode{\sphinxupquote{python.exe}}.
+If the output is not matching the expected Python installation, likely the \sphinxcode{\sphinxupquote{\$PATH}} environment variable needs to be adjusted.
+This can be done in the Windows system properties.
+It is sufficient to move the entries created by the Python installer to the start of the declaration list.
+
+
+\end{windowswit}
+
+\sphinxlineitem{Git:}
+\index{install Git@\spxentry{install Git}!on Windows@\spxentry{on Windows}}\index{on Windows@\spxentry{on Windows}!install Git@\spxentry{install Git}}\index{installation@\spxentry{installation}!Git@\spxentry{Git}}\ignorespaces 
+\sphinxAtStartPar
+Windows also does not come with Git. If you happen to have it installed already,
+please check if you have configured it for command line use. You should be able
+to open the Windows command prompt and run a command like \sphinxcode{\sphinxupquote{ git \sphinxhyphen{}\sphinxhyphen{}version}}.
+It should return a version number and not an error.
+
+\sphinxAtStartPar
+To install Git, visit the \dlhbhref{G1O}{Git website} and
+download an installer. If in doubt, go with the 64bit installer of the latest
+version. The installer itself provides various customization options. We
+recommend to leave the defaults as they are, in particular the target
+directory, but configure the following settings (they are distributed over
+multiple dialogs):
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Select \sphinxstyleemphasis{Git from the command line and also from 3rd\sphinxhyphen{}party software}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleemphasis{Enable file system caching}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleemphasis{Select Use external OpenSSH}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleemphasis{Enable symbolic links}
+
+\end{itemize}
+
+\sphinxlineitem{Git\sphinxhyphen{}annex:}
+\index{install git\sphinxhyphen{}annex@\spxentry{install git\sphinxhyphen{}annex}!on Windows@\spxentry{on Windows}}\index{on Windows@\spxentry{on Windows}!install git\sphinxhyphen{}annex@\spxentry{install git\sphinxhyphen{}annex}}\index{installation@\spxentry{installation}!git\sphinxhyphen{}annex@\spxentry{git\sphinxhyphen{}annex}}\ignorespaces 
+\sphinxAtStartPar
+There are two convenient ways to install git\sphinxhyphen{}annex. The first is \sphinxhref{https://git-annex.branchable.com/install/Windows}{downloading the installer from git\sphinxhyphen{}annex’ homepage}. The other is to deploy git\sphinxhyphen{}annex via the \dlhbhref{G2L}{DataLad installer}.
+The latter option requires the installation of the \sphinxcode{\sphinxupquote{datalad\sphinxhyphen{}installer}} Python package.
+Once Python is available, it can be done with the Python package manager
+\sphinxcode{\sphinxupquote{ pip}}. Open a command prompt and run:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{p}{\PYGZgt{}} python \PYGZhy{}m pip install datalad\PYGZhy{}installer
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Afterwards, open another command prompt in administrator mode and run:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{p}{\PYGZgt{}} datalad\PYGZhy{}installer git\PYGZhy{}annex \PYGZhy{}m datalad/git\PYGZhy{}annex:release
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This will download a recent git\sphinxhyphen{}annex, and configure it for your Git installation.
+The admin command prompt can be closed afterwards, all other steps do not need it.
+
+\sphinxAtStartPar
+For \dlhbhref{B1M}{performance improvements}, regardless of which installation method you chose, we recommend to also set the following git\sphinxhyphen{}annex configuration:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{p}{\PYGZgt{}} git config \PYGZhy{}\PYGZhy{}global filter.annex.process \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{git\PYGZhy{}annex filter\PYGZhy{}process}\PYG{l+s+s2}{\PYGZdq{}}
+\end{sphinxVerbatim}
+
+\sphinxlineitem{DataLad:}
+\sphinxAtStartPar
+With Python, Git, and git\sphinxhyphen{}annex installed, DataLad can be installed, and later also
+upgraded using \sphinxcode{\sphinxupquote{ pip}} by running:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{p}{\PYGZgt{}} python \PYGZhy{}m pip install datalad
+\end{sphinxVerbatim}
+
+\sphinxlineitem{7\sphinxhyphen{}Zip (optional, but highly recommended):}
+\index{install 7\sphinxhyphen{}zip@\spxentry{install 7\sphinxhyphen{}zip}!on Windows@\spxentry{on Windows}}\index{on Windows@\spxentry{on Windows}!install 7\sphinxhyphen{}zip@\spxentry{install 7\sphinxhyphen{}zip}}\index{installation@\spxentry{installation}!7\sphinxhyphen{}Zip@\spxentry{7\sphinxhyphen{}Zip}}\ignorespaces 
+\sphinxAtStartPar
+Download it from the \dlhbhref{71}{7\sphinxhyphen{}zip website} (64bit
+installer when in doubt), and install it into the default target directory.
+
+\end{description}
+
+\sphinxAtStartPar
+There are many other ways to install DataLad on Windows, check for example the
+\textit{Windows-wit}~{\windowswiticoninline}\textit{\ref{ww-wsl2}} {\hyperref[\detokenize{intro/installation:ww-wsl2}]{\sphinxcrossref{\DUrole{std,std-ref}{on the Windows Subsystem 2 for Linux}}}} (\autopageref*{\detokenize{intro/installation:ww-wsl2}}).
+One attractive alternative approach is {\hyperref[\detokenize{intro/installation:conda}]{\sphinxcrossref{Conda}}} (\autopageref*{\detokenize{intro/installation:conda}}), a completely different approach is to install the {\hyperref[\detokenize{glossary:term-DataLad-Gooey}]{\sphinxtermref{\DUrole{xref,std,std-term}{DataLad Gooey}}}}, which is a standalone installation of DataLad’s graphical application (see \dlhbhref{D1F}{the DataLad Gooey documentation} for installation instructions).
+
+\index{install DataLad@\spxentry{install DataLad}!on WSL2@\spxentry{on WSL2}}\index{on WSL2@\spxentry{on WSL2}!install DataLad@\spxentry{install DataLad}}\ignorespaces \begin{windowswit}[label={ww-wsl2}, before title={\thetcbcounter\ }, check odd page=true]{Install DataLad using the Windows Subsystem 2 for Linux}
+\label{\detokenize{intro/installation:ww-wsl2}}
+
+\sphinxAtStartPar
+With the Windows Subsystem for Linux, you will be able to use a Unix system
+despite being on Windows.  You need to have a recent build of Windows in
+order to get WSL2 \textendash{} we do not recommend WSL1.
+
+\sphinxAtStartPar
+You can find out how to install the Windows Subsystem for Linux at
+\dlhbhref{M1B}{docs.microsoft.com}.
+Afterwards, proceed with your installation as described in the installation instructions
+for Linux.
+
+
+\end{windowswit}
+
+\sphinxAtStartPar
+Using DataLad on Windows has a few peculiarities. In general, DataLad can feel a bit
+sluggish on non\sphinxhyphen{}WSL2 Windows systems. This is due to various file system issues
+that also affect the version control system {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}} itself, which DataLad
+relies on. The core functionality of DataLad works, and you should be able to
+follow most contents covered in this book.  You will notice, however, that some
+Unix commands displayed in examples may not work, and that terminal output can
+look different from what is displayed in the code examples of the book, and
+that some dependencies for additional functionality are not available for
+Windows. Dedicated notes,
+“\sphinxcode{\sphinxupquote{Windows\sphinxhyphen{}wit}}s”, contain important information, alternative commands, or
+warnings, and an overview of useful Windows commands and general information is included in {\hyperref[\detokenize{intro/howto:howto}]{\sphinxcrossref{\DUrole{std,std-ref}{The command line}}}} (\autopageref*{\detokenize{intro/howto:howto}}).
+
+\index{install DataLad@\spxentry{install DataLad}!on Mac@\spxentry{on Mac}}\index{on Mac@\spxentry{on Mac}!install DataLad@\spxentry{install DataLad}}\ignorespaces 
+
+\subsection{Mac (incl. M1)}
+\label{\detokenize{intro/installation:mac-incl-m1}}\label{\detokenize{intro/installation:mac}}\label{\detokenize{intro/installation:index-8}}
+\sphinxAtStartPar
+Modern Macs come with a compatible Python 3 version installed by default. The
+\textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-py2v3}} {\hyperref[\detokenize{intro/installation:fom-py2v3}]{\sphinxcrossref{\DUrole{std,std-ref}{on Python versions}}}} (\autopageref*{\detokenize{intro/installation:fom-py2v3}}) has instructions on how to
+confirm that.
+
+\sphinxAtStartPar
+DataLad is available via OS X’s \dlhbhref{B3}{homebrew} package manager.
+First, install the homebrew package manager, which requires \dlhbhref{A1A}{Xcode} to be installed from the
+Mac App Store.
+
+\sphinxAtStartPar
+Next, install datalad and its dependencies:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }brew\PYG{+w}{ }install\PYG{+w}{ }datalad
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Alternatively, you can exclusively use \sphinxcode{\sphinxupquote{ brew}} for DataLad’s non\sphinxhyphen{}Python
+dependencies, and then check the \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-macosx-pip}} {\hyperref[\detokenize{intro/installation:fom-macosx-pip}]{\sphinxcrossref{\DUrole{std,std-ref}{on how to install DataLad via
+Python\textquotesingle{}s package manager}}}} (\autopageref*{\detokenize{intro/installation:fom-macosx-pip}}).
+\begin{findoutmore}[label={fom-macosx-pip}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{Install DataLad via pip on macOS}
+\label{\detokenize{intro/installation:fom-macosx-pip}}
+
+\sphinxAtStartPar
+If Git/git\sphinxhyphen{}annex are installed already (via brew), DataLad can also be
+installed via Python’s package manager \sphinxcode{\sphinxupquote{pip}}, which should be installed
+by default on your system:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }python\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }pip\PYG{+w}{ }install\PYG{+w}{ }datalad
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Some macOS versions may use \sphinxcode{\sphinxupquote{python3}} instead of \sphinxcode{\sphinxupquote{python}} \textendash{} use {\hyperref[\detokenize{glossary:term-tab-completion}]{\sphinxtermref{\DUrole{xref,std,std-term}{tab
+completion}}}} to find out which is installed.
+
+\sphinxAtStartPar
+Recent macOS versions may warn after installation that scripts were installed
+into locations that were not on \sphinxcode{\sphinxupquote{PATH}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+The script chardetect is installed in
+\PYGZsq{}/Users/MYUSERNAME/Library/Python/3.11/bin\PYGZsq{} which is not on PATH.
+Consider adding this directory to PATH or, if you prefer to
+suppress this warning, use \PYGZhy{}\PYGZhy{}no\PYGZhy{}warn\PYGZhy{}script\PYGZhy{}location.
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+To fix this, add these paths to the \sphinxcode{\sphinxupquote{\$PATH}} environment variable.
+You can do this for your own user account by adding something like the following
+to the \sphinxstyleemphasis{profile} file of your shell (exchange the user name accordingly):
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{export}\PYG{+w}{ }\PYG{n+nv}{PATH}\PYG{o}{=}\PYG{n+nv}{\PYGZdl{}PATH}:/Users/MYUSERNAME/Library/Python/3.11/bin
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+If you use a {\hyperref[\detokenize{glossary:term-bash}]{\sphinxtermref{\DUrole{xref,std,std-term}{bash}}}} shell, this may be \sphinxcode{\sphinxupquote{\textasciitilde{}/.bashrc}} or
+\sphinxcode{\sphinxupquote{\textasciitilde{}/.bash\_profile}}, if you are using a {\hyperref[\detokenize{glossary:term-zsh}]{\sphinxtermref{\DUrole{xref,std,std-term}{zsh}}}} shell, it may be
+\sphinxcode{\sphinxupquote{\textasciitilde{}/.zshrc}} or \sphinxcode{\sphinxupquote{\textasciitilde{}/.zprofile}}. Find out which shell you are using by
+typing \sphinxcode{\sphinxupquote{echo \$SHELL}} into your terminal.
+
+\sphinxAtStartPar
+Alternatively, you could configure it \sphinxstyleemphasis{system\sphinxhyphen{}wide}, i.e., for all users of
+your computer by adding the path
+\sphinxcode{\sphinxupquote{/Users/MYUSERNAME/Library/Python/3.11/bin}} to the file \sphinxcode{\sphinxupquote{/etc/paths}},
+e.g., with the editor {\hyperref[\detokenize{glossary:term-nano}]{\sphinxtermref{\DUrole{xref,std,std-term}{nano}}}} (requires using \sphinxcode{\sphinxupquote{sudo}} and authenticating
+with your password):
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }sudo\PYG{+w}{ }nano\PYG{+w}{ }/etc/paths
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The contents of this file could look like this afterwards (the last line was
+added):
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+go}{/usr/local/bin}
+\PYG{g+go}{/usr/bin}
+\PYG{g+go}{/bin}
+\PYG{g+go}{/usr/sbin}
+\PYG{g+go}{/sbin}
+\PYG{g+go}{/Users/MYUSERNAME/Library/Python/3.11/bin}
+\end{sphinxVerbatim}
+
+
+\end{findoutmore}
+
+\index{install DataLad@\spxentry{install DataLad}!on Debian/Ubuntu@\spxentry{on Debian/Ubuntu}}\index{on Debian/Ubuntu@\spxentry{on Debian/Ubuntu}!install DataLad@\spxentry{install DataLad}}\ignorespaces 
+
+\subsection{Linux: (Neuro)Debian, Ubuntu, and similar systems}
+\label{\detokenize{intro/installation:linux-neuro-debian-ubuntu-and-similar-systems}}\label{\detokenize{intro/installation:index-9}}
+\sphinxAtStartPar
+DataLad is part of the Debian and Ubuntu operating systems. However, the
+particular DataLad version included in a release may be a bit older (check the
+versions for \sphinxhref{https://packages.debian.org/datalad}{Debian} and \dlhbhref{U1A}{Ubuntu} to see which ones are available).
+
+\sphinxAtStartPar
+For some recent releases of Debian\sphinxhyphen{}based operating systems, \dlhbhref{D7}{NeuroDebian} provides more recent DataLad versions (check the
+\dlhbhref{D7B}{availability table}).  In order to
+install from NeuroDebian, follow \dlhbhref{D7A}{its installation documentation}, which only requires
+copy\sphinxhyphen{}pasting three lines into a terminal.  Also, should you be confused by the
+name: enabling this repository will not do any harm if your field is not
+neuroscience.
+
+\sphinxAtStartPar
+Whichever repository you end up using, the following command installs DataLad
+and all of its software dependencies (including {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}} and \dlhbhref{S3}{p7zip}):
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }sudo\PYG{+w}{ }apt\PYGZhy{}get\PYG{+w}{ }install\PYG{+w}{ }datalad
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The command above will also upgrade existing installations to the most recent
+available version.
+
+\index{install DataLad@\spxentry{install DataLad}!on Redhat/Fedora@\spxentry{on Redhat/Fedora}}\index{on Redhat/Fedora@\spxentry{on Redhat/Fedora}!install DataLad@\spxentry{install DataLad}}\ignorespaces 
+
+\subsection{Linux: CentOS, Redhat, Fedora, or similar systems}
+\label{\detokenize{intro/installation:linux-centos-redhat-fedora-or-similar-systems}}\label{\detokenize{intro/installation:index-10}}
+\sphinxAtStartPar
+For CentOS, Redhat, Fedora, or similar distributions, there is an \dlhbhref{B1K}{RPM package for git\sphinxhyphen{}annex}.  A
+suitable version of Python and {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}} should come with the operating
+system, although some servers may run fairly old releases.
+
+\sphinxAtStartPar
+DataLad itself can be installed via \sphinxcode{\sphinxupquote{pip}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }python\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }pip\PYG{+w}{ }install\PYG{+w}{ }datalad
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Alternatively, DataLad can be installed together with {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}} and
+{\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}} via {\hyperref[\detokenize{intro/installation:conda}]{\sphinxcrossref{Conda}}} (\autopageref*{\detokenize{intro/installation:conda}}).
+
+\index{install DataLad@\spxentry{install DataLad}!on HPC@\spxentry{on HPC}}\index{on HPC@\spxentry{on HPC}!install DataLad@\spxentry{install DataLad}}\ignorespaces 
+
+\subsection{Linux\sphinxhyphen{}machines with no root access (e.g. HPC systems)}
+\label{\detokenize{intro/installation:linux-machines-with-no-root-access-e-g-hpc-systems}}\label{\detokenize{intro/installation:norootinstall}}\label{\detokenize{intro/installation:index-11}}
+\sphinxAtStartPar
+The most convenient user\sphinxhyphen{}based installation can be achieved via {\hyperref[\detokenize{intro/installation:conda}]{\sphinxcrossref{Conda}}} (\autopageref*{\detokenize{intro/installation:conda}}).
+
+\index{install DataLad@\spxentry{install DataLad}!with Conda@\spxentry{with Conda}}\index{with Conda@\spxentry{with Conda}!install DataLad@\spxentry{install DataLad}}\ignorespaces 
+
+\subsection{Conda}
+\label{\detokenize{intro/installation:conda}}\label{\detokenize{intro/installation:index-12}}\label{\detokenize{intro/installation:id1}}
+\sphinxAtStartPar
+Conda is a software distribution available for all major operating systems, and
+its \dlhbhref{C3A}{Miniconda} installer
+offers a convenient way to bootstrap a DataLad installation. Importantly, it
+does not require admin/root access to a system.
+
+\sphinxAtStartPar
+\dlhbhref{C3B}{Detailed, platform\sphinxhyphen{}specific installation instructions} are available
+in the Conda documentation. In short: download and run the installer, or, from
+the command line, run
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }wget\PYG{+w}{ }https://repo.anaconda.com/miniconda/Miniconda3\PYGZhy{}latest\PYGZhy{}\PYGZlt{}YOUR\PYGZhy{}OS\PYGZgt{}\PYGZhy{}x86\PYGZus{}64.sh
+\PYG{g+gp}{\PYGZdl{} }bash\PYG{+w}{ }Miniconda3\PYGZhy{}latest\PYGZhy{}\PYGZlt{}YOUR\PYGZhy{}OS\PYGZgt{}\PYGZhy{}x86\PYGZus{}64.sh
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+In the above call, replace \sphinxcode{\sphinxupquote{\textless{}YOUR\sphinxhyphen{}OS\textgreater{}}} with an identifier for your operating
+system, such as “Linux” or “MacOSX”.  During the installation, you will need to
+accept a license agreement (press Enter to scroll down, and type “yes” and
+Enter to accept), confirm the installation into the default directory, and you
+should respond “yes” to the prompt \sphinxcode{\sphinxupquote{“Do you wish the installer to initialize
+Miniconda3 by running conda init? {[}yes|no{]}”}}.  Afterwards, you can remove the
+installation script by running \sphinxcode{\sphinxupquote{rm ./Miniconda3\sphinxhyphen{}latest\sphinxhyphen{}*\sphinxhyphen{}x86\_64.sh}}.
+
+\sphinxAtStartPar
+The installer automatically configures the shell to make conda\sphinxhyphen{}installed tools
+accessible, so no further configuration is necessary.  Once Conda is installed,
+the DataLad package can be installed from the \sphinxcode{\sphinxupquote{conda\sphinxhyphen{}forge}} channel:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }conda\PYG{+w}{ }install\PYG{+w}{ }\PYGZhy{}c\PYG{+w}{ }conda\PYGZhy{}forge\PYG{+w}{ }datalad
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+In general, all of DataLad’s software dependencies are automatically installed, too.
+This makes a conda\sphinxhyphen{}based deployment very convenient. A from\sphinxhyphen{}scratch DataLad installation
+on a HPC system, as a normal user, is done in three lines:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }wget\PYG{+w}{ }https://repo.anaconda.com/miniconda/Miniconda3\PYGZhy{}latest\PYGZhy{}Linux\PYGZhy{}x86\PYGZus{}64.sh
+\PYG{g+gp}{\PYGZdl{} }bash\PYG{+w}{ }Miniconda3\PYGZhy{}latest\PYGZhy{}Linux\PYGZhy{}x86\PYGZus{}64.sh
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} acknowledge license, keep everything at default}
+\PYG{g+gp}{\PYGZdl{} }conda\PYG{+w}{ }install\PYG{+w}{ }\PYGZhy{}c\PYG{+w}{ }conda\PYGZhy{}forge\PYG{+w}{ }datalad
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+In case a dependency is not available from Conda (e.g., there is no git\sphinxhyphen{}annex
+package for Windows in Conda), please refer to the platform\sphinxhyphen{}specific
+instructions above.
+
+\sphinxAtStartPar
+To update an existing installation with conda, use:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }conda\PYG{+w}{ }update\PYG{+w}{ }\PYGZhy{}c\PYG{+w}{ }conda\PYGZhy{}forge\PYG{+w}{ }datalad
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The \dlhbhref{G2L}{DataLad installer} also supports setting up a Conda environment, in case
+a suitable Python version is already available.
+
+\index{install DataLad@\spxentry{install DataLad}!with pip@\spxentry{with pip}}\index{with pip@\spxentry{with pip}!install DataLad@\spxentry{install DataLad}}\ignorespaces 
+
+\subsection{Using Python’s package manager \sphinxstyleliteralintitle{\sphinxupquote{pip}}}
+\label{\detokenize{intro/installation:using-python-s-package-manager-pip}}\label{\detokenize{intro/installation:pipinstall}}\label{\detokenize{intro/installation:index-13}}
+\sphinxAtStartPar
+As mentioned above, DataLad can be installed via Python’s package manager \dlhbhref{P5}{pip}.  \sphinxcode{\sphinxupquote{pip}} comes with any Python distribution
+from \dlhbhref{P8}{python.org}, and is available as a system\sphinxhyphen{}package
+in nearly all GNU/Linux distributions.
+
+\sphinxAtStartPar
+If you have Python and \sphinxcode{\sphinxupquote{pip}} set up, to automatically install DataLad and
+most of its software dependencies, type
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }python\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }pip\PYG{+w}{ }install\PYG{+w}{ }datalad
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+If this results in a \sphinxcode{\sphinxupquote{permission denied}} error, you can install DataLad into
+a user’s home directory:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }python\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }pip\PYG{+w}{ }install\PYG{+w}{ }\PYGZhy{}\PYGZhy{}user\PYG{+w}{ }datalad
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+On some systems, you may need to call \sphinxcode{\sphinxupquote{python3}} instead of \sphinxcode{\sphinxupquote{python}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }python3\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }pip\PYG{+w}{ }install\PYG{+w}{ }datalad
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} or, in case of a \PYGZdq{}permission denied error\PYGZdq{}:}
+\PYG{g+gp}{\PYGZdl{} }python3\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }pip\PYG{+w}{ }install\PYG{+w}{ }\PYGZhy{}\PYGZhy{}user\PYG{+w}{ }datalad
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+An existing installation can be upgraded with \sphinxcode{\sphinxupquote{python \sphinxhyphen{}m pip install \sphinxhyphen{}U datalad}}.
+
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{pip}} is not able to install non\sphinxhyphen{}Python software, such as 7\sphinxhyphen{}zip or
+{\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}}.  But you can install the \dlhbhref{G2L}{DataLad installer} via a \sphinxcode{\sphinxupquote{python \sphinxhyphen{}m pip install datalad\sphinxhyphen{}installer}}. This is a command\sphinxhyphen{}line tool that aids installation
+of DataLad and its key software dependencies on a range of platforms.
+
+\index{configure user identity@\spxentry{configure user identity}!with Git@\spxentry{with Git}|spxpagem}\ignorespaces 
+
+\section{Initial configuration}
+\label{\detokenize{intro/installation:initial-configuration}}\label{\detokenize{intro/installation:installconfig}}\label{\detokenize{intro/installation:index-14}}
+\sphinxAtStartPar
+Initial configurations only concern the setup of a {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}} identity. If you
+are a Git\sphinxhyphen{}user, you should hence be good to go.
+
+\begin{figure}[tbp]
+\centering
+
+\noindent\sphinxincludegraphics[width=0.700\linewidth]{{gitidentity}.pdf}
+\end{figure}
+
+\sphinxAtStartPar
+If you have not used the version control system Git before, you will need to
+tell Git some information about you. This needs to be done only once.
+In the following example, exchange \sphinxcode{\sphinxupquote{Bob McBobFace}} with your own name, and
+\sphinxcode{\sphinxupquote{bob@example.com}} with your own email address.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} enter your home directory using the \PYGZti{} shortcut}
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }\PYGZti{}
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }config\PYG{+w}{ }\PYGZhy{}\PYGZhy{}global\PYG{+w}{ }\PYGZhy{}\PYGZhy{}add\PYG{+w}{ }user.name\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}Bob McBobFace\PYGZdq{}}
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }config\PYG{+w}{ }\PYGZhy{}\PYGZhy{}global\PYG{+w}{ }\PYGZhy{}\PYGZhy{}add\PYG{+w}{ }user.email\PYG{+w}{ }bob@example.com
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This information is used to track changes in the DataLad projects you will
+be working on. Based on this information, changes you make are associated
+with your name and email address, and you should use a real email address
+and name \textendash{} it does not establish a lot of trust nor is it helpful after a few
+years if your history, especially in a collaborative project, shows
+that changes were made by \sphinxcode{\sphinxupquote{Anonymous}} with the email
+\sphinxcode{\sphinxupquote{youdontgetmy@email.fu}}.
+And do not worry, you won’t get any emails from Git or DataLad.
+
+\sphinxstepscope
+
+\index{terminal@\spxentry{terminal}|spxpagem}\index{shell@\spxentry{shell}|spxpagem}\index{command Line@\spxentry{command Line}|spxpagem}\ignorespaces 
+

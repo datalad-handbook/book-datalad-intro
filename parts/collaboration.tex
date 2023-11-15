@@ -1,0 +1,1382 @@
+\chapter{Collaboration}
+\label{\detokenize{basics/basics-collaboration:collaboration}}\label{\detokenize{basics/basics-collaboration:chapter-collaboration}}\label{\detokenize{basics/basics-collaboration::doc}}
+\noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{collaboration_sketch}.pdf}\hspace*{\fill}}
+
+\sphinxstepscope
+
+
+\section{Looking without touching}
+\label{\detokenize{basics/101-116-sharelocal:looking-without-touching}}\label{\detokenize{basics/101-116-sharelocal:sharelocal1}}\label{\detokenize{basics/101-116-sharelocal::doc}}
+\sphinxAtStartPar
+Only now, several weeks into the DataLad\sphinxhyphen{}101 course does your room
+mate realize that he has enrolled in the course as well, but has not
+yet attended at all. “Oh man, can you help me catch up?” he asks
+you one day. “Sharing just your notes would be really cool for a
+start already!”
+
+\sphinxAtStartPar
+“Sure thing”, you say, and decide that it’s probably best if he gets
+all of the \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} course dataset. Sharing datasets was
+something you wanted to look into soon, anyway.
+
+\sphinxAtStartPar
+This is one exciting aspect of DataLad datasets that has yet been missing
+from this course: How does one share a dataset?
+In this section, we will cover the simplest way of sharing a dataset:
+on a local or shared file system, via an \sphinxstyleemphasis{installation} with a path as
+a source.
+\begin{importantnote}[before title={\thetcbcounter\ }, check odd page=true]{More on public data sharing}
+
+\sphinxAtStartPar
+Interested in sharing datasets \sphinxstyleemphasis{publicly}? Read this chapter to get a feel
+for all relevant basic concepts of sharing datasets. Afterwards, head over
+to chapter {\hyperref[\detokenize{basics/basics-thirdparty:chapter-thirdparty}]{\sphinxcrossref{\DUrole{std,std-ref}{Distributing datasets}}}} (\autopageref*{\detokenize{basics/basics-thirdparty:chapter-thirdparty}}) to find out how to share a dataset
+on third\sphinxhyphen{}party infrastructure.
+
+
+\end{importantnote}
+
+\sphinxAtStartPar
+In this scenario multiple people can access the very same files at the
+same time, often on the same machine (e.g., a shared workstation, or
+a server that people can “{\hyperref[\detokenize{glossary:term-SSH}]{\sphinxtermref{\DUrole{xref,std,std-term}{SSH}}}}” into). You might think: “What do I need
+DataLad for, if everyone can already access everything?” However,
+universal, unrestricted access can easily lead to chaos. DataLad can
+help facilitate collaboration without requiring ultimate trust and
+reliability of all participants. Essentially, with a shared dataset,
+collaborators can see and use your dataset without any danger
+of undesired, or uncontrolled modification.
+
+\sphinxAtStartPar
+To demonstrate how to share a DataLad dataset on a common file system,
+we will pretend that your personal computer
+can be accessed by other users. Let’s say that
+your room mate has access, and you are making sure that there is
+a \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} dataset in a different place on the file system
+for him to access and work with.
+
+\sphinxAtStartPar
+This is indeed a common real\sphinxhyphen{}world use case: Two users on a shared
+file system sharing a dataset with each other.
+But as we cannot easily simulate a second user in this book,
+for now, you will have to share your dataset with yourself.
+This endeavor serves several purposes: For one, you will experience a very easy
+way of sharing a dataset. Secondly, it will show you
+how a dataset can be obtained from a path, instead of a URL as shown in section
+{\hyperref[\detokenize{basics/101-105-install:installds}]{\sphinxcrossref{\DUrole{std,std-ref}{Install datasets}}}} (\autopageref*{\detokenize{basics/101-105-install:installds}}). Thirdly, \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} is a dataset that can
+showcase many different properties of a dataset already, but it will
+be an additional learning experience to see how the different parts
+of the dataset \textendash{} text files, larger files, subdatasets,
+{\hyperref[\detokenize{glossary:term-run-record}]{\sphinxtermref{\DUrole{xref,std,std-term}{run record}}}}s \textendash{} will appear upon installation when shared.
+And lastly, you will likely “share a dataset with yourself” whenever you
+will be using a particular dataset of your own creation as input for
+one or more projects.
+
+\sphinxAtStartPar
+“Awesome!” exclaims your room mate as you take out your laptop to
+share the dataset. “You are really saving my ass
+here. I’ll make up for it when we prepare for the final”, he promises.
+
+\sphinxAtStartPar
+To install \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} into a different part
+of your file system, navigate out of \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}}, and \textendash{} for
+simplicity \textendash{} create a new directory, \sphinxcode{\sphinxupquote{mock\_user}}, right next to it:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }../
+\PYG{g+gp}{\PYGZdl{} }mkdir\PYG{+w}{ }mock\PYGZus{}user
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+For simplicity, pretend that this is a second user’s \textendash{} your room mate’s \textendash{}
+home directory. Furthermore, let’s for now disregard anything about
+{\hyperref[\detokenize{glossary:term-permissions}]{\sphinxtermref{\DUrole{xref,std,std-term}{permissions}}}}. In a real\sphinxhyphen{}world example you likely would not be able to read and write
+to a different user’s directories, but we will talk about permissions later.
+
+\index{clone@\spxentry{clone}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!clone@\spxentry{clone}}\index{clone dataset (set location description)@\spxentry{clone dataset}\spxextra{set location description}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!clone dataset (set location description)@\spxentry{clone dataset}\spxextra{set location description}}\ignorespaces 
+\sphinxAtStartPar
+After creation, navigate into \sphinxcode{\sphinxupquote{mock\_user}} and install the dataset \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}}.
+To do this, use \sphinxcode{\sphinxupquote{datalad clone}}, and provide a path to your original
+dataset:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }mock\PYGZus{}user
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }clone\PYG{+w}{ }\PYGZhy{}\PYGZhy{}description\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}DataLad\PYGZhy{}101 in mock\PYGZus{}user\PYGZdq{}}\PYG{+w}{ }../DataLad\PYGZhy{}101
+\PYG{g+go}{install(ok): /home/me/dl\PYGZhy{}101/mock\PYGZus{}user/DataLad\PYGZhy{}101 (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This will install your dataset \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} into your room mate’s home
+directory. Note that we have given this new
+dataset a description about its location. Note further that we
+have not provided the optional destination path to \sphinxcode{\sphinxupquote{datalad clone}},
+and hence it installed the dataset under its original name in the current directory.
+
+\sphinxAtStartPar
+Together with your room mate, you go ahead and see what this dataset looks
+like. Before running the command, try to predict what you will see.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }DataLad\PYGZhy{}101
+\PYG{g+gp}{\PYGZdl{} }tree
+\PYG{g+go}{.}
+\PYG{g+go}{├── books}
+\PYG{g+go}{│   ├── bash\PYGZus{}guide.pdf \PYGZhy{}\PYGZgt{} ../.git/annex/objects/WF/Gq/✂/MD5E\PYGZhy{}s1198170\PYGZhy{}\PYGZhy{}0ab2c121✂MD5.pdf}
+\PYG{g+go}{│   ├── byte\PYGZhy{}of\PYGZhy{}python.pdf \PYGZhy{}\PYGZgt{} ../.git/annex/objects/xF/42/✂/MD5E\PYGZhy{}s4161086\PYGZhy{}\PYGZhy{}c832fc13✂MD5.pdf}
+\PYG{g+go}{│   ├── progit.pdf \PYGZhy{}\PYGZgt{} ../.git/annex/objects/G6/Gj/✂/MD5E\PYGZhy{}s12465653\PYGZhy{}\PYGZhy{}05cd7ed5✂MD5.pdf}
+\PYG{g+go}{│   └── TLCL.pdf \PYGZhy{}\PYGZgt{} ../.git/annex/objects/jf/3M/✂/MD5E\PYGZhy{}s2120211\PYGZhy{}\PYGZhy{}06d1efcb✂MD5.pdf}
+\PYG{g+go}{├── code}
+\PYG{g+go}{│   └── list\PYGZus{}titles.sh}
+\PYG{g+go}{├── notes.txt}
+\PYG{g+go}{└── recordings}
+\PYG{g+go}{    ├── interval\PYGZus{}logo\PYGZus{}small.jpg \PYGZhy{}\PYGZgt{} ../.git/annex/objects/pw/Mf/✂/MD5E\PYGZhy{}s70348\PYGZhy{}\PYGZhy{}4b2ec0db✂MD5.jpg}
+\PYG{g+go}{    ├── longnow}
+\PYG{g+go}{    ├── podcasts.tsv}
+\PYG{g+go}{    └── salt\PYGZus{}logo\PYGZus{}small.jpg \PYGZhy{}\PYGZgt{} ../.git/annex/objects/fZ/wg/✂/MD5E\PYGZhy{}s76402\PYGZhy{}\PYGZhy{}87da732f✂MD5.jpg}
+
+\PYG{g+go}{4 directories, 9 files}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+There are a number of interesting things, and your room mate is the
+first to notice them:
+
+\sphinxAtStartPar
+“Hey, can you explain some things to me?”, he asks. “This directory
+here, “\sphinxcode{\sphinxupquote{longnow}}”, why is it empty?”
+True, the subdataset has a directory name but apart from this,
+the \sphinxcode{\sphinxupquote{longnow}} directory appears empty.
+
+\sphinxAtStartPar
+“Also, why do the PDFs in \sphinxcode{\sphinxupquote{books/}} and the \sphinxcode{\sphinxupquote{.jpg}} files
+appear so weird? They have
+this cryptic path right next to them, and look, if I try to open
+one of them, it fails! Did something go wrong when we installed
+the dataset?” he worries.
+Indeed, the PDFs and pictures appear just as they did in the original dataset
+on first sight: They are symlinks pointing to some location in the
+object tree. To reassure your room mate that everything is fine you
+quickly explain to him the concept of a symlink and the {\hyperref[\detokenize{glossary:term-object-tree}]{\sphinxtermref{\DUrole{xref,std,std-term}{object\sphinxhyphen{}tree}}}}
+of {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}}.
+
+\index{clone@\spxentry{clone}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!clone@\spxentry{clone}}\ignorespaces 
+\sphinxAtStartPar
+“But why does the PDF not open when I try to open it?” he repeats.
+True, these files cannot be opened. This mimics our experience when
+installing the \sphinxcode{\sphinxupquote{longnow}} subdataset: Right after installation,
+the \sphinxcode{\sphinxupquote{.mp3}} files also could not be opened, because their file
+content was not yet retrieved. You begin to explain to your room mate
+how DataLad retrieves only minimal metadata about which files actually
+exist in a dataset upon a \sphinxcode{\sphinxupquote{datalad clone}}. “It’s really handy”,
+you tell him. “This way you can decide which book you want to read,
+and then retrieve what you need. Everything that is \sphinxstyleemphasis{annexed} is retrieved
+on demand. Note though that the text files
+contents are present, and the files can be opened \textendash{} this is because
+these files are stored in {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}}. So you already have my notes,
+and you can decide for yourself whether you want to \sphinxcode{\sphinxupquote{get}} the books.”
+
+\sphinxAtStartPar
+To demonstrate this, you decide to examine the PDFs further.
+“Try to get one of the books”, you instruct your room mate:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }get\PYG{+w}{ }books/progit.pdf
+\PYG{g+go}{get(ok): books/progit.pdf (file) [from origin...]}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+“Opening this file will work, because the content was retrieved from
+the original dataset.”, you explain, proud that this worked just as you
+thought it would.
+
+\sphinxAtStartPar
+Let’s now turn to the fact that the subdataset \sphinxcode{\sphinxupquote{longnow}} contains neither
+file content nor file metadata information to explore the contents of the
+dataset: there are no subdirectories or any files under \sphinxcode{\sphinxupquote{recordings/longnow/}}.
+This is behavior that you have not observed until now.
+To fix this and obtain file availability metadata,
+you have to run a somewhat unexpected command:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }get\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }recordings/longnow
+\PYG{g+go}{[INFO] Remote origin not usable by git\PYGZhy{}annex; setting annex\PYGZhy{}ignore}
+\PYG{g+go}{install(ok): /home/me/dl\PYGZhy{}101/mock\PYGZus{}user/DataLad\PYGZhy{}101/recordings/longnow (dataset) [Installed subdataset in order to get /home/me/dl\PYGZhy{}101/mock\PYGZus{}user/DataLad\PYGZhy{}101/recordings/longnow]}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Before we look further into \sphinxcode{\sphinxupquote{datalad get}} and the
+\sphinxcode{\sphinxupquote{\sphinxhyphen{}n/\sphinxhyphen{}\sphinxhyphen{}no\sphinxhyphen{}data}} option, let’s first see what has changed after
+running the above command (excerpt):
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }tree
+\PYG{g+go}{.}
+\PYG{g+go}{├── books}
+\PYG{g+go}{│   ├── bash\PYGZus{}guide.pdf \PYGZhy{}\PYGZgt{} ../.git/annex/objects/WF/Gq/✂/MD5E\PYGZhy{}s1198170\PYGZhy{}\PYGZhy{}0ab2c121✂MD5.pdf}
+\PYG{g+go}{│   ├── byte\PYGZhy{}of\PYGZhy{}python.pdf \PYGZhy{}\PYGZgt{} ../.git/annex/objects/xF/42/✂/MD5E\PYGZhy{}s4161086\PYGZhy{}\PYGZhy{}c832fc13✂MD5.pdf}
+\PYG{g+go}{│   ├── progit.pdf \PYGZhy{}\PYGZgt{} ../.git/annex/objects/G6/Gj/✂/MD5E\PYGZhy{}s12465653\PYGZhy{}\PYGZhy{}05cd7ed5✂MD5.pdf}
+\PYG{g+go}{│   └── TLCL.pdf \PYGZhy{}\PYGZgt{} ../.git/annex/objects/jf/3M/✂/MD5E\PYGZhy{}s2120211\PYGZhy{}\PYGZhy{}06d1efcb✂MD5.pdf}
+\PYG{g+go}{├── code}
+\PYG{g+go}{│   └── list\PYGZus{}titles.sh}
+\PYG{g+go}{├── notes.txt}
+\PYG{g+go}{└── recordings}
+\PYG{g+go}{    ├── interval\PYGZus{}logo\PYGZus{}small.jpg \PYGZhy{}\PYGZgt{} ../.git/annex/objects/pw/Mf/✂/MD5E\PYGZhy{}s70348\PYGZhy{}\PYGZhy{}4b2ec0db✂MD5.jpg}
+\PYG{g+go}{    ├── longnow}
+\PYG{g+go}{    │   ├── Long\PYGZus{}Now\PYGZus{}\PYGZus{}Conversations\PYGZus{}at\PYGZus{}The\PYGZus{}Interval}
+\PYG{g+go}{    │   │   ├── 2017\PYGZus{}06\PYGZus{}09\PYGZus{}\PYGZus{}How\PYGZus{}Digital\PYGZus{}Memory\PYGZus{}Is\PYGZus{}Shaping\PYGZus{}Our\PYGZus{}Future\PYGZus{}\PYGZus{}Abby\PYGZus{}Smith\PYGZus{}Rumsey.mp3 \PYGZhy{}\PYGZgt{} ../.git/annex/objects/8j/kQ/✂/MD5E\PYGZhy{}s66305442\PYGZhy{}\PYGZhy{}c723d53d✂MD5.mp3}
+\PYG{g+go}{    │   │   ├── 2017\PYGZus{}06\PYGZus{}09\PYGZus{}\PYGZus{}Pace\PYGZus{}Layers\PYGZus{}Thinking\PYGZus{}\PYGZus{}Stewart\PYGZus{}Brand\PYGZus{}\PYGZus{}Paul\PYGZus{}Saffo.mp3 \PYGZhy{}\PYGZgt{} ../.git/annex/objects/Qk/9M/✂/MD5E\PYGZhy{}s112801659\PYGZhy{}\PYGZhy{}00a42a1a✂MD5.mp3}
+\PYG{g+go}{    │   │   ├── 2017\PYGZus{}06\PYGZus{}09\PYGZus{}\PYGZus{}Proof\PYGZus{}\PYGZus{}The\PYGZus{}Science\PYGZus{}of\PYGZus{}Booze\PYGZus{}\PYGZus{}Adam\PYGZus{}Rogers.mp3 \PYGZhy{}\PYGZgt{} ../.git/annex/objects/FP/96/✂/MD5E\PYGZhy{}s60091960\PYGZhy{}\PYGZhy{}6e48eceb✂MD5.mp3}
+\PYG{g+go}{    │   │   ├── 2017\PYGZus{}06\PYGZus{}09\PYGZus{}\PYGZus{}Seveneves\PYGZus{}at\PYGZus{}The\PYGZus{}Interval\PYGZus{}\PYGZus{}Neal\PYGZus{}Stephenson.mp3 \PYGZhy{}\PYGZgt{} ../.git/annex/objects/Wf/5Q/✂/MD5E\PYGZhy{}s66431897\PYGZhy{}\PYGZhy{}aff90c83✂MD5.mp3}
+\PYG{g+go}{    │   │   ├── 2017\PYGZus{}06\PYGZus{}09\PYGZus{}\PYGZus{}Talking\PYGZus{}with\PYGZus{}Robots\PYGZus{}about\PYGZus{}Architecture\PYGZus{}\PYGZus{}Jeffrey\PYGZus{}McGrew.mp3 \PYGZhy{}\PYGZgt{} ../.git/annex/objects/Fj/9V/✂/MD5E\PYGZhy{}s61491081\PYGZhy{}\PYGZhy{}c4e88ea0✂MD5.mp3}
+\PYG{g+go}{    │   │   ├── 2017\PYGZus{}06\PYGZus{}09\PYGZus{}\PYGZus{}The\PYGZus{}Red\PYGZus{}Planet\PYGZus{}for\PYGZus{}Real\PYGZus{}\PYGZus{}Andy\PYGZus{}Weir.mp3 \PYGZhy{}\PYGZgt{} ../.git/annex/objects/xq/Q3/✂/MD5E\PYGZhy{}s136924472\PYGZhy{}\PYGZhy{}0d107210✂MD5.mp3}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Interesting! The file metadata information is now present, and we can
+explore the file hierarchy. The file content, however, is not present yet.
+
+\sphinxAtStartPar
+What has happened here?
+
+\sphinxAtStartPar
+When DataLad installs a dataset, it will by default only obtain the
+superdataset, and not any subdatasets. The superdataset contains the
+information that a subdataset exists though \textendash{} the subdataset is \sphinxstyleemphasis{registered}
+in the superdataset.  This is why the subdataset name exists as a directory.
+A subsequent \sphinxcode{\sphinxupquote{datalad get \sphinxhyphen{}n path/to/longnow}} will install the registered
+subdataset again, just as we did in the example above.
+
+\sphinxAtStartPar
+But what about the \sphinxcode{\sphinxupquote{\sphinxhyphen{}n}} option for \sphinxcode{\sphinxupquote{datalad get}}?
+Previously, we used \sphinxcode{\sphinxupquote{datalad get}} to get file content. However,
+\sphinxcode{\sphinxupquote{datalad get}} operates on more than just the level of \sphinxstyleemphasis{files} or \sphinxstyleemphasis{directories}.
+Instead, it can also operate on the level of \sphinxstyleemphasis{datasets}. Regardless of whether
+it is a single file (such as \sphinxcode{\sphinxupquote{books/TLCL.pdf}}) or a registered subdataset
+(such as \sphinxcode{\sphinxupquote{recordings/longnow}}), \sphinxcode{\sphinxupquote{datalad get}} will operate on it to 1) install
+it \textendash{} if it is a not yet installed subdataset \textendash{} and 2) retrieve the contents of any files.
+That makes it very easy to get your file content, regardless of
+how your dataset may be structured \textendash{} it is always the same command, and DataLad
+blurs the boundaries between superdatasets and subdatasets.
+
+\sphinxAtStartPar
+In the above example, we called \sphinxcode{\sphinxupquote{datalad get}} with the option \sphinxcode{\sphinxupquote{\sphinxhyphen{}n/\sphinxhyphen{}\sphinxhyphen{}no\sphinxhyphen{}data}}.
+This option prevents that \sphinxcode{\sphinxupquote{datalad get}} obtains the data of individual files or
+directories, thus limiting its scope to the level of datasets as only a
+\sphinxcode{\sphinxupquote{datalad clone}} is performed. Without this option, the command would
+have retrieved all of the subdatasets contents right away. But with \sphinxcode{\sphinxupquote{\sphinxhyphen{}n/\sphinxhyphen{}\sphinxhyphen{}no\sphinxhyphen{}data}},
+it only installed the subdataset to retrieve the meta data about file availability.
+
+\index{get all dataset content@\spxentry{get all dataset content}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!get all dataset content@\spxentry{get all dataset content}}\ignorespaces 
+\sphinxAtStartPar
+To explicitly install all potential subdatasets \sphinxstyleemphasis{recursively}, that is,
+all of the subdatasets inside it as well, one can give the
+\sphinxcode{\sphinxupquote{\sphinxhyphen{}r}}/\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}recursive}} option to \sphinxcode{\sphinxupquote{datalad get}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }get\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYGZhy{}r\PYG{+w}{ }\PYGZlt{}subds\PYGZgt{}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This would install the \sphinxcode{\sphinxupquote{subds}} subdataset and all potential further
+subdatasets inside of it, and the meta data about file hierarchies would
+have been available right away for every subdataset inside of \sphinxcode{\sphinxupquote{subds}}. If you
+had several subdatasets and would not provide a path to a single dataset,
+but, say, the current directory (\sphinxcode{\sphinxupquote{.}} as in \sphinxcode{\sphinxupquote{datalad get \sphinxhyphen{}n \sphinxhyphen{}r .}}), it
+would clone all registered subdatasets recursively.
+
+\sphinxAtStartPar
+So why is a recursive get not the default behavior?
+In {\hyperref[\detokenize{basics/101-106-nesting:nesting}]{\sphinxcrossref{\DUrole{std,std-ref}{Dataset nesting}}}} (\autopageref*{\detokenize{basics/101-106-nesting:nesting}}) we learned that datasets can be nested \sphinxstyleemphasis{arbitrarily} deep.
+Upon getting the meta data of one dataset you might not want to also install
+a few dozen levels of nested subdatasets right away.
+
+\sphinxAtStartPar
+However, there is a middle way%
+\begin{footnote}\sphinxAtStartFootnote
+Another alternative to a recursion limit to \sphinxcode{\sphinxupquote{datalad get \sphinxhyphen{}n \sphinxhyphen{}r}} is
+a dataset configuration that specifies subdatasets that should \sphinxstyleemphasis{not} be
+cloned recursively, unless explicitly given to the command with a path. With
+this configuration, a superdataset’s maintainer can safeguard users and prevent
+potentially large amounts of subdatasets to be cloned.
+You can learn more about this configuration in the section {\hyperref[\detokenize{basics/101-123-config2:config2}]{\sphinxcrossref{\DUrole{std,std-ref}{Shipping and overriding configuration}}}} (\autopageref*{\detokenize{basics/101-123-config2:config2}}).
+%
+\end{footnote}: The \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}recursion\sphinxhyphen{}limit}} option let’s
+you specify how many levels of subdatasets should be installed together
+with the first subdataset:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }get\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYGZhy{}r\PYG{+w}{ }\PYGZhy{}\PYGZhy{}recursion\PYGZhy{}limit\PYG{+w}{ }\PYG{l+m}{1}\PYG{+w}{ }\PYGZlt{}subds\PYGZgt{}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+To summarize what you learned in this section, write a note on how to
+install a dataset using a path as a source on a common file system.
+
+\sphinxAtStartPar
+Write this note in “your own” (the original) \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} dataset, though!
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} navigate back into the original dataset}
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }../../DataLad\PYGZhy{}101
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} write the note}
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }\PYGZlt{}\PYGZlt{}\PYG{+w}{ }EOT\PYG{+w}{ }\PYGZgt{}\PYGZgt{}\PYG{+w}{ }notes.txt
+\PYG{g+go}{A source to install a dataset from can also be a path, for example as}
+\PYG{g+go}{in \PYGZdq{}datalad clone ../DataLad\PYGZhy{}101\PYGZdq{}.}
+
+\PYG{g+go}{Just as in creating datasets, you can add a description on the}
+\PYG{g+go}{location of the new dataset clone with the \PYGZhy{}D/\PYGZhy{}\PYGZhy{}description option.}
+
+\PYG{g+go}{Note that subdatasets will not be installed by default, but are only}
+\PYG{g+go}{registered in the superdataset \PYGZhy{}\PYGZhy{} you will have to do a}
+\PYG{g+go}{\PYGZdq{}datalad get \PYGZhy{}n PATH/TO/SUBDATASET\PYGZdq{} to install the subdataset for file}
+\PYG{g+go}{availability meta data. The \PYGZhy{}n/\PYGZhy{}\PYGZhy{}no\PYGZhy{}data options prevents that file}
+\PYG{g+go}{contents are also downloaded.}
+
+\PYG{g+go}{Note that a recursive \PYGZdq{}datalad get\PYGZdq{} would install all further}
+\PYG{g+go}{registered subdatasets underneath a subdataset, so a safer way to}
+\PYG{g+go}{proceed is to set a decent \PYGZhy{}\PYGZhy{}recursion\PYGZhy{}limit:}
+\PYG{g+go}{\PYGZdq{}datalad get \PYGZhy{}n \PYGZhy{}r \PYGZhy{}\PYGZhy{}recursion\PYGZhy{}limit 2 \PYGZlt{}subds\PYGZgt{}\PYGZdq{}}
+
+\PYG{g+go}{EOT}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Save this note.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}add note about cloning from paths and recursive datalad get\PYGZdq{}}
+\PYG{g+go}{add(ok): notes.txt (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\index{clone@\spxentry{clone}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!clone@\spxentry{clone}}\ignorespaces \begin{gitusernote}[label={index-3}, before title={\thetcbcounter\ }, check odd page=true]{Get a clone}
+\label{\detokenize{basics/101-116-sharelocal:index-3}}
+
+\sphinxAtStartPar
+A dataset that is installed from an existing source, e.g., a path or URL,
+is the DataLad equivalent of a \sphinxstyleemphasis{clone} in Git.
+
+
+\end{gitusernote}
+
+\sphinxstepscope
+
+
+\section{Where’s Waldo?}
+\label{\detokenize{basics/101-117-sharelocal2:where-s-waldo}}\label{\detokenize{basics/101-117-sharelocal2:sharelocal2}}\label{\detokenize{basics/101-117-sharelocal2::doc}}
+\sphinxAtStartPar
+So far, you and your room mate have created a copy of the \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}}
+dataset on the same file system but a different place by installing
+it from a path.
+
+\sphinxAtStartPar
+You have observed that the \sphinxcode{\sphinxupquote{\sphinxhyphen{}r}}/\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}recursive}}
+option needs to be given to \sphinxcode{\sphinxupquote{datalad get {[}\sphinxhyphen{}n/\sphinxhyphen{}\sphinxhyphen{}no\sphinxhyphen{}data{]}}}
+in order to install further potential subdatasets in one go. Only then
+is the subdatasets file content availability metadata present to explore
+the file hierarchy available within the subdataset.
+Alternatively, a \sphinxcode{\sphinxupquote{datalad get \sphinxhyphen{}n \textless{}subds\textgreater{}}} takes care of installing
+exactly the specified registered subdataset.
+
+\sphinxAtStartPar
+And you have mesmerized your room mate by showing him how {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}}
+retrieved large file contents from the original dataset.
+Your room mate is excited by this magical command.
+You however begin to wonder: how does DataLad know where to look for that original content?
+
+\sphinxAtStartPar
+This information comes from git\sphinxhyphen{}annex.
+Before getting another PDF, let’s query git\sphinxhyphen{}annex where its content is stored:
+
+\index{whereis@\spxentry{whereis}!git\sphinxhyphen{}annex command@\spxentry{git\sphinxhyphen{}annex command}}\index{git\sphinxhyphen{}annex command@\spxentry{git\sphinxhyphen{}annex command}!whereis@\spxentry{whereis}}\index{show file content availability@\spxentry{show file content availability}!with git\sphinxhyphen{}annex@\spxentry{with git\sphinxhyphen{}annex}}\index{with git\sphinxhyphen{}annex@\spxentry{with git\sphinxhyphen{}annex}!show file content availability@\spxentry{show file content availability}}\ignorespaces 
+\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-117-sharelocal2:index-0}}}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} navigate back into the clone of DataLad\PYGZhy{}101}
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }../mock\PYGZus{}user/DataLad\PYGZhy{}101
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }annex\PYG{+w}{ }whereis\PYG{+w}{ }books/TLCL.pdf
+\PYG{g+go}{whereis books/TLCL.pdf (1 copy)}
+\PYG{g+go}{  0c450dc0\PYGZhy{}c48c\PYGZhy{}4057\PYGZhy{}a231\PYGZhy{}e2654b689600 \PYGZhy{}\PYGZhy{} me@appveyor\PYGZhy{}vm:\PYGZti{}/dl\PYGZhy{}101/DataLad\PYGZhy{}101 [origin]}
+\PYG{g+go}{ok}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Oh, another cryptic character sequence \sphinxhyphen{} this time however not a symlink, but an {\hyperref[\detokenize{glossary:term-annex-UUID}]{\sphinxtermref{\DUrole{xref,std,std-term}{annex UUID}}}}.
+“That’s hard to read \textendash{} what is it?” your room mate asks.
+You can recognize a path to the dataset on your computer, prefixed with the user and hostname of your computer.
+“This”, you exclaim, excited about your own realization, “is my dataset’s location I’m sharing it from!” You can check the \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-clone-description}} {\hyperref[\detokenize{basics/101-117-sharelocal2:fom-clone-description}]{\sphinxcrossref{\DUrole{std,std-ref}{on customizing this description}}}} (\autopageref*{\detokenize{basics/101-117-sharelocal2:fom-clone-description}}) and learn how to tweak this accoridng to your taste.
+
+\index{set description for dataset location@\spxentry{set description for dataset location}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!set description for dataset location@\spxentry{set description for dataset location}}\ignorespaces \begin{findoutmore}[label={fom-clone-description}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{What is this location, and what if I provided a description?}
+\label{\detokenize{basics/101-117-sharelocal2:fom-clone-description}}
+
+\sphinxAtStartPar
+Back in the very first section of the Basics, {\hyperref[\detokenize{basics/101-101-create:createds}]{\sphinxcrossref{\DUrole{std,std-ref}{Create a dataset}}}} (\autopageref*{\detokenize{basics/101-101-create:createds}}), a {\hyperref[\detokenize{basics/101-101-create:createdescription}]{\sphinxcrossref{\DUrole{std,std-ref}{Find\sphinxhyphen{}out\sphinxhyphen{}more mentioned the ‘\textendash{}description’ option}}}} (\autopageref*{\detokenize{basics/101-101-create:createdescription}})   of \sphinxcode{\sphinxupquote{datalad create}}.
+With this option, you can provide a description about the dataset \sphinxstyleemphasis{location}.
+
+\sphinxAtStartPar
+The \sphinxcode{\sphinxupquote{git annex whereis}} command, finally, is where such a description
+can become handy: If you had created the dataset with
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }create\PYG{+w}{ }\PYGZhy{}\PYGZhy{}description\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}course on DataLad\PYGZhy{}101 on my private laptop\PYGZdq{}}\PYG{+w}{ }\PYGZhy{}c\PYG{+w}{ }text2git\PYG{+w}{ }DataLad\PYGZhy{}101
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+the command would show \sphinxcode{\sphinxupquote{course on DataLad\sphinxhyphen{}101 on my private laptop}} after
+the {\hyperref[\detokenize{glossary:term-UUID}]{\sphinxtermref{\DUrole{xref,std,std-term}{UUID}}}} \textendash{} and thus a more human\sphinxhyphen{}readable description of \sphinxstyleemphasis{where}
+file content is stored.
+This becomes especially useful when the number of repository copies
+increases. If you have only one other dataset it may be easy to
+remember what and where it is. But once you have one back\sphinxhyphen{}up
+of your dataset on a USB stick, one dataset shared with
+Dropbox, and a third one on your institutions
+{\hyperref[\detokenize{glossary:term-GitLab}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitLab}}}} instance you will be grateful for the descriptions
+you provided these locations with.
+
+\sphinxAtStartPar
+The current report of the location of the dataset is in the format
+\sphinxcode{\sphinxupquote{user@host:path}}.
+
+\sphinxAtStartPar
+If the physical location of a dataset is not relevant, ambiguous, or volatile,
+or if it has an {\hyperref[\detokenize{glossary:term-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{annex}}}} that could move within the foreseeable lifetime of a
+dataset, a custom description with the relevant information on the dataset is
+superior. If this is not the case, decide for yourself whether you want to use
+the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}description}} option for future datasets or not depending on what you
+find more readable \textendash{} a self\sphinxhyphen{}made location description, or an automatic
+\sphinxcode{\sphinxupquote{user@host:path}} information.
+
+
+\end{findoutmore}
+
+\sphinxAtStartPar
+The message further informs you that there is only “\sphinxcode{\sphinxupquote{(1 copy)}}” of this file content.
+This makes sense: There is only your own, original \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} dataset in which this book is saved.
+
+\sphinxAtStartPar
+To retrieve file content of an annexed file such as one of these PDFs, git\sphinxhyphen{}annex will try to obtain it from the locations it knows to contain this content.
+It uses the UUID to identify these locations.
+Every copy of a dataset will get a UUID as a unique identifier.
+Note however that just because git\sphinxhyphen{}annex knows a certain location where content was once it does not guarantee that retrieval will work.
+If one location is a USB stick that is in your bag pack instead of your USB port, a second location is a hard drive that you deleted all of its previous contents (including dataset content) from,
+and another location is a web server, but you are not connected to the internet, git\sphinxhyphen{}annex will not succeed in retrieving contents from these locations.
+As long as there is at least one location that contains the file and is accessible, though, git\sphinxhyphen{}annex will get the content.
+Therefore, for the books in your dataset, retrieving contents works because you and your room mate share the same file system.
+If you’d share the dataset with anyone without access to your file system, \sphinxcode{\sphinxupquote{datalad get}} would not work, because it cannot access your files.
+
+\sphinxAtStartPar
+But there is one book that does not suffer from this restriction:
+The \sphinxcode{\sphinxupquote{bash\_guide.pdf}}.
+This book was not manually downloaded and saved to the dataset with \sphinxcode{\sphinxupquote{wget}} (thus keeping DataLad in the dark about where it came from), but it was obtained with the \sphinxcode{\sphinxupquote{datalad download\sphinxhyphen{}url}} command.
+This registered the books original source in the dataset, and here is why that is useful:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }annex\PYG{+w}{ }whereis\PYG{+w}{ }books/bash\PYGZus{}guide.pdf
+\PYG{g+go}{whereis books/bash\PYGZus{}guide.pdf (2 copies)}
+\PYG{g+go}{  00000000\PYGZhy{}0000\PYGZhy{}0000\PYGZhy{}0000\PYGZhy{}000000000001 \PYGZhy{}\PYGZhy{} web}
+\PYG{g+go}{  0c450dc0\PYGZhy{}c48c\PYGZhy{}4057\PYGZhy{}a231\PYGZhy{}e2654b689600 \PYGZhy{}\PYGZhy{} me@appveyor\PYGZhy{}vm:\PYGZti{}/dl\PYGZhy{}101/DataLad\PYGZhy{}101 [origin]}
+
+\PYG{g+go}{  web: https://www.tldp.org/LDP/Bash\PYGZhy{}Beginners\PYGZhy{}Guide/Bash\PYGZhy{}Beginners\PYGZhy{}Guide.pdf}
+\PYG{g+go}{ok}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Unlike the \sphinxcode{\sphinxupquote{TLCL.pdf}} book, this book has two sources, and one of them is \sphinxcode{\sphinxupquote{web}}.
+The second to last line specifies the precise URL you downloaded the file from.
+Thus, for this book, your room mate is always able to obtain it (as long as the URL remains valid), even if you would delete your \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} dataset.
+
+\sphinxAtStartPar
+We can also see a report of the source that git\sphinxhyphen{}annex uses to retrieve the content from if we look at the very end of the \sphinxcode{\sphinxupquote{get}} summary.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }get\PYG{+w}{ }books/TLCL.pdf
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }get\PYG{+w}{ }books/bash\PYGZus{}guide.pdf
+\PYG{g+go}{get(ok): books/TLCL.pdf (file) [from origin...]}
+\PYG{g+go}{get(ok): books/bash\PYGZus{}guide.pdf (file) [from origin...]}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Both of these files were retrieved “\sphinxcode{\sphinxupquote{from origin...}}”.
+\sphinxcode{\sphinxupquote{Origin}} is Git terminology for “from where the dataset was copied from” \textendash{} \sphinxcode{\sphinxupquote{origin}} therefore is the original \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} dataset from which file content can be retrieved from very fast.
+
+\sphinxAtStartPar
+If your room mate did not have access to the same file system or you deleted your \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} dataset, this output would look differently.
+The \sphinxcode{\sphinxupquote{datalad get}} command would fail on the \sphinxcode{\sphinxupquote{TLCL.pdf}} book without a known second source, and \sphinxcode{\sphinxupquote{bash\_guide.pdf}} would be retrieved “\sphinxcode{\sphinxupquote{from web...}}” \sphinxhyphen{} the registered second source, its original download URL.
+Let’s see a retrieval from \sphinxcode{\sphinxupquote{web}} in action for another file.
+The \sphinxcode{\sphinxupquote{.mp3}} files in the \sphinxcode{\sphinxupquote{longnow}} seminar series have registered web URLs%
+\begin{footnote}\sphinxAtStartFootnote
+Maybe you wonder what the location \sphinxcode{\sphinxupquote{mih@medusa}} is. It is a copy of the
+data on an account belonging to user \sphinxcode{\sphinxupquote{mih}} on the host name \sphinxcode{\sphinxupquote{medusa}}.
+Because we do not have the host names’ address, nor log\sphinxhyphen{}in credentials for
+this user, we cannot retrieve content from this location. However, somebody
+else (for example, the user \sphinxcode{\sphinxupquote{mih}}) could.
+%
+\end{footnote}.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} navigate into the subdirectory}
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }recordings/longnow
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }annex\PYG{+w}{ }whereis\PYG{+w}{ }Long\PYGZus{}Now\PYGZus{}\PYGZus{}Seminars\PYGZus{}About\PYGZus{}Long\PYGZus{}term\PYGZus{}Thinking/2003\PYGZus{}11\PYGZus{}15\PYGZus{}\PYGZus{}Brian\PYGZus{}Eno\PYGZus{}\PYGZus{}The\PYGZus{}Long\PYGZus{}Now.mp3
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }get\PYG{+w}{ }Long\PYGZus{}Now\PYGZus{}\PYGZus{}Seminars\PYGZus{}About\PYGZus{}Long\PYGZus{}term\PYGZus{}Thinking/2003\PYGZus{}11\PYGZus{}15\PYGZus{}\PYGZus{}Brian\PYGZus{}Eno\PYGZus{}\PYGZus{}The\PYGZus{}Long\PYGZus{}Now.mp3
+\PYG{g+go}{whereis Long\PYGZus{}Now\PYGZus{}\PYGZus{}Seminars\PYGZus{}About\PYGZus{}Long\PYGZus{}term\PYGZus{}Thinking/2003\PYGZus{}11\PYGZus{}15\PYGZus{}\PYGZus{}Brian\PYGZus{}Eno\PYGZus{}\PYGZus{}The\PYGZus{}Long\PYGZus{}Now.mp3 (2 copies)}
+\PYG{g+go}{	00000000\PYGZhy{}0000\PYGZhy{}0000\PYGZhy{}0000\PYGZhy{}000000000001 \PYGZhy{}\PYGZhy{} web}
+\PYG{g+go}{	✂UUID✂ \PYGZhy{}\PYGZhy{} mih@medusa:/tmp/seminars\PYGZhy{}on\PYGZhy{}longterm\PYGZhy{}thinking}
+
+\PYG{g+go}{  web: http://podcast.longnow.org/salt/redirect/salt\PYGZhy{}020031114\PYGZhy{}eno\PYGZhy{}podcast.mp3}
+\PYG{g+go}{ok}
+\PYG{g+go}{get(ok): Long\PYGZus{}Now\PYGZus{}\PYGZus{}Seminars\PYGZus{}About\PYGZus{}Long\PYGZus{}term\PYGZus{}Thinking/2003\PYGZus{}11\PYGZus{}15\PYGZus{}\PYGZus{}Brian\PYGZus{}Eno\PYGZus{}\PYGZus{}The\PYGZus{}Long\PYGZus{}Now.mp3 (file) [from web...]}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+As you can see at the end of the \sphinxcode{\sphinxupquote{get}} result, the files has been retrieved “\sphinxcode{\sphinxupquote{from web...}}”.
+Quite useful, this provenance, right?
+Let’s add a note on the \sphinxcode{\sphinxupquote{git annex whereis}} command.
+Again, do this in the original \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} directory, and do not forget to save it.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} navigate back:}
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }../../../../DataLad\PYGZhy{}101
+
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} write the note}
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }\PYGZlt{}\PYGZlt{}\PYG{+w}{ }EOT\PYG{+w}{ }\PYGZgt{}\PYGZgt{}\PYG{+w}{ }notes.txt
+\PYG{g+go}{The command \PYGZdq{}git annex whereis PATH\PYGZdq{} lists the repositories that have}
+\PYG{g+go}{the file content of an annexed file. When using \PYGZdq{}datalad get\PYGZdq{} to}
+\PYG{g+go}{retrieve file content, those repositories will be queried.}
+
+\PYG{g+go}{EOT}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{ modified: notes.txt (file)}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}add note on git annex whereis\PYGZdq{}}
+\PYG{g+go}{add(ok): notes.txt (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxstepscope
+
+
+\section{Retrace and reenact}
+\label{\detokenize{basics/101-118-sharelocal3:retrace-and-reenact}}\label{\detokenize{basics/101-118-sharelocal3:sharelocal3}}\label{\detokenize{basics/101-118-sharelocal3::doc}}
+\sphinxAtStartPar
+“Thanks a lot for sharing your dataset with me! This
+is super helpful. I’m sure I’ll catch up in no time!”,
+your room mate says confidently. “How far did you get
+with the DataLad commands yet?” he asks at last.
+
+\sphinxAtStartPar
+“Mhh, I think the last big one was \sphinxcode{\sphinxupquote{datalad run}}.
+Actually, let me quickly show you what this command
+does. There is something that I’ve been wanting to try
+anyway.” you say.
+
+\sphinxAtStartPar
+The dataset you shared contained a number of \sphinxcode{\sphinxupquote{datalad run}}
+commands. For example, you created the simple \sphinxcode{\sphinxupquote{podcasts.tsv}}
+file that listed all titles and speaker names of the longnow
+podcasts.
+
+\sphinxAtStartPar
+Given that you learned to create “proper” \sphinxcode{\sphinxupquote{datalad run}} commands,
+complete with \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}input}} and \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}output}} specification,
+anyone should be able to \sphinxcode{\sphinxupquote{datalad rerun}} these commits
+easily. This is what you want to try now.
+
+\sphinxAtStartPar
+You begin to think about which \sphinxcode{\sphinxupquote{datalad run}} commit would be
+the most useful one to take a look at. The creation of
+\sphinxcode{\sphinxupquote{podcasts.tsv}} was a bit dull \textendash{} at this point in time, you
+didn’t yet know about \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}input}} and \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}output}} arguments,
+and the resulting output is present anyway because text files
+like this \sphinxcode{\sphinxupquote{.tsv}} file are stored in Git.
+However, one of the attempts to resize a picture could be
+useful. The input, the podcast logos, is not yet retrieved,
+nor is the resulting, resized image. “Let’s go for this!”,
+you say, and drag your confused room mate to the computer
+screen.
+
+\sphinxAtStartPar
+First of all, find the commit shasum of the command you
+want to run by taking a look into the history of the dataset
+(in the shared dataset):
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} navigate into the shared copy}
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }../mock\PYGZus{}user/DataLad\PYGZhy{}101
+\end{sphinxVerbatim}
+
+\fvset{hllines={, 4,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} lets view the history}
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}\PYGZhy{}oneline\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{10}
+\PYG{g+go}{41fdaab add note on clean datasets}
+\PYG{g+go}{fd4a25e [DATALAD RUNCMD] Resize logo for slides}
+\PYG{g+go}{08f2efb [DATALAD RUNCMD] Resize logo for slides}
+\PYG{g+go}{87b4f80 add additional notes on run options}
+\PYG{g+go}{d0c060f [DATALAD RUNCMD] convert \PYGZhy{}resize 450x450 recordings/longn...}
+\PYG{g+go}{5227d93 resized picture by hand}
+\PYG{g+go}{6686234 [DATALAD RUNCMD] convert \PYGZhy{}resize 400x400 recordings/longn...}
+\PYG{g+go}{4b7a0a0 add note on basic datalad run and datalad rerun}
+\PYG{g+go}{cdedbc3 add note datalad and git diff}
+\PYG{g+go}{08120c3 [DATALAD RUNCMD] create a list of podcast titles}
+\end{sphinxVerbatim}
+\sphinxresetverbatimhllines
+
+\sphinxAtStartPar
+Ah, there it is, the second most recent commit.
+Just as already done in section {\hyperref[\detokenize{basics/101-109-rerun:run2}]{\sphinxcrossref{\DUrole{std,std-ref}{DataLad, rerun!}}}} (\autopageref*{\detokenize{basics/101-109-rerun:run2}}),
+take this shasum and plug it into a \sphinxcode{\sphinxupquote{datalad rerun}}
+command:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }rerun\PYG{+w}{ }fd4a25e6✂SHA1
+\PYG{g+go}{[INFO] run commit fd4a25e; (Resize logo for s...)}
+\PYG{g+go}{get(ok): recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}salt.jpg (file) [from web...]}
+\PYG{g+go}{run.remove(ok): recordings/salt\PYGZus{}logo\PYGZus{}small.jpg (file) [Removed file]}
+\PYG{g+go}{[INFO] == Command start (output follows) =====}
+\PYG{g+go}{[INFO] == Command exit (modification check follows) =====}
+\PYG{g+go}{run(ok): /home/me/dl\PYGZhy{}101/mock\PYGZus{}user/DataLad\PYGZhy{}101 (dataset) [convert \PYGZhy{}resize 400x400 recordings/longn...]}
+\PYG{g+go}{add(ok): recordings/salt\PYGZus{}logo\PYGZus{}small.jpg (file)}
+\PYG{g+go}{action summary:}
+\PYG{g+go}{  add (ok: 1)}
+\PYG{g+go}{  get (notneeded: 1, ok: 1)}
+\PYG{g+go}{  run (ok: 1)}
+\PYG{g+go}{  run.remove (ok: 1)}
+\PYG{g+go}{  save (notneeded: 2)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+“This was so easy!” you exclaim. DataLad retrieved the missing
+file content from the subdataset and it tried to unlock the output
+prior to the command execution. Note that because you did not retrieve
+the output, \sphinxcode{\sphinxupquote{recordings/salt\_logo\_small.jpg}}, yet, the missing content
+could not be “unlocked”, but is reportedly “removed” prior to the successful rerun.
+
+\sphinxAtStartPar
+Your room mate now not only knows how exactly the resized file
+came into existence, but he can also reproduce your exact steps to
+create it. “This is as reproducible as it can be!” you think in awe.
+
+\sphinxstepscope
+
+
+\section{Stay up to date}
+\label{\detokenize{basics/101-119-sharelocal4:stay-up-to-date}}\label{\detokenize{basics/101-119-sharelocal4:update}}\label{\detokenize{basics/101-119-sharelocal4:sharelocal4}}\label{\detokenize{basics/101-119-sharelocal4::doc}}
+\sphinxAtStartPar
+All of what you have seen about sharing dataset was really
+cool, and for the most part also surprisingly intuitive.
+\sphinxcode{\sphinxupquote{datalad run}} commands or file retrieval worked exactly as
+you imagined it to work, and you begin to think that slowly but
+steadily you are getting a feel about how DataLad really works.
+
+\sphinxAtStartPar
+But to be honest, so far, sharing the dataset with DataLad was
+also remarkably unexciting given that you already knew most of
+the dataset magic that your room mate currently is still
+mesmerized about.
+To be honest, you are not yet certain whether
+sharing data with DataLad really improves your life up
+until this point. After all, you could have just copied
+your directory into your \sphinxcode{\sphinxupquote{mock\_user}} directory and
+this would have resulted in about the same output, right?
+
+\sphinxAtStartPar
+What we will be looking into now is how shared DataLad
+datasets can be updated.
+
+\sphinxAtStartPar
+Remember that you added some notes on \sphinxcode{\sphinxupquote{datalad clone}},
+\sphinxcode{\sphinxupquote{datalad get}}, and \sphinxcode{\sphinxupquote{git annex whereis}} into the
+original \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}}?
+
+\sphinxAtStartPar
+This is a change that is not reflected in your “shared”
+installation in \sphinxcode{\sphinxupquote{../mock\_user/DataLad\sphinxhyphen{}101}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYGZdl{} \PYGZsh{} Inside the installed copy, view the last 15 lines of notes.txt
+\PYGZdl{} tail notes.txt
+should be specified with an \PYGZhy{}o/\PYGZhy{}\PYGZhy{}output flag. Upon a run or rerun of
+the command, the contents of these files will get unlocked so that
+they can be modified.
+
+Important! If the dataset is not \PYGZdq{}clean\PYGZdq{} (a datalad status output is
+empty), datalad run will not work \PYGZhy{} you will have to save
+modifications present in your dataset.
+A suboptimal alternative is the \PYGZhy{}\PYGZhy{}explicit flag, used to record only
+those changes done to the files listed with \PYGZhy{}\PYGZhy{}output flags.
+
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+But the original intention of sharing the dataset with
+your room mate was to give him access to your notes.
+How does he get the notes that you have added in the last
+two sections, for example?
+
+\sphinxAtStartPar
+This installed copy of \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} knows its \sphinxcode{\sphinxupquote{origin}}, i.e.,
+the place it was installed from. Using this information,
+it can query the original dataset whether any changes
+happened since the last time it checked, and if so, retrieve and
+integrate them.
+
+\index{update@\spxentry{update}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!update@\spxentry{update}}\index{update dataset with remote change@\spxentry{update dataset with remote change}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!update dataset with remote change@\spxentry{update dataset with remote change}}\ignorespaces 
+\sphinxAtStartPar
+This is done with the \sphinxcode{\sphinxupquote{datalad update \sphinxhyphen{}\sphinxhyphen{}how merge}}
+command.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }update\PYG{+w}{ }\PYGZhy{}\PYGZhy{}how\PYG{+w}{ }merge
+\PYG{g+go}{merge(ok): . (dataset) [Merged origin/main]}
+\PYG{g+go}{update.annex\PYGZus{}merge(ok): . (dataset) [Merged annex branch]}
+\PYG{g+go}{update(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Importantly, run this command either within the specific
+(sub)dataset you are interested in, or provide a path to
+the root of the dataset you are interested in with the
+\sphinxcode{\sphinxupquote{\sphinxhyphen{}d}}/\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}dataset}} flag. If you would run the command
+within the \sphinxcode{\sphinxupquote{longnow}} subdataset, you would query this
+subdatasets’ \sphinxcode{\sphinxupquote{origin}} for updates, not the original
+\sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} dataset.
+
+\sphinxAtStartPar
+Let’s check the contents in \sphinxcode{\sphinxupquote{notes.txt}} to see whether
+the previously missing changes are now present:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} view the last 15 lines of notes.txt}
+\PYG{g+gp}{\PYGZdl{} }tail\PYG{+w}{ }notes.txt
+
+\PYG{g+go}{Note that a recursive \PYGZdq{}datalad get\PYGZdq{} would install all further}
+\PYG{g+go}{registered subdatasets underneath a subdataset, so a safer way to}
+\PYG{g+go}{proceed is to set a decent \PYGZhy{}\PYGZhy{}recursion\PYGZhy{}limit:}
+\PYG{g+go}{\PYGZdq{}datalad get \PYGZhy{}n \PYGZhy{}r \PYGZhy{}\PYGZhy{}recursion\PYGZhy{}limit 2 \PYGZlt{}subds\PYGZgt{}\PYGZdq{}}
+
+\PYG{g+go}{The command \PYGZdq{}git annex whereis PATH\PYGZdq{} lists the repositories that have}
+\PYG{g+go}{the file content of an annexed file. When using \PYGZdq{}datalad get\PYGZdq{} to}
+\PYG{g+go}{retrieve file content, those repositories will be queried.}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Wohoo, the contents are here!
+
+\sphinxAtStartPar
+Therefore, sharing DataLad datasets by installing them
+enables you to update the datasets content should the
+original datasets’ content change \textendash{} in only a single
+command. How cool is that?!
+
+\sphinxAtStartPar
+Conclude this section by adding a note about updating a
+dataset to your own \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} dataset:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} navigate back:}
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }../../DataLad\PYGZhy{}101
+
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} write the note}
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }\PYGZlt{}\PYGZlt{}\PYG{+w}{ }EOT\PYG{+w}{ }\PYGZgt{}\PYGZgt{}\PYG{+w}{ }notes.txt
+\PYG{g+go}{To update a shared dataset, run the command \PYGZdq{}datalad update \PYGZhy{}\PYGZhy{}how merge\PYGZdq{}.}
+\PYG{g+go}{This command will query its origin for changes, and integrate the}
+\PYG{g+go}{changes into the dataset.}
+
+\PYG{g+go}{EOT}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} save the changes}
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}add note about datalad update\PYGZdq{}}
+\PYG{g+go}{add(ok): notes.txt (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+PS: You might wonder what a plain \sphinxcode{\sphinxupquote{datalad update}} command with no option does.
+If you are a Git\sphinxhyphen{}user and know about branches and merging you can read the
+\sphinxcode{\sphinxupquote{Note for Git\sphinxhyphen{}users}}. However, a thorough explanation
+and demonstration will be in the next section.
+
+\index{update@\spxentry{update}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!update@\spxentry{update}}\ignorespaces \begin{gitusernote}[label={index-1}, before title={\thetcbcounter\ }, check odd page=true]{Update internals}
+\label{\detokenize{basics/101-119-sharelocal4:index-1}}
+
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{datalad update}} is the DataLad equivalent of a \sphinxcode{\sphinxupquote{git fetch}},
+\sphinxcode{\sphinxupquote{datalad update \sphinxhyphen{}\sphinxhyphen{}how merge}} is the DataLad equivalent of a
+\sphinxcode{\sphinxupquote{git pull}}.
+Upon a simple \sphinxcode{\sphinxupquote{datalad update}}, the remote information
+is available on a branch separate from the main branch
+\textendash{} in most cases this will be \sphinxcode{\sphinxupquote{remotes/origin/main}}.
+You can \sphinxcode{\sphinxupquote{git checkout}} this branch or run \sphinxcode{\sphinxupquote{git diff}} to
+explore the changes and identify potential merge conflicts.
+
+
+\end{gitusernote}
+
+\sphinxstepscope
+
+
+\section{Networking}
+\label{\detokenize{basics/101-121-siblings:networking}}\label{\detokenize{basics/101-121-siblings:sibling}}\label{\detokenize{basics/101-121-siblings::doc}}
+\sphinxAtStartPar
+To get a hang on the basics of sharing a dataset,
+you shared your \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} dataset with your
+room mate on a common, local file system. Your lucky
+room mate now has your notes and can thus try to catch
+up to still pass the course.
+Moreover, though, he can also integrate all other notes
+or changes you make to your dataset, and stay up to date.
+This is because a DataLad dataset makes updating shared
+data a matter of a single \sphinxcode{\sphinxupquote{datalad update \sphinxhyphen{}\sphinxhyphen{}how merge}} command.
+
+\sphinxAtStartPar
+But why does this need to be a one\sphinxhyphen{}way street? “I want to
+provide helpful information for you as well!”, says your
+room mate. “How could you get any insightful notes that
+I make in my dataset, or maybe the results of our upcoming
+mid\sphinxhyphen{}term project? Its a bit unfair that I can get your work,
+but you cannot get mine.”
+
+\index{register file with URL in dataset@\spxentry{register file with URL in dataset}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!register file with URL in dataset@\spxentry{register file with URL in dataset}}\ignorespaces 
+\sphinxAtStartPar
+Consider, for example, that your room mate might have googled about DataLad
+a bit. In the depths of the web, he might have found useful additional information, such
+a script on \dlhbhref{G15A}{dataset nesting}.
+Because he found this very helpful in understanding dataset
+nesting concepts, he decided to download it from GitHub, and saved it in the \sphinxcode{\sphinxupquote{code/}} directory.
+
+\sphinxAtStartPar
+He does it using the DataLad command \sphinxcode{\sphinxupquote{datalad download\sphinxhyphen{}url}}
+that you experienced in section {\hyperref[\detokenize{basics/101-101-create:createds}]{\sphinxcrossref{\DUrole{std,std-ref}{Create a dataset}}}} (\autopageref*{\detokenize{basics/101-101-create:createds}}) already: This command will
+download a file just as \sphinxcode{\sphinxupquote{wget}}, but it can also take a commit message
+and will save the download right to the history of the dataset that you specify,
+while recording its origin as provenance information.
+
+\sphinxAtStartPar
+Navigate into your dataset copy in \sphinxcode{\sphinxupquote{mock\_user/DataLad\sphinxhyphen{}101}},
+and run the following command
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} navigate into the installed copy}
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }../mock\PYGZus{}user/DataLad\PYGZhy{}101
+
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} download the shell script and save it in your code/ directory}
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }download\PYGZhy{}url\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{  }\PYGZhy{}d\PYG{+w}{ }.\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{  }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}Include nesting demo from datalad website\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{  }\PYGZhy{}O\PYG{+w}{ }code/nested\PYGZus{}repos.sh\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{  }https://raw.githubusercontent.com/datalad/datalad.org/7e8e39b1/content/asciicast/seamless\PYGZus{}nested\PYGZus{}repos.sh
+\PYG{g+go}{download\PYGZus{}url(ok): /home/me/dl\PYGZhy{}101/mock\PYGZus{}user/DataLad\PYGZhy{}101/code/nested\PYGZus{}repos.sh (file)}
+\PYG{g+go}{add(ok): code/nested\PYGZus{}repos.sh (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Run a quick \sphinxcode{\sphinxupquote{datalad status}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{nothing to save, working tree clean}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Nice, the \sphinxcode{\sphinxupquote{datalad download\sphinxhyphen{}url}} command saved this download
+right into the history, and \sphinxcode{\sphinxupquote{datalad status}} does not report
+unsaved modifications! We’ll show an excerpt of the last commit
+here%
+\begin{footnote}\sphinxAtStartFootnote
+As this example, simplistically, created a “pretend” room mate by only changing directories, not user accounts, the recorded Git identity of your “room mate” will, of course, be the same as yours.
+%
+\end{footnote}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{1}\PYG{+w}{ }\PYGZhy{}p
+\PYG{g+go}{commit 5b6e19a5✂SHA1}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    Include nesting demo from datalad website}
+
+\PYG{g+go}{diff \PYGZhy{}\PYGZhy{}git a/code/nested\PYGZus{}repos.sh b/code/nested\PYGZus{}repos.sh}
+\PYG{g+go}{new file mode 100644}
+\PYG{g+go}{index 0000000..f84c817}
+\PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{} /dev/null}
+\PYG{g+go}{+++ b/code/nested\PYGZus{}repos.sh}
+\PYG{g+go}{@@ \PYGZhy{}0,0 +1,59 @@}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Suddenly, your room mate has a file change that you do not have.
+His dataset evolved.
+
+\sphinxAtStartPar
+So how do we link back from the copy of the dataset to its
+origin, such that your room mate’s changes can be included in
+your dataset? How do we let the original dataset “know” about
+this copy your room mate has?
+Do we need to install the installed dataset of our room mate
+as a copy again?
+
+\sphinxAtStartPar
+No, luckily, it’s simpler and less convoluted. What we have to
+do is to \sphinxstyleemphasis{register} a DataLad {\hyperref[\detokenize{glossary:term-sibling}]{\sphinxtermref{\DUrole{xref,std,std-term}{sibling}}}}: A reference to our room mate’s
+dataset in our own, original dataset.
+
+\index{sibling@\spxentry{sibling}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!sibling@\spxentry{sibling}}\ignorespaces \begin{gitusernote}[label={index-1}, before title={\thetcbcounter\ }, check odd page=true]{Remote siblings}
+\label{\detokenize{basics/101-121-siblings:index-1}}
+
+\sphinxAtStartPar
+Git repositories can configure clones of a dataset as \sphinxstyleemphasis{remotes} in
+order to fetch, pull, or push from and to them. A \sphinxcode{\sphinxupquote{datalad sibling}}
+is the equivalent of a git clone that is configured as a remote.
+
+
+\end{gitusernote}
+
+\sphinxAtStartPar
+Let’s see how this is done.
+
+\index{siblings@\spxentry{siblings}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!siblings@\spxentry{siblings}}\index{register sibling in dataset@\spxentry{register sibling in dataset}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!register sibling in dataset@\spxentry{register sibling in dataset}}\ignorespaces 
+\sphinxAtStartPar
+First of all, navigate back into the original dataset.
+In the original dataset, “add” a “sibling” by using
+the \sphinxcode{\sphinxupquote{datalad siblings}} command.
+The command takes the base command,
+\sphinxcode{\sphinxupquote{datalad siblings}}, an action, in this case \sphinxcode{\sphinxupquote{add}}, a path to the
+root of the dataset \sphinxcode{\sphinxupquote{\sphinxhyphen{}d .}}, a name for the sibling, \sphinxcode{\sphinxupquote{\sphinxhyphen{}s/\sphinxhyphen{}\sphinxhyphen{}name roommate}},
+and a URL or path to the sibling, \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}url ../mock\_user/DataLad\sphinxhyphen{}101}}.
+This registers your room mate’s \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} as a “sibling” (we will call it
+“roommate”) to your own \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} dataset.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }../../DataLad\PYGZhy{}101
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} add a sibling}
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }siblings\PYG{+w}{ }add\PYG{+w}{ }\PYGZhy{}d\PYG{+w}{ }.\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{  }\PYGZhy{}\PYGZhy{}name\PYG{+w}{ }roommate\PYG{+w}{ }\PYGZhy{}\PYGZhy{}url\PYG{+w}{ }../mock\PYGZus{}user/DataLad\PYGZhy{}101
+\PYG{g+go}{.: roommate(+) [../mock\PYGZus{}user/DataLad\PYGZhy{}101 (git)]}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+There are a few confusing parts about this command: For one, do not be surprised
+about the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}url}} argument \textendash{} it’s called “URL” but it can be a path as well.
+Also, do not forget to give a name to your dataset’s sibling. Without the \sphinxcode{\sphinxupquote{\sphinxhyphen{}s}}/
+\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}name}} argument the command will fail. The reason behind this is that the default
+name of a sibling if no name is given will be the host name of the specified URL,
+but as you provide a path and not a URL, there is no host name to take as a default.
+
+\sphinxAtStartPar
+As you can see in the command output, the addition of a {\hyperref[\detokenize{glossary:term-sibling}]{\sphinxtermref{\DUrole{xref,std,std-term}{sibling}}}} succeeded:
+\sphinxcode{\sphinxupquote{roommate(+){[}../mock\_user/DataLad\sphinxhyphen{}101{]}}} means that your room mate’s dataset
+is now known to your own dataset as “roommate”.
+
+\index{list dataset siblings@\spxentry{list dataset siblings}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!list dataset siblings@\spxentry{list dataset siblings}}\ignorespaces 
+\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-121-siblings:index-3}}}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }siblings
+\PYG{g+go}{.: here(+) [git]}
+\PYG{g+go}{.: roommate(+) [../mock\PYGZus{}user/DataLad\PYGZhy{}101 (git)]}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This command will list all known siblings of the dataset. You can see it
+in the resulting list with the name “roommate” you have given to it.
+And just as a brief remark: siblings do not have to stay around forever.
+Check the \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-remove-sibling}} {\hyperref[\detokenize{basics/101-121-siblings:fom-remove-sibling}]{\sphinxcrossref{\DUrole{std,std-ref}{on removing a sibling}}}} (\autopageref*{\detokenize{basics/101-121-siblings:fom-remove-sibling}}).
+
+\index{remove dataset sibling@\spxentry{remove dataset sibling}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!remove dataset sibling@\spxentry{remove dataset sibling}}\ignorespaces \begin{findoutmore}[label={fom-remove-sibling}, before title={\thetcbcounter\ }, float, floatplacement=tbp, check odd page=true]{What if I mistyped the name or want to remove the sibling?}
+\label{\detokenize{basics/101-121-siblings:fom-remove-sibling}}
+
+\sphinxAtStartPar
+You can remove a sibling using \sphinxcode{\sphinxupquote{datalad siblings remove \sphinxhyphen{}s roommate}}
+
+
+\end{findoutmore}
+
+\sphinxAtStartPar
+The fact that the \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} dataset now has a sibling means that we
+can also \sphinxcode{\sphinxupquote{datalad update}} this repository. Awesome!
+
+\sphinxAtStartPar
+Your room mate previously ran a \sphinxcode{\sphinxupquote{datalad update \sphinxhyphen{}\sphinxhyphen{}how merge}} in the section
+{\hyperref[\detokenize{basics/101-119-sharelocal4:update}]{\sphinxcrossref{\DUrole{std,std-ref}{Stay up to date}}}} (\autopageref*{\detokenize{basics/101-119-sharelocal4:update}}). This got him
+changes \sphinxstyleemphasis{he knew you made} into a dataset that \sphinxstyleemphasis{he so far did not change}.
+This meant that nothing unexpected would happen with the
+\sphinxcode{\sphinxupquote{datalad update \sphinxhyphen{}\sphinxhyphen{}how merge}}.
+
+\sphinxAtStartPar
+But consider the current case: Your room mate made changes to his
+dataset, but you do not necessarily know which. You also made
+changes to your dataset in the meantime, and added a note on
+\sphinxcode{\sphinxupquote{datalad update}}.
+How would you know that his changes and
+your changes are not in conflict with each other?
+
+\sphinxAtStartPar
+This scenario is where a plain \sphinxcode{\sphinxupquote{datalad update}} becomes useful.
+If you run a plain \sphinxcode{\sphinxupquote{datalad update}} (which uses the default option \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}how fetch}}), DataLad will query the sibling
+for changes, and store those changes in a safe place in your own
+dataset, \sphinxstyleemphasis{but it will not yet integrate them into your dataset}.
+This gives you a chance to see whether you actually want to have the
+changes your room mate made.
+
+\index{update dataset from particular sibling@\spxentry{update dataset from particular sibling}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!update dataset from particular sibling@\spxentry{update dataset from particular sibling}}\ignorespaces 
+\sphinxAtStartPar
+Let’s see how it’s done. First, run a plain \sphinxcode{\sphinxupquote{datalad update}} without
+the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}how merge}} option.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }update\PYG{+w}{ }\PYGZhy{}s\PYG{+w}{ }roommate
+\PYG{g+go}{update(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Note that we supplied the sibling’s name with the \sphinxcode{\sphinxupquote{\sphinxhyphen{}s}}/\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}name}} option.
+This is good practice, and allows you to be precise in where you want to get
+updates from. It would have worked without the specification (just as a bare
+\sphinxcode{\sphinxupquote{datalad update \sphinxhyphen{}\sphinxhyphen{}how merge}} worked for your room mate), because there is only
+one other known location, though.
+
+\sphinxAtStartPar
+This plain \sphinxcode{\sphinxupquote{datalad update}} “fetched” updates from
+the dataset. The changes however, are not yet visible \textendash{} the script that
+he added is not yet in your \sphinxcode{\sphinxupquote{code/}} directory:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }ls\PYG{+w}{ }code/
+\PYG{g+go}{list\PYGZus{}titles.sh}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+So where is the file? It is in a different \sphinxstyleemphasis{branch} of your dataset.
+
+\sphinxAtStartPar
+If you do not use {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}}, the concept of a {\hyperref[\detokenize{glossary:term-branch}]{\sphinxtermref{\DUrole{xref,std,std-term}{branch}}}} can be a big
+source of confusion. There will be sections later in this book that will
+elaborate a bit more what branches are, and how to work with them, but
+for now envision a branch just like a bunch of drawers on your desk.
+The paperwork that you have in front of you right on your desk is your
+dataset as you currently see it.
+These drawers instead hold documents that you are in principle working on,
+just not now \textendash{} maybe different versions of paperwork you currently have in
+front of you, or maybe other files than the ones currently in front of you
+on your desk.
+
+\sphinxAtStartPar
+Imagine that a \sphinxcode{\sphinxupquote{datalad update}} created a small drawer, placed all of
+the changed or added files from the sibling inside, and put it on your
+desk. You can now take a look into that drawer to see whether you want
+to have the changes right in front of you.
+
+\sphinxAtStartPar
+The drawer is a branch, and it is usually called \sphinxcode{\sphinxupquote{remotes/origin/main}}.
+To look inside of it you can \sphinxcode{\sphinxupquote{git checkout BRANCHNAME}}, or you can
+do a \sphinxcode{\sphinxupquote{diff}} between the branch (your drawer) and the dataset as it
+is currently in front of you (your desk). We will do the latter, and leave
+the former for a different lecture. Make sure to see the
+\textit{Windows-wit}~{\windowswiticoninline}\textit{\ref{ww-datalad-diff-calls}} {\hyperref[\detokenize{basics/101-121-siblings:ww-datalad-diff-calls}]{\sphinxcrossref{\DUrole{std,std-ref}{on using \textquotesingle{}datalad diff\textquotesingle{}}}}} (\autopageref*{\detokenize{basics/101-121-siblings:ww-datalad-diff-calls}}) too.
+
+\index{corresponding branch@\spxentry{corresponding branch}!in adjusted mode@\spxentry{in adjusted mode}}\index{in adjusted mode@\spxentry{in adjusted mode}!corresponding branch@\spxentry{corresponding branch}}\index{show dataset modification for particular path@\spxentry{show dataset modification for particular path}!on Windows with DataLad@\spxentry{on Windows with DataLad}}\index{on Windows with DataLad@\spxentry{on Windows with DataLad}!show dataset modification for particular path@\spxentry{show dataset modification for particular path}}\index{diff@\spxentry{diff}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!diff@\spxentry{diff}}\ignorespaces \begin{windowswit}[label={ww-datalad-diff-calls}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{‘datalad diff’ needs the corresponding branch}
+\label{\detokenize{basics/101-121-siblings:ww-datalad-diff-calls}}
+
+\sphinxAtStartPar
+Please use the following command instead:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }diff\PYG{+w}{ }\PYGZhy{}\PYGZhy{}from\PYG{+w}{ }main\PYG{+w}{ }\PYGZhy{}\PYGZhy{}to\PYG{+w}{ }remotes/roommate/main
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This syntax specifies the {\hyperref[\detokenize{glossary:term-main}]{\sphinxtermref{\DUrole{xref,std,std-term}{main}}}} {\hyperref[\detokenize{glossary:term-branch}]{\sphinxtermref{\DUrole{xref,std,std-term}{branch}}}} as a starting point for the comparison instead of the current \sphinxcode{\sphinxupquote{adjusted/main(unlocked)}} branch.
+
+
+\end{windowswit}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }diff\PYG{+w}{ }\PYGZhy{}\PYGZhy{}to\PYG{+w}{ }remotes/roommate/main
+\PYG{g+go}{    added: code/nested\PYGZus{}repos.sh (file)}
+\PYG{g+go}{ modified: notes.txt (file)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This shows us that there is an additional file, and it also shows us
+that there is a difference in \sphinxcode{\sphinxupquote{notes.txt}}! Let’s ask
+\sphinxcode{\sphinxupquote{git diff}} to show us what the differences in detail (note that it is a shortened excerpt, cut in the middle to reduce its length):
+Again, check the \textit{Windows-wit}~{\windowswiticoninline}\textit{\ref{ww-git-diff-calls}} {\hyperref[\detokenize{basics/101-121-siblings:ww-git-diff-calls}]{\sphinxcrossref{\DUrole{std,std-ref}{on using \textquotesingle{}git diff\textquotesingle{}}}}} (\autopageref*{\detokenize{basics/101-121-siblings:ww-git-diff-calls}}) too.
+
+\index{corresponding branch@\spxentry{corresponding branch}!in adjusted mode@\spxentry{in adjusted mode}}\index{in adjusted mode@\spxentry{in adjusted mode}!corresponding branch@\spxentry{corresponding branch}}\index{show dataset modification@\spxentry{show dataset modification}!on Windows with Git@\spxentry{on Windows with Git}}\index{on Windows with Git@\spxentry{on Windows with Git}!show dataset modification@\spxentry{show dataset modification}}\index{diff@\spxentry{diff}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!diff@\spxentry{diff}}\ignorespaces \begin{windowswit}[label={ww-git-diff-calls}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{‘git diff’ needs the corresponding branch}
+\label{\detokenize{basics/101-121-siblings:ww-git-diff-calls}}
+
+\sphinxAtStartPar
+Please use the following command instead:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }diff\PYG{+w}{ }main..remotes/roommate/main
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This is {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}}s syntax for specifying a comparison between two {\hyperref[\detokenize{glossary:term-branch}]{\sphinxtermref{\DUrole{xref,std,std-term}{branch}}}}es.
+
+
+\end{windowswit}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }diff\PYG{+w}{ }remotes/roommate/main
+\PYG{g+go}{diff \PYGZhy{}\PYGZhy{}git a/code/nested\PYGZus{}repos.sh b/code/nested\PYGZus{}repos.sh}
+\PYG{g+go}{deleted file mode 100644}
+\PYG{g+go}{index f84c817..0000000}
+\PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{} a/code/nested\PYGZus{}repos.sh}
+\PYG{g+go}{+++ /dev/null}
+\PYG{g+go}{@@ \PYGZhy{}1,59 +0,0 @@}
+\PYG{g+go}{\PYGZhy{}\PYGZsh{}!/bin/bash}
+\PYG{g+go}{\PYGZhy{}\PYGZsh{} This script was converted using cast2script from:}
+\PYG{g+go}{\PYGZhy{}\PYGZsh{} docs/casts/seamless\PYGZus{}nested\PYGZus{}repos.sh}
+\PYG{g+go}{\PYGZhy{}set \PYGZhy{}e \PYGZhy{}u}
+\PYG{g+go}{\PYGZhy{}export GIT\PYGZus{}PAGER=cat}
+\PYG{g+go}{\PYGZhy{}}
+\PYG{g+go}{\PYGZhy{}\PYGZsh{} DataLad provides seamless management of nested Git repositories...}
+\PYG{g+go}{\PYGZhy{}}
+\PYG{g+go}{\PYGZhy{}\PYGZsh{} Let\PYGZsq{}s create a dataset}
+\PYG{g+go}{\PYGZhy{}datalad create demo}
+\PYG{g+go}{\PYGZhy{}cd demo}
+\PYG{g+go}{diff \PYGZhy{}\PYGZhy{}git a/notes.txt b/notes.txt}
+\PYG{g+go}{index 655be7d..ff02f68 100644}
+\PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{} a/notes.txt}
+\PYG{g+go}{+++ b/notes.txt}
+\PYG{g+go}{@@ \PYGZhy{}59,3 +59,7 @@ The command \PYGZdq{}git annex whereis PATH\PYGZdq{} lists the repositories that have}
+\PYG{g+go}{ the file content of an annexed file. When using \PYGZdq{}datalad get\PYGZdq{} to}
+\PYG{g+go}{ retrieve file content, those repositories will be queried.}
+
+\PYG{g+go}{+To update a shared dataset, run the command \PYGZdq{}datalad update \PYGZhy{}\PYGZhy{}how merge\PYGZdq{}.}
+\PYG{g+go}{+This command will query its origin for changes, and integrate the}
+\PYG{g+go}{+changes into the dataset.}
+\PYG{g+go}{+}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Let’s digress into what is shown here.
+We are comparing the current state of your dataset against
+the current state of your room mate’s dataset. Everything marked with
+a \sphinxcode{\sphinxupquote{\sphinxhyphen{}}} is a change that your room mate has, but not you: This is the
+script that he downloaded!
+
+\sphinxAtStartPar
+Everything that is marked with a \sphinxcode{\sphinxupquote{+}} is a change that you have,
+but not your room mate: It is the additional note on \sphinxcode{\sphinxupquote{datalad update}}
+you made in your own dataset in the previous section.
+
+\sphinxAtStartPar
+Cool! So now that you know what the changes are that your room mate
+made, you can safely \sphinxcode{\sphinxupquote{datalad update \sphinxhyphen{}\sphinxhyphen{}how merge}} them to integrate
+them into your dataset. In technical terms you will
+“\sphinxstyleemphasis{merge the branch remotes/roommate/main into main}”.
+But the details of this will be stated in a standalone section later.
+
+\sphinxAtStartPar
+Note that the fact that your room mate does not have the note
+on \sphinxcode{\sphinxupquote{datalad update}} does not influence your note. It will not
+get deleted by the merge. You do not set your dataset to the state
+of your room mate’s dataset, but you incorporate all changes he made
+\textendash{} which is only the addition of the script.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }update\PYG{+w}{ }\PYGZhy{}\PYGZhy{}how\PYG{+w}{ }merge\PYG{+w}{ }\PYGZhy{}s\PYG{+w}{ }roommate
+\PYG{g+go}{merge(ok): . (dataset) [Merged roommate/main]}
+\PYG{g+go}{update.annex\PYGZus{}merge(ok): . (dataset) [Merged annex branch]}
+\PYG{g+go}{update(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The exciting question is now whether your room mate’s change is now
+also part of your own dataset. Let’s list the contents of the \sphinxcode{\sphinxupquote{code/}}
+directory and also peek into the history:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }ls\PYG{+w}{ }code/
+\PYG{g+go}{list\PYGZus{}titles.sh}
+\PYG{g+go}{nested\PYGZus{}repos.sh}
+\end{sphinxVerbatim}
+
+\fvset{hllines={, 2, 4,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}\PYGZhy{}oneline
+\PYG{g+go}{6ae8e71 Merge remote\PYGZhy{}tracking branch \PYGZsq{}roommate/main\PYGZsq{}}
+\PYG{g+go}{4bb5d39 add note about datalad update}
+\PYG{g+go}{5b6e19a Include nesting demo from datalad website}
+\PYG{g+go}{adb4b5d add note on git annex whereis}
+\PYG{g+go}{1e73592 add note about cloning from paths and recursive datalad get}
+\end{sphinxVerbatim}
+\sphinxresetverbatimhllines
+
+\sphinxAtStartPar
+Wohoo! Here it is: The script now also exists in your own dataset.
+You can see the commit that your room mate made when he saved the script,
+and you can also see a commit that records how you \sphinxcode{\sphinxupquote{merged}} your
+room mate’s dataset changes into your own dataset. The commit message of this
+latter commit for now might contain many words yet unknown to you if you
+do not use Git, but a later section will get into the details of what
+the meaning of “{\hyperref[\detokenize{glossary:term-merge}]{\sphinxtermref{\DUrole{xref,std,std-term}{merge}}}}”, “{\hyperref[\detokenize{glossary:term-branch}]{\sphinxtermref{\DUrole{xref,std,std-term}{branch}}}}”, “refs”
+or “{\hyperref[\detokenize{glossary:term-main}]{\sphinxtermref{\DUrole{xref,std,std-term}{main}}}}” is.
+
+\sphinxAtStartPar
+For now, you are happy to have the changes your room mate made available.
+This is how it should be! You helped him, and he helps you. Awesome!
+There actually is a wonderful word for it: \sphinxstyleemphasis{Collaboration}.
+Thus, without noticing, you have successfully collaborated for the first
+time using DataLad datasets.
+
+\sphinxAtStartPar
+Create a note about this, and save it.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }\PYGZlt{}\PYGZlt{}\PYG{+w}{ }EOT\PYG{+w}{ }\PYGZgt{}\PYGZgt{}\PYG{+w}{ }notes.txt
+\PYG{g+go}{To update from a dataset with a shared history, you need to add this}
+\PYG{g+go}{dataset as a sibling to your dataset. \PYGZdq{}Adding a sibling\PYGZdq{} means}
+\PYG{g+go}{providing DataLad with info about the location of a dataset, and a}
+\PYG{g+go}{name for it.}
+\PYG{g+go}{Afterwards, a \PYGZdq{}datalad update \PYGZhy{}\PYGZhy{}how merge \PYGZhy{}s name\PYGZdq{} will integrate the}
+\PYG{g+go}{changes made to the sibling into the dataset. A safe step in between}
+\PYG{g+go}{is to do a \PYGZdq{}datalad update \PYGZhy{}s name\PYGZdq{} and checkout the changes with}
+\PYG{g+go}{\PYGZdq{}git/datalad diff\PYGZdq{} to remotes/origin/main}
+
+\PYG{g+go}{EOT}
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}Add note on adding siblings\PYGZdq{}}
+\PYG{g+go}{add(ok): notes.txt (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxstepscope
+
+
+\section{Summary}
+\label{\detokenize{basics/101-120-summary:summary}}\label{\detokenize{basics/101-120-summary:summary-sharelocal}}\label{\detokenize{basics/101-120-summary::doc}}
+\sphinxAtStartPar
+Together with your room mate you have just discovered how
+to share, update, and collaborate on a DataLad dataset on a shared file system.
+Thus, you have glimpsed into the principles and advantages of
+sharing a dataset with a simple example.
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+To obtain a dataset, one can also use \sphinxcode{\sphinxupquote{datalad clone}} with a path.
+Potential subdatasets will not be installed right away. As they are registered in
+the superdataset, you can
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+do \sphinxcode{\sphinxupquote{datalad get \sphinxhyphen{}n/\sphinxhyphen{}\sphinxhyphen{}no\sphinxhyphen{}data}}
+
+\item {} 
+\sphinxAtStartPar
+or specify the \sphinxcode{\sphinxupquote{\sphinxhyphen{}r}}/\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}recursive}}: \sphinxcode{\sphinxupquote{datalad get \sphinxhyphen{}n \sphinxhyphen{}r \textless{}subds\textgreater{}}}
+
+\end{itemize}
+
+\sphinxAtStartPar
+with a decent \sphinxcode{\sphinxupquote{\sphinxhyphen{}R/\sphinxhyphen{}\sphinxhyphen{}recursion\sphinxhyphen{}limit}} choice to install them afterwards.
+
+\item {} 
+\sphinxAtStartPar
+The configuration of the original dataset determines which types
+of files will have their content available right after the installation of
+the dataset, and which types of files need to be retrieved via
+\sphinxcode{\sphinxupquote{datalad get}}: Any file content stored in {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}} will be available
+right away, while all file content that is \sphinxcode{\sphinxupquote{annexed}} only has
+small metadata about its availability attached to it. The original
+\sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} dataset used the \sphinxcode{\sphinxupquote{text2git}} configuration template
+to store text files such as \sphinxcode{\sphinxupquote{notes.txt}} and \sphinxcode{\sphinxupquote{code/list\_titles.sh}}
+in Git \textendash{} these files’ content is therefore available right after
+installation.
+
+\item {} 
+\sphinxAtStartPar
+Annexed content can be retrieved via \sphinxcode{\sphinxupquote{datalad get}} from the
+file content sources.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{git annex whereis PATH}} will list all locations known to contain file
+content for a particular file. It is a very
+helpful command to find out where file content resides, and how many
+locations with copies exist. {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}} will try to retrieve file contents from those locations. If you want, you can describe locations with the
+\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}description}} provided during a \sphinxcode{\sphinxupquote{datalad create}}.
+
+\item {} 
+\sphinxAtStartPar
+A shared copy of a dataset includes the datasets history. If well made,
+\sphinxcode{\sphinxupquote{datalad run}} commands can then easily be \sphinxcode{\sphinxupquote{rerun}}.
+
+\item {} 
+\sphinxAtStartPar
+Because an installed dataset knows its origin \textendash{} the place it was
+originally installed from \textendash{} it can be kept up\sphinxhyphen{}to\sphinxhyphen{}date with the
+\sphinxcode{\sphinxupquote{datalad update}} command. This command will query the origin of the
+dataset for updates, and a \sphinxcode{\sphinxupquote{datalad update \sphinxhyphen{}\sphinxhyphen{}how merge}} will integrate
+these changes into the dataset copy.
+
+\item {} 
+\sphinxAtStartPar
+Thus, using DataLad, data can be easily shared and kept up to date
+with only two commands: \sphinxcode{\sphinxupquote{datalad clone}} and \sphinxcode{\sphinxupquote{datalad update}}.
+
+\item {} 
+\sphinxAtStartPar
+By configuring a dataset as a {\hyperref[\detokenize{glossary:term-sibling}]{\sphinxtermref{\DUrole{xref,std,std-term}{sibling}}}}, collaboration becomes easy.
+
+\item {} 
+\sphinxAtStartPar
+To avoid integrating conflicting modifications of a sibling dataset into your
+own dataset, a \sphinxcode{\sphinxupquote{datalad update \sphinxhyphen{}s SIBLINGNAME}} will “\sphinxcode{\sphinxupquote{fetch}}” modifications
+and store them on a different {\hyperref[\detokenize{glossary:term-branch}]{\sphinxtermref{\DUrole{xref,std,std-term}{branch}}}} of your dataset. The commands
+\sphinxcode{\sphinxupquote{datalad diff}} and \sphinxcode{\sphinxupquote{git diff}} can subsequently help to find
+out what changes have been made in the sibling.
+
+\end{itemize}
+
+
+\subsection{Now what can I do with that?}
+\label{\detokenize{basics/101-120-summary:now-what-can-i-do-with-that}}
+\sphinxAtStartPar
+Most importantly, you have experienced the first way of sharing
+and updating a dataset.
+The example here may strike you as too simplistic, but in later parts of
+the book you will see examples in which datasets are shared on the same
+file system in surprisingly useful ways.
+
+\sphinxAtStartPar
+Simultaneously, you have observed dataset properties you already knew
+(for example, how annexed files need to be retrieved via \sphinxcode{\sphinxupquote{datalad get}}),
+but you have also seen novel aspects of a dataset \textendash{} for example, that
+subdatasets are not automatically installed by default, how
+\sphinxcode{\sphinxupquote{git annex whereis}} can help you find out where file content might be stored,
+how useful commands that capture provenance about the origin or creation of files
+(such as \sphinxcode{\sphinxupquote{datalad run}} or \sphinxcode{\sphinxupquote{datalad download\sphinxhyphen{}url}}) are,
+or how a shared dataset can be updated to reflect changes that were made
+to the original dataset.
+
+\sphinxAtStartPar
+Also, you have successfully demonstrated a large number of DataLad dataset
+principles to your room mate: How content stored in Git is present right
+away and how annexed content first needs to be retrieved, how easy a
+\sphinxcode{\sphinxupquote{datalad rerun}} is if the original \sphinxcode{\sphinxupquote{datalad run}} command was well
+specified, how a datasets history is shared and not only its data.
+
+\sphinxAtStartPar
+Lastly, with the configuration of a sibling, you have experienced one
+way to collaborate in a dataset, and with \sphinxcode{\sphinxupquote{datalad update \sphinxhyphen{}\sphinxhyphen{}how merge}}
+and \sphinxcode{\sphinxupquote{datalad update}}, you also glimpsed into more advances aspects
+of Git, namely the concept of a branch.
+
+\sphinxAtStartPar
+Therefore, these last few sections have hopefully been a good review
+of what you already knew, but also a big knowledge gain, and cause
+joyful anticipation of collaboration in a real\sphinxhyphen{}world setting of one
+of your own use cases.
+
+\sphinxstepscope
+
+

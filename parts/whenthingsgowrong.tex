@@ -1,0 +1,352 @@
+\chapter{When things go wrong}
+\label{\detokenize{basics/101-135-help:when-things-go-wrong}}\label{\detokenize{basics/101-135-help:help}}\label{\detokenize{basics/101-135-help::doc}}
+\noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{reading}.pdf}\hspace*{\fill}}
+
+\sphinxAtStartPar
+All DataLad errors or problems you encounter during \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} are intentional
+and serve illustrative purposes. But what if you run into any DataLad errors
+outside of this course?
+Fortunately, the syllabus has a whole section on that, and on
+one lazy, warm summer afternoon you flip through it.
+
+\sphinxAtStartPar
+You realize that you already know the most important things:
+The number one advice on how to get help is
+“Read the error message”.
+The second advice it
+“I’m not kidding: Read the error message”.
+The third advice, finally, says
+“Honestly, read the f***ing error message”.
+
+
+\section{Help yourself}
+\label{\detokenize{basics/101-135-help:help-yourself}}
+\sphinxAtStartPar
+If you run into a DataLad problem and you have followed the three
+steps above, but the error message
+\dlhbhref{X1C}{does not give you a clue on how to proceed},
+the first you should do is
+\begin{enumerate}
+\sphinxsetlistlabels{\arabic}{enumi}{enumii}{}{.}%
+\item {} 
+\sphinxAtStartPar
+find out which \sphinxstyleemphasis{version} of DataLad you use
+
+\item {} 
+\sphinxAtStartPar
+read the \sphinxstyleemphasis{help page} of the command that failed
+
+\end{enumerate}
+
+\sphinxAtStartPar
+The first step is important in order to find out whether a
+command failed due to using a wrong DataLad version. In order
+to use this book and follow along, your DataLad version
+should be \sphinxcode{\sphinxupquote{datalad\sphinxhyphen{}0.19}} or higher, for example.
+
+\sphinxAtStartPar
+To find out which version you are using, run
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }\PYGZhy{}\PYGZhy{}version
+\PYG{g+go}{datalad 0.19.3}
+\end{sphinxVerbatim}
+
+\index{wtf@\spxentry{wtf}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!wtf@\spxentry{wtf}}\index{get system information@\spxentry{get system information}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!get system information@\spxentry{get system information}}\ignorespaces 
+\sphinxAtStartPar
+If you want a comprehensive overview of your full setup,
+\sphinxcode{\sphinxupquote{datalad wtf}}%
+\begin{footnote}\sphinxAtStartFootnote
+\sphinxcode{\sphinxupquote{wtf}} in \sphinxcode{\sphinxupquote{datalad wtf}} could stand for many things. “Why the Face?”
+“Wow, that’s fantastic!”, “What’s this for?”, “What to fix”, “What the FAQ”,
+“Where’s the fire?”, “Wipe the floor”, “Welcome to fun”,
+“Waste Treatment Facility”, “What’s this foolishness”, “What the fruitcake”, …
+Pick a translation of your choice and make running this command more joyful.
+%
+\end{footnote} is the command to turn to. Running this command will
+generate a report about the DataLad installation and configuration.
+The output below shows an excerpt.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }wtf
+\PYG{g+gp}{\PYGZsh{} }WTF
+\PYG{g+gp}{\PYGZsh{}}\PYG{c+c1}{\PYGZsh{} configuration \PYGZlt{}SENSITIVE, report disabled by configuration\PYGZgt{}}
+\PYG{g+gp}{\PYGZsh{}}\PYG{c+c1}{\PYGZsh{} credentials}
+\PYG{g+go}{  \PYGZhy{} keyring:}
+\PYG{g+go}{    \PYGZhy{} active\PYGZus{}backends:}
+\PYG{g+go}{      \PYGZhy{} PlaintextKeyring with no encyption v.1.0 at /home/me/.local/share/python\PYGZus{}keyring/keyring\PYGZus{}pass.cfg}
+\PYG{g+go}{    \PYGZhy{} config\PYGZus{}file: /home/me/.config/python\PYGZus{}keyring/keyringrc.cfg}
+\PYG{g+go}{    \PYGZhy{} data\PYGZus{}root: /home/me/.local/share/python\PYGZus{}keyring}
+\PYG{g+gp}{\PYGZsh{}}\PYG{c+c1}{\PYGZsh{} datalad}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This lengthy output will report all information that might
+be relevant \textendash{} from DataLad to {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}} or Python
+up to your operating system.
+
+\sphinxAtStartPar
+The second step, finding and reading the help page of the command
+in question, is important in order to find out how the
+command that failed is used. Are arguments specified correctly?
+Does the help list any caveats?
+
+\sphinxAtStartPar
+There are multiple ways to find help on DataLad commands.
+You could turn to the \dlhbhref{D1}{documentation}.
+Alternatively, to get help right inside the terminal,
+run any command with the \sphinxcode{\sphinxupquote{\sphinxhyphen{}h}}/\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}help}} option (shown
+as an excerpt here):
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }get\PYG{+w}{ }\PYGZhy{}\PYGZhy{}help
+\PYG{g+go}{Usage: datalad get [\PYGZhy{}h] [\PYGZhy{}s LABEL] [\PYGZhy{}d PATH] [\PYGZhy{}r] [\PYGZhy{}R LEVELS] [\PYGZhy{}n]}
+\PYG{g+go}{                   [\PYGZhy{}D DESCRIPTION] [\PYGZhy{}\PYGZhy{}reckless [auto|ephemeral|shared\PYGZhy{}...]]}
+\PYG{g+go}{                   [\PYGZhy{}J NJOBS] [\PYGZhy{}\PYGZhy{}version]}
+\PYG{g+go}{                   [PATH [PATH ...]]}
+
+\PYG{g+go}{Get any dataset content (files/directories/subdatasets).}
+
+\PYG{g+go}{This command only operates on dataset content. To obtain a new independent}
+\PYG{g+go}{dataset from some source use the CLONE command.}
+
+\PYG{g+go}{By default this command operates recursively within a dataset, but not}
+\PYG{g+go}{across potential subdatasets, i.e. if a directory is provided, all files in}
+\PYG{g+go}{the directory are obtained. Recursion into subdatasets is supported too. If}
+\PYG{g+go}{enabled, relevant subdatasets are detected and installed in order to}
+\PYG{g+go}{fulfill a request.}
+
+\PYG{g+go}{NOTE}
+\PYG{g+go}{  Power\PYGZhy{}user info: This command uses git annex get to fulfill}
+\PYG{g+go}{  file handles.}
+
+\PYG{g+go}{*Examples*}
+
+\PYG{g+go}{Get a single file::}
+
+\PYG{g+gp}{   \PYGZpc{} }datalad\PYG{+w}{ }get\PYG{+w}{ }\PYGZlt{}path/to/file\PYGZgt{}
+
+\PYG{g+go}{Get (clone) a registered subdataset, but don\PYGZsq{}t retrieve data::}
+
+\PYG{g+gp}{   \PYGZpc{} }datalad\PYG{+w}{ }get\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYGZlt{}path/to/subds\PYGZgt{}
+
+\PYG{g+go}{positional arguments:}
+\PYG{g+go}{  PATH                  path/name of the requested dataset component. The}
+\PYG{g+go}{                        component must already be known to a dataset. To add}
+\PYG{g+go}{                        new components to a dataset use the ADD command.}
+\PYG{g+go}{                        Constraints: value must be a string or value must be}
+\PYG{g+go}{                        NONE}
+
+\PYG{g+go}{\PYGZhy{}✂\PYGZhy{}\PYGZhy{}✂\PYGZhy{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This, for example, is the help page on \sphinxcode{\sphinxupquote{datalad get}}, the same you would find in the documentation, but in your terminal (here heavily trimmed to only show the main components).
+It contains a command description, a list
+of all the available options with a short explanation of them, and
+example commands. The two \sphinxstyleemphasis{arguments} sections provide a comprehensive
+list of command arguments with details on their possibilities and
+requirements. A first thing to check would be whether your command call
+specified all of the required arguments.
+
+\sphinxAtStartPar
+To find examples for using particular commands take a look at the topic index at the end of this book.
+The online\sphinxhyphen{}handbook offers a convenient full\sphinxhyphen{}text search that can point you to all relevant sections in no time.
+An additional source of information is the \dlhbhref{P2}{PsyInf knowledge base}. It contains a curated
+collection of solutions and workarounds that have not yet made it into other
+documentation.
+
+
+\section{Asking questions (right)}
+\label{\detokenize{basics/101-135-help:asking-questions-right}}
+\sphinxAtStartPar
+If nothing you do on your own helps to solve the problem,
+consider asking others. Check out \dlhbhref{N1}{neurostars}
+and search for your problem \textendash{} likely,
+\dlhbhref{X1E}{somebody already encountered the same error before}
+and fixed it, but if not, just ask a new question with a \sphinxcode{\sphinxupquote{datalad}} tag.
+
+\sphinxAtStartPar
+Make sure your question is as informative as it can be for others.
+Include
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleemphasis{context} \textendash{} what did you want to do and why?
+
+\item {} 
+\sphinxAtStartPar
+the \sphinxstyleemphasis{problem} \textendash{} post the error message, and provide the
+steps necessary to reproduce it. Do not shorten the error message, unless it contains sensitive information.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleemphasis{technical details} \textendash{} what version of DataLad are you using, what version
+of git\sphinxhyphen{}annex, and which git\sphinxhyphen{}annex repository type, what is your operating
+system and \textendash{} if applicable \textendash{} Python version? \sphinxcode{\sphinxupquote{datalad wtf}} is your friend
+to find all of this information.
+
+\end{itemize}
+
+\index{debugging@\spxentry{debugging}}\ignorespaces 
+
+\section{Debugging like a DataLad\sphinxhyphen{}developer}
+\label{\detokenize{basics/101-135-help:debugging-like-a-datalad-developer}}\label{\detokenize{basics/101-135-help:index-1}}
+\sphinxAtStartPar
+If you have read a command’s help from start to end, checked all software versions twice, even \dlhbhref{X1D}{asked colleagues to reproduce your problem (unsuccessfully)}, and you still don’t have any clue what is going on, then welcome to the debugging section!
+
+\begin{figure}[tbp]
+\centering
+\capstart
+
+\noindent\sphinxincludegraphics[width=0.500\linewidth]{{debug}.pdf}
+\caption{It’s not as bad as this ;\sphinxhyphen{})}\label{\detokenize{basics/101-135-help:id4}}\end{figure}
+
+\sphinxAtStartPar
+It is not always straightforward to see \sphinxstyleemphasis{why} a particular DataLad command has failed.
+Given that operations with DataLad can be quite complicated, and could involve complexities such as different forms of authentication, different file systems, interactions with the environment, configurations, and other software, and \sphinxstyleemphasis{much} more, there are what may feel like an infinite amount of sources for the problem at hand.
+The resulting error message, however, may not display the underlying cause correctly because the error message of whichever process failed is not propagated into the final result report.
+
+\sphinxAtStartPar
+In situations where there is no obvious reason for a command to fail, it can be helpful \textendash{} either for yourself or for further information to include in {\hyperref[\detokenize{glossary:term-GitHub}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitHub}}}} issues \textendash{} to start \dlhbhref{X1B}{debugging}, or \sphinxstyleemphasis{logging at a higher granularity} than is the default.
+This allows you to gain more insights into the actions DataLad and its underlying tools are taking, where \sphinxstyleemphasis{exactly} they fail, and to even play around with the program at the state of the failure.
+
+\sphinxAtStartPar
+{\hyperref[\detokenize{glossary:term-debugging}]{\sphinxtermref{\DUrole{xref,std,std-term}{Debugging}}}} and {\hyperref[\detokenize{glossary:term-logging}]{\sphinxtermref{\DUrole{xref,std,std-term}{logging}}}} are not as complex as these terms may sound if you have never consciously debugged.
+
+\sphinxAtStartPar
+Procedurally, it can be as easy as adding an additional flag to a command call, and cognitively, it can be as easy as engaging your visual system in a visual search task for the color red or the word “error”, or reading more DataLad output than you are used to.
+We will start with the general concepts, and then end with a peek at reaching into DataLad’s internals.
+
+
+\subsection{Logging}
+\label{\detokenize{basics/101-135-help:logging}}\label{\detokenize{basics/101-135-help:id2}}
+\sphinxAtStartPar
+In order to gain more insights into the steps performed by a program and capture as many details as possible for troubleshooting an error, you can turn to {\hyperref[\detokenize{glossary:term-logging}]{\sphinxtermref{\DUrole{xref,std,std-term}{logging}}}}.
+Logging simply refers to the fact that DataLad and its underlying tools tell you what they are doing:
+This information can be coarse, such as a mere \sphinxcode{\sphinxupquote{{[}INFO{]} Downloading \textless{}some\_url\textgreater{} into \textless{}some\_target\textgreater{}}}, or fine\sphinxhyphen{}grained, such as \sphinxcode{\sphinxupquote{{[}DEBUG{]} Resolved dataset for status reporting: \textless{}dataset\textgreater{}}}.
+The {\hyperref[\detokenize{glossary:term-log-level}]{\sphinxtermref{\DUrole{xref,std,std-term}{log level}}}} in brackets at the beginning of the line indicates how many details DataLad shares with you.
+
+\sphinxAtStartPar
+Note that {\hyperref[\detokenize{glossary:term-logging}]{\sphinxtermref{\DUrole{xref,std,std-term}{logging}}}} is not a sealed book, and happens automatically during the execution of any DataLad command.
+While you were reading this book, you have seen a lot of log messages already.
+Anything printed to your terminal preceded by \sphinxcode{\sphinxupquote{{[}INFO{]}}}, for example, is a log message (in this case, on the \sphinxcode{\sphinxupquote{info}} level).
+When you are \sphinxstyleemphasis{consciously} logging, you simply set the log\sphinxhyphen{}level to the desired amount of information, or increase the amount of verbosity until the output gives you a hint of what went wrong.
+Likewise, adjusting the log\sphinxhyphen{}level also works the other way around, and lets you \sphinxstyleemphasis{decrease} the amount of information you receive in your terminal.
+See the \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-loglevels}} {\hyperref[\detokenize{basics/101-135-help:fom-loglevels}]{\sphinxcrossref{\DUrole{std,std-ref}{on the different log\sphinxhyphen{}levels}}}} (\autopageref*{\detokenize{basics/101-135-help:fom-loglevels}}) for a complete description.
+
+\index{log level@\spxentry{log level}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!log level@\spxentry{log level}}\index{configuration item@\spxentry{configuration item}!datalad.log.level@\spxentry{datalad.log.level}}\index{configure verbosity of command output@\spxentry{configure verbosity of command output}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!configure verbosity of command output@\spxentry{configure verbosity of command output}}\ignorespaces \begin{findoutmore}[label={fom-loglevels}, before title={\thetcbcounter\ }, float, floatplacement=tbp, check odd page=true]{Log levels}
+\label{\detokenize{basics/101-135-help:fom-loglevels}}
+
+\sphinxAtStartPar
+Log levels provide the means to adjust how much information you want, and are described in human readable terms, ordered by the severity of the failures or problems reported.
+The following log levels can be chosen from:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{critical}: Only catastrophes are reported. Currently, there is nothing inside of DataLad that would log at this level, so setting the log level to \sphinxstyleemphasis{critical} will result in getting no details at all, not even about errors or failures.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{error}: With this log level you will receive reports on any errors that occurred within the program during command execution.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{warning}: At this log level, the command execution will report on usual situations and anything that \sphinxstyleemphasis{might} be a problem, in addition to report anything from the \sphinxstyleemphasis{error} log level. .
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{info}: This log level will include reports by the program that indicate normal behavior and serve to keep you up to date about the current state of things, in additions to warning and error logging messages.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{debug}: This log level is very useful to troubleshoot a problem, and results in DataLad telling you \sphinxstyleemphasis{a lot} about what it is doing.
+
+\end{itemize}
+
+\sphinxAtStartPar
+Other than log \sphinxstyleemphasis{levels}, you can also adjust the amount of information provided with numerical granularity. Instead of specifying a log level, provide an integer between 1 and 50, with lower values denoting more debugging information.
+
+\sphinxAtStartPar
+Raising the log level (e.g, to \sphinxcode{\sphinxupquote{error}}, or \sphinxcode{\sphinxupquote{40}}) will decrease the amount of information and output you will receive, while lowering it (e.g., to \sphinxcode{\sphinxupquote{debug}} or \sphinxcode{\sphinxupquote{10}}) will increase it.
+
+\bigskip
+
+\sphinxAtStartPar
+\sphinxstylestrong{Configure log levels}
+
+\medskip
+
+\sphinxAtStartPar
+The log level can also be set (for different scopes) using the \sphinxcode{\sphinxupquote{datalad.log.level}} configuration variable, or the corresponding environment variable \sphinxcode{\sphinxupquote{DATALAD\_LOG\_LEVEL}}.
+
+\sphinxAtStartPar
+To set the log level for a single command, for example, set it in front of the command:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nv}{DATALAD\PYGZus{}LOG\PYGZus{}LEVEL}\PYG{o}{=}debug\PYG{+w}{ }datalad\PYG{+w}{ }status
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+And to set the log level for the rest of the shell session, export it:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{export}\PYG{+w}{ }\PYG{n+nv}{DATALAD\PYGZus{}LOG\PYGZus{}LEVEL}\PYG{o}{=}debug
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+gp}{\PYGZdl{} }...
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+You can find out a bit more on environment variable {\hyperref[\detokenize{basics/101-123-config2:fom-envvar}]{\sphinxcrossref{\DUrole{std,std-ref}{in the Findoutmore on environment variables}}}} (\autopageref*{\detokenize{basics/101-123-config2:fom-envvar}}).
+The configuration variable can be used to set the log level on a user (global) or system\sphinxhyphen{}wide level with the \sphinxcode{\sphinxupquote{git config}} command:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }config\PYG{+w}{ }\PYGZhy{}\PYGZhy{}global\PYG{+w}{ }datalad.log.level\PYG{+w}{ }debug
+\end{sphinxVerbatim}
+
+
+\end{findoutmore}
+
+\sphinxAtStartPar
+Setting a log level can be done in the form of an {\hyperref[\detokenize{glossary:term-environment-variable}]{\sphinxtermref{\DUrole{xref,std,std-term}{environment variable}}}}, a configuration, or with the \sphinxcode{\sphinxupquote{\sphinxhyphen{}l}}/\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}log\sphinxhyphen{}level}} flag appended directly after the main \sphinxcode{\sphinxupquote{ datalad}} command.
+To get extensive information on what \sphinxcode{\sphinxupquote{datalad status}} does underneath the hood, your command could look like this (but its output is shortened):
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }\PYGZhy{}\PYGZhy{}log\PYGZhy{}level\PYG{+w}{ }debug\PYG{+w}{ }status
+\PYG{g+go}{[DEBUG] Resolved dataset to report status: /home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101}
+\PYG{g+go}{[DEBUG] Done query repo: [\PYGZsq{}ls\PYGZhy{}files\PYGZsq{}, \PYGZsq{}\PYGZhy{}\PYGZhy{}stage\PYGZsq{}, \PYGZsq{}\PYGZhy{}z\PYGZsq{}, \PYGZsq{}\PYGZhy{}\PYGZhy{}exclude\PYGZhy{}standard\PYGZsq{}, \PYGZsq{}\PYGZhy{}o\PYGZsq{}, \PYGZsq{}\PYGZhy{}\PYGZhy{}directory\PYGZsq{}, \PYGZsq{}\PYGZhy{}\PYGZhy{}no\PYGZhy{}empty\PYGZhy{}directory\PYGZsq{}]}
+\PYG{g+go}{[DEBUG] Done AnnexRepo(/home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101/recordings/longnow).get\PYGZus{}content\PYGZus{}info(...)}
+\PYG{g+go}{[DEBUG] Run [\PYGZsq{}git\PYGZsq{}, \PYGZsq{}\PYGZhy{}c\PYGZsq{}, \PYGZsq{}diff.ignoreSubmodules=none\PYGZsq{}, \PYGZsq{}\PYGZhy{}c\PYGZsq{}, \PYGZsq{}core.quotepath=false\PYGZsq{}, \PYGZsq{}ls\PYGZhy{}files\PYGZsq{}, \PYGZsq{}\PYGZhy{}z\PYGZsq{}, \PYGZsq{}\PYGZhy{}m\PYGZsq{}, \PYGZsq{}\PYGZhy{}d\PYGZsq{}] (protocol\PYGZus{}class=GeneratorStdOutErrCapture) (cwd=/home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101/recordings/longnow)}
+\PYG{g+go}{[DEBUG] AnnexRepo(/home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101/recordings/longnow).get\PYGZus{}content\PYGZus{}info(...)}
+\PYG{g+go}{[DEBUG] Query repo: [\PYGZsq{}ls\PYGZhy{}tree\PYGZsq{}, \PYGZsq{}HEAD\PYGZsq{}, \PYGZsq{}\PYGZhy{}z\PYGZsq{}, \PYGZsq{}\PYGZhy{}r\PYGZsq{}, \PYGZsq{}\PYGZhy{}\PYGZhy{}full\PYGZhy{}tree\PYGZsq{}, \PYGZsq{}\PYGZhy{}l\PYGZsq{}]}
+\PYG{g+go}{[DEBUG] Run [\PYGZsq{}git\PYGZsq{}, \PYGZsq{}\PYGZhy{}c\PYGZsq{}, \PYGZsq{}diff.ignoreSubmodules=none\PYGZsq{}, \PYGZsq{}\PYGZhy{}c\PYGZsq{}, \PYGZsq{}core.quotepath=false\PYGZsq{}, \PYGZsq{}ls\PYGZhy{}tree\PYGZsq{}, \PYGZsq{}HEAD\PYGZsq{}, \PYGZsq{}\PYGZhy{}z\PYGZsq{}, \PYGZsq{}\PYGZhy{}r\PYGZsq{}, \PYGZsq{}\PYGZhy{}\PYGZhy{}full\PYGZhy{}tree\PYGZsq{}, \PYGZsq{}\PYGZhy{}l\PYGZsq{}] (protocol\PYGZus{}class=GeneratorStdOutErrCapture) (cwd=/home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101/recordings/longnow)}
+\PYG{g+go}{[DEBUG] Done query repo: [\PYGZsq{}ls\PYGZhy{}tree\PYGZsq{}, \PYGZsq{}HEAD\PYGZsq{}, \PYGZsq{}\PYGZhy{}z\PYGZsq{}, \PYGZsq{}\PYGZhy{}r\PYGZsq{}, \PYGZsq{}\PYGZhy{}\PYGZhy{}full\PYGZhy{}tree\PYGZsq{}, \PYGZsq{}\PYGZhy{}l\PYGZsq{}]}
+\PYG{g+go}{[DEBUG] Done AnnexRepo(/home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101/recordings/longnow).get\PYGZus{}content\PYGZus{}info(...)}
+\PYG{g+go}{nothing to save, working tree clean}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This output is extensive and detailed, but it precisely shows the sequence of commands and arguments that are run prior to a failure or crash, and all additional information that is reported with the log levels \sphinxcode{\sphinxupquote{info}} or \sphinxcode{\sphinxupquote{debug}} can be very helpful to find out what is wrong.
+Even if the vast amount of detail in output generated with \sphinxcode{\sphinxupquote{debug}} logging appears overwhelming, it can make sense to find out at which point an execution stalls, whether arguments, commands, or datasets reported in the debug output are what you expect them to be, and to forward all information into any potential GitHub issue you will be creating.
+
+\sphinxAtStartPar
+Finally, other than logging with a DataLad command, it sometimes can be useful to turn to {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}} or {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}} for logging.
+For failing \sphinxcode{\sphinxupquote{datalad get}} calls, it may be useful to retry the retrieval using \sphinxcode{\sphinxupquote{git annex get \sphinxhyphen{}d \sphinxhyphen{}v \textless{}file\textgreater{}}}, where \sphinxcode{\sphinxupquote{\sphinxhyphen{}d}} (debug) and \sphinxcode{\sphinxupquote{\sphinxhyphen{}v}} (verbose) increase the amount of detail about the command execution and failure.
+In rare cases where you suspect something might be wrong with Git, setting the environment variables \sphinxcode{\sphinxupquote{GIT\_TRACE}} and \sphinxcode{\sphinxupquote{GIT\_TRACE\_SETUP}} to \sphinxcode{\sphinxupquote{2}} prior to running a Git command will give you debugging output.
+
+
+\subsection{Debugging}
+\label{\detokenize{basics/101-135-help:debug}}\label{\detokenize{basics/101-135-help:id3}}
+\sphinxAtStartPar
+If the additional level of detail provided by logging messages is not enough, you can go further with actual {\hyperref[\detokenize{glossary:term-debugging}]{\sphinxtermref{\DUrole{xref,std,std-term}{debugging}}}}.
+For this, add the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}dbg}} or \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}idbg}} flag to the main \sphinxcode{\sphinxupquote{ datalad}} command, as in \sphinxcode{\sphinxupquote{datalad \sphinxhyphen{}\sphinxhyphen{}dbg status}}.
+Adding this flag will enter a \sphinxhref{https://docs.python.org/3/library/pdb.html}{Python} or \dlhbhref{I3}{IPython debugger} when something unexpectedly crashes.
+This allows you to debug the program right when it fails, inspect available variables and their values, or step back and forth through the source code.
+Note that debugging experience is not a prerequisite when using DataLad \textendash{} although it is \dlhbhref{M3A}{an exciting life skill}.
+\dlhbhref{P1A}{The official Python docs} provide a good overview on the available debugger commands if you are interested in learning more about this.
+
+\appendix
+
+\sphinxstepscope
+
+

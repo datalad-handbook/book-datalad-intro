@@ -1,0 +1,918 @@
+\chapter{Appendix}
+\label{\detokenize{book_appendix:appendix}}\label{\detokenize{book_appendix::doc}}
+\begin{figure}[tbp]
+\centering
+
+\noindent\sphinxincludegraphics[width=0.500\linewidth]{{remote_designteam}.pdf}
+\end{figure}
+
+\sphinxstepscope
+
+
+\section{Glossary}
+\label{\detokenize{glossary:glossary}}\label{\detokenize{glossary:id1}}\label{\detokenize{glossary::doc}}\begin{description}
+\sphinxlineitem{absolute path\index{absolute path@\spxentry{absolute path}|spxpagem}\phantomsection\label{\detokenize{glossary:term-absolute-path}}}
+\index{file system concept@\spxentry{file system concept}!path (absolute)@\spxentry{path}\spxextra{absolute}}\ignorespaces 
+\sphinxAtStartPar
+The complete path from the root of the file system. On Unix\sphinxhyphen{}like systems, absolute paths always start with \sphinxcode{\sphinxupquote{/}}, and on Windows systems, they start with a \sphinxcode{\sphinxupquote{\textbackslash{}}} (likely prefixed by a disk identifier).
+Examples: \sphinxcode{\sphinxupquote{/home/user/Pictures/xkcd\sphinxhyphen{}webcomics/530.png}}, \sphinxcode{\sphinxupquote{C:\textbackslash{}Users\textbackslash{}user\textbackslash{}Pictures\textbackslash{}xkcd\sphinxhyphen{}webcomics\textbackslash{}530.png}}. See also {\hyperref[\detokenize{glossary:term-relative-path}]{\sphinxtermref{\DUrole{xref,std,std-term}{relative path}}}}.
+
+\sphinxlineitem{adjusted branch\index{adjusted branch@\spxentry{adjusted branch}|spxpagem}\phantomsection\label{\detokenize{glossary:term-adjusted-branch}}}
+\index{adjusted branch@\spxentry{adjusted branch}!in adjusted mode@\spxentry{in adjusted mode}}\index{in adjusted mode@\spxentry{in adjusted mode}!adjusted branch@\spxentry{adjusted branch}}\index{adjusted branch@\spxentry{adjusted branch}!git\sphinxhyphen{}annex concept@\spxentry{git\sphinxhyphen{}annex concept}}\index{git\sphinxhyphen{}annex concept@\spxentry{git\sphinxhyphen{}annex concept}!adjusted branch@\spxentry{adjusted branch}}\ignorespaces 
+\sphinxAtStartPar
+A specially managed {\hyperref[\detokenize{glossary:term-branch}]{\sphinxtermref{\DUrole{xref,std,std-term}{branch}}}} in a dataset.
+An adjusted branch presents a modified (adjusted) view on its
+{\hyperref[\detokenize{glossary:term-corresponding-branch}]{\sphinxtermref{\DUrole{xref,std,std-term}{corresponding branch}}}}. The most common use of an adjusted branch
+is a work tree where all files are “unlocked”.
+Such a branch is named \sphinxcode{\sphinxupquote{adjusted/\textless{}branchname\textgreater{}(unlocked)}}, and
+all files handled by {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}} are immediately modifiable.
+Instead of referencing data in the {\hyperref[\detokenize{glossary:term-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{annex}}}} with a {\hyperref[\detokenize{glossary:term-symlink}]{\sphinxtermref{\DUrole{xref,std,std-term}{symlink}}}},
+unlocked files need to be copies of the data in the annex.
+Files where no content is available locally are also files, but only
+contain placeholder content. Some adjusted modes hide files without
+available content entirely.
+Adjusted branches are locally managed, and it is not meaningful to push
+them to other dataset clones.
+Adjusted branches primarily exist as the default branch on so\sphinxhyphen{}called
+{\hyperref[\detokenize{glossary:term-crippled-file-system}]{\sphinxtermref{\DUrole{xref,std,std-term}{crippled file system}}}}s such as Windows.
+
+\sphinxlineitem{adjusted mode\index{adjusted mode@\spxentry{adjusted mode}|spxpagem}\phantomsection\label{\detokenize{glossary:term-adjusted-mode}}}
+\index{adjusted mode@\spxentry{adjusted mode}!git\sphinxhyphen{}annex concept@\spxentry{git\sphinxhyphen{}annex concept}}\index{git\sphinxhyphen{}annex concept@\spxentry{git\sphinxhyphen{}annex concept}!adjusted mode@\spxentry{adjusted mode}}\ignorespaces 
+\sphinxAtStartPar
+A repository mode that used an {\hyperref[\detokenize{glossary:term-adjusted-branch}]{\sphinxtermref{\DUrole{xref,std,std-term}{adjusted branch}}}} for the work tree.
+This mode can be entered manually (see \sphinxcode{\sphinxupquote{git annex adjust}}), or automatically
+when git\sphinxhyphen{}annex detects a file system with insufficient capabilities
+(see {\hyperref[\detokenize{glossary:term-crippled-file-system}]{\sphinxtermref{\DUrole{xref,std,std-term}{crippled file system}}}}).
+
+\sphinxlineitem{annex\index{annex@\spxentry{annex}|spxpagem}\phantomsection\label{\detokenize{glossary:term-annex}}}
+\index{annex@\spxentry{annex}!git\sphinxhyphen{}annex concept@\spxentry{git\sphinxhyphen{}annex concept}}\index{git\sphinxhyphen{}annex concept@\spxentry{git\sphinxhyphen{}annex concept}!annex@\spxentry{annex}}\ignorespaces 
+\sphinxAtStartPar
+git\sphinxhyphen{}annex concept: a different word for {\hyperref[\detokenize{glossary:term-object-tree}]{\sphinxtermref{\DUrole{xref,std,std-term}{object\sphinxhyphen{}tree}}}}.
+
+\sphinxlineitem{annex key\index{annex key@\spxentry{annex key}|spxpagem}\phantomsection\label{\detokenize{glossary:term-annex-key}}}
+\index{file content identifier@\spxentry{file content identifier}!git\sphinxhyphen{}annex concept@\spxentry{git\sphinxhyphen{}annex concept}}\index{git\sphinxhyphen{}annex concept@\spxentry{git\sphinxhyphen{}annex concept}!file content identifier@\spxentry{file content identifier}}\index{annex key@\spxentry{annex key}!git\sphinxhyphen{}annex concept@\spxentry{git\sphinxhyphen{}annex concept}}\index{git\sphinxhyphen{}annex concept@\spxentry{git\sphinxhyphen{}annex concept}!annex key@\spxentry{annex key}}\ignorespaces 
+\sphinxAtStartPar
+Git\sphinxhyphen{}annex file content identifier. It is used for naming objects
+in a dataset {\hyperref[\detokenize{glossary:term-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{annex}}}}. These identifiers follow a
+\dlhbhref{B1L}{strict naming scheme}.
+However, various types of identifiers, so called
+\dlhbhref{B1A}{backends} can be used. Most
+backends are based on a {\hyperref[\detokenize{glossary:term-checksum}]{\sphinxtermref{\DUrole{xref,std,std-term}{checksum}}}}, thereby enabling content verification
+and data integrity checks for files in an annex.
+
+\sphinxlineitem{annex UUID\index{annex UUID@\spxentry{annex UUID}|spxpagem}\phantomsection\label{\detokenize{glossary:term-annex-UUID}}}
+\index{location identifier@\spxentry{location identifier}!git\sphinxhyphen{}annex concept@\spxentry{git\sphinxhyphen{}annex concept}}\index{git\sphinxhyphen{}annex concept@\spxentry{git\sphinxhyphen{}annex concept}!location identifier@\spxentry{location identifier}}\index{annex uuid@\spxentry{annex uuid}!git\sphinxhyphen{}annex concept@\spxentry{git\sphinxhyphen{}annex concept}}\index{git\sphinxhyphen{}annex concept@\spxentry{git\sphinxhyphen{}annex concept}!annex uuid@\spxentry{annex uuid}}\ignorespaces 
+\sphinxAtStartPar
+A {\hyperref[\detokenize{glossary:term-UUID}]{\sphinxtermref{\DUrole{xref,std,std-term}{UUID}}}} assigned to an annex of each individual {\hyperref[\detokenize{glossary:term-clone}]{\sphinxtermref{\DUrole{xref,std,std-term}{clone}}}} of a dataset repository.
+{\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}} uses this UUID to track file content availability information.
+The UUID is available under the configuration key \sphinxcode{\sphinxupquote{annex.uuid}} and is stored in the
+configuration file of a local clone (\sphinxcode{\sphinxupquote{\textless{}dataset root\textgreater{}/.git/config}}).
+A single dataset instance (i.e. a local clone) has exactly one annex UUID,
+but other clones of the same dataset each have their own unique annex UUIDs.
+
+\sphinxlineitem{bare Git repositories\index{bare Git repositories@\spxentry{bare Git repositories}|spxpagem}\phantomsection\label{\detokenize{glossary:term-bare-Git-repositories}}}
+\index{bare repository@\spxentry{bare repository}!Git concept@\spxentry{Git concept}}\index{Git concept@\spxentry{Git concept}!bare repository@\spxentry{bare repository}}\ignorespaces 
+\sphinxAtStartPar
+A bare Git repository is a repository that contains the contents of the \sphinxcode{\sphinxupquote{.git}}
+directory of regular DataLad datasets or Git repositories, but no worktree
+or checkout. This has advantages: The repository is leaner, it is easier
+for administrators to perform garbage collections, and it is required if you
+want to push to it at all times. You can find out more on what bare repositories are and how to use them
+\dlhbhref{G1G}{in the Git documentation}.
+
+\sphinxlineitem{bash\index{bash@\spxentry{bash}|spxpagem}\phantomsection\label{\detokenize{glossary:term-bash}}}
+\index{shell@\spxentry{shell}!bash@\spxentry{bash}}\ignorespaces 
+\sphinxAtStartPar
+A Unix {\hyperref[\detokenize{glossary:term-shell}]{\sphinxtermref{\DUrole{xref,std,std-term}{shell}}}} and command language.
+
+\sphinxlineitem{Bitbucket\index{Bitbucket@\spxentry{Bitbucket}|spxpagem}\phantomsection\label{\detokenize{glossary:term-Bitbucket}}}
+\index{dataset hosting@\spxentry{dataset hosting}!Bitbucket@\spxentry{Bitbucket}}\index{Bitbucket@\spxentry{Bitbucket}!dataset hosting@\spxentry{dataset hosting}}\ignorespaces 
+\sphinxAtStartPar
+Bitbucket is an online platform where one can store and share version
+controlled projects using Git (and thus also DataLad project), similar
+to {\hyperref[\detokenize{glossary:term-GitHub}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitHub}}}} or {\hyperref[\detokenize{glossary:term-GitLab}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitLab}}}}. See \dlhbhref{B2}{bitbucket.org}.
+
+\sphinxlineitem{branch\index{branch@\spxentry{branch}|spxpagem}\phantomsection\label{\detokenize{glossary:term-branch}}}
+\index{branch@\spxentry{branch}!Git concept@\spxentry{Git concept}}\index{Git concept@\spxentry{Git concept}!branch@\spxentry{branch}}\ignorespaces 
+\sphinxAtStartPar
+Git concept: A lightweight, independent history streak of your dataset. Branches can contain less,
+more, or changed files compared to other branches, and one can {\hyperref[\detokenize{glossary:term-merge}]{\sphinxtermref{\DUrole{xref,std,std-term}{merge}}}} the changes
+a branch contains into another branch.
+
+\sphinxlineitem{checksum\index{checksum@\spxentry{checksum}|spxpagem}\phantomsection\label{\detokenize{glossary:term-checksum}}}
+\index{checksum@\spxentry{checksum}|see{\textquotesingle{}shasum\textquotesingle{}}}\ignorespaces 
+\sphinxAtStartPar
+An alternative term to {\hyperref[\detokenize{glossary:term-shasum}]{\sphinxtermref{\DUrole{xref,std,std-term}{shasum}}}}.
+
+\sphinxlineitem{clone\index{clone@\spxentry{clone}|spxpagem}\phantomsection\label{\detokenize{glossary:term-clone}}}
+\index{clone@\spxentry{clone}!Git concept@\spxentry{Git concept}}\index{Git concept@\spxentry{Git concept}!clone@\spxentry{clone}}\ignorespaces 
+\sphinxAtStartPar
+Git concept: A copy of a {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}} repository. In Git\sphinxhyphen{}terminology, all “installed” datasets
+are clones.
+
+\sphinxlineitem{commit\index{commit@\spxentry{commit}|spxpagem}\phantomsection\label{\detokenize{glossary:term-commit}}}
+\index{commit@\spxentry{commit}!Git concept@\spxentry{Git concept}}\index{Git concept@\spxentry{Git concept}!commit@\spxentry{commit}}\ignorespaces 
+\sphinxAtStartPar
+Git concept: Adding selected changes of a file or dataset to the repository, and thus making these changes
+part of the revision history of the repository. Should always have an informative {\hyperref[\detokenize{glossary:term-commit-message}]{\sphinxtermref{\DUrole{xref,std,std-term}{commit message}}}}.
+
+\sphinxlineitem{commit message\index{commit message@\spxentry{commit message}|spxpagem}\phantomsection\label{\detokenize{glossary:term-commit-message}}}
+\index{commit message@\spxentry{commit message}!Git concept@\spxentry{Git concept}}\index{Git concept@\spxentry{Git concept}!commit message@\spxentry{commit message}}\ignorespaces 
+\sphinxAtStartPar
+Git concept: A concise summary of changes you should attach to a \sphinxcode{\sphinxupquote{datalad save}} command. This summary will
+show up in your {\hyperref[\detokenize{glossary:term-DataLad-dataset}]{\sphinxtermref{\DUrole{xref,std,std-term}{DataLad dataset}}}} history.
+
+\sphinxlineitem{compute node\index{compute node@\spxentry{compute node}|spxpagem}\phantomsection\label{\detokenize{glossary:term-compute-node}}}
+\sphinxAtStartPar
+A compute node is an individual computer, part of a {\hyperref[\detokenize{glossary:term-high-performance-computing}]{\sphinxtermref{\DUrole{xref,std,std-term}{high\sphinxhyphen{}performance computing}}}} or {\hyperref[\detokenize{glossary:term-high-throughput-computing}]{\sphinxtermref{\DUrole{xref,std,std-term}{high\sphinxhyphen{}throughput computing}}}} (HTC) cluster.
+
+\sphinxlineitem{conda\index{conda@\spxentry{conda}|spxpagem}\phantomsection\label{\detokenize{glossary:term-conda}}}
+\sphinxAtStartPar
+A package, dependency, and environment management system for a number of programming languages.
+Find out more at \dlhbhref{C3}{docs.conda.io}.
+It overlaps with {\hyperref[\detokenize{glossary:term-pip}]{\sphinxtermref{\DUrole{xref,std,std-term}{pip}}}} in functionality, but it is advised to not use both tools simultaneously for package management.
+
+\sphinxlineitem{container\index{container@\spxentry{container}|spxpagem}\phantomsection\label{\detokenize{glossary:term-container}}}
+\index{container concept@\spxentry{container concept}!container@\spxentry{container}|spxpagem}\ignorespaces 
+\sphinxAtStartPar
+A running instance of a {\hyperref[\detokenize{glossary:term-container-image}]{\sphinxtermref{\DUrole{xref,std,std-term}{container image}}}} image that is ready to use.
+
+\sphinxlineitem{container image\index{container image@\spxentry{container image}|spxpagem}\phantomsection\label{\detokenize{glossary:term-container-image}}}
+\index{container concept@\spxentry{container concept}!image@\spxentry{image}|spxpagem}\ignorespaces 
+\sphinxAtStartPar
+A container image is \sphinxstyleemphasis{built} from a {\hyperref[\detokenize{glossary:term-container-recipe}]{\sphinxtermref{\DUrole{xref,std,std-term}{container recipe}}}}.
+It is a file system snapshot in a file, populated with software specified in the recipe, and some initial configuration.
+
+\sphinxlineitem{container recipe\index{container recipe@\spxentry{container recipe}|spxpagem}\phantomsection\label{\detokenize{glossary:term-container-recipe}}}
+\index{container concept@\spxentry{container concept}!recipe@\spxentry{recipe}|spxpagem}\ignorespaces 
+\sphinxAtStartPar
+A text file that lists all required components of the computational environment that a {\hyperref[\detokenize{glossary:term-software-container}]{\sphinxtermref{\DUrole{xref,std,std-term}{software container}}}} should contain.
+It is made by a human user.
+
+\sphinxlineitem{corresponding branch\index{corresponding branch@\spxentry{corresponding branch}|spxpagem}\phantomsection\label{\detokenize{glossary:term-corresponding-branch}}}
+\index{corresponding branch@\spxentry{corresponding branch}!in adjusted mode@\spxentry{in adjusted mode}}\index{in adjusted mode@\spxentry{in adjusted mode}!corresponding branch@\spxentry{corresponding branch}}\ignorespaces 
+\sphinxAtStartPar
+A {\hyperref[\detokenize{glossary:term-branch}]{\sphinxtermref{\DUrole{xref,std,std-term}{branch}}}} underlying a particular {\hyperref[\detokenize{glossary:term-adjusted-branch}]{\sphinxtermref{\DUrole{xref,std,std-term}{adjusted branch}}}}.
+Changes committed to an adjusted branch are propagated to its corresponding
+branch. Only the corresponding branch is suitable for sharing with other
+repository clones.
+
+\sphinxlineitem{crippled file system\index{crippled file system@\spxentry{crippled file system}|spxpagem}\phantomsection\label{\detokenize{glossary:term-crippled-file-system}}}
+\index{crippled file system@\spxentry{crippled file system}!git\sphinxhyphen{}annex concept@\spxentry{git\sphinxhyphen{}annex concept}}\index{git\sphinxhyphen{}annex concept@\spxentry{git\sphinxhyphen{}annex concept}!crippled file system@\spxentry{crippled file system}}\ignorespaces 
+\sphinxAtStartPar
+git\sphinxhyphen{}annex concept: A file system that does not allow making symlinks or removing write {\hyperref[\detokenize{glossary:term-permissions}]{\sphinxtermref{\DUrole{xref,std,std-term}{permissions}}}} from files. Examples for this are \sphinxhref{https://en.wikipedia.org/wiki/Design\_of\_the\_FAT\_file\_system}{FAT} (likely used by your USB sticks) or \dlhbhref{W1N}{NTFS} (used on Windows systems of the last three decades).
+
+\sphinxlineitem{DataLad dataset\index{DataLad dataset@\spxentry{DataLad dataset}|spxpagem}\phantomsection\label{\detokenize{glossary:term-DataLad-dataset}}}
+\index{dataset@\spxentry{dataset}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!dataset@\spxentry{dataset}}\ignorespaces 
+\sphinxAtStartPar
+A DataLad dataset is a Git repository that may or may not have a data annex that is used to
+manage data referenced in a dataset. In practice, most DataLad datasets will come with an annex.
+
+\sphinxlineitem{DataLad extension\index{DataLad extension@\spxentry{DataLad extension}|spxpagem}\phantomsection\label{\detokenize{glossary:term-DataLad-extension}}}
+\index{extension@\spxentry{extension}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!extension@\spxentry{extension}}\ignorespaces 
+\sphinxAtStartPar
+Python packages that equip DataLad with specialized commands. The online\sphinxhyphen{}handbook has an entire chapter that
+gives an overview of available extensions contains demonstrations.
+
+\sphinxlineitem{DataLad Gooey\index{DataLad Gooey@\spxentry{DataLad Gooey}|spxpagem}\phantomsection\label{\detokenize{glossary:term-DataLad-Gooey}}}
+\sphinxAtStartPar
+A {\hyperref[\detokenize{glossary:term-DataLad-extension}]{\sphinxtermref{\DUrole{xref,std,std-term}{DataLad extension}}}} that provides DataLad with a graphical user interface. Find out more in its Documentation: \dlhbhref{D1F}{docs.datalad.org/projects/gooey}
+
+\sphinxlineitem{DataLad subdataset\index{DataLad subdataset@\spxentry{DataLad subdataset}|spxpagem}\phantomsection\label{\detokenize{glossary:term-DataLad-subdataset}}}
+\index{subdataset@\spxentry{subdataset}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!subdataset@\spxentry{subdataset}}\ignorespaces 
+\sphinxAtStartPar
+A DataLad dataset contained within a different DataLad dataset (the parent or {\hyperref[\detokenize{glossary:term-DataLad-superdataset}]{\sphinxtermref{\DUrole{xref,std,std-term}{DataLad superdataset}}}}).
+
+\sphinxlineitem{DataLad superdataset\index{DataLad superdataset@\spxentry{DataLad superdataset}|spxpagem}\phantomsection\label{\detokenize{glossary:term-DataLad-superdataset}}}
+\index{superdataset@\spxentry{superdataset}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!superdataset@\spxentry{superdataset}}\ignorespaces 
+\sphinxAtStartPar
+A DataLad dataset that contains one or more levels of other DataLad datasets ({\hyperref[\detokenize{glossary:term-DataLad-subdataset}]{\sphinxtermref{\DUrole{xref,std,std-term}{DataLad subdataset}}}}).
+
+\sphinxlineitem{dataset ID\index{dataset ID@\spxentry{dataset ID}|spxpagem}\phantomsection\label{\detokenize{glossary:term-dataset-ID}}}
+\index{dataset identifier@\spxentry{dataset identifier}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!dataset identifier@\spxentry{dataset identifier}}\index{configuration item@\spxentry{configuration item}!datalad.dataset.id@\spxentry{datalad.dataset.id}}\ignorespaces 
+\sphinxAtStartPar
+A {\hyperref[\detokenize{glossary:term-UUID}]{\sphinxtermref{\DUrole{xref,std,std-term}{UUID}}}} that identifies a dataset as a unit \textendash{} across its entire history and flavors.
+This ID is stored in a dataset’s own configuration file (\sphinxcode{\sphinxupquote{\textless{}dataset root\textgreater{}/.datalad/config}})
+under the configuration key \sphinxcode{\sphinxupquote{datalad.dataset.id}}.
+As this configuration is stored in a file that is part of the Git
+history of a dataset, this ID is identical for all {\hyperref[\detokenize{glossary:term-clone}]{\sphinxtermref{\DUrole{xref,std,std-term}{clone}}}}s of a dataset and across all
+its versions.
+
+\sphinxlineitem{Debian\index{Debian@\spxentry{Debian}|spxpagem}\phantomsection\label{\detokenize{glossary:term-Debian}}}
+\sphinxAtStartPar
+A common Linux distribution. \dlhbhref{D8A}{More information at www.debian.org}.
+
+\sphinxlineitem{debugging\index{debugging@\spxentry{debugging}|spxpagem}\phantomsection\label{\detokenize{glossary:term-debugging}}}
+\sphinxAtStartPar
+Finding and resolving problems within a computer program.
+To learn about debugging a failed execution of a DataLad command, take a look at the section {\hyperref[\detokenize{basics/101-135-help:debug}]{\sphinxcrossref{\DUrole{std,std-ref}{Debugging}}}} (\autopageref*{\detokenize{basics/101-135-help:debug}}).
+
+\sphinxlineitem{Docker\index{Docker@\spxentry{Docker}|spxpagem}\phantomsection\label{\detokenize{glossary:term-Docker}}}\begin{description}
+\sphinxlineitem{\dlhbhref{D9}{Docker} is a containerization software that can package software into {\hyperref[\detokenize{glossary:term-software-container}]{\sphinxtermref{\DUrole{xref,std,std-term}{software container}}}}s, similar to {\hyperref[\detokenize{glossary:term-Singularity}]{\sphinxtermref{\DUrole{xref,std,std-term}{Singularity}}}}.}
+\sphinxAtStartPar
+Find out more on \dlhbhref{W1C}{Wikipedia}.
+
+\end{description}
+
+\sphinxlineitem{Docker\sphinxhyphen{}Hub\index{Docker\sphinxhyphen{}Hub@\spxentry{Docker\sphinxhyphen{}Hub}|spxpagem}\phantomsection\label{\detokenize{glossary:term-Docker-Hub}}}
+\index{hub@\spxentry{hub}!Docker@\spxentry{Docker}}\index{Docker@\spxentry{Docker}!hub@\spxentry{hub}}\ignorespaces 
+\sphinxAtStartPar
+\dlhbhref{D6}{Docker Hub} is a library for {\hyperref[\detokenize{glossary:term-Docker}]{\sphinxtermref{\DUrole{xref,std,std-term}{Docker}}}} {\hyperref[\detokenize{glossary:term-container-image}]{\sphinxtermref{\DUrole{xref,std,std-term}{container image}}}}s.
+Among other things, it hosts and builds Docker container images.
+You can can \sphinxstyleemphasis{pull} {\hyperref[\detokenize{glossary:term-container-image}]{\sphinxtermref{\DUrole{xref,std,std-term}{container image}}}}s built from a publicly shared {\hyperref[\detokenize{glossary:term-container-recipe}]{\sphinxtermref{\DUrole{xref,std,std-term}{container recipe}}}} from it.
+
+\sphinxlineitem{DOI\index{DOI@\spxentry{DOI}|spxpagem}\phantomsection\label{\detokenize{glossary:term-DOI}}}
+\sphinxAtStartPar
+A digital object identifier (DOI) is a character string used to permanently identify
+a resource and link to in on the web. A DOI will always refer to the one resource
+it was assigned to, and only that one.
+
+\sphinxlineitem{extractor\index{extractor@\spxentry{extractor}|spxpagem}\phantomsection\label{\detokenize{glossary:term-extractor}}}
+\index{metadata extractor@\spxentry{metadata extractor}!DataLad concept@\spxentry{DataLad concept}}\ignorespaces 
+\sphinxAtStartPar
+DataLad concept: A metadata extractor of the {\hyperref[\detokenize{glossary:term-DataLad-extension}]{\sphinxtermref{\DUrole{xref,std,std-term}{DataLad extension}}}} \sphinxcode{\sphinxupquote{datalad\sphinxhyphen{}metalad}}
+enables DataLad to extract and aggregate special types of metadata.
+
+\sphinxlineitem{environment variable\index{environment variable@\spxentry{environment variable}|spxpagem}\phantomsection\label{\detokenize{glossary:term-environment-variable}}}
+\index{operating system concept@\spxentry{operating system concept}!environment variable@\spxentry{environment variable}|spxpagem}\ignorespaces 
+\sphinxAtStartPar
+A variable made up of a name/value pair. Programs using a given environment variable will use its associated value for their execution.
+See the {\hyperref[\detokenize{basics/101-123-config2:fom-envvar}]{\sphinxcrossref{\DUrole{std,std-ref}{Find\sphinxhyphen{}out\sphinxhyphen{}more on environment variables}}}} (\autopageref*{\detokenize{basics/101-123-config2:fom-envvar}}) for details.
+
+\sphinxlineitem{ephemeral clone\index{ephemeral clone@\spxentry{ephemeral clone}|spxpagem}\phantomsection\label{\detokenize{glossary:term-ephemeral-clone}}}
+\index{clone (ephemeral)@\spxentry{clone}\spxextra{ephemeral}!DataLad concept@\spxentry{DataLad concept}}\ignorespaces 
+\sphinxAtStartPar
+dataset clones that share the annex with the dataset they were cloned from, without {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}} being aware of it.
+On a technical level, this is achieved via symlinks.
+They can be created with the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}reckless ephemeral}} option of \sphinxcode{\sphinxupquote{datalad clone}}.
+
+\sphinxlineitem{force\sphinxhyphen{}push\index{force\sphinxhyphen{}push@\spxentry{force\sphinxhyphen{}push}|spxpagem}\phantomsection\label{\detokenize{glossary:term-force-push}}}
+\index{push (forced)@\spxentry{push}\spxextra{forced}!Git concept@\spxentry{Git concept}}\index{Git concept@\spxentry{Git concept}!push (forced)@\spxentry{push}\spxextra{forced}}\ignorespaces 
+\sphinxAtStartPar
+Git concept; Enforcing a \sphinxcode{\sphinxupquote{git push}} command with the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}force}}
+option. Find out more in the
+\dlhbhref{G1M}{documentation of git push}.
+
+\sphinxlineitem{fork\index{fork@\spxentry{fork}|spxpagem}\phantomsection\label{\detokenize{glossary:term-fork}}}
+\index{fork@\spxentry{fork}!Git concept@\spxentry{Git concept}}\index{Git concept@\spxentry{Git concept}!fork@\spxentry{fork}}\ignorespaces 
+\sphinxAtStartPar
+Git concept on repository hosting sites (GitHub, GitLab, Gin, …);
+\dlhbhref{G3D}{A fork is a copy of a repository on a web\sphinxhyphen{}based Git repository hosting site}.
+
+\sphinxlineitem{GIN\index{GIN@\spxentry{GIN}|spxpagem}\phantomsection\label{\detokenize{glossary:term-GIN}}}
+\index{dataset hosting@\spxentry{dataset hosting}!GIN@\spxentry{GIN}|spxpagem}\ignorespaces 
+\sphinxAtStartPar
+A web\sphinxhyphen{}based repository store for data management that you can use to host and
+share datasets. Find out more about GIN \dlhbhref{G5A}{at gin.g\sphinxhyphen{}node.org}.
+
+\sphinxlineitem{Git\index{Git@\spxentry{Git}|spxpagem}\phantomsection\label{\detokenize{glossary:term-Git}}}
+\sphinxAtStartPar
+A version control system to track changes made to small\sphinxhyphen{}sized files over time. You can find out
+more about Git in \dlhbhref{G1A}{the (free) GitPro book}
+or \dlhbhref{G16}{interactive Git tutorials} on {\hyperref[\detokenize{glossary:term-GitHub}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitHub}}}}.
+
+\sphinxlineitem{git\sphinxhyphen{}annex\index{git\sphinxhyphen{}annex@\spxentry{git\sphinxhyphen{}annex}|spxpagem}\phantomsection\label{\detokenize{glossary:term-git-annex}}}
+\sphinxAtStartPar
+A distributed file synchronization system, enabling sharing and synchronizing collections
+of large files. It allows managing files with {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}}, without checking the file content into Git.
+
+\sphinxlineitem{git\sphinxhyphen{}annex branch\index{git\sphinxhyphen{}annex branch@\spxentry{git\sphinxhyphen{}annex branch}|spxpagem}\phantomsection\label{\detokenize{glossary:term-git-annex-branch}}}
+\index{git\sphinxhyphen{}annex branch@\spxentry{git\sphinxhyphen{}annex branch}!git\sphinxhyphen{}annex concept@\spxentry{git\sphinxhyphen{}annex concept}}\index{git\sphinxhyphen{}annex concept@\spxentry{git\sphinxhyphen{}annex concept}!git\sphinxhyphen{}annex branch@\spxentry{git\sphinxhyphen{}annex branch}}\ignorespaces 
+\sphinxAtStartPar
+This {\hyperref[\detokenize{glossary:term-branch}]{\sphinxtermref{\DUrole{xref,std,std-term}{branch}}}} exists in your dataset if the dataset contains
+an {\hyperref[\detokenize{glossary:term-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{annex}}}}.  The git\sphinxhyphen{}annex branch is completely unconnected to any
+other branch in your dataset, and contains different types of log files.
+Its contents are used for git\sphinxhyphen{}annex’s internal tracking of the dataset
+and its annexed contents.
+The branch is managed by {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}}, and you should not tamper with
+it unless you absolutely know what you are doing.
+
+\sphinxlineitem{Git config file\index{Git config file@\spxentry{Git config file}|spxpagem}\phantomsection\label{\detokenize{glossary:term-Git-config-file}}}
+\index{configuration file@\spxentry{configuration file}!Git concept@\spxentry{Git concept}}\ignorespaces 
+\sphinxAtStartPar
+A file in which {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}} stores configuration option. Such a file usually exists on
+the system, user, and repository (dataset) level.
+
+\sphinxlineitem{GitHub\index{GitHub@\spxentry{GitHub}|spxpagem}\phantomsection\label{\detokenize{glossary:term-GitHub}}}
+\index{dataset hosting@\spxentry{dataset hosting}!GitHub@\spxentry{GitHub}}\ignorespaces 
+\sphinxAtStartPar
+GitHub is an online platform where one can store and share version controlled projects
+using Git (and thus also DataLad project). See \dlhbhref{G2}{GitHub.com}.
+
+\sphinxlineitem{gitk\index{gitk@\spxentry{gitk}|spxpagem}\phantomsection\label{\detokenize{glossary:term-gitk}}}
+\index{gitk@\spxentry{gitk}!Git command@\spxentry{Git command}}\index{Git command@\spxentry{Git command}!gitk@\spxentry{gitk}}\ignorespaces 
+\sphinxAtStartPar
+A repository browser that displays changes in a repository or a selected set of commits. It
+visualizes a commit graph, information related to each commit, and the files in the trees
+of each revision.
+
+\sphinxlineitem{GitLab\index{GitLab@\spxentry{GitLab}|spxpagem}\phantomsection\label{\detokenize{glossary:term-GitLab}}}
+\index{dataset hosting@\spxentry{dataset hosting}!GitLab@\spxentry{GitLab}}\ignorespaces 
+\sphinxAtStartPar
+An online platform to host and share software projects version controlled with {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}},
+similar to {\hyperref[\detokenize{glossary:term-GitHub}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitHub}}}}. See \dlhbhref{G8}{Gitlab.com}.
+
+\sphinxlineitem{globbing\index{globbing@\spxentry{globbing}|spxpagem}\phantomsection\label{\detokenize{glossary:term-globbing}}}
+\index{command line concept@\spxentry{command line concept}!globbing@\spxentry{globbing}}\ignorespaces 
+\sphinxAtStartPar
+A powerful pattern matching function of a shell. Allows to match the names of multiple files
+or directories. The most basic pattern is \sphinxcode{\sphinxupquote{*}}, which matches any number of character, such
+that \sphinxcode{\sphinxupquote{ls *.txt}} will list all \sphinxcode{\sphinxupquote{.txt}} files in the current directory.
+You can read about more about Pattern Matching in
+\dlhbhref{G6A}{Bash’s Docs}.
+
+\sphinxlineitem{high\sphinxhyphen{}performance computing\index{high\sphinxhyphen{}performance computing@\spxentry{high\sphinxhyphen{}performance computing}|spxpagem}\phantomsection\label{\detokenize{glossary:term-high-performance-computing}}}\sphinxlineitem{HPC\index{HPC@\spxentry{HPC}|spxpagem}\phantomsection\label{\detokenize{glossary:term-HPC}}}
+\sphinxAtStartPar
+Aggregating computing power from a bond of computers in a way that delivers higher performance than a typical desktop computer in order to solve computing tasks that require high computing power or demand a lot of disk space or memory.
+
+\sphinxlineitem{high\sphinxhyphen{}throughput computing\index{high\sphinxhyphen{}throughput computing@\spxentry{high\sphinxhyphen{}throughput computing}|spxpagem}\phantomsection\label{\detokenize{glossary:term-high-throughput-computing}}}\sphinxlineitem{HTC\index{HTC@\spxentry{HTC}|spxpagem}\phantomsection\label{\detokenize{glossary:term-HTC}}}
+\sphinxAtStartPar
+A computing environment build from a bond of computers and tuned to deliver large amounts of computational power to allow parallel processing of independent computational jobs. For more information, see \dlhbhref{W1H}{Wikipedia}.
+
+\sphinxlineitem{http\index{http@\spxentry{http}|spxpagem}\phantomsection\label{\detokenize{glossary:term-http}}}
+\index{protocol@\spxentry{protocol}!http@\spxentry{http}}\ignorespaces 
+\sphinxAtStartPar
+Hypertext Transfer Protocol; A protocol for file transfer over a network.
+
+\sphinxlineitem{https\index{https@\spxentry{https}|spxpagem}\phantomsection\label{\detokenize{glossary:term-https}}}
+\index{protocol@\spxentry{protocol}!https@\spxentry{https}}\ignorespaces 
+\sphinxAtStartPar
+Hypertext Transfer Protocol Secure; A protocol for file transfer over a network.
+
+\sphinxlineitem{logging\index{logging@\spxentry{logging}|spxpagem}\phantomsection\label{\detokenize{glossary:term-logging}}}
+\sphinxAtStartPar
+Automatic protocol creation of software processes, for example in order to gain insights into errors. To learn about logging to troubleshoot problems or remove or increase the amount of information printed to your terminal during the execution of a DataLad command, take a look at the section {\hyperref[\detokenize{basics/101-135-help:logging}]{\sphinxcrossref{\DUrole{std,std-ref}{Logging}}}} (\autopageref*{\detokenize{basics/101-135-help:logging}}).
+
+\sphinxlineitem{log level\index{log level@\spxentry{log level}|spxpagem}\phantomsection\label{\detokenize{glossary:term-log-level}}}
+\index{log level@\spxentry{log level}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!log level@\spxentry{log level}}\ignorespaces 
+\sphinxAtStartPar
+Adjusts the amount of verbosity during {\hyperref[\detokenize{glossary:term-logging}]{\sphinxtermref{\DUrole{xref,std,std-term}{logging}}}}.
+
+\sphinxlineitem{main\index{main@\spxentry{main}|spxpagem}\phantomsection\label{\detokenize{glossary:term-main}}}
+\index{main branch@\spxentry{main branch}!Git concept@\spxentry{Git concept}}\index{Git concept@\spxentry{Git concept}!main branch@\spxentry{main branch}}\ignorespaces 
+\sphinxAtStartPar
+Git concept: For the longest time, \sphinxcode{\sphinxupquote{master}} was the name of the default {\hyperref[\detokenize{glossary:term-branch}]{\sphinxtermref{\DUrole{xref,std,std-term}{branch}}}} in a dataset. More recently, the name \sphinxcode{\sphinxupquote{main}} is used. If you are not sure, you can find out if your default branch is \sphinxcode{\sphinxupquote{main}} or \sphinxcode{\sphinxupquote{master}} by running \sphinxcode{\sphinxupquote{git branch}}.
+
+\sphinxlineitem{Makefile\index{Makefile@\spxentry{Makefile}|spxpagem}\phantomsection\label{\detokenize{glossary:term-Makefile}}}
+\sphinxAtStartPar
+Makefiles are recipes on how to create a digital object for the build automation tool \dlhbhref{W1L}{Make}.
+They are used to build programs, but also to manage projects where some files must be automatically updated from others whenever the others change.
+
+\sphinxlineitem{manpage\index{manpage@\spxentry{manpage}|spxpagem}\phantomsection\label{\detokenize{glossary:term-manpage}}}
+\sphinxAtStartPar
+Abbreviation of “manual page”. For most Unix programs, the command \sphinxcode{\sphinxupquote{man \textless{}program\sphinxhyphen{}name\textgreater{}}} will open a {\hyperref[\detokenize{glossary:term-pager}]{\sphinxtermref{\DUrole{xref,std,std-term}{pager}}}} with this commands documentation. If you have installed DataLad as a Debian package, \sphinxcode{\sphinxupquote{man}} will allow you to open DataLad manpages in your terminal.
+
+\sphinxlineitem{master\index{master@\spxentry{master}|spxpagem}\phantomsection\label{\detokenize{glossary:term-master}}}
+\index{master branch@\spxentry{master branch}!Git concept@\spxentry{Git concept}}\index{Git concept@\spxentry{Git concept}!master branch@\spxentry{master branch}}\ignorespaces 
+\sphinxAtStartPar
+Git concept: For the longest time, \sphinxcode{\sphinxupquote{master}} was the name of the default {\hyperref[\detokenize{glossary:term-branch}]{\sphinxtermref{\DUrole{xref,std,std-term}{branch}}}} in a dataset. More recently, the name \sphinxcode{\sphinxupquote{main}} is used. If you are not sure, you can find out if your default branch is \sphinxcode{\sphinxupquote{main}} or \sphinxcode{\sphinxupquote{master}} by running \sphinxcode{\sphinxupquote{git branch}}.
+
+\sphinxlineitem{merge\index{merge@\spxentry{merge}|spxpagem}\phantomsection\label{\detokenize{glossary:term-merge}}}
+\index{merge@\spxentry{merge}!Git concept@\spxentry{Git concept}}\index{Git concept@\spxentry{Git concept}!merge@\spxentry{merge}}\ignorespaces 
+\sphinxAtStartPar
+Git concept: to integrate the changes of one {\hyperref[\detokenize{glossary:term-branch}]{\sphinxtermref{\DUrole{xref,std,std-term}{branch}}}}/{\hyperref[\detokenize{glossary:term-sibling}]{\sphinxtermref{\DUrole{xref,std,std-term}{sibling}}}}/ … into
+a different branch.
+
+\sphinxlineitem{merge request\index{merge request@\spxentry{merge request}|spxpagem}\phantomsection\label{\detokenize{glossary:term-merge-request}}}
+\index{merge request@\spxentry{merge request}!Git concept@\spxentry{Git concept}}\index{Git concept@\spxentry{Git concept}!merge request@\spxentry{merge request}}\ignorespaces 
+\sphinxAtStartPar
+See {\hyperref[\detokenize{glossary:term-pull-request}]{\sphinxtermref{\DUrole{xref,std,std-term}{pull request}}}}.
+
+\sphinxlineitem{metadata\index{metadata@\spxentry{metadata}|spxpagem}\phantomsection\label{\detokenize{glossary:term-metadata}}}
+\sphinxAtStartPar
+“Data about data”: Information about one or more aspects of data used to summarize
+basic information, for example means of create of the data, creator or author, size,
+or purpose of the data. For example, a digital image may include metadata that
+describes how large the picture is, the color depth, the image resolution, when the image
+was created, the shutter speed, and other data.
+
+\sphinxlineitem{nano\index{nano@\spxentry{nano}|spxpagem}\phantomsection\label{\detokenize{glossary:term-nano}}}
+\index{nano@\spxentry{nano}!terminal command@\spxentry{terminal command}}\index{terminal command@\spxentry{terminal command}!nano@\spxentry{nano}}\ignorespaces 
+\sphinxAtStartPar
+A common text\sphinxhyphen{}editor.
+
+\sphinxlineitem{object\sphinxhyphen{}tree\index{object\sphinxhyphen{}tree@\spxentry{object\sphinxhyphen{}tree}|spxpagem}\phantomsection\label{\detokenize{glossary:term-object-tree}}}
+\index{object tree@\spxentry{object tree}!git\sphinxhyphen{}annex concept@\spxentry{git\sphinxhyphen{}annex concept}}\ignorespaces 
+\sphinxAtStartPar
+git\sphinxhyphen{}annex concept: The place where {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}} stores available file contents. Files that are annexed get
+a {\hyperref[\detokenize{glossary:term-symlink}]{\sphinxtermref{\DUrole{xref,std,std-term}{symlink}}}} added to {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}} that points to the file content. A different word for {\hyperref[\detokenize{glossary:term-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{annex}}}}.
+
+\sphinxlineitem{Open Science Framework\index{Open Science Framework@\spxentry{Open Science Framework}|spxpagem}\phantomsection\label{\detokenize{glossary:term-Open-Science-Framework}}}\sphinxlineitem{OSF\index{OSF@\spxentry{OSF}|spxpagem}\phantomsection\label{\detokenize{glossary:term-OSF}}}
+\sphinxAtStartPar
+An open source software project that facilitates open collaboration in science research.
+
+\sphinxlineitem{pager\index{pager@\spxentry{pager}|spxpagem}\phantomsection\label{\detokenize{glossary:term-pager}}}
+\index{command line concept@\spxentry{command line concept}!pager@\spxentry{pager}}\ignorespaces 
+\sphinxAtStartPar
+A \dlhbhref{W1W}{terminal paper} is a program to view file contents in the {\hyperref[\detokenize{glossary:term-terminal}]{\sphinxtermref{\DUrole{xref,std,std-term}{terminal}}}}. Popular examples are the programs \sphinxcode{\sphinxupquote{less}} and \sphinxcode{\sphinxupquote{more}}. Some terminal output can be opened automatically in a pager, for example the output of a \sphinxcode{\sphinxupquote{git log}} command. You can use the arrow keys to navigate and scroll in the pager, and the letter \sphinxcode{\sphinxupquote{q}} to exit it.
+
+\sphinxlineitem{permissions\index{permissions@\spxentry{permissions}|spxpagem}\phantomsection\label{\detokenize{glossary:term-permissions}}}
+\index{file system concept@\spxentry{file system concept}!permissions@\spxentry{permissions}}\ignorespaces 
+\sphinxAtStartPar
+Access rights assigned by most file systems that determine whether a user can view (\sphinxcode{\sphinxupquote{read permission}}),
+change (\sphinxcode{\sphinxupquote{write permission}}), or execute (\sphinxcode{\sphinxupquote{execute permission}}) a specific content.
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{read permissions}} grant the ability to a file, or the contents (file names) in a directory.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{write permissions}} grant the ability to modify a file. When content is stored in the
+{\hyperref[\detokenize{glossary:term-object-tree}]{\sphinxtermref{\DUrole{xref,std,std-term}{object\sphinxhyphen{}tree}}}} by {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}}, your previously granted write permission for this
+content is revoked to prevent accidental modifications.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{execute permissions}} grant the ability to execute a file. Any script that should be an executable
+needs to get such permission.
+
+\end{itemize}
+
+\sphinxlineitem{pip\index{pip@\spxentry{pip}|spxpagem}\phantomsection\label{\detokenize{glossary:term-pip}}}
+\index{pip@\spxentry{pip}!terminal command@\spxentry{terminal command}}\index{terminal command@\spxentry{terminal command}!pip@\spxentry{pip}}\ignorespaces 
+\sphinxAtStartPar
+A Python package manager. Short for “Pip installs Python”. \sphinxcode{\sphinxupquote{pip install \textless{}package name\textgreater{}}}
+searches the Python package index \dlhbhref{P6}{PyPi} for a
+package and installs it while resolving any potential dependencies.
+
+\sphinxlineitem{pipe\index{pipe@\spxentry{pipe}|spxpagem}\phantomsection\label{\detokenize{glossary:term-pipe}}}
+\index{operating system concept@\spxentry{operating system concept}!pipe@\spxentry{pipe}|spxpagem}\ignorespaces 
+\sphinxAtStartPar
+Unix concept: A mechanism for providing the output of one command ({\hyperref[\detokenize{glossary:term-stdout}]{\sphinxtermref{\DUrole{xref,std,std-term}{stdout}}}}) as the input of a next command ({\hyperref[\detokenize{glossary:term-stdin}]{\sphinxtermref{\DUrole{xref,std,std-term}{stdin}}}}) in a Unix terminal. The standard syntax are multiple commands, separated by vertical bars (the “pipes”, “|”). Read more \dlhbhref{W1O}{on Wikipedia}.
+
+\sphinxlineitem{provenance\index{provenance@\spxentry{provenance}|spxpagem}\phantomsection\label{\detokenize{glossary:term-provenance}}}
+\sphinxAtStartPar
+A record that describes entities and processes that were involved in producing or influencing
+a digital resource. It provides a critical foundation for assessing authenticity, enables trust,
+and allows reproducibility.
+
+\sphinxlineitem{publication dependency\index{publication dependency@\spxentry{publication dependency}|spxpagem}\phantomsection\label{\detokenize{glossary:term-publication-dependency}}}
+\index{publication dependency@\spxentry{publication dependency}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!publication dependency@\spxentry{publication dependency}}\ignorespaces 
+\sphinxAtStartPar
+DataLad concept: An existing {\hyperref[\detokenize{glossary:term-sibling}]{\sphinxtermref{\DUrole{xref,std,std-term}{sibling}}}} is linked to a new sibling
+so that the existing sibling is always published prior to the new sibling.
+The existing sibling could be a {\hyperref[\detokenize{glossary:term-special-remote}]{\sphinxtermref{\DUrole{xref,std,std-term}{special remote}}}} to publish file
+contents stored in the dataset {\hyperref[\detokenize{glossary:term-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{annex}}}} automatically with every
+\sphinxcode{\sphinxupquote{datalad push}} to the new sibling. Publication dependencies can be
+set with the option \sphinxcode{\sphinxupquote{publish\sphinxhyphen{}depends}} in the commands
+\sphinxcode{\sphinxupquote{datalad siblings}}, \sphinxcode{\sphinxupquote{datalad create\sphinxhyphen{}sibling}}, and
+\sphinxcode{\sphinxupquote{datalad create\sphinxhyphen{}sibling\sphinxhyphen{}github/gitlab}}.
+
+\sphinxlineitem{pull request\index{pull request@\spxentry{pull request}|spxpagem}\phantomsection\label{\detokenize{glossary:term-pull-request}}}
+\index{pull request@\spxentry{pull request}!Git concept@\spxentry{Git concept}}\index{Git concept@\spxentry{Git concept}!pull request@\spxentry{pull request}}\ignorespaces 
+\sphinxAtStartPar
+Also known as {\hyperref[\detokenize{glossary:term-merge-request}]{\sphinxtermref{\DUrole{xref,std,std-term}{merge request}}}}. Contributions to Git repositories/DataLad datasets can be proposed to be {\hyperref[\detokenize{glossary:term-merge}]{\sphinxtermref{\DUrole{xref,std,std-term}{merge}}}}d into the dataset by “requesting a pull/update” from the dataset maintainer to obtain a proposed change from a dataset clone or sibling. It is implemented as a feature in repository hosting sites such as {\hyperref[\detokenize{glossary:term-GitHub}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitHub}}}}, {\hyperref[\detokenize{glossary:term-GIN}]{\sphinxtermref{\DUrole{xref,std,std-term}{Gin}}}}, or {\hyperref[\detokenize{glossary:term-GitLab}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitLab}}}}.
+
+\sphinxlineitem{ref\index{ref@\spxentry{ref}|spxpagem}\phantomsection\label{\detokenize{glossary:term-ref}}}
+\index{ref@\spxentry{ref}!Git concept@\spxentry{Git concept}}\index{Git concept@\spxentry{Git concept}!ref@\spxentry{ref}}\ignorespaces 
+\sphinxAtStartPar
+Git concept. A “Git Reference”, typically shortened to “ref”, is a text file containing a {\hyperref[\detokenize{glossary:term-commit}]{\sphinxtermref{\DUrole{xref,std,std-term}{commit}}}} {\hyperref[\detokenize{glossary:term-shasum}]{\sphinxtermref{\DUrole{xref,std,std-term}{shasum}}}} as a human\sphinxhyphen{}readable reference to a specific version of your dataset or Git repository. Thanks to refs, Git users do not need to memorize or type shasums when switching between dataset states, and can use simple names instead: For example, a {\hyperref[\detokenize{glossary:term-branch}]{\sphinxtermref{\DUrole{xref,std,std-term}{branch}}}} such as \sphinxcode{\sphinxupquote{main}} is a ref, and a {\hyperref[\detokenize{glossary:term-tag}]{\sphinxtermref{\DUrole{xref,std,std-term}{tag}}}} is one, too. In both cases, those refs are text files that contain the shasum of the commit at the tip of a branch, or the shasum of the commit you added the tag to. Refs are organized in the directory \sphinxcode{\sphinxupquote{.git/refs}} and Git commands and configurations can use refs to perform updating operations or determine their behavior. More details can be found at \dlhbhref{G1D}{at git\sphinxhyphen{}scm.com}
+
+\sphinxlineitem{relative path\index{relative path@\spxentry{relative path}|spxpagem}\phantomsection\label{\detokenize{glossary:term-relative-path}}}
+\index{file system concept@\spxentry{file system concept}!path (relative)@\spxentry{path}\spxextra{relative}}\ignorespaces 
+\sphinxAtStartPar
+A path related to the present working directory. Relative paths never start with \sphinxcode{\sphinxupquote{/}} or \sphinxcode{\sphinxupquote{\textbackslash{}}}.
+Examples on Unix and Windows: \sphinxcode{\sphinxupquote{../Pictures/xkcd\sphinxhyphen{}webcomics/530.png}}, \sphinxcode{\sphinxupquote{..\textbackslash{}Pictures\textbackslash{}xkcd\sphinxhyphen{}webcomics\textbackslash{}530.png}}. See also {\hyperref[\detokenize{glossary:term-absolute-path}]{\sphinxtermref{\DUrole{xref,std,std-term}{absolute path}}}}.
+
+\sphinxlineitem{remote\index{remote@\spxentry{remote}|spxpagem}\phantomsection\label{\detokenize{glossary:term-remote}}}
+\index{remote@\spxentry{remote}!Git concept@\spxentry{Git concept}}\index{Git concept@\spxentry{Git concept}!remote@\spxentry{remote}}\ignorespaces 
+\sphinxAtStartPar
+Git\sphinxhyphen{}terminology: A repository (and thus also {\hyperref[\detokenize{glossary:term-DataLad-dataset}]{\sphinxtermref{\DUrole{xref,std,std-term}{DataLad dataset}}}}) that a given repository
+tracks. A {\hyperref[\detokenize{glossary:term-sibling}]{\sphinxtermref{\DUrole{xref,std,std-term}{sibling}}}} is DataLad’s equivalent to a remote.
+
+\sphinxlineitem{Remote Indexed Archive (RIA) store\index{Remote Indexed Archive (RIA) store@\spxentry{Remote Indexed Archive (RIA) store}|spxpagem}\phantomsection\label{\detokenize{glossary:term-Remote-Indexed-Archive-RIA-store}}}
+\index{Remote Indexed Archive@\spxentry{Remote Indexed Archive}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!Remote Indexed Archive@\spxentry{Remote Indexed Archive}}\index{RIA store@\spxentry{RIA store}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!RIA store@\spxentry{RIA store}}\ignorespaces 
+\sphinxAtStartPar
+A Remote Indexed Archive (RIA) Store is a flexible and scalable dataset storage
+solution, useful for collaborative, back\sphinxhyphen{}up, or storage workflows. Read more
+about RIA stores in the online version of the handbook.
+
+\sphinxlineitem{run procedure\index{run procedure@\spxentry{run procedure}|spxpagem}\phantomsection\label{\detokenize{glossary:term-run-procedure}}}
+\index{run procedure@\spxentry{run procedure}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!run procedure@\spxentry{run procedure}}\ignorespaces 
+\sphinxAtStartPar
+DataLad concept: An executable (such as a script) that can be called with the
+\sphinxcode{\sphinxupquote{datalad run\sphinxhyphen{}procedure}} command and performs modifications or routine
+tasks in datasets. Procedures can be written by users, or come with DataLad and
+its extensions. Find out more in section {\hyperref[\detokenize{basics/101-124-procedures:procedures}]{\sphinxcrossref{\DUrole{std,std-ref}{Configurations to go}}}} (\autopageref*{\detokenize{basics/101-124-procedures:procedures}})
+
+\sphinxlineitem{run record\index{run record@\spxentry{run record}|spxpagem}\phantomsection\label{\detokenize{glossary:term-run-record}}}
+\index{run record@\spxentry{run record}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!run record@\spxentry{run record}}\ignorespaces 
+\sphinxAtStartPar
+A command summary of a \sphinxcode{\sphinxupquote{datalad run}} command, generated by DataLad and included
+in the commit message.
+
+\sphinxlineitem{sed\index{sed@\spxentry{sed}|spxpagem}\phantomsection\label{\detokenize{glossary:term-sed}}}
+\index{sed@\spxentry{sed}!terminal command@\spxentry{terminal command}}\index{terminal command@\spxentry{terminal command}!sed@\spxentry{sed}}\ignorespaces 
+\sphinxAtStartPar
+A Unix stream editor to parse and transform text. Find out more
+\dlhbhref{W1Q}{here} and in its
+\dlhbhref{G6B}{documentation}.
+
+\sphinxlineitem{shasum\index{shasum@\spxentry{shasum}|spxpagem}\phantomsection\label{\detokenize{glossary:term-shasum}}}
+\sphinxAtStartPar
+A hexadecimal number, 40 digits long, that is produced by a secure hash algorithm, and
+is used by {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}} to identify {\hyperref[\detokenize{glossary:term-commit}]{\sphinxtermref{\DUrole{xref,std,std-term}{commit}}}}s. A shasum is a type of {\hyperref[\detokenize{glossary:term-checksum}]{\sphinxtermref{\DUrole{xref,std,std-term}{checksum}}}}.
+
+\sphinxlineitem{shebang\index{shebang@\spxentry{shebang}|spxpagem}\phantomsection\label{\detokenize{glossary:term-shebang}}}
+\sphinxAtStartPar
+The characters \sphinxcode{\sphinxupquote{\#!}} at the very top of a script. One can specify the interpreter (i.e., the
+software that executes a script of yours, such as Python) after with it such as in
+\sphinxcode{\sphinxupquote{\#! /usr/bin/python}}.
+If the script has executable {\hyperref[\detokenize{glossary:term-permissions}]{\sphinxtermref{\DUrole{xref,std,std-term}{permissions}}}}, it is henceforth able to call the interpreter itself.
+Instead of \sphinxcode{\sphinxupquote{python code/myscript.py}} one can just run \sphinxcode{\sphinxupquote{code/myscript}} if \sphinxcode{\sphinxupquote{myscript}} has
+executable {\hyperref[\detokenize{glossary:term-permissions}]{\sphinxtermref{\DUrole{xref,std,std-term}{permissions}}}} and a correctly specified shebang.
+
+\sphinxlineitem{shell\index{shell@\spxentry{shell}|spxpagem}\phantomsection\label{\detokenize{glossary:term-shell}}}
+\sphinxAtStartPar
+A command line language and programming language. See also {\hyperref[\detokenize{glossary:term-terminal}]{\sphinxtermref{\DUrole{xref,std,std-term}{terminal}}}}.
+
+\sphinxlineitem{special remote\index{special remote@\spxentry{special remote}|spxpagem}\phantomsection\label{\detokenize{glossary:term-special-remote}}}
+\sphinxAtStartPar
+git\sphinxhyphen{}annex concept: A protocol that defines the underlying transport of annexed files
+to and from places that are not {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}} repositories (e.g., a cloud service or
+external machines such as HPC systems).
+
+\sphinxlineitem{squash\index{squash@\spxentry{squash}|spxpagem}\phantomsection\label{\detokenize{glossary:term-squash}}}
+\index{squash@\spxentry{squash}!Git concept@\spxentry{Git concept}}\index{Git concept@\spxentry{Git concept}!squash@\spxentry{squash}}\ignorespaces 
+\sphinxAtStartPar
+Git concept; Squashing is a Git operation which rewrites history by taking
+a range of commits and squash them into a single commit. For more information
+on rewriting Git history, checkout section {\hyperref[\detokenize{basics/101-137-history:history}]{\sphinxcrossref{\DUrole{std,std-ref}{Git things done}}}} (\autopageref*{\detokenize{basics/101-137-history:history}}) and the
+\dlhbhref{G1F}{Git documentation}.
+
+\sphinxlineitem{SSH\index{SSH@\spxentry{SSH}|spxpagem}\phantomsection\label{\detokenize{glossary:term-SSH}}}
+\index{concepts@\spxentry{concepts}!SSH@\spxentry{SSH}}\ignorespaces 
+\sphinxAtStartPar
+Secure shell (SSH) is a network protocol to link one machine (computer),
+the \sphinxstyleemphasis{client}, to a different local or remote machine, the \sphinxstyleemphasis{server}. See also: {\hyperref[\detokenize{glossary:term-SSH-server}]{\sphinxtermref{\DUrole{xref,std,std-term}{SSH server}}}}.
+
+\sphinxlineitem{SSH key\index{SSH key@\spxentry{SSH key}|spxpagem}\phantomsection\label{\detokenize{glossary:term-SSH-key}}}
+\index{concepts@\spxentry{concepts}!SSH key@\spxentry{SSH key}}\index{SSH@\spxentry{SSH}!key@\spxentry{key}}\ignorespaces 
+\sphinxAtStartPar
+An SSH key is an access credential in the SSH protocol that can be used to login
+from one system to remote servers and services, such as from your private
+computer to an {\hyperref[\detokenize{glossary:term-SSH-server}]{\sphinxtermref{\DUrole{xref,std,std-term}{SSH server}}}}, without supplying your username or password
+at each visit. To use an SSH key for authentication, you need to generate a
+key pair on the system you would like to use to access a remote system or service
+(most likely, your computer).
+The pair consists of a \sphinxstyleemphasis{private} and a \sphinxstyleemphasis{public} key. The public key is shared
+with the remote server, and the private key is used to authenticate your machine
+whenever you want to access the remote server or service.
+Services such as {\hyperref[\detokenize{glossary:term-GitHub}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitHub}}}}, {\hyperref[\detokenize{glossary:term-GitLab}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitLab}}}}, and {\hyperref[\detokenize{glossary:term-GIN}]{\sphinxtermref{\DUrole{xref,std,std-term}{Gin}}}} use SSH keys and the SSH protocol
+to ease access to repositories. This
+\dlhbhref{G3A}{tutorial by GitHub}
+is a detailed step\sphinxhyphen{}by\sphinxhyphen{}step instruction to generate and use SSH keys for authentication.
+
+\sphinxlineitem{SSH server\index{SSH server@\spxentry{SSH server}|spxpagem}\phantomsection\label{\detokenize{glossary:term-SSH-server}}}
+\index{SSH@\spxentry{SSH}!server@\spxentry{server}}\ignorespaces 
+\sphinxAtStartPar
+An remote or local computer that users can log into using the {\hyperref[\detokenize{glossary:term-SSH}]{\sphinxtermref{\DUrole{xref,std,std-term}{SSH}}}} protocol.
+
+\sphinxlineitem{stdin\index{stdin@\spxentry{stdin}|spxpagem}\phantomsection\label{\detokenize{glossary:term-stdin}}}
+\index{operating system concept@\spxentry{operating system concept}!stdin@\spxentry{stdin}|spxpagem}\ignorespaces 
+\sphinxAtStartPar
+Unix concept: One of the three \dlhbhref{W1S}{standard input/output streams}
+in programming. Standard input (\sphinxcode{\sphinxupquote{stdin}}) is a stream from which a program
+reads its input data.
+
+\sphinxlineitem{stderr\index{stderr@\spxentry{stderr}|spxpagem}\phantomsection\label{\detokenize{glossary:term-stderr}}}
+\index{operating system concept@\spxentry{operating system concept}!stderr@\spxentry{stderr}|spxpagem}\ignorespaces 
+\sphinxAtStartPar
+Unix concept: One of the three \dlhbhref{W1S}{standard input/output streams}
+in programming. Standard error (\sphinxcode{\sphinxupquote{stderr}}) is a stream to which a program
+outputs error messages, independent from standard output.
+
+\sphinxlineitem{stdout\index{stdout@\spxentry{stdout}|spxpagem}\phantomsection\label{\detokenize{glossary:term-stdout}}}
+\index{operating system concept@\spxentry{operating system concept}!stdout@\spxentry{stdout}|spxpagem}\ignorespaces 
+\sphinxAtStartPar
+Unix concept: One of the three \dlhbhref{W1S}{standard input/output streams}
+in programming. Standard output (\sphinxcode{\sphinxupquote{stdout}}) is a stream to which a program
+writes its output data.
+
+\sphinxlineitem{symlink\index{symlink@\spxentry{symlink}|spxpagem}\phantomsection\label{\detokenize{glossary:term-symlink}}}
+\index{file system concept@\spxentry{file system concept}!symlink@\spxentry{symlink}}\ignorespaces 
+\sphinxAtStartPar
+A symbolic link (also symlink or soft link) is a reference to another file or path in the form
+of a relative path. Windows users are familiar with a similar concept: shortcuts.
+
+\sphinxlineitem{sibling\index{sibling@\spxentry{sibling}|spxpagem}\phantomsection\label{\detokenize{glossary:term-sibling}}}
+\sphinxAtStartPar
+DataLad concept: A dataset clone that a given {\hyperref[\detokenize{glossary:term-DataLad-dataset}]{\sphinxtermref{\DUrole{xref,std,std-term}{DataLad dataset}}}} knows about. Changes can be
+retrieved and pushed between a dataset and its sibling. It is the
+equivalent of a {\hyperref[\detokenize{glossary:term-remote}]{\sphinxtermref{\DUrole{xref,std,std-term}{remote}}}} in Git.
+
+\sphinxlineitem{Singularity\index{Singularity@\spxentry{Singularity}|spxpagem}\phantomsection\label{\detokenize{glossary:term-Singularity}}}
+\sphinxAtStartPar
+\dlhbhref{S8A}{Singularity} is a containerization software that can package software into {\hyperref[\detokenize{glossary:term-software-container}]{\sphinxtermref{\DUrole{xref,std,std-term}{software container}}}}s.
+It is a useful alternative to {\hyperref[\detokenize{glossary:term-Docker}]{\sphinxtermref{\DUrole{xref,std,std-term}{Docker}}}} as it can run on shared computational infrastructure.
+Find out more on \dlhbhref{W1R}{Wikipedia}.
+
+\sphinxlineitem{Singularity\sphinxhyphen{}Hub\index{Singularity\sphinxhyphen{}Hub@\spxentry{Singularity\sphinxhyphen{}Hub}|spxpagem}\phantomsection\label{\detokenize{glossary:term-Singularity-Hub}}}
+\sphinxAtStartPar
+\dlhbhref{S5}{singularity\sphinxhyphen{}hub.org} was a Singularity container portal.
+Among other things, it hosts Singularity container images.
+You can can \sphinxstyleemphasis{pull} {\hyperref[\detokenize{glossary:term-container-image}]{\sphinxtermref{\DUrole{xref,std,std-term}{container image}}}}s built from it.
+
+\sphinxlineitem{software container\index{software container@\spxentry{software container}|spxpagem}\phantomsection\label{\detokenize{glossary:term-software-container}}}
+\sphinxAtStartPar
+Computational containers are cut\sphinxhyphen{}down virtual machines that allow you to package software libraries and their dependencies in precise versions into a bundle that can be shared with others.
+They are running instances of a {\hyperref[\detokenize{glossary:term-container-image}]{\sphinxtermref{\DUrole{xref,std,std-term}{container image}}}}.
+On your own and other’s machines, the container constitutes a secluded software environment that contains the exact software environment that you specified but does not effect any software outside of the container.
+Unlike virtual machines, software containers do not have their own operating system and instead use basic services of the underlying operating system of the computer they run on (in a read\sphinxhyphen{}only fashion).
+This makes them lightweight and portable.
+By sharing software environments with containers, such as {\hyperref[\detokenize{glossary:term-Docker}]{\sphinxtermref{\DUrole{xref,std,std-term}{Docker}}}} or {\hyperref[\detokenize{glossary:term-Singularity}]{\sphinxtermref{\DUrole{xref,std,std-term}{Singularity}}}} containers, others (and also yourself) have easy access to software without the need to modify the software environment of the machine the container runs on.
+
+\sphinxlineitem{submodule\index{submodule@\spxentry{submodule}|spxpagem}\phantomsection\label{\detokenize{glossary:term-submodule}}}
+\index{submodule@\spxentry{submodule}!Git concept@\spxentry{Git concept}}\index{Git concept@\spxentry{Git concept}!submodule@\spxentry{submodule}}\ignorespaces 
+\sphinxAtStartPar
+Git concept: a submodule is a Git repository embedded inside another Git repository. A
+{\hyperref[\detokenize{glossary:term-DataLad-subdataset}]{\sphinxtermref{\DUrole{xref,std,std-term}{DataLad subdataset}}}} is known as a submodule in the {\hyperref[\detokenize{glossary:term-Git-config-file}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git config file}}}}.
+
+\sphinxlineitem{tab completion\index{tab completion@\spxentry{tab completion}|spxpagem}\phantomsection\label{\detokenize{glossary:term-tab-completion}}}
+\index{command line concept@\spxentry{command line concept}!tab completion@\spxentry{tab completion}}\ignorespaces 
+\sphinxAtStartPar
+Also known as command\sphinxhyphen{}line completion. A common shell feature in which
+the program automatically fills in partially types commands upon
+pressing the \sphinxcode{\sphinxupquote{TAB}} key.
+
+\sphinxlineitem{tag\index{tag@\spxentry{tag}|spxpagem}\phantomsection\label{\detokenize{glossary:term-tag}}}
+\index{tag@\spxentry{tag}!Git concept@\spxentry{Git concept}}\index{Git concept@\spxentry{Git concept}!tag@\spxentry{tag}}\ignorespaces 
+\sphinxAtStartPar
+Git concept: A mark on a commit that can help to identify commits. You can attach
+a tag with a name of your choice to any commit by supplying the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}version\sphinxhyphen{}tag \textless{}TAG\sphinxhyphen{}NAME\textgreater{}}}
+option to \sphinxcode{\sphinxupquote{datalad save}}.
+
+\sphinxlineitem{the DataLad superdataset ///\index{the DataLad superdataset ///@\spxentry{the DataLad superdataset ///}|spxpagem}\phantomsection\label{\detokenize{glossary:term-the-DataLad-superdataset}}}
+\sphinxAtStartPar
+DataLad provides unified access to a large amount of data at an open data
+collection found at \dlhbhref{D3}{datasets.datalad.org}.
+This collection is known as “The DataLad superdataset” and under its shortcut,
+\sphinxcode{\sphinxupquote{///}}. You can install the superdataset \textendash{} and subsequently query its content via metadata
+search \textendash{} by running \sphinxcode{\sphinxupquote{datalad clone ///}}.
+
+\sphinxlineitem{tig\index{tig@\spxentry{tig}|spxpagem}\phantomsection\label{\detokenize{glossary:term-tig}}}
+\index{tig@\spxentry{tig}!terminal command@\spxentry{terminal command}}\index{terminal command@\spxentry{terminal command}!tig@\spxentry{tig}}\ignorespaces 
+\sphinxAtStartPar
+A text\sphinxhyphen{}mode interface for git that allows you to easily browse through your commit history.
+It is not part of git and needs to be installed. Find out more \dlhbhref{G13A}{here}.
+
+\sphinxlineitem{terminal\index{terminal@\spxentry{terminal}|spxpagem}\phantomsection\label{\detokenize{glossary:term-terminal}}}
+\sphinxAtStartPar
+The terminal (sometimes also called a shell, console, or CLI) is an interactive, text based interface that allows you to access your computer’s functionality.
+The most common command\sphinxhyphen{}line shells use {\hyperref[\detokenize{glossary:term-bash}]{\sphinxtermref{\DUrole{xref,std,std-term}{bash}}}} or c\sphinxhyphen{}shell.
+You can get a short intro to the terminal and useful commands in the section {\hyperref[\detokenize{intro/howto:howto}]{\sphinxcrossref{\DUrole{std,std-ref}{The command line}}}} (\autopageref*{\detokenize{intro/howto:howto}}).
+
+\sphinxlineitem{Ubuntu\index{Ubuntu@\spxentry{Ubuntu}|spxpagem}\phantomsection\label{\detokenize{glossary:term-Ubuntu}}}
+\sphinxAtStartPar
+A common Linux distribution. \dlhbhref{U2}{More information here}.
+
+\sphinxlineitem{UUID\index{UUID@\spxentry{UUID}|spxpagem}\phantomsection\label{\detokenize{glossary:term-UUID}}}
+\sphinxAtStartPar
+Universally Unique Identifier. It is a character string used for \sphinxstyleemphasis{unambiguous}
+identification, formatted according to a specific standard. This
+identification is not only unambiguous and unique on a system, but indeed \sphinxstyleemphasis{universally}
+unique \textendash{} no UUID exists twice anywhere \sphinxstyleemphasis{on the planet}.
+Every DataLad dataset has a UUID that identifies a dataset uniquely as a whole across
+its entire history and flavors called {\hyperref[\detokenize{glossary:term-dataset-ID}]{\sphinxtermref{\DUrole{xref,std,std-term}{Dataset ID}}}} that looks similar to
+this \sphinxcode{\sphinxupquote{0828ac72\sphinxhyphen{}f7c8\sphinxhyphen{}11e9\sphinxhyphen{}917f\sphinxhyphen{}a81e84238a11}}. This dataset ID will only exist once,
+identifying only one particular dataset on the planet. Note that this does not
+require all UUIDs to be known in some central database \textendash{} the fact that no UUID
+exists twice is achieved by mere probability: The chance of a UUID being duplicated
+is so close to zero that it is negligible.
+
+\sphinxlineitem{version control\index{version control@\spxentry{version control}|spxpagem}\phantomsection\label{\detokenize{glossary:term-version-control}}}
+\sphinxAtStartPar
+Processes and tools to keep track of changes to documents or other collections of information.
+
+\sphinxlineitem{vim\index{vim@\spxentry{vim}|spxpagem}\phantomsection\label{\detokenize{glossary:term-vim}}}
+\index{vim@\spxentry{vim}!terminal command@\spxentry{terminal command}}\index{terminal command@\spxentry{terminal command}!vim@\spxentry{vim}}\ignorespaces 
+\sphinxAtStartPar
+A text editor, often the default in UNIX operating systems. If you are not used to using it,
+but ended up in it accidentally: press \sphinxcode{\sphinxupquote{ESC}} \sphinxcode{\sphinxupquote{:}} \sphinxcode{\sphinxupquote{q}} \sphinxcode{\sphinxupquote{!}} \sphinxcode{\sphinxupquote{Enter}} to exit without saving.
+Here is help: \dlhbhref{O3}{A vim tutorial} and
+\dlhbhref{G1B}{how to configure the default editor for git}.
+
+\sphinxlineitem{virtual environment\index{virtual environment@\spxentry{virtual environment}|spxpagem}\phantomsection\label{\detokenize{glossary:term-virtual-environment}}}
+\sphinxAtStartPar
+A specific Python installation with packages of your choice, kept in a self\sphinxhyphen{}contained directory tree, and not interfering with the system\sphinxhyphen{}wide installations.
+Virtual environments are an easy solution to create several different Python environments and come in handy if you want to have a cleanly structured software setup and several applications with software requirements that would conflict with each other in a single system: You can have one virtual environment with package A in version X, and a second one with package A in version Y.
+There are several tools that create virtual environments such as the built\sphinxhyphen{}in \sphinxcode{\sphinxupquote{venv}} module, the \sphinxcode{\sphinxupquote{virtualenv}} module, or {\hyperref[\detokenize{glossary:term-conda}]{\sphinxtermref{\DUrole{xref,std,std-term}{conda}}}}.
+Virtual environments are light\sphinxhyphen{}weight and you can switch between them fast.
+
+\sphinxlineitem{WSL\index{WSL@\spxentry{WSL}|spxpagem}\phantomsection\label{\detokenize{glossary:term-WSL}}}
+\sphinxAtStartPar
+The Windows Subsystem for Linux, a compatibility layer for running Linux distributions on recent versions of Windows. Find out more \dlhbhref{W1X}{here}.
+
+\sphinxlineitem{zsh\index{zsh@\spxentry{zsh}|spxpagem}\phantomsection\label{\detokenize{glossary:term-zsh}}}
+\index{shell@\spxentry{shell}!zsh@\spxentry{zsh}}\ignorespaces 
+\sphinxAtStartPar
+A Unix shell.
+
+\end{description}
+
+\sphinxstepscope
+
+
+\section{Acknowledgements}
+\label{\detokenize{acknowledgements:acknowledgements}}\label{\detokenize{acknowledgements::doc}}
+\sphinxAtStartPar
+The DataLad software and its documentation are the joint work of more than 100 individuals.
+We are deeply grateful for these contributions to free and open source software (FOSS) and documentation.
+Likewise we are grateful to the many more people that produce and maintain the FOSS ecosystem that DataLad is built on.
+We are particularly indebted to Joey Hess, the author of the git\sphinxhyphen{}annex software, without which DataLad would not be what it is today.
+
+\sphinxAtStartPar
+The DataLad project received support through the following grants:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+US\sphinxhyphen{}German collaboration in computational neuroscience (CRCNS) project “DataGit: converging catalogues, warehouses, and deployment logistics into a federated ‘data distribution’” (Halchenko/Hanke), co\sphinxhyphen{}funded by the US National Science Foundation (NSF 1429999) and the German Federal Ministry of Education and Research (BMBF 01GQ1411).
+
+\item {} 
+\sphinxAtStartPar
+CRCNS US\sphinxhyphen{}German Data Sharing “DataLad \sphinxhyphen{} a decentralized system for integrated discovery, management, and publication of digital objects of science” (Halchenko/Pestilli/Hanke), co\sphinxhyphen{}funded by the US National Science Foundation (NSF 1912266) and the German Federal Ministry of Education and Research (BMBF 01GQ1905).
+
+\item {} 
+\sphinxAtStartPar
+Helmholtz Research Center Jülich, FDM challenge 2022
+
+\item {} 
+\sphinxAtStartPar
+German federal state of Saxony\sphinxhyphen{}Anhalt and the European Regional Development Fund (ERDF), Project: Center for Behavioral Brain Sciences, Imaging Platform
+
+\item {} 
+\sphinxAtStartPar
+ReproNim project (NIH 1P41EB019936\sphinxhyphen{}01A1).
+
+\item {} 
+\sphinxAtStartPar
+Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) under grant SFB 1451 (431549029, INF project)
+
+\item {} 
+\sphinxAtStartPar
+European Union’s Horizon 2020 research and innovation programme under grant agreements
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Human Brain Project SGA3 (H2020\sphinxhyphen{}EU.3.1.5.3, grant no. 945539)
+
+\item {} 
+\sphinxAtStartPar
+VirtualBrainCloud (H2020\sphinxhyphen{}EU.3.1.5.3, grant no. 826421)
+
+\end{itemize}
+
+\end{itemize}
+
+\sphinxstepscope
+
+\index{copyright@\spxentry{copyright}}\index{licenses@\spxentry{licenses}}\ignorespaces 
+
+\section{Copyright and licenses}
+\label{\detokenize{licenses:copyright-and-licenses}}\label{\detokenize{licenses:index-0}}\label{\detokenize{licenses::doc}}
+\sphinxAtStartPar
+This book is made available under the terms of the \dlhbhref{C2A}{Creative Commons Attribution\sphinxhyphen{}ShareAlike 4.0 International Public License (CC\sphinxhyphen{}BY\sphinxhyphen{}SA)}.
+The copyright holders for the book content are the respective individual contributors of particular content, as recorded in the version history of the online\sphinxhyphen{}handbook’s Git repository.
+
+\sphinxAtStartPar
+This book may contain copyrighted and/or trademarked materials, the use of which may not have been specifically authorized by the respective owner.
+These are included for educational purposes in an effort to explain issues relevant to decentralized data management and other topics covered in this book.
+We believe that this constitutes a “fair use” of the materials as provided for in section 107 of the US Copyright Law.
+Use of these materials that go beyond “fair use” may require permissions to be obtained from the respective owner.
+These copyright/trademark holders are not affiliated with the authors or any of the authors’ representatives.
+They do not sponsor or endorse the contents, materials, or processes discussed within this book.
+
+\sphinxAtStartPar
+The remainder of this sections amends the general copyright and license declaration of the book with additional information on used 3rd\sphinxhyphen{}party materials.
+
+
+\subsection{unDraw illustrations}
+\label{\detokenize{licenses:undraw-illustrations}}
+\sphinxAtStartPar
+This book includes numerous illustrations obtained from Katerina Limpitsouni’s undraw project (\sphinxurl{https://undraw.co}), covered by the following terms:
+\begin{quote}
+
+\sphinxAtStartPar
+Copyright 2023 Katerina Limpitsouni
+
+\sphinxAtStartPar
+All images, assets and vectors published on unDraw can be used for free.
+You can use them for noncommercial and commercial purposes.
+You do not need to ask permission from or provide credit to the creator or unDraw.
+
+\sphinxAtStartPar
+More precisely, unDraw grants you an nonexclusive, worldwide copyright license to download, copy, modify, distribute, perform, and use the assets provided from unDraw for free, including for commercial purposes, without permission from or attributing the creator or unDraw.
+This license does not include the right to compile assets, vectors or images from unDraw to replicate a similar or competing service, in any form or distribute the assets in packs or otherwise.
+This extends to automated and non\sphinxhyphen{}automated ways to link, embed, scrape, search or download the assets included on the website without our consent.
+
+\sphinxAtStartPar
+Regarding brand logos that are included:
+
+\sphinxAtStartPar
+Are registered trademarks of their respected owners.
+Are included on a promotional basis and do not represent an association with unDraw or its users.
+Do not indicate any kind of endorsement of the trademark holder towards unDraw, nor vice versa.
+Are provided with the sole purpose to represent the actual brand/service/company that has registered the trademark and must not be used otherwise.
+\end{quote}
+
+
+\subsection{YODA illustration}
+\label{\detokenize{licenses:yoda-illustration}}
+\sphinxAtStartPar
+The “YODA” cartoon used in chapter {\hyperref[\detokenize{basics/basics-yoda:chapter-yoda}]{\sphinxcrossref{\DUrole{std,std-ref}{You will find only what you bring in}}}} (\autopageref*{\detokenize{basics/basics-yoda:chapter-yoda}}) is derived from \sphinxurl{https://openclipart.org/detail/227445/yoda}, which was made available under \dlhbhref{C1A}{CC0} terms.
+
+
+\subsection{Fonts}
+\label{\detokenize{licenses:fonts}}
+\sphinxAtStartPar
+This book uses the following fonts, listed grouped by their respective licenses.
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\dlhbhref{S1A}{SIL Open Font License}
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+InsonsolataDN\sphinxhyphen{}(Regular, Bold)
+
+\item {} 
+\sphinxAtStartPar
+Lato
+
+\item {} 
+\sphinxAtStartPar
+STIXGeneral\sphinxhyphen{}(Regular, Italic, Bold), STIXMathSans\sphinxhyphen{}Regular
+
+\item {} 
+\sphinxAtStartPar
+Font Awesome; via \sphinxurl{https://github.com/xdanaux/fontawesome-latex}
+
+\end{itemize}
+
+\item {} 
+\sphinxAtStartPar
+\dlhbhref{T2A}{GUST Font license}
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+LMSans(DemiCond10\sphinxhyphen{}Regular, 10\sphinxhyphen{}Bold)
+
+\end{itemize}
+
+\item {} 
+\sphinxAtStartPar
+\dlhbhref{C2B}{CC\sphinxhyphen{}BY 4.0 License}
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+CCIcons; via \sphinxurl{https://github.com/ummels/ccicons}
+
+\end{itemize}
+
+\end{itemize}
+
+
+\subsection{Box icons}
+\label{\detokenize{licenses:box-icons}}
+\sphinxAtStartPar
+The icons used to annotate boxes were obtained from svgrepo.com and have the following licenses.
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+The \sphinxhref{https://www.svgrepo.com/svg/368334/window}{“Window” SVG vector} for Windows Wits is released in the \dlhbhref{C2C}{public domain}.
+
+\item {} 
+\sphinxAtStartPar
+The \sphinxhref{https://www.svgrepo.com/svg/23335/idea-and-creativity-symbol-of-a-lightbulb}{“Idea and creativity symbol of a lightbulb SVG vector”} for Find\sphinxhyphen{}out\sphinxhyphen{}more’s is released in the \dlhbhref{C2C}{public domain}.
+
+\item {} 
+\sphinxAtStartPar
+The icon for Gitusernotes is derived from the \sphinxhref{https://www.svgrepo.com/svg/443850/gui-git-pull-request}{“Git Pull Request SVG Vector”}, which is released under the \dlhbhref{M2}{MIT License}.
+
+\end{itemize}
+
+\sphinxstepscope
+
+\index{Conda@\spxentry{Conda}|see{\textquotesingle{}with Conda\textquotesingle{}}}\ignorespaces 
+\index{DataLad@\spxentry{DataLad}|see{\textquotesingle{}with DataLad\textquotesingle{}}}\ignorespaces 
+\index{git\sphinxhyphen{}annex@\spxentry{git\sphinxhyphen{}annex}|see{\textquotesingle{}with git\sphinxhyphen{}annex\textquotesingle{}}}\ignorespaces 
+\index{pip@\spxentry{pip}|see{\textquotesingle{}with pip\textquotesingle{}}}\ignorespaces 
+\index{Python@\spxentry{Python}|see{\textquotesingle{}with Python\textquotesingle{}}}\ignorespaces 
+\index{CentOS@\spxentry{CentOS}|see{\textquotesingle{}on Redhat/Fedora\textquotesingle{}}}\ignorespaces 
+\index{Debian@\spxentry{Debian}|see{\textquotesingle{}on Debian/Ubuntu\textquotesingle{}}}\ignorespaces 
+\index{Fedora@\spxentry{Fedora}|see{\textquotesingle{}on Redhat/Fedora\textquotesingle{}}}\ignorespaces 
+\index{high\sphinxhyphen{}performance computing@\spxentry{high\sphinxhyphen{}performance computing}|see{\textquotesingle{}HPC\textquotesingle{}}}\ignorespaces 
+\index{high\sphinxhyphen{}throughput computing@\spxentry{high\sphinxhyphen{}throughput computing}|see{\textquotesingle{}HTC\textquotesingle{}}}\ignorespaces 
+\index{HPC@\spxentry{HPC}|see{\textquotesingle{}on HPC\textquotesingle{}}}\ignorespaces 
+\index{Mac@\spxentry{Mac}|see{\textquotesingle{}on Mac\textquotesingle{}}}\ignorespaces 
+\index{RedHat@\spxentry{RedHat}|see{\textquotesingle{}on Redhat/Fedora\textquotesingle{}}}\ignorespaces 
+\index{terminal@\spxentry{terminal}|see{\textquotesingle{}in a terminal\textquotesingle{}}}\ignorespaces 
+\index{Ubuntu@\spxentry{Ubuntu}|see{\textquotesingle{}on Debian/Ubuntu\textquotesingle{}}}\ignorespaces 
+\index{Windows@\spxentry{Windows}|see{\textquotesingle{}on Windows\textquotesingle{}}}\ignorespaces 
+\index{WSL2@\spxentry{WSL2}|see{\textquotesingle{}on WSL2\textquotesingle{}}}\ignorespaces 
+\index{here\sphinxhyphen{}document@\spxentry{here\sphinxhyphen{}document}|see{\textquotesingle{}heredoc\textquotesingle{}}}\ignorespaces 
+\index{shell commands@\spxentry{shell commands}|see{\textquotesingle{}terminal commands\textquotesingle{}}}\ignorespaces 
+\sphinxstepscope
+
+

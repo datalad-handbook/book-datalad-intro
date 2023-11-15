@@ -1,0 +1,3365 @@
+\chapter{Help yourself}
+\label{\detokenize{basics/basics-help:help-yourself}}\label{\detokenize{basics/basics-help:chapter-help}}\label{\detokenize{basics/basics-help::doc}}
+\noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{help}.pdf}\hspace*{\fill}}
+
+\sphinxstepscope
+
+
+\section{What to do if things go wrong}
+\label{\detokenize{basics/101-135-intro:what-to-do-if-things-go-wrong}}\label{\detokenize{basics/101-135-intro:intro}}\label{\detokenize{basics/101-135-intro::doc}}
+\sphinxAtStartPar
+After all of the DataLad\sphinxhyphen{}101 lectures and tutorials so far, you really begin to
+appreciate the pre\sphinxhyphen{}crafted examples and tasks this book provides.
+“Nothing really goes wrong, and if so, it’s intended”, you acknowledge.
+“But how does this prepare me for life after the course? I’ve seen a lot of
+different errors and know many caveats and principles already, but I certainly
+will mess something up at one point. How can I get help, or use the history of
+the dataset to undo what I screwed up? Also, I’m not sure whether I know what I
+can and cannot do with the files inside of my dataset… What if I would
+like to remove one, for example?”
+
+\sphinxAtStartPar
+Therefore, this upcoming chapter is a series of tutorials about common
+file system operations, interactions with the history of datasets, and how
+to get help after errors.
+
+\sphinxstepscope
+
+
+\section{Miscellaneous file system operations}
+\label{\detokenize{basics/101-136-filesystem:miscellaneous-file-system-operations}}\label{\detokenize{basics/101-136-filesystem:file-system}}\label{\detokenize{basics/101-136-filesystem::doc}}
+\sphinxAtStartPar
+With all of the information about symlinks and object trees,
+you might be reluctant to perform usual file system managing
+operations, such as copying, moving, renaming or deleting
+files or directories with annexed content.
+
+\sphinxAtStartPar
+If I renamed one of those books, would the symlink that points
+to the file content still be correct? What happens if I’d copy
+an annexed file?
+If I moved the whole \sphinxcode{\sphinxupquote{books/}} directory? What if I moved
+all of \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} into a different place on my computer?
+What if renamed the whole superdataset?
+And how do I remove a file, or directory, or subdataset?
+
+\sphinxAtStartPar
+Therefore, there is an extra tutorial today, and you attend.
+There is no better way of learning than doing. Here, in the
+safe space of the \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} course, you can try out all
+of the things you would be unsure about or reluctant to try
+on the dataset that contains your own, valuable data.
+
+\sphinxAtStartPar
+Below you will find common questions about file system
+management operations, and each question outlines caveats and
+solutions with code examples you can paste into your own terminal.
+Because these code snippets will add many commits to your
+dataset, we are cleaning up within each segment with
+common git operations that manipulate the datasets
+history \textendash{} be sure to execute these commands as well (and
+be sure to be in the correct dataset).
+
+\index{rename file@\spxentry{rename file}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!rename file@\spxentry{rename file}}\ignorespaces 
+
+\subsection{Renaming files}
+\label{\detokenize{basics/101-136-filesystem:renaming-files}}\label{\detokenize{basics/101-136-filesystem:index-0}}
+\sphinxAtStartPar
+Let’s try it. In Unix, renaming a file is exactly the same as
+moving a file, and uses the \sphinxcode{\sphinxupquote{ mv}} command.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }books/
+\PYG{g+gp}{\PYGZdl{} }mv\PYG{+w}{ }TLCL.pdf\PYG{+w}{ }The\PYGZus{}Linux\PYGZus{}Command\PYGZus{}Line.pdf
+\PYG{g+gp}{\PYGZdl{} }ls\PYG{+w}{ }\PYGZhy{}lh\PYG{+w}{ }The\PYGZus{}Linux\PYGZus{}Command\PYGZus{}Line.pdf
+\PYG{g+go}{total 16K}
+\PYG{g+go}{lrwxrwxrwx 1 elena elena 131 2019\PYGZhy{}06\PYGZhy{}18 16:13 bash\PYGZus{}guide.pdf \PYGZhy{}\PYGZgt{} ../.git/annex/objects/WF/Gq/✂/MD5E\PYGZhy{}s1198170\PYGZhy{}\PYGZhy{}0ab2c121✂MD5.pdf}
+\PYG{g+go}{lrwxrwxrwx 1 elena elena 131 2019\PYGZhy{}06\PYGZhy{}18 16:13 byte\PYGZhy{}of\PYGZhy{}python.pdf \PYGZhy{}\PYGZgt{} ../.git/annex/objects/xF/42/✂/MD5E\PYGZhy{}s4161086\PYGZhy{}\PYGZhy{}c832fc13✂MD5.pdf}
+\PYG{g+go}{lrwxrwxrwx 1 elena elena 133 2019\PYGZhy{}06\PYGZhy{}18 16:13 progit.pdf \PYGZhy{}\PYGZgt{} ../.git/annex/objects/G6/Gj/✂/MD5E\PYGZhy{}s12465653\PYGZhy{}\PYGZhy{}05cd7ed5✂MD5.pdf}
+\PYG{g+go}{lrwxrwxrwx 1 elena elena 131 2019\PYGZhy{}06\PYGZhy{}18 16:13 The\PYGZus{}Linux\PYGZus{}Command\PYGZus{}Line.pdf \PYGZhy{}\PYGZgt{} ../.git/annex/objects/jf/3M/✂/MD5E\PYGZhy{}s2120211\PYGZhy{}\PYGZhy{}06d1efcb✂MD5.pdf}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Try to open the renamed file, e.g., with
+\sphinxcode{\sphinxupquote{evince The\_Linux\_Command\_Line.pdf}}.
+This works!
+
+\sphinxAtStartPar
+But let’s see what changed in the dataset with this operation:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{untracked: /home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101/books/The\PYGZus{}Linux\PYGZus{}Command\PYGZus{}Line.pdf (symlink)}
+\PYG{g+go}{  deleted: /home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101/books/TLCL.pdf (symlink)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+We can see that the old file is marked as \sphinxcode{\sphinxupquote{deleted}}, and
+simultaneously, an \sphinxcode{\sphinxupquote{untracked}} file appears: the renamed
+PDF.
+
+\sphinxAtStartPar
+While this might appear messy, a \sphinxcode{\sphinxupquote{datalad save}} will clean
+all of this up. Therefore, do not panic if you rename a file,
+and see a dirty dataset status with deleted and untracked files
+\textendash{} \sphinxcode{\sphinxupquote{datalad save}} handles these and other cases really well
+under the hood.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}rename the book\PYGZdq{}}
+\PYG{g+go}{delete(ok): books/TLCL.pdf (symlink)}
+\PYG{g+go}{add(ok): books/The\PYGZus{}Linux\PYGZus{}Command\PYGZus{}Line.pdf (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The \sphinxcode{\sphinxupquote{datalad save}} command will identify that a file was
+renamed, and will summarize this nicely in the resulting commit:
+
+\fvset{hllines={, 8, 9, 10, 11,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{1}\PYG{+w}{ }\PYGZhy{}p
+\PYG{g+go}{commit d05e0ded✂SHA1}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    rename the book}
+
+\PYG{g+go}{diff \PYGZhy{}\PYGZhy{}git a/books/TLCL.pdf b/books/The\PYGZus{}Linux\PYGZus{}Command\PYGZus{}Line.pdf}
+\PYG{g+go}{similarity index 100\PYGZpc{}}
+\PYG{g+go}{rename from books/TLCL.pdf}
+\PYG{g+go}{rename to books/The\PYGZus{}Linux\PYGZus{}Command\PYGZus{}Line.pdf}
+\end{sphinxVerbatim}
+\sphinxresetverbatimhllines
+
+\sphinxAtStartPar
+Note that \sphinxcode{\sphinxupquote{datalad save}} commits all modifications when
+it’s called without a path specification,
+so any other changes will be saved in the same commit as the rename.
+If there are unsaved modifications you do not want to commit
+together with the file name change, you could give both the
+new and the deleted file as a path specification to
+\sphinxcode{\sphinxupquote{datalad save}}, even if it feels unintuitive to
+save a change that is marked as a deletion in a
+\sphinxcode{\sphinxupquote{datalad status}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}rename file\PYGZdq{}}\PYG{+w}{ }oldname\PYG{+w}{ }newname
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Alternatively, there is also a way to save the name change
+only using Git tools only, outlined in the \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-gitmv}} {\hyperref[\detokenize{basics/101-136-filesystem:fom-gitmv}]{\sphinxcrossref{\DUrole{std,std-ref}{on faster renaming}}}} (\autopageref*{\detokenize{basics/101-136-filesystem:fom-gitmv}}). If you are a Git user, you will be very familiar with it.
+
+\index{rename file@\spxentry{rename file}!with Git@\spxentry{with Git}}\index{with Git@\spxentry{with Git}!rename file@\spxentry{rename file}}\ignorespaces \begin{findoutmore}[label={fom-gitmv}, before title={\thetcbcounter\ }, check odd page=true]{Faster renaming with Git tools}
+\label{\detokenize{basics/101-136-filesystem:fom-gitmv}}
+
+\sphinxAtStartPar
+Git has built\sphinxhyphen{}in commands that provide a solution in two steps.
+
+\sphinxAtStartPar
+If you have followed along with the previous \sphinxcode{\sphinxupquote{datalad save}}, let’s revert the renaming of the the files:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }reset\PYG{+w}{ }\PYGZhy{}\PYGZhy{}hard\PYG{+w}{ }HEAD\PYGZti{}1
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{HEAD is now at 39e55c8 add container and execute analysis within container}
+\PYG{g+go}{nothing to save, working tree clean}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Now we are checking out how to rename files and commit this operation
+using only Git:
+A Git\sphinxhyphen{}specific way to rename files is the \sphinxcode{\sphinxupquote{git mv}} command:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }mv\PYG{+w}{ }TLCL.pdf\PYG{+w}{ }The\PYGZus{}Linux\PYGZus{}Command\PYGZus{}Line.pdf
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{    added: /home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101/books/The\PYGZus{}Linux\PYGZus{}Command\PYGZus{}Line.pdf (symlink)}
+\PYG{g+go}{  deleted: /home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101/books/TLCL.pdf (symlink)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+We can see that the old file is still seen as “deleted”, but the “new”,
+renamed file is “added”. A \sphinxcode{\sphinxupquote{git status}} displays the change
+in the dataset a bit more accurately:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }status
+\PYG{g+go}{On branch main}
+\PYG{g+go}{Changes to be committed:}
+\PYG{g+go}{  (use \PYGZdq{}git restore \PYGZhy{}\PYGZhy{}staged \PYGZlt{}file\PYGZgt{}...\PYGZdq{} to unstage)}
+\PYG{g+go}{	renamed:    TLCL.pdf \PYGZhy{}\PYGZgt{} The\PYGZus{}Linux\PYGZus{}Command\PYGZus{}Line.pdf}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Because the \sphinxcode{\sphinxupquote{git mv}} places the change directly into the
+staging area (the \sphinxstyleemphasis{index}) of Git%
+\begin{footnote}\sphinxAtStartFootnote
+If you want to learn more about the Git\sphinxhyphen{}specific concepts of \sphinxstyleemphasis{worktree},
+\sphinxstyleemphasis{staging area}/\sphinxstyleemphasis{index} or \sphinxstyleemphasis{HEAD}, the upcoming section {\hyperref[\detokenize{basics/101-137-history:history}]{\sphinxcrossref{\DUrole{std,std-ref}{Back and forth in time}}}} (\autopageref*{\detokenize{basics/101-137-history:history}}) will
+talk briefly about them and demonstrate helpful commands.
+%
+\end{footnote},
+a subsequent \sphinxcode{\sphinxupquote{git commit \sphinxhyphen{}m "rename book"}} will write the renaming
+\textendash{} and only the renaming \textendash{} to the dataset’s history, even if other
+(unstaged) modifications are present.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }commit\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}rename book\PYGZdq{}}
+\PYG{g+go}{[main 515fcc2] rename book}
+\PYG{g+go}{ 1 file changed, 0 insertions(+), 0 deletions(\PYGZhy{})}
+\PYG{g+go}{ rename books/\PYGZob{}TLCL.pdf =\PYGZgt{} The\PYGZus{}Linux\PYGZus{}Command\PYGZus{}Line.pdf\PYGZcb{} (100\PYGZpc{})}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+\dlhbhref{P2B}{Especially when renaming directories with many files, this can be much faster} than a \sphinxcode{\sphinxupquote{mv}} followed by \sphinxcode{\sphinxupquote{datalad save}},
+
+
+\end{findoutmore}
+
+\sphinxAtStartPar
+To summarize, renaming files is easy and worry\sphinxhyphen{}free. Do not be intimidated
+by a file marked as deleted \textendash{} a \sphinxcode{\sphinxupquote{datalad save}} will rectify this.
+Be mindful of other modifications in your dataset, though, and either supply
+appropriate paths to \sphinxcode{\sphinxupquote{datalad save}}, or use Git tools to exclusively save
+the name change and nothing else.
+
+\sphinxAtStartPar
+Let’s revert this now, to have a clean history.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }reset\PYG{+w}{ }\PYGZhy{}\PYGZhy{}hard\PYG{+w}{ }HEAD\PYGZti{}1
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{HEAD is now at 39e55c8 add container and execute analysis within container}
+\PYG{g+go}{nothing to save, working tree clean}
+\end{sphinxVerbatim}
+
+
+\subsection{Moving files from or into subdirectories}
+\label{\detokenize{basics/101-136-filesystem:moving-files-from-or-into-subdirectories}}
+\sphinxAtStartPar
+Let’s move an annexed file from within \sphinxcode{\sphinxupquote{books/}} into the root
+of the superdataset:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }mv\PYG{+w}{ }TLCL.pdf\PYG{+w}{ }../TLCL.pdf
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{untracked: /home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101/TLCL.pdf (symlink)}
+\PYG{g+go}{  deleted: /home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101/books/TLCL.pdf (symlink)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+In general, this looks exactly like renaming or moving a file
+in the same directory. There is a subtle difference though:
+Currently, the symlink of the annexed file is broken. There
+are two ways to demonstrate this. One is trying to open the
+file \textendash{} this will currently fail. The second way is to look
+at the symlink:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }../
+\PYG{g+gp}{\PYGZdl{} }ls\PYG{+w}{ }\PYGZhy{}l\PYG{+w}{ }TLCL.pdf
+\PYG{g+go}{lrwxrwxrwx 1 elena elena 131 2019\PYGZhy{}06\PYGZhy{}18 16:13 TLCL.pdf \PYGZhy{}\PYGZgt{} ../.git/annex/objects/jf/3M/✂/MD5E\PYGZhy{}s2120211\PYGZhy{}\PYGZhy{}06d1efcb✂MD5.pdf}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The first part of the symlink should point into the \sphinxcode{\sphinxupquote{.git/}}
+directory, but currently, it does not \textendash{} the symlink still looks
+like \sphinxcode{\sphinxupquote{TLCL.pdf}} would be within \sphinxcode{\sphinxupquote{books/}}. Instead of pointing
+into \sphinxcode{\sphinxupquote{.git}}, it currently points to \sphinxcode{\sphinxupquote{../.git}}, which is non\sphinxhyphen{}existent,
+and even outside of the superdataset. This is why the file
+cannot be opened: When any program tries to follow the symlink,
+it will not resolve, and an error such as “no file or directory”
+will be returned. But do not panic! A \sphinxcode{\sphinxupquote{datalad save}} will
+rectify this as well:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}moved book into root\PYGZdq{}}
+\PYG{g+gp}{\PYGZdl{} }ls\PYG{+w}{ }\PYGZhy{}l\PYG{+w}{ }TLCL.pdf
+\PYG{g+go}{delete(ok): books/TLCL.pdf (symlink)}
+\PYG{g+go}{add(ok): TLCL.pdf (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\PYG{g+go}{lrwxrwxrwx 1 elena elena 128 2019\PYGZhy{}06\PYGZhy{}18 16:13 TLCL.pdf \PYGZhy{}\PYGZgt{} .git/annex/objects/jf/3M/✂/MD5E\PYGZhy{}s2120211\PYGZhy{}\PYGZhy{}06d1efcb✂MD5.pdf}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+After a \sphinxcode{\sphinxupquote{datalad save}}, the symlink is fixed again.
+Therefore, in general, whenever moving or renaming a file,
+especially between directories, a \sphinxcode{\sphinxupquote{datalad save}} is
+the best option to turn to.
+
+\index{content pointer file@\spxentry{content pointer file}!git\sphinxhyphen{}annex concept@\spxentry{git\sphinxhyphen{}annex concept}}\index{git\sphinxhyphen{}annex concept@\spxentry{git\sphinxhyphen{}annex concept}!content pointer file@\spxentry{content pointer file}}\ignorespaces \begin{findoutmore}[label={index-2}, before title={\thetcbcounter\ }, check odd page=true]{Why a move between directories is actually a content change}
+\label{\detokenize{basics/101-136-filesystem:index-2}}
+
+\sphinxAtStartPar
+Let’s see how this shows up in the dataset history:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{1}\PYG{+w}{ }\PYGZhy{}p
+\PYG{g+go}{commit b315f5c4✂SHA1}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    moved book into root}
+
+\PYG{g+go}{diff \PYGZhy{}\PYGZhy{}git a/TLCL.pdf b/TLCL.pdf}
+\PYG{g+go}{new file mode 120000}
+\PYG{g+go}{index 0000000..34328e2}
+\PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{} /dev/null}
+\PYG{g+go}{+++ b/TLCL.pdf}
+\PYG{g+go}{@@ \PYGZhy{}0,0 +1 @@}
+\PYG{g+go}{+.git/annex/objects/jf/3M/✂/MD5E\PYGZhy{}s2120211\PYGZhy{}\PYGZhy{}06d1efcb✂MD5.pdf}
+\PYG{g+go}{\PYGZbs{} No newline at end of file}
+\PYG{g+go}{diff \PYGZhy{}\PYGZhy{}git a/books/TLCL.pdf b/books/TLCL.pdf}
+\PYG{g+go}{deleted file mode 120000}
+\PYG{g+go}{index 4c84b61..0000000}
+\PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{} a/books/TLCL.pdf}
+\PYG{g+go}{+++ /dev/null}
+\PYG{g+go}{@@ \PYGZhy{}1 +0,0 @@}
+\PYG{g+go}{\PYGZhy{}../.git/annex/objects/jf/3M/✂/MD5E\PYGZhy{}s2120211\PYGZhy{}\PYGZhy{}06d1efcb✂MD5.pdf}
+\PYG{g+go}{\PYGZbs{} No newline at end of file}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+As you can see, this action does not show up as a move, but instead
+a deletion and addition of a new file. Why? Because the content
+that is tracked is the actual symlink, and due to the change in
+relative location, the symlink needed to change. Hence, what looks
+and feels like a move on the file system for you is actually a
+move plus a content change for Git.
+
+
+\end{findoutmore}
+
+\index{fix@\spxentry{fix}!git\sphinxhyphen{}annex command@\spxentry{git\sphinxhyphen{}annex command}}\index{git\sphinxhyphen{}annex command@\spxentry{git\sphinxhyphen{}annex command}!fix@\spxentry{fix}}\ignorespaces \begin{gitusernote}[label={index-3}, before title={\thetcbcounter\ }, check odd page=true]{‘datalad save’ internals: ‘git annex fix’}
+\label{\detokenize{basics/101-136-filesystem:index-3}}
+
+\sphinxAtStartPar
+A \sphinxcode{\sphinxupquote{datalad save}} command internally uses a \sphinxcode{\sphinxupquote{git commit}} to save changes to a dataset.
+\sphinxcode{\sphinxupquote{git commit}} in turn triggers a \sphinxcode{\sphinxupquote{git annex fix}}
+command. This git\sphinxhyphen{}annex command fixes up links that have become broken
+to again point to annexed content, and is responsible for cleaning up
+what needs to be cleaned up. Thanks, git\sphinxhyphen{}annex!
+
+
+\end{gitusernote}
+
+\sphinxAtStartPar
+Finally, let’s clean up:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }reset\PYG{+w}{ }\PYGZhy{}\PYGZhy{}hard\PYG{+w}{ }HEAD\PYGZti{}1
+\PYG{g+go}{HEAD is now at 39e55c8 add container and execute analysis within container}
+\end{sphinxVerbatim}
+
+\index{move file to other dataset@\spxentry{move file to other dataset}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!move file to other dataset@\spxentry{move file to other dataset}}\ignorespaces 
+
+\subsection{Moving files across dataset boundaries}
+\label{\detokenize{basics/101-136-filesystem:moving-files-across-dataset-boundaries}}\label{\detokenize{basics/101-136-filesystem:index-4}}
+\sphinxAtStartPar
+Generally speaking, moving files across dataset hierarchies is not advised.
+While DataLad blurs the dataset boundaries to ease working in nested dataset,
+the dataset boundaries do still exist. If you move a file from one subdataset
+into another, or up or down a dataset hierarchy, you will move it out of the
+version control it was in (i.e., from one \sphinxcode{\sphinxupquote{.git}} directory into a different
+one). From the perspective of the first subdataset, the file will be deleted,
+and from the perspective of the receiving dataset, the file will be added to
+the dataset, but straight out of nowhere, with none of its potential history
+from its original dataset attached to it. Before moving a file, consider whether
+\sphinxstyleemphasis{copying} it (outlined in the next but one paragraph) might be a more suitable
+alternative.
+
+\sphinxAtStartPar
+If you are willing to sacrifice%
+\begin{footnote}\sphinxAtStartFootnote
+Or rather: split \textendash{} basically, the file is getting a fresh new start.
+Think of it as some sort of witness\sphinxhyphen{}protection program with complete
+disrespect for provenance…
+%
+\end{footnote} the file’s history and move it to a
+different dataset, the procedure differs between annexed files, and files
+stored in Git.
+
+\sphinxAtStartPar
+For files that Git manages, moving and saving is simple: Move the file, and
+save the resulting changes in \sphinxstyleemphasis{both} affected datasets (this can be done with
+a recursive \sphinxcode{\sphinxupquote{datalad save}} from a top\sphinxhyphen{}level dataset, though).
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }mv\PYG{+w}{ }notes.txt\PYG{+w}{ }midterm\PYGZus{}project/notes.txt
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status\PYG{+w}{ }\PYGZhy{}r
+\PYG{g+go}{ modified: midterm\PYGZus{}project (dataset)}
+\PYG{g+go}{untracked: midterm\PYGZus{}project/notes.txt (file)}
+\PYG{g+go}{  deleted: notes.txt (file)}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}r\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}moved notes.txt from root of top\PYGZhy{}ds to midterm subds\PYGZdq{}}
+\PYG{g+go}{add(ok): notes.txt (file)}
+\PYG{g+go}{save(ok): midterm\PYGZus{}project (dataset)}
+\PYG{g+go}{delete(ok): notes.txt (file)}
+\PYG{g+go}{add(ok): midterm\PYGZus{}project (dataset)}
+\PYG{g+go}{add(ok): .gitmodules (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\PYG{g+go}{action summary:}
+\PYG{g+go}{  add (ok: 3)}
+\PYG{g+go}{  delete (ok: 1)}
+\PYG{g+go}{  save (notneeded: 2, ok: 2)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Note how the history of \sphinxcode{\sphinxupquote{notes.txt}} does not exist in the subdataset \textendash{} it appears
+as if the file was generated at once, instead of successively over the course:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }midterm\PYGZus{}project
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }notes.txt
+\PYG{g+go}{commit 1e273c59✂SHA1}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    moved notes.txt from root of top\PYGZhy{}ds to midterm subds}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+(Undo\sphinxhyphen{}ing this requires \sphinxcode{\sphinxupquote{git reset}}s in \sphinxstyleemphasis{both} datasets)
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZsh{} }\PYG{k}{in}\PYG{+w}{ }midterm\PYGZus{}project
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }reset\PYG{+w}{ }\PYGZhy{}\PYGZhy{}hard\PYG{+w}{ }HEAD\PYGZti{}
+
+\PYG{g+gp}{\PYGZsh{} }\PYG{k}{in}\PYG{+w}{ }DataLad\PYGZhy{}101
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }../
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }reset\PYG{+w}{ }\PYGZhy{}\PYGZhy{}hard\PYG{+w}{ }HEAD\PYGZti{}
+\PYG{g+go}{HEAD is now at 4f00ad0 [DATALAD RUNCMD] rerun analysis in container}
+\PYG{g+go}{HEAD is now at 39e55c8 add container and execute analysis within container}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The process is a bit more complex for annexed files. Let’s do it wrong, first:
+What happens if we move an annexed file in the same way as \sphinxcode{\sphinxupquote{notes.txt}}?
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }mv\PYG{+w}{ }books/TLCL.pdf\PYG{+w}{ }midterm\PYGZus{}project
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status\PYG{+w}{ }\PYGZhy{}r
+\PYG{g+go}{  deleted: books/TLCL.pdf (symlink)}
+\PYG{g+go}{ modified: midterm\PYGZus{}project (dataset)}
+\PYG{g+go}{untracked: midterm\PYGZus{}project/TLCL.pdf (symlink)}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}r\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}move annexed file around\PYGZdq{}}
+\PYG{g+go}{add(ok): TLCL.pdf (file) [TLCL.pdf is a git\PYGZhy{}annex symlink.]}
+\PYG{g+go}{save(ok): midterm\PYGZus{}project (dataset)}
+\PYG{g+go}{delete(ok): books/TLCL.pdf (symlink)}
+\PYG{g+go}{add(ok): midterm\PYGZus{}project (dataset)}
+\PYG{g+go}{add(ok): .gitmodules (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\PYG{g+go}{action summary:}
+\PYG{g+go}{  add (ok: 3)}
+\PYG{g+go}{  delete (ok: 1)}
+\PYG{g+go}{  save (notneeded: 2, ok: 2)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+At this point, this does not look that different to the result of moving
+\sphinxcode{\sphinxupquote{notes.txt}}. Note, though, that the deleted and untracked PDFs are symlinks \textendash{}
+and therein lies the problem: What was moved was not the file content (which is
+still in the annex of the top\sphinxhyphen{}level dataset, \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}}), but its symlink that
+was stored in Git. After moving the file, the symlink is broken, and git\sphinxhyphen{}annex
+has no way of finding out where the file content could be:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }midterm\PYGZus{}project
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }annex\PYG{+w}{ }whereis\PYG{+w}{ }TLCL.pdf
+\PYG{g+go}{whereis TLCL.pdf (0 copies) failed}
+\PYG{g+go}{whereis: 1 failed}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Let’s rewind, and find out how to do it correctly:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }reset\PYG{+w}{ }\PYGZhy{}\PYGZhy{}hard\PYG{+w}{ }HEAD\PYGZti{}
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }../
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }reset\PYG{+w}{ }\PYGZhy{}\PYGZhy{}hard\PYG{+w}{ }HEAD\PYGZti{}
+\PYG{g+go}{HEAD is now at 4f00ad0 [DATALAD RUNCMD] rerun analysis in container}
+\PYG{g+go}{HEAD is now at 39e55c8 add container and execute analysis within container}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The crucial step to remember is to get the annexed file out of the annex prior
+to moving it. For this, we need to fall back to git\sphinxhyphen{}annex commands:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }annex\PYG{+w}{ }unlock\PYG{+w}{ }books/TLCL.pdf
+\PYG{g+gp}{\PYGZdl{} }mv\PYG{+w}{ }books/TLCL.pdf\PYG{+w}{ }midterm\PYGZus{}project
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status\PYG{+w}{ }\PYGZhy{}r
+\PYG{g+go}{unlock books/TLCL.pdf ok}
+\PYG{g+gp+gpVirtualEnv}{(recording state in git...)}
+\PYG{g+go}{  deleted: books/TLCL.pdf (file)}
+\PYG{g+go}{ modified: midterm\PYGZus{}project (dataset)}
+\PYG{g+go}{untracked: midterm\PYGZus{}project/TLCL.pdf (file)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Afterwards, a (recursive) \sphinxcode{\sphinxupquote{datalad save}} commits the removal of the book from
+DataLad\sphinxhyphen{}101, and adds the file content into the annex of \sphinxcode{\sphinxupquote{midterm\_project}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}r\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}move book into midterm\PYGZus{}project\PYGZdq{}}
+\PYG{g+go}{add(ok): TLCL.pdf (file)}
+\PYG{g+go}{save(ok): midterm\PYGZus{}project (dataset)}
+\PYG{g+go}{delete(ok): books/TLCL.pdf (file)}
+\PYG{g+go}{add(ok): midterm\PYGZus{}project (dataset)}
+\PYG{g+go}{add(ok): .gitmodules (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\PYG{g+go}{action summary:}
+\PYG{g+go}{  add (ok: 3)}
+\PYG{g+go}{  delete (ok: 1)}
+\PYG{g+go}{  save (notneeded: 2, ok: 2)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Even though you did split the file’s history, at least its content is in the
+correct dataset now:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }midterm\PYGZus{}project
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }annex\PYG{+w}{ }whereis\PYG{+w}{ }TLCL.pdf
+\PYG{g+go}{whereis TLCL.pdf (1 copy)}
+\PYG{g+go}{  	✂UUID✂ \PYGZhy{}\PYGZhy{} me@appveyor\PYGZhy{}vm:\PYGZti{}/dl\PYGZhy{}101/DataLad\PYGZhy{}101/midterm\PYGZus{}project [here]}
+\PYG{g+go}{ok}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+But more than showing you how it can be done, if necessary, this paragraph
+hopefully convinced you that moving files across dataset boundaries is not
+convenient. It can be a confusing and potentially “file\sphinxhyphen{}content\sphinxhyphen{}losing”\sphinxhyphen{}dangerous
+process, but it also dissociates a file from its provenance that is captured
+in its previous dataset, with no machine\sphinxhyphen{}readable way to learn about the move
+easily. A better alternative may be copying files with the \sphinxcode{\sphinxupquote{datalad copy\sphinxhyphen{}file}}
+command introduced in detail in the web version, and demonstrated in the next
+but one paragraph. Let’s quickly clean up by moving the file back:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZsh{} }\PYG{k}{in}\PYG{+w}{ }midterm\PYGZus{}project
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }annex\PYG{+w}{ }unannex\PYG{+w}{ }TLCL.pdf
+\PYG{g+go}{unannex TLCL.pdf ok}
+\PYG{g+gp+gpVirtualEnv}{(recording state in git...)}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }mv\PYG{+w}{ }TLCL.pdf\PYG{+w}{ }../books
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }../
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}r\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}move book back from midterm\PYGZus{}project\PYGZdq{}}
+\PYG{g+go}{delete(ok): TLCL.pdf (symlink)}
+\PYG{g+go}{save(ok): midterm\PYGZus{}project (dataset)}
+\PYG{g+go}{add(ok): midterm\PYGZus{}project (dataset)}
+\PYG{g+go}{add(ok): .gitmodules (file)}
+\PYG{g+go}{add(ok): books/TLCL.pdf (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\PYG{g+go}{action summary:}
+\PYG{g+go}{  add (ok: 3)}
+\PYG{g+go}{  delete (ok: 1)}
+\PYG{g+go}{  save (notneeded: 2, ok: 2)}
+\end{sphinxVerbatim}
+
+
+\subsection{Copying files}
+\label{\detokenize{basics/101-136-filesystem:copying-files}}
+\sphinxAtStartPar
+Let’s create a copy of an annexed file, using the Unix
+command \sphinxcode{\sphinxupquote{cp}} to copy.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cp\PYG{+w}{ }books/TLCL.pdf\PYG{+w}{ }copyofTLCL.pdf
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{untracked: copyofTLCL.pdf (file)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+That’s expected. The copy shows up as a new, untracked
+file. Let’s save it:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}add copy of TLCL.pdf\PYGZdq{}}
+\PYG{g+go}{add(ok): copyofTLCL.pdf (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{1}\PYG{+w}{ }\PYGZhy{}p
+\PYG{g+go}{commit ebbe6b93✂SHA1}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    add copy of TLCL.pdf}
+
+\PYG{g+go}{diff \PYGZhy{}\PYGZhy{}git a/copyofTLCL.pdf b/copyofTLCL.pdf}
+\PYG{g+go}{new file mode 120000}
+\PYG{g+go}{index 0000000..34328e2}
+\PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{} /dev/null}
+\PYG{g+go}{+++ b/copyofTLCL.pdf}
+\PYG{g+go}{@@ \PYGZhy{}0,0 +1 @@}
+\PYG{g+go}{+.git/annex/objects/jf/3M/✂/MD5E\PYGZhy{}s2120211\PYGZhy{}\PYGZhy{}06d1efcb✂MD5.pdf}
+\PYG{g+go}{\PYGZbs{} No newline at end of file}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+That’s it.
+
+\index{content pointer file@\spxentry{content pointer file}!git\sphinxhyphen{}annex concept@\spxentry{git\sphinxhyphen{}annex concept}}\index{git\sphinxhyphen{}annex concept@\spxentry{git\sphinxhyphen{}annex concept}!content pointer file@\spxentry{content pointer file}}\ignorespaces \begin{findoutmore}[label={index-5}, before title={\thetcbcounter\ }, check odd page=true]{Symlinks!}
+\label{\detokenize{basics/101-136-filesystem:index-5}}
+
+\sphinxAtStartPar
+If you have read the additional content in the section
+{\hyperref[\detokenize{basics/101-115-symlinks:symlink}]{\sphinxcrossref{\DUrole{std,std-ref}{Data integrity}}}} (\autopageref*{\detokenize{basics/101-115-symlinks:symlink}}), you know that the same file content
+is only stored once, and copies of the same file point to
+the same location in the object tree.
+
+\sphinxAtStartPar
+Let’s check that out:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }ls\PYG{+w}{ }\PYGZhy{}l\PYG{+w}{ }copyofTLCL.pdf
+\PYG{g+gp}{\PYGZdl{} }ls\PYG{+w}{ }\PYGZhy{}l\PYG{+w}{ }books/TLCL.pdf
+\PYG{g+go}{lrwxrwxrwx 1 elena elena 128 2019\PYGZhy{}06\PYGZhy{}18 16:13 copyofTLCL.pdf \PYGZhy{}\PYGZgt{} .git/annex/objects/jf/3M/✂/MD5E\PYGZhy{}s2120211\PYGZhy{}\PYGZhy{}06d1efcb✂MD5.pdf}
+\PYG{g+go}{lrwxrwxrwx 1 elena elena 131 2019\PYGZhy{}06\PYGZhy{}18 16:13 books/TLCL.pdf \PYGZhy{}\PYGZgt{} ../.git/annex/objects/jf/3M/✂/MD5E\PYGZhy{}s2120211\PYGZhy{}\PYGZhy{}06d1efcb✂MD5.pdf}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Indeed! Apart from their relative location (\sphinxcode{\sphinxupquote{.git}} versus
+\sphinxcode{\sphinxupquote{../.git}}) their symlink is identical. Thus, even though two
+copies of the book exist in your dataset, your disk needs to
+store it only once.
+
+\sphinxAtStartPar
+In most cases, this is just an interesting fun\sphinxhyphen{}fact, but beware
+when dropping content with \sphinxcode{\sphinxupquote{datalad drop}}
+({\hyperref[\detokenize{basics/101-136-filesystem:remove}]{\sphinxcrossref{\DUrole{std,std-ref}{Removing annexed content entirely}}}} (\autopageref*{\detokenize{basics/101-136-filesystem:remove}})):
+If you drop the content of one copy of a file, all
+other copies will lose this content as well.
+
+
+\end{findoutmore}
+
+\sphinxAtStartPar
+Finally, let’s clean up:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }reset\PYG{+w}{ }\PYGZhy{}\PYGZhy{}hard\PYG{+w}{ }HEAD\PYGZti{}1
+\PYG{g+go}{HEAD is now at de2d23c move book back from midterm\PYGZus{}project}
+\end{sphinxVerbatim}
+
+\index{copy file to other dataset@\spxentry{copy file to other dataset}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!copy file to other dataset@\spxentry{copy file to other dataset}}\ignorespaces 
+
+\subsection{Copying files across dataset boundaries}
+\label{\detokenize{basics/101-136-filesystem:copying-files-across-dataset-boundaries}}\label{\detokenize{basics/101-136-filesystem:index-6}}\label{\detokenize{basics/101-136-filesystem:copyfilefs}}
+\sphinxAtStartPar
+Instead of moving files across dataset boundaries, \sphinxstyleemphasis{copying} them is an easier
+and actually supported method.
+The DataLad command that can be used for this is \sphinxcode{\sphinxupquote{datalad copy\sphinxhyphen{}file}}.
+This command allows to copy files
+(from any dataset or non\sphinxhyphen{}dataset location, annexed or not annexed) into a dataset.
+If the file is copied from a dataset and is annexed, its availability metadata
+is added to the new dataset as well, and there is no need for unannex’ing the
+or even retrieving its file contents. Let’s see this in action for a file
+stored in Git, and a file stored in annex:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }copy\PYGZhy{}file\PYG{+w}{ }notes.txt\PYG{+w}{ }midterm\PYGZus{}project\PYG{+w}{ }\PYGZhy{}d\PYG{+w}{ }midterm\PYGZus{}project
+\PYG{g+go}{copy\PYGZus{}file(ok): /home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101/notes.txt}
+\PYG{g+go}{add(ok): notes.txt (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }copy\PYGZhy{}file\PYG{+w}{ }books/bash\PYGZus{}guide.pdf\PYG{+w}{ }midterm\PYGZus{}project\PYG{+w}{ }\PYGZhy{}d\PYG{+w}{ }midterm\PYGZus{}project
+\PYG{g+go}{copy\PYGZus{}file(ok): /home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101/books/bash\PYGZus{}guide.pdf [/home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101/midterm\PYGZus{}project/bash\PYGZus{}guide.pdf]}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Both files have been successfully transferred and saved to the subdataset, and
+no unannexing was necessary.
+\sphinxcode{\sphinxupquote{notes.txt}} was annexed in the subdataset, though, as this subdataset
+was not configured with the \sphinxcode{\sphinxupquote{text2git}} {\hyperref[\detokenize{glossary:term-run-procedure}]{\sphinxtermref{\DUrole{xref,std,std-term}{run procedure}}}}.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }tree\PYG{+w}{ }midterm\PYGZus{}project
+\PYG{g+go}{midterm\PYGZus{}project}
+\PYG{g+go}{├── bash\PYGZus{}guide.pdf \PYGZhy{}\PYGZgt{} .git/annex/objects/31/wQ/SHA256E\PYGZhy{}s1198170\PYGZhy{}\PYGZhy{}d08f2c7b✂SHA162d6b24a20cb5abae4d4402c.pdf/SHA256E\PYGZhy{}s1198170\PYGZhy{}\PYGZhy{}d08f2c7b✂SHA162d6b24a20cb5abae4d4402c.pdf}
+\PYG{g+go}{├── CHANGELOG.md}
+\PYG{g+go}{├── code}
+\PYG{g+go}{│   ├── README.md}
+\PYG{g+go}{│   └── script.py}
+\PYG{g+go}{├── input}
+\PYG{g+go}{│   └── iris.csv \PYGZhy{}\PYGZgt{} .git/annex/objects/qz/Jg/✂/MD5E\PYGZhy{}s3975\PYGZhy{}\PYGZhy{}341a3b52✂MD5.csv}
+\PYG{g+go}{├── notes.txt \PYGZhy{}\PYGZgt{} .git/annex/objects/p1/jm/✂/MD5E\PYGZhy{}s5080\PYGZhy{}\PYGZhy{}73ec6967✂MD5.txt}
+\PYG{g+go}{├── pairwise\PYGZus{}relationships.png \PYGZhy{}\PYGZgt{} .git/annex/objects/q1/gp/✂/MD5E\PYGZhy{}s261062\PYGZhy{}\PYGZhy{}025dc493✂MD5.png}
+\PYG{g+go}{├── prediction\PYGZus{}report.csv \PYGZhy{}\PYGZgt{} .git/annex/objects/8q/6M/✂/MD5E\PYGZhy{}s345\PYGZhy{}\PYGZhy{}a88cab39✂MD5.csv}
+\PYG{g+go}{└── README.md}
+
+\PYG{g+go}{2 directories, 9 files}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The subdataset has two new commits as \sphinxcode{\sphinxupquote{datalad copy\sphinxhyphen{}file}} can take care
+of saving changes in the copied\sphinxhyphen{}to dataset, and thus the new subdataset state
+would need to be saved in the superdataset.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status\PYG{+w}{ }\PYGZhy{}r
+\PYG{g+go}{ modified: midterm\PYGZus{}project (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Still, just as when we \sphinxstyleemphasis{moved} files across dataset boundaries, the files’
+provenance record is lost:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }midterm\PYGZus{}project
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }notes.txt
+\PYG{g+go}{commit 5b8d330f✂SHA1}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    [DATALAD] Recorded changes}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Nevertheless, copying files with \sphinxcode{\sphinxupquote{datalad copy\sphinxhyphen{}file}} is easier and safer
+than moving them with standard Unix commands, especially so for annexed files.
+A more detailed introduction to \sphinxcode{\sphinxupquote{datalad copy\sphinxhyphen{}file}} and a concrete
+use case can be found in the online\sphinxhyphen{}handbook.
+
+\sphinxAtStartPar
+Let’s clean up:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }reset\PYG{+w}{ }\PYGZhy{}\PYGZhy{}hard\PYG{+w}{ }HEAD\PYGZti{}2
+\PYG{g+go}{HEAD is now at b2b6855 move book back from midterm\PYGZus{}project}
+\end{sphinxVerbatim}
+
+
+\subsection{Moving/renaming a subdirectory or subdataset}
+\label{\detokenize{basics/101-136-filesystem:moving-renaming-a-subdirectory-or-subdataset}}
+\sphinxAtStartPar
+Moving or renaming subdirectories, especially if they are subdatasets,
+\sphinxstyleemphasis{can} be a minefield. But in principle, a safe way to proceed is using
+the Unix \sphinxcode{\sphinxupquote{ mv}} command to move or rename, and the \sphinxcode{\sphinxupquote{datalad save}}
+to clean up afterwards, just as in the examples above. Make sure to
+\sphinxstylestrong{not} use \sphinxcode{\sphinxupquote{git mv}}, especially for subdatasets.
+
+\sphinxAtStartPar
+Let’s, for example, rename the \sphinxcode{\sphinxupquote{books}} directory:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }mv\PYG{+w}{ }books/\PYG{+w}{ }readings
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{untracked: readings (directory)}
+\PYG{g+go}{  deleted: books/TLCL.pdf (symlink)}
+\PYG{g+go}{  deleted: books/bash\PYGZus{}guide.pdf (symlink)}
+\PYG{g+go}{  deleted: books/byte\PYGZhy{}of\PYGZhy{}python.pdf (symlink)}
+\PYG{g+go}{  deleted: books/progit.pdf (symlink)}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}renamed directory\PYGZdq{}}
+\PYG{g+go}{delete(ok): books/TLCL.pdf (symlink)}
+\PYG{g+go}{delete(ok): books/bash\PYGZus{}guide.pdf (symlink)}
+\PYG{g+go}{delete(ok): books/byte\PYGZhy{}of\PYGZhy{}python.pdf (symlink)}
+\PYG{g+go}{delete(ok): books/progit.pdf (symlink)}
+\PYG{g+go}{add(ok): readings/TLCL.pdf (file)}
+\PYG{g+go}{add(ok): readings/bash\PYGZus{}guide.pdf (file)}
+\PYG{g+go}{add(ok): readings/byte\PYGZhy{}of\PYGZhy{}python.pdf (file)}
+\PYG{g+go}{add(ok): readings/progit.pdf (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This is easy, and complication free. Moving (as in: changing the location, instead of
+the name) the directory would work in the
+same fashion, and a \sphinxcode{\sphinxupquote{datalad save}} would fix broken symlinks afterwards.
+Let’s quickly clean this up:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }reset\PYG{+w}{ }\PYGZhy{}\PYGZhy{}hard\PYG{+w}{ }HEAD\PYGZti{}1
+\PYG{g+go}{HEAD is now at de2d23c move book back from midterm\PYGZus{}project}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+But let’s now try to move the \sphinxcode{\sphinxupquote{longnow}} subdataset into the root of the
+superdataset:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }mv\PYG{+w}{ }recordings/longnow\PYG{+w}{ }.
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{untracked: longnow (directory)}
+\PYG{g+go}{  deleted: recordings/longnow (dataset)}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}moved subdataset\PYGZdq{}}
+\PYG{g+go}{delete(ok): recordings/longnow (dataset)}
+\PYG{g+go}{add(ok): longnow (dataset)}
+\PYG{g+go}{add(ok): .gitmodules (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{nothing to save, working tree clean}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This seems fine, and it has indeed worked.
+However, \sphinxstyleemphasis{reverting} a commit like this is tricky, at the moment. This could
+lead to trouble if you at a later point try to revert or rebase chunks of your
+history including this move. Therefore, if you can, try not to move subdatasets
+around. For now we’ll clean up in a somewhat “hacky” way: Reverting, and
+moving remaining subdataset contents back to their original place by hand
+to take care of the unwanted changes the commit reversal introduced.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }reset\PYG{+w}{ }\PYGZhy{}\PYGZhy{}hard\PYG{+w}{ }HEAD\PYGZti{}1
+\PYG{g+go}{warning: unable to rmdir \PYGZsq{}longnow\PYGZsq{}: Directory not empty}
+\PYG{g+go}{HEAD is now at de2d23c move book back from midterm\PYGZus{}project}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }mv\PYG{+w}{ }\PYGZhy{}f\PYG{+w}{ }longnow\PYG{+w}{ }recordings
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The take\sphinxhyphen{}home message therefore is that it is best not to move subdatasets,
+but very possible to move subdirectories if necessary. In both cases, do not
+attempt moving with the \sphinxcode{\sphinxupquote{git mv}}, but stick with \sphinxcode{\sphinxupquote{ mv}} and
+a subsequent \sphinxcode{\sphinxupquote{datalad save}}.
+
+
+\subsection{Moving/renaming a superdataset}
+\label{\detokenize{basics/101-136-filesystem:moving-renaming-a-superdataset}}
+\sphinxAtStartPar
+Once created, a DataLad superdataset may not be in an optimal
+place on your file system, or have the best name.
+
+\sphinxAtStartPar
+After a while, you might think that the dataset would fit much
+better into \sphinxcode{\sphinxupquote{/home/user/research\_projects/}} than in
+\sphinxcode{\sphinxupquote{/home/user/Documents/MyFiles/tmp/datalad\sphinxhyphen{}test/}}. Or maybe at
+some point, a long name such as \sphinxcode{\sphinxupquote{My\sphinxhyphen{}very\sphinxhyphen{}first\sphinxhyphen{}DataLad\sphinxhyphen{}project\sphinxhyphen{}wohoo\sphinxhyphen{}I\sphinxhyphen{}am\sphinxhyphen{}so\sphinxhyphen{}excited}}
+does not look pretty in your terminal prompt anymore, and going for
+\sphinxcode{\sphinxupquote{finance\sphinxhyphen{}2019}} seems more professional.
+
+\sphinxAtStartPar
+These will be situations in which you want to rename or move
+a superdataset. Will that break anything?
+
+\sphinxAtStartPar
+In all standard situations, no, it will be completely fine.
+You can use standard Unix commands such as \sphinxcode{\sphinxupquote{mv}} to do it,
+and also whichever graphical user interface or explorer you may
+use.
+
+\sphinxAtStartPar
+Beware of one thing though: If your dataset either is a sibling
+or has a sibling with the source being a path, moving or renaming
+the dataset will break the linkage between the datasets. This can
+be fixed easily though. We can try this in the \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-adjust-sibling-urls}} {\hyperref[\detokenize{basics/101-136-filesystem:fom-adjust-sibling-urls}]{\sphinxcrossref{\DUrole{std,std-ref}{on adjusting sibling URLs}}}} (\autopageref*{\detokenize{basics/101-136-filesystem:fom-adjust-sibling-urls}}).
+
+\index{move subdataset@\spxentry{move subdataset}!with Git@\spxentry{with Git}}\index{with Git@\spxentry{with Git}!move subdataset@\spxentry{move subdataset}}\ignorespaces \begin{findoutmore}[label={fom-adjust-sibling-urls}, before title={\thetcbcounter\ }, check odd page=true]{If a renamed/moved dataset is a sibling…}
+\label{\detokenize{basics/101-136-filesystem:fom-adjust-sibling-urls}}
+
+\sphinxAtStartPar
+As section {\hyperref[\detokenize{basics/101-122-config:config}]{\sphinxcrossref{\DUrole{std,std-ref}{DIY configurations}}}} (\autopageref*{\detokenize{basics/101-122-config:config}}) explains, each
+sibling is registered in \sphinxcode{\sphinxupquote{.git/config}} in a “submodule” section.
+Let’s look at how our sibling “roommate” is registered there:
+
+\fvset{hllines={, 18, 19,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }.git/config
+\PYG{g+go}{[core]}
+\PYG{g+go}{	repositoryformatversion = 0}
+\PYG{g+go}{	filemode = true}
+\PYG{g+go}{	bare = false}
+\PYG{g+go}{	logallrefupdates = true}
+\PYG{g+go}{	editor = nano}
+\PYG{g+go}{[annex]}
+\PYG{g+go}{	uuid = 46b169aa\PYGZhy{}bb91\PYGZhy{}42d6\PYGZhy{}be06\PYGZhy{}355d957fb4f7}
+\PYG{g+go}{	version = 10}
+\PYG{g+go}{[filter \PYGZdq{}annex\PYGZdq{}]}
+\PYG{g+go}{	smudge = git\PYGZhy{}annex smudge \PYGZhy{}\PYGZhy{} \PYGZpc{}f}
+\PYG{g+go}{	clean = git\PYGZhy{}annex smudge \PYGZhy{}\PYGZhy{}clean \PYGZhy{}\PYGZhy{} \PYGZpc{}f}
+\PYG{g+go}{	process = git\PYGZhy{}annex filter\PYGZhy{}process}
+\PYG{g+go}{[submodule \PYGZdq{}recordings/longnow\PYGZdq{}]}
+\PYG{g+go}{	active = true}
+\PYG{g+go}{	url = https://github.com/datalad\PYGZhy{}datasets/longnow\PYGZhy{}podcasts.git}
+\PYG{g+go}{[remote \PYGZdq{}roommate\PYGZdq{}]}
+\PYG{g+go}{	url = ../mock\PYGZus{}user/DataLad\PYGZhy{}101}
+\PYG{g+go}{	fetch = +refs/heads/*:refs/remotes/roommate/*}
+\PYG{g+go}{	annex\PYGZhy{}uuid = ✂UUID✂}
+\PYG{g+go}{	annex\PYGZhy{}ignore = false}
+\PYG{g+go}{[submodule \PYGZdq{}midterm\PYGZus{}project\PYGZdq{}]}
+\PYG{g+go}{	active = true}
+\PYG{g+go}{	url = ./midterm\PYGZus{}project}
+\PYG{g+go}{[submodule \PYGZdq{}longnow\PYGZdq{}]}
+\PYG{g+go}{	active = true}
+\PYG{g+go}{	url = https://github.com/datalad\PYGZhy{}datasets/longnow\PYGZhy{}podcasts.git}
+\end{sphinxVerbatim}
+\sphinxresetverbatimhllines
+
+\sphinxAtStartPar
+As you can see, its “url” is specified as a relative path. Say your
+room mate’s directory is a dataset you would want to move. Let’s see
+what happens if we move the dataset such that the path does not point
+to the dataset anymore:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZsh{} }add\PYG{+w}{ }an\PYG{+w}{ }intermediate\PYG{+w}{ }directory
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }../mock\PYGZus{}user
+\PYG{g+gp}{\PYGZdl{} }mkdir\PYG{+w}{ }onemoredir
+\PYG{g+gp}{\PYGZsh{} }move\PYG{+w}{ }your\PYG{+w}{ }room\PYG{+w}{ }mates\PYG{+w}{ }dataset\PYG{+w}{ }into\PYG{+w}{ }this\PYG{+w}{ }new\PYG{+w}{ }directory
+\PYG{g+gp}{\PYGZdl{} }mv\PYG{+w}{ }DataLad\PYGZhy{}101\PYG{+w}{ }onemoredir
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This means that relative to your \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}}, your room mates
+dataset is not at \sphinxcode{\sphinxupquote{../mock\_user/DataLad\sphinxhyphen{}101}} anymore, but in
+\sphinxcode{\sphinxupquote{../mock\_user/onemoredir/DataLad\sphinxhyphen{}101}}. The path specified in
+the configuration file is thus wrong now.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZsh{} }navigate\PYG{+w}{ }back\PYG{+w}{ }into\PYG{+w}{ }your\PYG{+w}{ }dataset
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }../DataLad\PYGZhy{}101
+\PYG{g+gp}{\PYGZsh{} }attempt\PYG{+w}{ }a\PYG{+w}{ }datalad\PYG{+w}{ }update
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }update
+\PYG{g+go}{update(error): . (dataset) [Fetch failed: CommandError(CommandError: \PYGZsq{}git \PYGZhy{}c diff.ignoreSubmodules=none \PYGZhy{}c core.quotepath=false fetch \PYGZhy{}\PYGZhy{}verbose \PYGZhy{}\PYGZhy{}progress \PYGZhy{}\PYGZhy{}no\PYGZhy{}recurse\PYGZhy{}submodules \PYGZhy{}\PYGZhy{}prune roommate\PYGZsq{} failed with exitcode 128 under /home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101 [err: \PYGZsq{}fatal: \PYGZsq{}../mock\PYGZus{}user/DataLad\PYGZhy{}101\PYGZsq{} does not appear to be a git repository}
+\PYG{g+go}{fatal: Could not read from remote repository.}
+
+\PYG{g+go}{Please make sure you have the correct access rights}
+\PYG{g+go}{and the repository exists.\PYGZsq{}])] [CommandError: \PYGZsq{}git \PYGZhy{}c diff.ignoreSubmodules=none \PYGZhy{}c core.quotepath=false fetch \PYGZhy{}\PYGZhy{}verbose \PYGZhy{}\PYGZhy{}progress \PYGZhy{}\PYGZhy{}no\PYGZhy{}recurse\PYGZhy{}submodules \PYGZhy{}\PYGZhy{}prune roommate\PYGZsq{} failed with exitcode 128 under /home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101 [err: \PYGZsq{}fatal: \PYGZsq{}../mock\PYGZus{}user/DataLad\PYGZhy{}101\PYGZsq{} does not appear to be a git repository}
+\PYG{g+go}{fatal: Could not read from remote repository.}
+
+\PYG{g+go}{Please make sure you have the correct access rights}
+\PYG{g+go}{and the repository exists.\PYGZsq{}]]}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Here we go:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYGZsq{}fatal: \PYGZsq{}../mock\PYGZus{}user/DataLad\PYGZhy{}101\PYGZsq{} does not appear to be a git repository
+ fatal: Could not read from remote repository.
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Git seems pretty insistent (given the amount of error messages) that
+it cannot seem to find a Git repository at the location the \sphinxcode{\sphinxupquote{.git/config}}
+file specified. Luckily, we can provide this information. Edit the file with
+an editor of your choice and fix the path from
+\sphinxcode{\sphinxupquote{url = ../mock\_user/DataLad\sphinxhyphen{}101}} to
+\sphinxcode{\sphinxupquote{url = ../mock\_user/onemoredir/DataLad\sphinxhyphen{}101}}.
+
+\sphinxAtStartPar
+Below, we are using the stream editor \dlhbhref{W1P}{sed}
+for this operation.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }sed\PYG{+w}{ }\PYGZhy{}i\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}s/..\PYGZbs{}/mock\PYGZus{}user\PYGZbs{}/DataLad\PYGZhy{}101/..\PYGZbs{}/mock\PYGZus{}user\PYGZbs{}/onemoredir\PYGZbs{}/DataLad\PYGZhy{}101/\PYGZsq{}}\PYG{+w}{ }.git/config
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This is how the file looks now:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }.git/config
+\PYG{g+go}{[core]}
+\PYG{g+go}{	repositoryformatversion = 0}
+\PYG{g+go}{	filemode = true}
+\PYG{g+go}{	bare = false}
+\PYG{g+go}{	logallrefupdates = true}
+\PYG{g+go}{	editor = nano}
+\PYG{g+go}{[annex]}
+\PYG{g+go}{	uuid = 46b169aa\PYGZhy{}bb91\PYGZhy{}42d6\PYGZhy{}be06\PYGZhy{}355d957fb4f7}
+\PYG{g+go}{	version = 10}
+\PYG{g+go}{[filter \PYGZdq{}annex\PYGZdq{}]}
+\PYG{g+go}{	smudge = git\PYGZhy{}annex smudge \PYGZhy{}\PYGZhy{} \PYGZpc{}f}
+\PYG{g+go}{	clean = git\PYGZhy{}annex smudge \PYGZhy{}\PYGZhy{}clean \PYGZhy{}\PYGZhy{} \PYGZpc{}f}
+\PYG{g+go}{	process = git\PYGZhy{}annex filter\PYGZhy{}process}
+\PYG{g+go}{[submodule \PYGZdq{}recordings/longnow\PYGZdq{}]}
+\PYG{g+go}{	active = true}
+\PYG{g+go}{	url = https://github.com/datalad\PYGZhy{}datasets/longnow\PYGZhy{}podcasts.git}
+\PYG{g+go}{[remote \PYGZdq{}roommate\PYGZdq{}]}
+\PYG{g+go}{	url = ../mock\PYGZus{}user/onemoredir/DataLad\PYGZhy{}101}
+\PYG{g+go}{	fetch = +refs/heads/*:refs/remotes/roommate/*}
+\PYG{g+go}{	annex\PYGZhy{}uuid = ✂UUID✂}
+\PYG{g+go}{	annex\PYGZhy{}ignore = false}
+\PYG{g+go}{[submodule \PYGZdq{}midterm\PYGZus{}project\PYGZdq{}]}
+\PYG{g+go}{	active = true}
+\PYG{g+go}{	url = ./midterm\PYGZus{}project}
+\PYG{g+go}{[submodule \PYGZdq{}longnow\PYGZdq{}]}
+\PYG{g+go}{	active = true}
+\PYG{g+go}{	url = https://github.com/datalad\PYGZhy{}datasets/longnow\PYGZhy{}podcasts.git}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Let’s try to update now:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }update
+\PYG{g+go}{update(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Nice! We fixed it!
+Therefore, if a dataset you move or rename is known to other
+datasets from its path, or identifies siblings with paths,
+make sure to adjust them in the \sphinxcode{\sphinxupquote{.git/config}} file.
+
+\sphinxAtStartPar
+To clean up, we’ll redo the move of the dataset and the
+modification in \sphinxcode{\sphinxupquote{.git/config}}.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }../mock\PYGZus{}user\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }mv\PYG{+w}{ }onemoredir/DataLad\PYGZhy{}101\PYG{+w}{ }.
+\PYG{g+gp}{\PYGZdl{} }rm\PYG{+w}{ }\PYGZhy{}r\PYG{+w}{ }onemoredir
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }../DataLad\PYGZhy{}101\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }sed\PYG{+w}{ }\PYGZhy{}i\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}s/..\PYGZbs{}/mock\PYGZus{}user\PYGZbs{}/onemoredir\PYGZbs{}/DataLad\PYGZhy{}101/..\PYGZbs{}/mock\PYGZus{}user\PYGZbs{}/DataLad\PYGZhy{}101/\PYGZsq{}}\PYG{+w}{ }.git/config
+\end{sphinxVerbatim}
+
+
+\end{findoutmore}
+
+
+\subsection{Getting contents out of git\sphinxhyphen{}annex}
+\label{\detokenize{basics/101-136-filesystem:getting-contents-out-of-git-annex}}
+\sphinxAtStartPar
+Files in your dataset can either be handled by {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}} or {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git\sphinxhyphen{}annex}}}}.
+Self\sphinxhyphen{}made or predefined configurations to \sphinxcode{\sphinxupquote{.gitattributes}}, defaults, or the
+\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}to\sphinxhyphen{}git}} option to \sphinxcode{\sphinxupquote{datalad save}} allow you to control which tool
+does what on up to single\sphinxhyphen{}file basis. Accidentally though, you may give a file of yours
+to git\sphinxhyphen{}annex when it was intended to be stored in Git, or you want to get a previously
+annexed file into Git.
+
+\sphinxAtStartPar
+Consider you intend to share the cropped \sphinxcode{\sphinxupquote{.png}} images you created from the
+\sphinxcode{\sphinxupquote{longnow}} logos. Would you publish your \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} dataset so {\hyperref[\detokenize{glossary:term-GitHub}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitHub}}}}
+or {\hyperref[\detokenize{glossary:term-GitLab}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitLab}}}}, these files would not be available to others, because annexed
+dataset contents cannot be published to these services.
+Even though you could find a third party service of your choice
+and publish your dataset \sphinxstyleemphasis{and} the annexed data (see section {\hyperref[\detokenize{basics/101-138-sharethirdparty:sharethirdparty}]{\sphinxcrossref{\DUrole{std,std-ref}{Beyond shared infrastructure}}}} (\autopageref*{\detokenize{basics/101-138-sharethirdparty:sharethirdparty}})),
+you are feeling lazy today. And since it
+is only two files, and they are quite small, you decide to store them in Git \textendash{}
+this way, the files would be available without configuring an external data
+store.
+
+\sphinxAtStartPar
+To get a file out of the git\sphinxhyphen{}annex hands you need to \sphinxstyleemphasis{unannex} it. This is
+done with the git\sphinxhyphen{}annex command \sphinxcode{\sphinxupquote{git annex unannex}}. Let’s see how it
+works:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }annex\PYG{+w}{ }unannex\PYG{+w}{ }recordings/*logo\PYGZus{}small.jpg
+\PYG{g+go}{unannex recordings/interval\PYGZus{}logo\PYGZus{}small.jpg ok}
+\PYG{g+go}{unannex recordings/salt\PYGZus{}logo\PYGZus{}small.jpg ok}
+\PYG{g+gp+gpVirtualEnv}{(recording state in git...)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Your dataset’s history records the unannexing of the files.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}p\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{1}
+\PYG{g+go}{commit de2d23c8✂SHA1}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    move book back from midterm\PYGZus{}project}
+
+\PYG{g+go}{diff \PYGZhy{}\PYGZhy{}git a/books/TLCL.pdf b/books/TLCL.pdf}
+\PYG{g+go}{new file mode 120000}
+\PYG{g+go}{index 0000000..4c84b61}
+\PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{} /dev/null}
+\PYG{g+go}{+++ b/books/TLCL.pdf}
+\PYG{g+go}{@@ \PYGZhy{}0,0 +1 @@}
+\PYG{g+go}{+../.git/annex/objects/jf/3M/✂/MD5E\PYGZhy{}s2120211\PYGZhy{}\PYGZhy{}06d1efcb✂MD5.pdf}
+\PYG{g+go}{\PYGZbs{} No newline at end of file}
+\PYG{g+go}{diff \PYGZhy{}\PYGZhy{}git a/midterm\PYGZus{}project b/midterm\PYGZus{}project}
+\PYG{g+go}{index 4698466..b2b6855 160000}
+\PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{} a/midterm\PYGZus{}project}
+\PYG{g+go}{+++ b/midterm\PYGZus{}project}
+\PYG{g+go}{@@ \PYGZhy{}1 +1 @@}
+\PYG{g+go}{\PYGZhy{}Subproject commit 46984663✂SHA1}
+\PYG{g+go}{+Subproject commit b2b68556✂SHA1}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Once files have been unannexed, they are “untracked” again, and you can save them
+into Git, either by adding a rule to \sphinxcode{\sphinxupquote{.gitattributes}}, or with
+\sphinxcode{\sphinxupquote{datalad save \sphinxhyphen{}\sphinxhyphen{}to\sphinxhyphen{}git}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}\PYGZhy{}to\PYGZhy{}git\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}save cropped logos to Git\PYGZdq{}}\PYG{+w}{ }recordings/*jpg
+\PYG{g+go}{add(ok): recordings/interval\PYGZus{}logo\PYGZus{}small.jpg (file)}
+\PYG{g+go}{add(ok): recordings/salt\PYGZus{}logo\PYGZus{}small.jpg (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Note that git\sphinxhyphen{}annex keeps the previously annexed file’s content in the annex for safety, to prevent accidental data loss.
+If it is only few and small files that were unannexed, their size in the annex will not matter much.
+If it is a lot of files or larger files that were accidentally annexed, you may want to drop the left\sphinxhyphen{}behind content using \sphinxcode{\sphinxupquote{git annex unused}} and \sphinxcode{\sphinxupquote{git annex dropunused}}.
+
+
+\subsection{Getting all content out of the annex (removing the annex repo)}
+\label{\detokenize{basics/101-136-filesystem:getting-all-content-out-of-the-annex-removing-the-annex-repo}}\label{\detokenize{basics/101-136-filesystem:uninit}}
+\sphinxAtStartPar
+In case you want to get all annexed contents out of a Dataset at once, you could turn to \dlhbhref{B1L}{git annex uninit}.
+It is a command that can be used to stop using git annex entirely in a given repository/dataset.
+Running this command will unannex every file in the repository, remove all of git\sphinxhyphen{}annex’s other data, and remove the {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}} branch, leaving you with a normal Git repository plus the previously annexed files.
+
+\sphinxAtStartPar
+Note a \sphinxcode{\sphinxupquote{datalad push}} will reinstate the git\sphinxhyphen{}annex branch IF your dataset has siblings that still contain the annex branch.
+
+
+\subsection{Deleting (annexed) files/directories}
+\label{\detokenize{basics/101-136-filesystem:deleting-annexed-files-directories}}
+\sphinxAtStartPar
+Removing annexed file content from a dataset is possible in two different ways:
+Either by removing the file from the current state of the repository
+(which Git calls the \sphinxstyleemphasis{worktree}) but keeping the content in the history
+of the dataset, or by removing content entirely from a dataset and its
+history.
+
+
+\subsubsection{Removing a file, but keeping content in history}
+\label{\detokenize{basics/101-136-filesystem:removing-a-file-but-keeping-content-in-history}}
+\sphinxAtStartPar
+An \sphinxcode{\sphinxupquote{rm \textless{}file\textgreater{}}} or \sphinxcode{\sphinxupquote{rm \sphinxhyphen{}rf \textless{}directory\textgreater{}}} with a subsequent \sphinxcode{\sphinxupquote{datalad save}}
+will remove a file or directory, and save its removal. The file content however will
+still be in the history of the dataset, and the file can be brought back to existence
+by going back into the history of the dataset or reverting the removal commit:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYGZsh{} download a file
+\PYGZdl{} datalad download\PYGZhy{}url \PYGZhy{}m \PYGZdq{}Added flower mosaic from wikimedia\PYGZdq{} \PYGZbs{}
+  https://upload.wikimedia.org/wikipedia/commons/a/a5/Flower\PYGZus{}poster\PYGZus{}2.jpg \PYGZbs{}
+  \PYGZhy{}\PYGZhy{}path flowers.jpg
+\PYGZdl{} ls \PYGZhy{}l flowers.jpg
+download\PYGZus{}url(ok): /home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101/flowers.jpg (file)
+add(ok): flowers.jpg (file)
+save(ok): . (dataset)
+lrwxrwxrwx 1 elena elena 128 2019\PYGZhy{}06\PYGZhy{}18 16:13  2013 flowers.jpg \PYGZhy{}\PYGZgt{} .git/annex/objects/7q/9Z/✂/MD5E\PYGZhy{}s4487679\PYGZhy{}\PYGZhy{}3898ef0e✂MD5.jpg
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZsh{} }removal\PYG{+w}{ }is\PYG{+w}{ }easy:
+\PYG{g+gp}{\PYGZdl{} }rm\PYG{+w}{ }flowers.jpg
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This will lead to a dirty dataset status:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{  deleted: flowers.jpg (symlink)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+If a removal happened by accident, a \sphinxcode{\sphinxupquote{git checkout \sphinxhyphen{}\sphinxhyphen{} flowers.jpg}} would undo
+the removal at this stage. To stick with the removal and clean up the dataset
+state, \sphinxcode{\sphinxupquote{datalad save}} will suffice:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}removed file again\PYGZdq{}}
+\PYG{g+go}{delete(ok): flowers.jpg (symlink)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This commits the deletion of the file in the dataset’s history.
+If this commit is reverted, the file comes back to existence:
+
+\fvset{hllines={, 6,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }reset\PYG{+w}{ }\PYGZhy{}\PYGZhy{}hard\PYG{+w}{ }HEAD\PYGZti{}1
+\PYG{g+gp}{\PYGZdl{} }ls
+\PYG{g+go}{HEAD is now at 682d11f Added flower mosaic from wikimedia}
+\PYG{g+go}{books}
+\PYG{g+go}{code}
+\PYG{g+go}{flowers.jpg}
+\PYG{g+go}{midterm\PYGZus{}project}
+\PYG{g+go}{notes.txt}
+\PYG{g+go}{recordings}
+\end{sphinxVerbatim}
+\sphinxresetverbatimhllines
+
+\sphinxAtStartPar
+In other words, with an \sphinxcode{\sphinxupquote{ rm}} and subsequent \sphinxcode{\sphinxupquote{datalad save}},
+the symlink is removed, but the content is retained in the history.
+
+\index{drop@\spxentry{drop}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!drop@\spxentry{drop}}\ignorespaces 
+
+\subsubsection{Removing annexed content entirely}
+\label{\detokenize{basics/101-136-filesystem:removing-annexed-content-entirely}}\label{\detokenize{basics/101-136-filesystem:remove}}\label{\detokenize{basics/101-136-filesystem:index-8}}
+\sphinxAtStartPar
+The command to remove file content entirely and irreversibly from a repository is
+the \sphinxcode{\sphinxupquote{datalad drop}} command.
+This command will delete the content stored in the annex of the dataset,
+and can be very helpful to make a dataset more lean if the file content is
+either irrelevant or can be retrieved from other sources easily. Think about a
+situation in which a very large result file is computed by default
+in some analysis, but is not relevant for any project, and can thus be removed.
+Or if only the results of an analysis need to be kept, but the file contents from
+its input datasets can be dropped at these input datasets are backed\sphinxhyphen{}up else
+where. Because the command works on annexed contents, it will drop file \sphinxstyleemphasis{content}
+from a dataset, but it will retain the symlink for this file (as this symlink
+is stored in Git).
+
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{datalad drop}} can take any number of files.
+If an entire dataset is specified, all file content in sub\sphinxhyphen{}\sphinxstyleemphasis{directories} is
+dropped automatically, but for content in sub\sphinxhyphen{}\sphinxstyleemphasis{datasets} to be dropped, the
+\sphinxcode{\sphinxupquote{\sphinxhyphen{}r/\sphinxhyphen{}\sphinxhyphen{}recursive}} flag has to be included.
+By default, DataLad will not drop any content that does not have at least
+one verified remote copy that the content could be retrieved from again.
+It is possible to drop the downloaded image, because thanks to
+\sphinxcode{\sphinxupquote{datalad download\sphinxhyphen{}url}} its original location in the web is known:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }drop\PYG{+w}{ }flowers.jpg
+\PYG{g+go}{drop(ok): flowers.jpg (file)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Currently, the file content is gone, but the symlink still exist. Opening the
+remaining symlink will fail, but the content can be obtained easily again with
+\sphinxcode{\sphinxupquote{datalad get}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }get\PYG{+w}{ }flowers.jpg
+\PYG{g+go}{get(ok): flowers.jpg (file) [from web...]}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+If a file has no verified remote copies, DataLad will only drop its
+content if the user enforces it using the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}reckless {[}MODE{]}}} option, where \sphinxcode{\sphinxupquote{{[}MODE{]}}} is either \sphinxcode{\sphinxupquote{modification}} (drop despite unsaved modifications) \sphinxcode{\sphinxupquote{availability}} (drop even though no other copy is known) \sphinxcode{\sphinxupquote{undead}} (only for datasets; would drop a dataset without announcing its death to linked dataset clones) or \sphinxcode{\sphinxupquote{kill}} (no safety checks at all are run).
+We will demonstrate this by generating an empty file:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }dd\PYG{+w}{ }\PYG{k}{if}\PYG{o}{=}/dev/zero\PYG{+w}{ }\PYG{p}{|}\PYG{+w}{ }head\PYG{+w}{ }\PYGZhy{}c\PYG{+w}{ }\PYG{l+m}{18520}\PYG{+w}{ }\PYGZgt{}\PYG{+w}{ }a.pdf
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}add some file\PYGZdq{}}\PYG{+w}{ }a.pdf
+\PYG{g+go}{add(ok): a.pdf (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+DataLad will safeguard dropping content that it cannot retrieve again:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }drop\PYG{+w}{ }a.pdf
+\PYG{g+go}{drop(error): a.pdf (file) [unsafe; Could only verify the existence of 0 out of 1 necessary copy; (Use \PYGZhy{}\PYGZhy{}reckless availability to override this check, or adjust numcopies.)]}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+But with \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}reckless availability}} it will work:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }drop\PYG{+w}{ }\PYGZhy{}\PYGZhy{}reckless\PYG{+w}{ }availability\PYG{+w}{ }a.pdf
+\PYG{g+go}{drop(ok): a.pdf (file)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Note though that this file content is irreversibly gone now, and
+even going back in time in the history of the dataset will not bring it
+back into existence.
+
+\sphinxAtStartPar
+Finally, let’s clean up:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }reset\PYG{+w}{ }\PYGZhy{}\PYGZhy{}hard\PYG{+w}{ }HEAD\PYGZti{}2
+\PYG{g+go}{HEAD is now at c278f6a save cropped logos to Git}
+\end{sphinxVerbatim}
+
+
+\subsection{Deleting content stored in Git}
+\label{\detokenize{basics/101-136-filesystem:deleting-content-stored-in-git}}
+\sphinxAtStartPar
+It is much harder to delete dataset content that is stored in Git compared to
+content stored in git\sphinxhyphen{}annex.
+Operations such as \sphinxcode{\sphinxupquote{rm}} or \sphinxcode{\sphinxupquote{git rm}} remove the file from the \sphinxstyleemphasis{worktree},
+but not from its history, and they can be brought back to life just as annexed
+contents that were solely \sphinxcode{\sphinxupquote{rm}}\textquotesingle{}ed. There is also no straightforward
+Git equivalent of \sphinxcode{\sphinxupquote{drop}}.
+To accomplish a complete removal of a file from a dataset, we recommend the external tool
+\dlhbhref{G2S}{git\sphinxhyphen{}filter\sphinxhyphen{}repo}.
+It is a powerful and potentially very dangerous tool to rewrite Git history.
+
+\sphinxAtStartPar
+Usually, removing files stored in Git completely
+is not a common or recommended operation, as it involves quite aggressive
+rewriting of the dataset history. Sometimes, however, sensitive files, for example
+private {\hyperref[\detokenize{glossary:term-SSH-key}]{\sphinxtermref{\DUrole{xref,std,std-term}{SSH key}}}}s or passwords, or too many or too large files are
+accidentally saved into Git, and \sphinxstyleemphasis{need} to get out of the dataset history.
+The command \sphinxcode{\sphinxupquote{git\sphinxhyphen{}filter\sphinxhyphen{}repo \textless{}path\sphinxhyphen{}specification\textgreater{} \sphinxhyphen{}\sphinxhyphen{}force}} will “filter\sphinxhyphen{}out”,
+i.e., remove all files \sphinxstylestrong{but the ones specified} in \sphinxcode{\sphinxupquote{\textless{}path\sphinxhyphen{}specification\textgreater{}}}
+from the dataset’s history. An advanced chapter in the online\sphinxhyphen{}handbook
+shows an example invocation.
+
+\index{drop@\spxentry{drop}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!drop@\spxentry{drop}}\ignorespaces 
+
+\subsection{Uninstalling or deleting subdatasets}
+\label{\detokenize{basics/101-136-filesystem:uninstalling-or-deleting-subdatasets}}\label{\detokenize{basics/101-136-filesystem:index-9}}
+\sphinxAtStartPar
+Depending on the exact aim, different commands are of relevance for
+deleting a DataLad subdataset.
+One way to uninstall a dataset is the \sphinxcode{\sphinxupquote{datalad drop}} command.
+To work on datasets, \sphinxcode{\sphinxupquote{drop}} needs to be parametrized with \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}what all}}.
+If needed, add \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}recursive}} in case the dataset contains subdatasets, and a
+fitting \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}reckless}} mode, such as \sphinxcode{\sphinxupquote{datalad drop \sphinxhyphen{}\sphinxhyphen{}what all \sphinxhyphen{}\sphinxhyphen{}reckless kill \sphinxhyphen{}\sphinxhyphen{}recursive}}.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZsh{} }clone\PYG{+w}{ }a\PYG{+w}{ }subdataset\PYG{+w}{ }\PYGZhy{}\PYG{+w}{ }the\PYG{+w}{ }content\PYG{+w}{ }is\PYG{+w}{ }irrelevant,\PYG{+w}{ }so\PYG{+w}{ }why\PYG{+w}{ }not\PYG{+w}{ }a\PYG{+w}{ }cloud\PYG{+w}{ }:\PYG{o}{)}
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }clone\PYG{+w}{ }\PYGZhy{}d\PYG{+w}{ }.\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{ }https://github.com/datalad\PYGZhy{}datasets/disneyanimation\PYGZhy{}cloud.git\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{ }cloud
+\PYG{g+go}{[INFO] Remote origin not usable by git\PYGZhy{}annex; setting annex\PYGZhy{}ignore}
+\PYG{g+go}{install(ok): cloud (dataset)}
+\PYG{g+go}{add(ok): cloud (dataset)}
+\PYG{g+go}{add(ok): .gitmodules (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\PYG{g+go}{add(ok): .gitmodules (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+To uninstall the dataset, you can use
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }drop\PYG{+w}{ }\PYGZhy{}\PYGZhy{}what\PYG{+w}{ }all\PYG{+w}{ }\PYGZhy{}\PYGZhy{}reckless\PYG{+w}{ }\PYG{n+nb}{kill}\PYG{+w}{ }\PYGZhy{}\PYGZhy{}recursive\PYG{+w}{ }cloud
+\PYG{g+go}{uninstall(ok): cloud (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Note that the dataset is still known in the dataset, and not completely removed.
+A \sphinxcode{\sphinxupquote{datalad get {[}\sphinxhyphen{}n/\sphinxhyphen{}\sphinxhyphen{}no\sphinxhyphen{}data{]} cloud}} would install the dataset again.
+
+\index{remove@\spxentry{remove}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!remove@\spxentry{remove}}\ignorespaces 
+\sphinxAtStartPar
+In case one wants to fully delete a subdataset from a dataset, the
+\sphinxcode{\sphinxupquote{datalad remove}} command is relevant%
+\begin{footnote}\sphinxAtStartFootnote
+This is indeed the only case in which \sphinxcode{\sphinxupquote{datalad remove}} is
+relevant. For all other cases of content deletion a normal \sphinxcode{\sphinxupquote{rm}}
+with a subsequent \sphinxcode{\sphinxupquote{datalad save}} works best.
+%
+\end{footnote}.
+It needs a pointer to the root of the superdataset with the \sphinxcode{\sphinxupquote{\sphinxhyphen{}d/\sphinxhyphen{}\sphinxhyphen{}dataset}}
+flag, a path to the subdataset to be removed, and optionally a commit message
+(\sphinxcode{\sphinxupquote{\sphinxhyphen{}m/\sphinxhyphen{}\sphinxhyphen{}message}}) or recursive specification (\sphinxcode{\sphinxupquote{\sphinxhyphen{}r/\sphinxhyphen{}\sphinxhyphen{}recursive}}).
+To remove a subdataset, we will install the uninstalled subdataset again, and
+subsequently remove it with the \sphinxcode{\sphinxupquote{datalad remove}} command:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }get\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }cloud
+\PYG{g+go}{[INFO] Remote origin not usable by git\PYGZhy{}annex; setting annex\PYGZhy{}ignore}
+\PYG{g+go}{install(ok): /home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101/cloud (dataset) [Installed subdataset in order to get /home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101/cloud]}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZsh{} }delete\PYG{+w}{ }the\PYG{+w}{ }subdataset
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }remove\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}remove obsolete subds\PYGZdq{}}\PYG{+w}{ }\PYGZhy{}d\PYG{+w}{ }.\PYG{+w}{ }cloud
+\PYG{g+go}{uninstall(ok): cloud (dataset)}
+\PYG{g+go}{remove(ok): cloud (dataset)}
+\PYG{g+go}{add(ok): .gitmodules (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Note that for both commands a pointer to the \sphinxstyleemphasis{current directory} will not work.
+\sphinxcode{\sphinxupquote{datalad remove .}} or \sphinxcode{\sphinxupquote{datalad drop .}} will fail, even if
+the command is executed in a subdataset instead of the top\sphinxhyphen{}level
+superdataset \textendash{} you need to execute the command from a higher\sphinxhyphen{}level directory.
+
+
+\subsection{Deleting a superdataset}
+\label{\detokenize{basics/101-136-filesystem:deleting-a-superdataset}}
+\sphinxAtStartPar
+If for whatever reason you at one point tried to remove a DataLad dataset,
+whether with a GUI or the command line call \sphinxcode{\sphinxupquote{rm \sphinxhyphen{}rf \textless{}directory\textgreater{}}}, you likely
+have seen permission denied errors such as
+
+\sphinxAtStartPar
+This error indicates that there is write\sphinxhyphen{}protected content within \sphinxcode{\sphinxupquote{.git}} that
+cannot not be deleted. What is this write\sphinxhyphen{}protected content? It’s the file content
+stored in the object tree of git\sphinxhyphen{}annex. If you want, you can re\sphinxhyphen{}read the section on
+{\hyperref[\detokenize{basics/101-115-symlinks:symlink}]{\sphinxcrossref{\DUrole{std,std-ref}{Data integrity}}}} (\autopageref*{\detokenize{basics/101-115-symlinks:symlink}}) to find out how git\sphinxhyphen{}annex revokes write permission for the user
+to protect the file content given to it. To remove a dataset with annexed content
+one has to regain write permissions to everything in the dataset. This is done
+with the Unix \sphinxcode{\sphinxupquote{chmod}} command:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }chmod\PYG{+w}{ }\PYGZhy{}R\PYG{+w}{ }u+w\PYG{+w}{ }\PYGZlt{}dataset\PYGZgt{}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This \sphinxstyleemphasis{recursively} (\sphinxcode{\sphinxupquote{\sphinxhyphen{}R}}, i.e., throughout all files and (sub)directories) gives users
+(\sphinxcode{\sphinxupquote{u}}) write permissions (\sphinxcode{\sphinxupquote{+w}}) for the dataset.
+
+\sphinxAtStartPar
+Afterwards, \sphinxcode{\sphinxupquote{rm \sphinxhyphen{}rf \textless{}dataset\textgreater{}}} will succeed.
+
+\sphinxAtStartPar
+However, instead of \sphinxcode{\sphinxupquote{rm \sphinxhyphen{}rf}}, a faster way to remove a dataset is using either \sphinxcode{\sphinxupquote{datalad drop}} or  \sphinxcode{\sphinxupquote{datalad remove}}: Run \sphinxcode{\sphinxupquote{datalad drop \sphinxhyphen{}d \textless{}dataset\textgreater{}}} or \sphinxcode{\sphinxupquote{datalad remove \sphinxhyphen{}d \textless{}dataset\textgreater{}}} outside of the
+superdataset to remove a top\sphinxhyphen{}level dataset with all its contents. Likely,
+both  \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}recursive}} and \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}reckless {[}availability|undead|kill{]}}} flags are necessary
+to traverse into subdatasets and to remove content that does not have verified remotes.
+
+\sphinxAtStartPar
+Be aware though deleting a dataset in which ever way will
+irretrievably delete the dataset, it’s contents, and it’s history.
+
+
+\subsection{Summary}
+\label{\detokenize{basics/101-136-filesystem:summary}}
+\sphinxAtStartPar
+To sum up, file system management operations are safe and easy.
+Even if you are currently confused about one or two operations,
+worry not \textendash{} the take\sphinxhyphen{}home\sphinxhyphen{}message is simple: Use \sphinxcode{\sphinxupquote{datalad save}}
+whenever you move or rename files. Be mindful that a \sphinxcode{\sphinxupquote{datalad status}}
+can appear unintuitive or that symlinks can break if annexed files are moved,
+but all of these problems are solved after a \sphinxcode{\sphinxupquote{datalad save}} command.
+Apart from this command, having a clean dataset status prior to doing anything
+is your friend as well. It will make sure that you have a neat and organized
+commit history, and no accidental commits of changes unrelated to your file
+system management operations. The only operation you should beware of is
+moving subdatasets around \textendash{} this can be a minefield.
+With all of these experiences and tips, you feel confident that you know
+how to handle your datasets files and directories well and worry\sphinxhyphen{}free.
+
+\sphinxstepscope
+
+
+\section{Back and forth in time}
+\label{\detokenize{basics/101-137-history:back-and-forth-in-time}}\label{\detokenize{basics/101-137-history:history}}\label{\detokenize{basics/101-137-history::doc}}
+\sphinxAtStartPar
+Almost everyone inadvertently deleted or overwrote files at some point with
+a hasty operation that caused data fatalities or at least troubles to
+reobtain or restore data.
+With DataLad, no mistakes are forever: One powerful feature of datasets
+is the ability to revert data to a previous state and thus view earlier content or
+correct mistakes. As long as the content was version controlled (i.e., tracked),
+it is possible to look at previous states of the data, or revert changes \textendash{}
+even years after they happened \textendash{} thanks to the underlying version control
+system {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}}.
+
+\begin{figure}[tbp]
+\centering
+
+\noindent\sphinxincludegraphics[width=0.700\linewidth]{{versioncontrol}.pdf}
+\end{figure}
+
+\sphinxAtStartPar
+To get a glimpse into how to work with the history of a dataset, today’s lecture
+has an external Git\sphinxhyphen{}expert as a guest lecturer.
+“I do not have enough time to go through all the details in only
+one lecture. But I’ll give you the basics, and an idea of what is possible.
+Always remember: Just google what you need. You will find thousands of helpful tutorials
+or questions on \dlhbhref{S7}{Stack Overflow} right away.
+Even experts will \sphinxstyleemphasis{constantly} seek help to find out which Git command to
+use, and how to use it.”, he reassures with a wink.
+
+\sphinxAtStartPar
+The basis of working with the history is to \sphinxstyleemphasis{look at it} with tools such
+as {\hyperref[\detokenize{glossary:term-tig}]{\sphinxtermref{\DUrole{xref,std,std-term}{tig}}}}, {\hyperref[\detokenize{glossary:term-Gitk}]{\sphinxtermref{\DUrole{xref,std,std-term}{gitk}}}}, or simply the \sphinxcode{\sphinxupquote{git log}} command.
+The most important information in an entry (commit) in the history is
+the {\hyperref[\detokenize{glossary:term-shasum}]{\sphinxtermref{\DUrole{xref,std,std-term}{shasum}}}} (or hash) associated with it.
+This hash is how dataset modifications in the history are identified,
+and with this hash you can communicate with DataLad or {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}} about these
+modifications or version states%
+\begin{footnote}\sphinxAtStartFootnote
+For example, the \sphinxcode{\sphinxupquote{datalad rerun}} command introduced in section
+{\hyperref[\detokenize{basics/101-109-rerun:run2}]{\sphinxcrossref{\DUrole{std,std-ref}{DataLad, rerun!}}}} (\autopageref*{\detokenize{basics/101-109-rerun:run2}}) takes such a hash as an argument, and re\sphinxhyphen{}executes
+the \sphinxcode{\sphinxupquote{datalad run}} or \sphinxcode{\sphinxupquote{datalad rerun}} {\hyperref[\detokenize{glossary:term-run-record}]{\sphinxtermref{\DUrole{xref,std,std-term}{run record}}}} associated with
+this hash. Likewise, the \sphinxcode{\sphinxupquote{git diff}} can work with commit hashes.
+%
+\end{footnote}.
+Here is an excerpt from the \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} history to show a
+few abbreviated hashes of the 15 most recent commits%
+\begin{footnote}\sphinxAtStartFootnote
+There are other alternatives to reference commits in the history of a dataset,
+for example, “counting” ancestors of the most recent commit using the notation
+\sphinxcode{\sphinxupquote{HEAD\textasciitilde{}2}}, \sphinxcode{\sphinxupquote{HEAD\textasciicircum{}2}} or \sphinxcode{\sphinxupquote{HEAD@\{2\}}}. However, using hashes to reference
+commits is a very fail\sphinxhyphen{}save method and saves you from accidentally miscounting.
+%
+\end{footnote}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}15\PYG{+w}{ }\PYGZhy{}\PYGZhy{}oneline
+\PYG{g+go}{996f459 remove obsolete subds}
+\PYG{g+go}{15acb2a [DATALAD] Added subdataset}
+\PYG{g+go}{c278f6a save cropped logos to Git}
+\PYG{g+go}{de2d23c move book back from midterm\PYGZus{}project}
+\PYG{g+go}{a648756 move book into midterm\PYGZus{}project}
+\PYG{g+go}{39e55c8 add container and execute analysis within container}
+\PYG{g+go}{c5c9017 finished my midterm project}
+\PYG{g+go}{0edd3ea [DATALAD] Recorded changes}
+\PYG{g+go}{08684a4 add note on DataLad\PYGZsq{}s procedures}
+\PYG{g+go}{c2400da add note on configurations and git config}
+\PYG{g+go}{e202e94 Add note on adding siblings}
+\PYG{g+go}{6ae8e71 Merge remote\PYGZhy{}tracking branch \PYGZsq{}roommate/main\PYGZsq{}}
+\PYG{g+go}{4bb5d39 add note about datalad update}
+\PYG{g+go}{5b6e19a Include nesting demo from datalad website}
+\PYG{g+go}{adb4b5d add note on git annex whereis}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+“I’ll let you people direct this lecture”, the guest lecturer proposes.
+“You tell me what you would be interested in doing, and I’ll show you how it’s
+done. For the rest of the lecture, call me Google!”
+
+
+\subsection{Fixing (empty) commit messages}
+\label{\detokenize{basics/101-137-history:fixing-empty-commit-messages}}
+\sphinxAtStartPar
+From the back of the lecture hall comes a question you are really glad
+someone asked: “It has happened to me that I accidentally did a
+\sphinxcode{\sphinxupquote{datalad save}} and forgot to specify the commit message,
+how can I fix this?”.
+The room nods in agreement \textendash{} apparently, others have run into this
+premature slip of the \sphinxcode{\sphinxupquote{Enter}} key as well.
+
+\sphinxAtStartPar
+Let’s demonstrate a simple example. First, let’s create some random files.
+Do this right in your dataset.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }\PYGZlt{}\PYGZlt{}\PYG{+w}{ }EOT\PYG{+w}{ }\PYGZgt{}\PYG{+w}{ }Gitjoke1.txt
+\PYG{g+go}{Git knows what you did last summer!}
+\PYG{g+go}{EOT}
+
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }\PYGZlt{}\PYGZlt{}\PYG{+w}{ }EOT\PYG{+w}{ }\PYGZgt{}\PYG{+w}{ }Gitjoke2.txt
+\PYG{g+go}{Knock knock. Who\PYGZsq{}s there? Git.}
+\PYG{g+go}{Git\PYGZhy{}who?}
+\PYG{g+go}{Sorry, \PYGZsq{}who\PYGZsq{} is not a git command \PYGZhy{} did you mean \PYGZsq{}show\PYGZsq{}?}
+\PYG{g+go}{EOT}
+
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }\PYGZlt{}\PYGZlt{}\PYG{+w}{ }EOT\PYG{+w}{ }\PYGZgt{}\PYG{+w}{ }Gitjoke3.txt
+\PYG{g+go}{In Soviet Russia, git commits YOU!}
+\PYG{g+go}{EOT}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This will generate three new files in your dataset. Run a
+\sphinxcode{\sphinxupquote{datalad status}} to verify this:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{untracked: Gitjoke1.txt (file)}
+\PYG{g+go}{untracked: Gitjoke2.txt (file)}
+\PYG{g+go}{untracked: Gitjoke3.txt (file)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+And now:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save
+\PYG{g+go}{add(ok): Gitjoke1.txt (file)}
+\PYG{g+go}{add(ok): Gitjoke2.txt (file)}
+\PYG{g+go}{add(ok): Gitjoke3.txt (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Whooops! A \sphinxcode{\sphinxupquote{datalad save}} without a
+commit message that saved all of the files.
+
+\fvset{hllines={, 6,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}p\PYG{+w}{ }\PYGZhy{}1
+\PYG{g+go}{commit 58e40d9a✂SHA1}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    [DATALAD] Recorded changes}
+
+\PYG{g+go}{diff \PYGZhy{}\PYGZhy{}git a/Gitjoke1.txt b/Gitjoke1.txt}
+\PYG{g+go}{new file mode 100644}
+\PYG{g+go}{index 0000000..d7e1359}
+\PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{} /dev/null}
+\PYG{g+go}{+++ b/Gitjoke1.txt}
+\PYG{g+go}{@@ \PYGZhy{}0,0 +1 @@}
+\PYG{g+go}{+Git knows what you did last summer!}
+\PYG{g+go}{diff \PYGZhy{}\PYGZhy{}git a/Gitjoke2.txt b/Gitjoke2.txt}
+\PYG{g+go}{new file mode 100644}
+\PYG{g+go}{index 0000000..51beecb}
+\PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{} /dev/null}
+\PYG{g+go}{+++ b/Gitjoke2.txt}
+\PYG{g+go}{@@ \PYGZhy{}0,0 +1,3 @@}
+\PYG{g+go}{+Knock knock. Who\PYGZsq{}s there? Git.}
+\PYG{g+go}{+Git\PYGZhy{}who?}
+\PYG{g+go}{+Sorry, \PYGZsq{}who\PYGZsq{} is not a git command \PYGZhy{} did you mean \PYGZsq{}show\PYGZsq{}?}
+\PYG{g+go}{diff \PYGZhy{}\PYGZhy{}git a/Gitjoke3.txt b/Gitjoke3.txt}
+\PYG{g+go}{new file mode 100644}
+\PYG{g+go}{index 0000000..7b83d95}
+\PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{} /dev/null}
+\PYG{g+go}{+++ b/Gitjoke3.txt}
+\PYG{g+go}{@@ \PYGZhy{}0,0 +1 @@}
+\PYG{g+go}{+In Soviet Russia, git commits YOU!}
+\end{sphinxVerbatim}
+\sphinxresetverbatimhllines
+
+\sphinxAtStartPar
+As expected, all of the modifications present prior to the
+command are saved into the most recent commit, and the commit
+message DataLad provides by default, \sphinxcode{\sphinxupquote{{[}DATALAD{]} Recorded changes}},
+is not very helpful.
+
+\sphinxAtStartPar
+Changing the commit message of the most recent commit can be done with
+the command \sphinxcode{\sphinxupquote{git commit \sphinxhyphen{}\sphinxhyphen{}amend}}. Running this command will open
+an editor (the default, as configured in Git), and allow you
+to change the commit message. Make sure to read the {\hyperref[\detokenize{basics/101-137-history:fom-rebase1}]{\sphinxcrossref{\DUrole{std,std-ref}{find\sphinxhyphen{}out\sphinxhyphen{}more on changing other than the most recent commit}}}} (\autopageref*{\detokenize{basics/101-137-history:fom-rebase1}}) in case you want to improve the commit message of more commits than only the latest.
+
+\sphinxAtStartPar
+Try running the \sphinxcode{\sphinxupquote{git commit \sphinxhyphen{}\sphinxhyphen{}amend}} command right now and give
+the commit a new commit message (you can just delete the one created by
+DataLad in the editor)!
+
+\index{change historical commit messages@\spxentry{change historical commit messages}!with Git@\spxentry{with Git}}\index{with Git@\spxentry{with Git}!change historical commit messages@\spxentry{change historical commit messages}}\index{rebase@\spxentry{rebase}!Git command@\spxentry{Git command}}\index{Git command@\spxentry{Git command}!rebase@\spxentry{rebase}}\index{rewrite history@\spxentry{rewrite history}!with Git@\spxentry{with Git}}\index{with Git@\spxentry{with Git}!rewrite history@\spxentry{rewrite history}}\ignorespaces \begin{findoutmore}[label={fom-rebase1}, before title={\thetcbcounter\ }, float, check odd page=true]{Changing the commit messages of not-the-most-recent commits}
+\label{\detokenize{basics/101-137-history:fom-rebase1}}
+
+\sphinxAtStartPar
+The \sphinxcode{\sphinxupquote{git commit \sphinxhyphen{}\sphinxhyphen{}amend}} command will let you
+rewrite the commit message of the most recent commit. However, if you
+need to rewrite commit messages of older commits, you
+can do with an “interactive rebase”:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }rebase\PYG{+w}{ }\PYGZhy{}\PYGZhy{}interactive\PYG{+w}{ }HEAD\PYGZti{}N
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+where \sphinxcode{\sphinxupquote{N}} specifies how far back you want to rewrite commits.
+\sphinxcode{\sphinxupquote{git rebase \sphinxhyphen{}i HEAD\textasciitilde{}3}}, for example, lets you apply changes to the
+any number of commit messages within the last three commits.
+
+\sphinxAtStartPar
+Be aware that an interactive rebase lets you \sphinxstyleemphasis{rewrite} history.
+This can lead to confusion or worse if the history you are rewriting
+is shared with others, for example, in a collaborative project. Be also aware
+that rewriting history that is \sphinxstyleemphasis{pushed}/\sphinxstyleemphasis{published} to another location
+will require a force\sphinxhyphen{}push!
+
+\sphinxAtStartPar
+Running this command yields a list of the N most recent commits
+in a text editor (which may be {\hyperref[\detokenize{glossary:term-vim}]{\sphinxtermref{\DUrole{xref,std,std-term}{vim}}}}!), with
+the most recent commit at the bottom:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+pick 8503f26 Add note on adding siblings
+pick 23f0a52 add note on configurations and git config
+pick c42cba4 add note on DataLad\PYGZsq{}s procedures
+
+\PYGZsh{} Rebase b259ce8..c42cba4 onto b259ce8 (3 commands)
+\PYGZsh{}
+\PYGZsh{} Commands:
+\PYGZsh{} p, pick \PYGZlt{}commit\PYGZgt{} = use commit
+\PYGZsh{} r, reword \PYGZlt{}commit\PYGZgt{} = use commit, but edit the commit message
+\PYGZsh{} s, squash \PYGZlt{}commit\PYGZgt{} = use commit, but meld into previous commit
+\PYGZsh{} f, fixup \PYGZlt{}commit\PYGZgt{} = like \PYGZdq{}squash\PYGZdq{}, but discard this commit\PYGZsq{}s log message
+\PYGZhy{}✂\PYGZhy{}\PYGZhy{}✂\PYGZhy{}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+With an interactive rebase we can apply various modifications to any
+number of commits in the list. Below the list are examples for some of these
+actions. Among them is “reword”, which lets you “edit the commit
+message”. To apply this action and reword the top\sphinxhyphen{}most commit message in this list
+(\sphinxcode{\sphinxupquote{8503f26 Add note on adding siblings}}, three commits back in the history),
+exchange the word \sphinxcode{\sphinxupquote{pick}} in the beginning of the line with the word
+\sphinxcode{\sphinxupquote{reword}} or simply \sphinxcode{\sphinxupquote{r}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+r\PYG{+w}{ }8503f26\PYG{+w}{ }Add\PYG{+w}{ }note\PYG{+w}{ }on\PYG{+w}{ }adding\PYG{+w}{ }siblings
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+If you want to reword more than one commit message, exchange several
+\sphinxcode{\sphinxupquote{pick}}s. Any commit with the word \sphinxcode{\sphinxupquote{pick}} at the beginning of the line will
+be kept as is. Once you are done, save and close the editor. This will
+sequentially open up a new editor for each commit you want to reword. In
+it, you will be able to change the commit message. Save to proceed to
+the next commit message until the rebase is complete.
+
+\sphinxAtStartPar
+Be careful not to delete any lines in the above editor view \textendash{}
+\sphinxstylestrong{An interactive rebase can be dangerous, and if you remove a line, this commit will be lost!}
+
+
+\end{findoutmore}
+
+\index{stop content tracking@\spxentry{stop content tracking}!with Git@\spxentry{with Git}}\index{with Git@\spxentry{with Git}!stop content tracking@\spxentry{stop content tracking}}\ignorespaces 
+
+\subsection{Untracking accidentally saved contents (tracked in Git)}
+\label{\detokenize{basics/101-137-history:untracking-accidentally-saved-contents-tracked-in-git}}\label{\detokenize{basics/101-137-history:index-1}}
+\sphinxAtStartPar
+The next question comes from the front:
+“It happened that I forgot to give a path to the \sphinxcode{\sphinxupquote{datalad save}}
+command when I wanted to only start tracking a very specific file.
+Other times I just didn’t remember that
+additional, untracked files existed in the dataset and saved unaware of
+those. I know that it is good practice to only save
+those changes together that belong together, so is there a way to
+disentangle an accidental \sphinxcode{\sphinxupquote{datalad save}} again?”
+
+\sphinxAtStartPar
+Let’s say instead of saving \sphinxstyleemphasis{all three} previously untracked Git jokes
+you intended to save \sphinxstyleemphasis{only one} of those files. What we
+want to achieve is to keep all of the files and their contents
+in the dataset, but get them out of the history into an
+\sphinxstyleemphasis{untracked} state again, and save them \sphinxstyleemphasis{individually} afterwards.
+\begin{importantnote}[before title={\thetcbcounter\ }, check odd page=true]{Untracking is different for Git versus git-annex!}
+
+\sphinxAtStartPar
+Note that this is a case with \sphinxstyleemphasis{text files} (stored in Git)! For
+accidental annexing of files, please make sure to check out
+the next paragraph!
+
+
+\end{importantnote}
+
+\sphinxAtStartPar
+This is a task for the \sphinxcode{\sphinxupquote{git reset}} command. It essentially allows to
+undo commits by resetting the history of a dataset to an earlier version.
+\sphinxcode{\sphinxupquote{git reset}} comes with several \sphinxstyleemphasis{modes} that determine the
+exact behavior it, but the relevant one for this aim is \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}mixed}}%
+\begin{footnote}\sphinxAtStartFootnote
+The option \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}mixed}} is the default mode for a \sphinxcode{\sphinxupquote{git reset}}
+command, omitting it (i.e., running just \sphinxcode{\sphinxupquote{git reset}}) leads to the
+same behavior. It is explicitly stated in this book to make the mode
+clear, though.
+%
+\end{footnote}.
+Specifying the command:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }reset\PYG{+w}{ }\PYGZhy{}\PYGZhy{}mixed\PYG{+w}{ }COMMIT
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+will preserve all changes made to files since the specified
+commit in the dataset but remove them from the dataset’s history.
+This means all commits \sphinxstyleemphasis{since} \sphinxcode{\sphinxupquote{COMMIT}} (but \sphinxstyleemphasis{not including} \sphinxcode{\sphinxupquote{COMMIT}})
+will not be in your history anymore and become “untracked files” or
+“unsaved changes” instead. In other words, the modifications
+you made in these commits that are “undone” will still be present
+in your dataset \textendash{} just not written to the history anymore. Let’s
+try this to get a feel for it.
+
+\sphinxAtStartPar
+The COMMIT in the command can either be a hash or a reference
+with the HEAD pointer.
+
+\index{branch@\spxentry{branch}!Git concept@\spxentry{Git concept}}\index{Git concept@\spxentry{Git concept}!branch@\spxentry{branch}}\index{HEAD@\spxentry{HEAD}!Git concept@\spxentry{Git concept}}\index{Git concept@\spxentry{Git concept}!HEAD@\spxentry{HEAD}}\ignorespaces \begin{findoutmore}[label={index-2}, before title={\thetcbcounter\ }, check odd page=true]{Git terminology: branches and HEADs?}
+\label{\detokenize{basics/101-137-history:index-2}}
+
+\sphinxAtStartPar
+A Git repository (and thus any DataLad dataset) is built up as a tree of
+commits. A \sphinxstyleemphasis{branch} is a named pointer (reference) to a commit, and allows you
+to isolate developments. The default branch is called \sphinxcode{\sphinxupquote{main}}. \sphinxcode{\sphinxupquote{HEAD}} is
+a pointer to the branch you are currently on, and thus to the last commit
+in the given branch.
+
+\noindent\sphinxincludegraphics[width=0.500\linewidth]{{git_branch_HEAD}.png}
+
+\sphinxAtStartPar
+Using \sphinxcode{\sphinxupquote{HEAD}}, you can identify the most recent commit, or count backwards
+starting from the most recent commit. \sphinxcode{\sphinxupquote{HEAD\textasciitilde{}1}} is the ancestor of the most
+recent commit, i.e., one commit back (\sphinxcode{\sphinxupquote{f30ab}} in the figure above). Apart from
+the notation \sphinxcode{\sphinxupquote{HEAD\textasciitilde{}N}}, there is also \sphinxcode{\sphinxupquote{HEAD\textasciicircum{}N}} used to count backwards, but
+\dlhbhref{S7A}{less frequently used and of importance primarily in the case of merge
+commits}.
+
+
+\end{findoutmore}
+
+\sphinxAtStartPar
+Let’s stay with the hash, and reset to the commit prior to saving the Gitjokes.
+
+\sphinxAtStartPar
+First, find out the shasum, and afterwards, reset it.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{3}\PYG{+w}{ }\PYGZhy{}\PYGZhy{}oneline
+\PYG{g+go}{58e40d9 [DATALAD] Recorded changes}
+\PYG{g+go}{996f459 remove obsolete subds}
+\PYG{g+go}{15acb2a [DATALAD] Added subdataset}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }reset\PYG{+w}{ }\PYGZhy{}\PYGZhy{}mixed\PYG{+w}{ }996f459a✂SHA1
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Let’s see what has happened. First, let’s check the history:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{2}\PYG{+w}{ }\PYGZhy{}\PYGZhy{}oneline
+\PYG{g+go}{996f459 remove obsolete subds}
+\PYG{g+go}{15acb2a [DATALAD] Added subdataset}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+As you can see, the commit in which the jokes were tracked
+is not in the history anymore! Go on to see what \sphinxcode{\sphinxupquote{datalad status}}
+reports:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{untracked: Gitjoke1.txt (file)}
+\PYG{g+go}{untracked: Gitjoke2.txt (file)}
+\PYG{g+go}{untracked: Gitjoke3.txt (file)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Nice, the files are present, and untracked again. Do they contain
+the content still? We will read all of them with \sphinxcode{\sphinxupquote{ cat}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }Gitjoke*
+\PYG{g+go}{Git knows what you did last summer!}
+\PYG{g+go}{Knock knock. Who\PYGZsq{}s there? Git.}
+\PYG{g+go}{Git\PYGZhy{}who?}
+\PYG{g+go}{Sorry, \PYGZsq{}who\PYGZsq{} is not a git command \PYGZhy{} did you mean \PYGZsq{}show\PYGZsq{}?}
+\PYG{g+go}{In Soviet Russia, git commits YOU!}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Great. Now we can go ahead and save only the file we intended
+to track:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}save my favorite Git joke\PYGZdq{}}\PYG{+w}{ }Gitjoke2.txt
+\PYG{g+go}{add(ok): Gitjoke2.txt (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Finally, let’s check how the history looks afterwards:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}2
+\PYG{g+go}{commit 4bdb06cf✂SHA1}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    save my favorite Git joke}
+
+\PYG{g+go}{commit 996f459a✂SHA1}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    remove obsolete subds}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Wow! You have rewritten history%
+\begin{footnote}\sphinxAtStartFootnote
+Note though that rewriting history can be dangerous, and you should
+be aware of what you are doing. For example, rewriting parts of the
+dataset’s history that have been published (e.g., to a GitHub repository)
+already or that other people have copies of, is not advised.
+%
+\end{footnote}!
+
+\index{stop content tracking@\spxentry{stop content tracking}!with git\sphinxhyphen{}annex@\spxentry{with git\sphinxhyphen{}annex}}\index{with git\sphinxhyphen{}annex@\spxentry{with git\sphinxhyphen{}annex}!stop content tracking@\spxentry{stop content tracking}}\ignorespaces 
+
+\subsection{Untracking accidentally saved contents (stored in git\sphinxhyphen{}annex)}
+\label{\detokenize{basics/101-137-history:untracking-accidentally-saved-contents-stored-in-git-annex}}\label{\detokenize{basics/101-137-history:index-3}}
+\sphinxAtStartPar
+The previous \sphinxcode{\sphinxupquote{git reset}} undid the tracking of \sphinxstyleemphasis{text} files.
+However, those files are stored in Git, and thus their content
+is also stored in Git. Files that are annexed, however, have
+their content stored in git\sphinxhyphen{}annex, and not the file itself is stored
+in the history, but a symlink pointing to the location of the file
+content in the dataset’s annex. This has consequences for
+a \sphinxcode{\sphinxupquote{git reset}} command: Reverting a save of a file that is
+annexed would revert the save of the symlink into Git, but it will
+not revert the \sphinxstyleemphasis{annexing} of the file.
+Thus, what will be left in the dataset is an untracked symlink.
+
+\sphinxAtStartPar
+To undo an accidental save of that annexed a file, the annexed file
+has to be “unlocked” first with a \sphinxcode{\sphinxupquote{datalad unlock}} command.
+
+\sphinxAtStartPar
+We will simulate such a situation by creating a PDF file that
+gets annexed with an accidental \sphinxcode{\sphinxupquote{datalad save}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZsh{} }create\PYG{+w}{ }an\PYG{+w}{ }empty\PYG{+w}{ }pdf\PYG{+w}{ }file
+\PYG{g+gp}{\PYGZdl{} }convert\PYG{+w}{ }xc:none\PYG{+w}{ }\PYGZhy{}page\PYG{+w}{ }Letter\PYG{+w}{ }apdffile.pdf
+\PYG{g+gp}{\PYGZsh{} }accidentally\PYG{+w}{ }save\PYG{+w}{ }it
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save
+\PYG{g+go}{add(ok): Gitjoke1.txt (file)}
+\PYG{g+go}{add(ok): Gitjoke3.txt (file)}
+\PYG{g+go}{add(ok): apdffile.pdf (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This accidental \sphinxcode{\sphinxupquote{datalad save}} has thus added both text files
+stored in Git, but also a PDF file to the history of the dataset.
+As an \sphinxcode{\sphinxupquote{ ls \sphinxhyphen{}l}} reveals, the PDF file has been annexed and is
+thus a {\hyperref[\detokenize{glossary:term-symlink}]{\sphinxtermref{\DUrole{xref,std,std-term}{symlink}}}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }ls\PYG{+w}{ }\PYGZhy{}l\PYG{+w}{ }apdffile.pdf
+\PYG{g+go}{lrwxrwxrwx 1 elena elena 122 2019\PYGZhy{}06\PYGZhy{}18 16:13 apdffile.pdf \PYGZhy{}\PYGZgt{} .git/annex/objects/zZ/v7/✂/MD5E\PYGZhy{}s1216\PYGZhy{}\PYGZhy{}b954106f✂MD5.pdf}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Prior to resetting, the PDF file has to be unannexed.
+To unannex files, i.e., get the contents out of the object tree,
+the \sphinxcode{\sphinxupquote{datalad unlock}} command is relevant:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }unlock\PYG{+w}{ }apdffile.pdf
+\PYG{g+go}{unlock(ok): apdffile.pdf (file)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The file is now no longer symlinked:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }ls\PYG{+w}{ }\PYGZhy{}l\PYG{+w}{ }apdffile.pdf
+\PYG{g+go}{\PYGZhy{}rw\PYGZhy{}r\PYGZhy{}\PYGZhy{}r\PYGZhy{}\PYGZhy{} 1 elena elena 1216 2019\PYGZhy{}06\PYGZhy{}18 16:13 apdffile.pdf}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Finally, \sphinxcode{\sphinxupquote{git reset \sphinxhyphen{}\sphinxhyphen{}mixed}} can be used to revert the
+accidental \sphinxcode{\sphinxupquote{datalad save}}. Again, find out the shasum first, and
+afterwards, reset it.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{3}\PYG{+w}{ }\PYGZhy{}\PYGZhy{}oneline
+\PYG{g+go}{9b3495b [DATALAD] Recorded changes}
+\PYG{g+go}{4bdb06c save my favorite Git joke}
+\PYG{g+go}{996f459 remove obsolete subds}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }reset\PYG{+w}{ }\PYGZhy{}\PYGZhy{}mixed\PYG{+w}{ }4bdb06cf✂SHA1
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+To see what has happened, let’s check the history:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{2}\PYG{+w}{ }\PYGZhy{}\PYGZhy{}oneline
+\PYG{g+go}{4bdb06c save my favorite Git joke}
+\PYG{g+go}{996f459 remove obsolete subds}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+… and also the status of the dataset:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{untracked: Gitjoke1.txt (file)}
+\PYG{g+go}{untracked: Gitjoke3.txt (file)}
+\PYG{g+go}{untracked: apdffile.pdf (file)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The accidental save has been undone, and the file is present
+as untracked content again.
+As before, this action has not been recorded in your history.
+
+
+\subsection{Viewing previous versions of files and datasets}
+\label{\detokenize{basics/101-137-history:viewing-previous-versions-of-files-and-datasets}}
+\sphinxAtStartPar
+The next question is truly magical: How does one \sphinxstyleemphasis{see}
+data as it was at a previous state in history?
+
+\sphinxAtStartPar
+This magic trick can be performed with the \sphinxcode{\sphinxupquote{git checkout}}.
+It is a very heavily used command for various tasks, but among
+many it can send you back in time to view the state of a dataset
+at the time of a specific commit.
+
+\sphinxAtStartPar
+Let’s say you want to find out which notes you took in the first
+few chapters of this book. Find a commit {\hyperref[\detokenize{glossary:term-shasum}]{\sphinxtermref{\DUrole{xref,std,std-term}{shasum}}}} in your history
+to specify the point in time you want to go back to:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{16}\PYG{+w}{ }\PYGZhy{}\PYGZhy{}oneline
+\PYG{g+go}{4bdb06c save my favorite Git joke}
+\PYG{g+go}{996f459 remove obsolete subds}
+\PYG{g+go}{15acb2a [DATALAD] Added subdataset}
+\PYG{g+go}{c278f6a save cropped logos to Git}
+\PYG{g+go}{de2d23c move book back from midterm\PYGZus{}project}
+\PYG{g+go}{a648756 move book into midterm\PYGZus{}project}
+\PYG{g+go}{39e55c8 add container and execute analysis within container}
+\PYG{g+go}{c5c9017 finished my midterm project}
+\PYG{g+go}{0edd3ea [DATALAD] Recorded changes}
+\PYG{g+go}{08684a4 add note on DataLad\PYGZsq{}s procedures}
+\PYG{g+go}{c2400da add note on configurations and git config}
+\PYG{g+go}{e202e94 Add note on adding siblings}
+\PYG{g+go}{6ae8e71 Merge remote\PYGZhy{}tracking branch \PYGZsq{}roommate/main\PYGZsq{}}
+\PYG{g+go}{4bb5d39 add note about datalad update}
+\PYG{g+go}{5b6e19a Include nesting demo from datalad website}
+\PYG{g+go}{adb4b5d add note on git annex whereis}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Let’s go 15 commits back in time:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }checkout\PYG{+w}{ }1e73592e✂SHA1
+\PYG{g+go}{warning: unable to rmdir \PYGZsq{}midterm\PYGZus{}project\PYGZsq{}: Directory not empty}
+\PYG{g+go}{Note: switching to \PYGZsq{}1e73592e✂SHA1\PYGZsq{}.}
+
+\PYG{g+go}{You are in \PYGZsq{}detached HEAD\PYGZsq{} state. You can look around, make experimental}
+\PYG{g+go}{changes and commit them, and you can discard any commits you make in this}
+\PYG{g+go}{state without impacting any branches by switching back to a branch.}
+
+\PYG{g+go}{If you want to create a new branch to retain commits you create, you may}
+\PYG{g+go}{do so (now or later) by using \PYGZhy{}c with the switch command. Example:}
+
+\PYG{g+go}{  git switch \PYGZhy{}c \PYGZlt{}new\PYGZhy{}branch\PYGZhy{}name\PYGZgt{}}
+
+\PYG{g+go}{Or undo this operation with:}
+
+\PYG{g+go}{  git switch \PYGZhy{}}
+
+\PYG{g+go}{Turn off this advice by setting config variable advice.detachedHead to false}
+
+\PYG{g+go}{HEAD is now at 1e73592 add note about cloning from paths and recursive datalad get}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+How did your \sphinxcode{\sphinxupquote{notes.txt}} file look at this point?
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }tail\PYG{+w}{ }notes.txt
+\PYG{g+go}{registered in the superdataset \PYGZhy{}\PYGZhy{} you will have to do a}
+\PYG{g+go}{\PYGZdq{}datalad get \PYGZhy{}n PATH/TO/SUBDATASET\PYGZdq{} to install the subdataset for file}
+\PYG{g+go}{availability meta data. The \PYGZhy{}n/\PYGZhy{}\PYGZhy{}no\PYGZhy{}data options prevents that file}
+\PYG{g+go}{contents are also downloaded.}
+
+\PYG{g+go}{Note that a recursive \PYGZdq{}datalad get\PYGZdq{} would install all further}
+\PYG{g+go}{registered subdatasets underneath a subdataset, so a safer way to}
+\PYG{g+go}{proceed is to set a decent \PYGZhy{}\PYGZhy{}recursion\PYGZhy{}limit:}
+\PYG{g+go}{\PYGZdq{}datalad get \PYGZhy{}n \PYGZhy{}r \PYGZhy{}\PYGZhy{}recursion\PYGZhy{}limit 2 \PYGZlt{}subds\PYGZgt{}\PYGZdq{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Neat, isn’t it? By checking out a commit shasum you can explore a previous
+state of a datasets history. And this does not only apply to simple text
+files, but every type of file in your dataset, regardless of size.
+The checkout command however led to something that Git calls a “detached HEAD state”.
+While this sounds scary, a \sphinxcode{\sphinxupquote{git checkout main}} will bring you
+back into the most recent version of your dataset and get you out of the
+“detached HEAD state”:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }checkout\PYG{+w}{ }main
+\PYG{g+go}{Previous HEAD position was 1e73592 add note about cloning from paths and recursive datalad get}
+\PYG{g+go}{Switched to branch \PYGZsq{}main\PYGZsq{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Note one very important thing: The previously untracked files are still
+there.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{untracked: Gitjoke1.txt (file)}
+\PYG{g+go}{untracked: Gitjoke3.txt (file)}
+\PYG{g+go}{untracked: apdffile.pdf (file)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The contents of \sphinxcode{\sphinxupquote{notes.txt}} will now be the most recent version again:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }tail\PYG{+w}{ }notes.txt
+\PYG{g+go}{configurations, create files or file hierarchies, or perform arbitrary}
+\PYG{g+go}{tasks in datasets. They can be shipped with DataLad, its extensions,}
+\PYG{g+go}{or datasets, and you can even write your own procedures and distribute}
+\PYG{g+go}{them.}
+\PYG{g+go}{The \PYGZdq{}datalad run\PYGZhy{}procedure\PYGZdq{} command is used to apply such a procedure}
+\PYG{g+go}{to a dataset. Procedures shipped with DataLad or its extensions}
+\PYG{g+go}{starting with a \PYGZdq{}cfg\PYGZdq{} prefix can also be applied at the creation of a}
+\PYG{g+go}{dataset with \PYGZdq{}datalad create \PYGZhy{}c \PYGZlt{}PROC\PYGZhy{}NAME\PYGZgt{} \PYGZlt{}PATH\PYGZgt{}\PYGZdq{} (omitting the}
+\PYG{g+go}{\PYGZdq{}cfg\PYGZdq{} prefix).}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+… Wow! You traveled back and forth in time!
+But an even more magical way to see the contents of files in previous
+versions is Git’s \sphinxcode{\sphinxupquote{ cat\sphinxhyphen{}file}} command: Among many other things, it lets
+you read a file’s contents as of any point in time in the history, without a
+prior \sphinxcode{\sphinxupquote{git checkout}} (note that the output is shortened for brevity and shows only the last few lines of the file):
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }cat\PYGZhy{}file\PYG{+w}{ }\PYGZhy{}\PYGZhy{}textconv\PYG{+w}{ }1e73592e✂SHA1:notes.txt
+
+\PYG{g+go}{Note that subdatasets will not be installed by default, but are only}
+\PYG{g+go}{registered in the superdataset \PYGZhy{}\PYGZhy{} you will have to do a}
+\PYG{g+go}{\PYGZdq{}datalad get \PYGZhy{}n PATH/TO/SUBDATASET\PYGZdq{} to install the subdataset for file}
+\PYG{g+go}{availability meta data. The \PYGZhy{}n/\PYGZhy{}\PYGZhy{}no\PYGZhy{}data options prevents that file}
+\PYG{g+go}{contents are also downloaded.}
+
+\PYG{g+go}{Note that a recursive \PYGZdq{}datalad get\PYGZdq{} would install all further}
+\PYG{g+go}{registered subdatasets underneath a subdataset, so a safer way to}
+\PYG{g+go}{proceed is to set a decent \PYGZhy{}\PYGZhy{}recursion\PYGZhy{}limit:}
+\PYG{g+go}{\PYGZdq{}datalad get \PYGZhy{}n \PYGZhy{}r \PYGZhy{}\PYGZhy{}recursion\PYGZhy{}limit 2 \PYGZlt{}subds\PYGZgt{}\PYGZdq{}}
+\end{sphinxVerbatim}
+
+\index{cat\sphinxhyphen{}file@\spxentry{cat\sphinxhyphen{}file}!Git command@\spxentry{Git command}}\index{Git command@\spxentry{Git command}!cat\sphinxhyphen{}file@\spxentry{cat\sphinxhyphen{}file}}\ignorespaces 
+\sphinxAtStartPar
+The cat\sphinxhyphen{}file command is very versatile, and
+\dlhbhref{G1K}{it’s documentation} will list all
+of its functionality. To use it to see the contents of a file at a previous
+state as done above, this is how the general structure looks like:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }cat\PYGZhy{}file\PYG{+w}{ }\PYGZhy{}\PYGZhy{}textconv\PYG{+w}{ }SHASUM:\PYGZlt{}path/to/file\PYGZgt{}
+\end{sphinxVerbatim}
+
+
+\subsection{Undoing latest modifications of files}
+\label{\detokenize{basics/101-137-history:undoing-latest-modifications-of-files}}
+\sphinxAtStartPar
+Previously, we saw how to remove files from a datasets history that
+were accidentally saved and thus tracked for the first time.
+How does one undo a \sphinxstyleemphasis{modification} to a tracked file?
+
+\sphinxAtStartPar
+Let’s modify the saved \sphinxcode{\sphinxupquote{Gitjoke1.txt}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{echo}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}this is by far my favorite joke!\PYGZdq{}}\PYG{+w}{ }\PYGZgt{}\PYGZgt{}\PYG{+w}{ }Gitjoke2.txt
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }Gitjoke2.txt
+\PYG{g+go}{Knock knock. Who\PYGZsq{}s there? Git.}
+\PYG{g+go}{Git\PYGZhy{}who?}
+\PYG{g+go}{Sorry, \PYGZsq{}who\PYGZsq{} is not a git command \PYGZhy{} did you mean \PYGZsq{}show\PYGZsq{}?}
+\PYG{g+go}{this is by far my favorite joke!}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{untracked: Gitjoke1.txt (file)}
+\PYG{g+go}{untracked: Gitjoke3.txt (file)}
+\PYG{g+go}{untracked: apdffile.pdf (file)}
+\PYG{g+go}{ modified: Gitjoke2.txt (file)}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}add joke evaluation to joke\PYGZdq{}}\PYG{+w}{ }Gitjoke2.txt
+\PYG{g+go}{add(ok): Gitjoke2.txt (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+How could this modification to \sphinxcode{\sphinxupquote{Gitjoke2.txt}} be undone?
+With the \sphinxcode{\sphinxupquote{git reset}} command again. If you want to
+“unsave” the modification but keep it in the file, use
+\sphinxcode{\sphinxupquote{git reset \sphinxhyphen{}\sphinxhyphen{}mixed}} as before. However, if you want to
+get rid of the modifications entirely, use the option \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}hard}}
+instead of \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}mixed}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{2}\PYG{+w}{ }\PYGZhy{}\PYGZhy{}oneline
+\PYG{g+go}{a4ab359 add joke evaluation to joke}
+\PYG{g+go}{4bdb06c save my favorite Git joke}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }reset\PYG{+w}{ }\PYGZhy{}\PYGZhy{}hard\PYG{+w}{ }4bdb06cf✂SHA1
+\PYG{g+go}{HEAD is now at 4bdb06c save my favorite Git joke}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }Gitjoke2.txt
+\PYG{g+go}{Knock knock. Who\PYGZsq{}s there? Git.}
+\PYG{g+go}{Git\PYGZhy{}who?}
+\PYG{g+go}{Sorry, \PYGZsq{}who\PYGZsq{} is not a git command \PYGZhy{} did you mean \PYGZsq{}show\PYGZsq{}?}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The change has been undone completely. This method will work with
+files stored in Git and annexed files.
+
+\sphinxAtStartPar
+Note that this operation only restores this one file, because the commit that
+was undone only contained modifications to this one file. This is a
+demonstration of one of the reasons why one should strive for commits to
+represent meaningful logical units of change \textendash{} if necessary, they can be
+undone easily.
+
+
+\subsection{Undoing past modifications of files}
+\label{\detokenize{basics/101-137-history:undoing-past-modifications-of-files}}
+\sphinxAtStartPar
+What \sphinxcode{\sphinxupquote{git reset}} did was to undo commits from
+the most recent version of your dataset. How
+would one undo a change that happened a while ago, though,
+with important changes being added afterwards that you want
+to keep?
+
+\sphinxAtStartPar
+Let’s save a bad modification to \sphinxcode{\sphinxupquote{Gitjoke2.txt}},
+but also a modification to \sphinxcode{\sphinxupquote{notes.txt}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{echo}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}bad modification\PYGZdq{}}\PYG{+w}{ }\PYGZgt{}\PYGZgt{}\PYG{+w}{ }Gitjoke2.txt
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}did a bad modification\PYGZdq{}}\PYG{+w}{ }Gitjoke2.txt
+\PYG{g+go}{add(ok): Gitjoke2.txt (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }\PYGZlt{}\PYGZlt{}\PYG{+w}{ }EOT\PYG{+w}{ }\PYGZgt{}\PYGZgt{}\PYG{+w}{ }notes.txt
+
+\PYG{g+go}{Git has many handy tools to go back in forth in time and work with the}
+\PYG{g+go}{history of datasets. Among many other things you can rewrite commit}
+\PYG{g+go}{messages, undo changes, or look at previous versions of datasets.}
+\PYG{g+go}{A superb resource to find out more about this and practice such Git}
+\PYG{g+go}{operations is this chapter in the Pro\PYGZhy{}git book:}
+\PYG{g+go}{https://git\PYGZhy{}scm.com/book/en/v2/Git\PYGZhy{}Tools\PYGZhy{}Rewriting\PYGZhy{}History}
+\PYG{g+go}{EOT}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}add note on helpful git resource\PYGZdq{}}\PYG{+w}{ }notes.txt
+\PYG{g+go}{add(ok): notes.txt (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The objective is to remove the first, “bad” modification, but
+keep the more recent modification of \sphinxcode{\sphinxupquote{notes.txt}}. A \sphinxcode{\sphinxupquote{git reset}}
+command is not convenient, because resetting would need to reset
+the most recent, “good” modification as well.
+
+\sphinxAtStartPar
+One way to accomplish it is with an \sphinxstyleemphasis{interactive rebase}, using the
+\sphinxcode{\sphinxupquote{git rebase \sphinxhyphen{}i}} command%
+\begin{footnote}\sphinxAtStartFootnote
+When in need to interactively rebase, please consult further documentation
+and tutorials. It is out of scope of this book to be a complete
+guide on rebasing, and not all interactive rebasing operations are
+complication\sphinxhyphen{}free. However, you can always undo mistakes that occur
+during rebasing with the help of the \dlhbhref{G1P}{reflog}.
+%
+\end{footnote}. Experienced Git\sphinxhyphen{}users will know
+under which situations and how to perform such an interactive rebase.
+
+\sphinxAtStartPar
+However, outlining an interactive rebase here in this book could lead to
+problems for readers without (much) Git experience: An interactive rebase,
+even if performed successfully, can lead to many problems if it is applied with
+too little experience, for example, in any collaborative real\sphinxhyphen{}world project.
+
+\index{revert@\spxentry{revert}!Git command@\spxentry{Git command}}\index{Git command@\spxentry{Git command}!revert@\spxentry{revert}}\ignorespaces 
+\sphinxAtStartPar
+Instead, we demonstrate a different, less intrusive way to revert one or more
+changes at any point in the history of a dataset: the \sphinxcode{\sphinxupquote{git revert}}
+command.
+Instead of \sphinxstyleemphasis{rewriting} the history, it will add an additional commit in which
+the changes of an unwanted commit are reverted.
+
+\sphinxAtStartPar
+The command looks like this:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }revert\PYG{+w}{ }SHASUM
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+where \sphinxcode{\sphinxupquote{SHASUM}} specifies the commit hash of the modification that should
+be reverted.
+
+\index{revert multiple commit@\spxentry{revert multiple commit}!with Git@\spxentry{with Git}}\index{with Git@\spxentry{with Git}!revert multiple commit@\spxentry{revert multiple commit}}\ignorespaces \begin{findoutmore}[label={index-6}, before title={\thetcbcounter\ }, check odd page=true]{Reverting more than a single commit}
+\label{\detokenize{basics/101-137-history:index-6}}
+
+\sphinxAtStartPar
+You can also specify a range of commits like this:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }revert\PYG{+w}{ }OLDER\PYGZus{}SHASUM..NEWERSHASUM
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This command will revert all commits starting with the one after
+\sphinxcode{\sphinxupquote{OLDER\_SHASUM}} (i.e. \sphinxstylestrong{not including} this commit) until and \sphinxstylestrong{including}
+the one specified with \sphinxcode{\sphinxupquote{NEWERSHASUM}}.
+For each reverted commit, one new commit will be added to the history that
+reverts it. Thus, if you revert a range of three commits, there will be three
+reversal commits. If you however want the reversal of a range of commits
+saved in a single commit, supply the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}no\sphinxhyphen{}commit}} option as in
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }revert\PYG{+w}{ }\PYGZhy{}\PYGZhy{}no\PYGZhy{}commit\PYG{+w}{ }OLDER\PYGZus{}SHASUM..NEWERSHASUM
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+After running this command, run a single \sphinxcode{\sphinxupquote{git commit}} to conclude the
+reversal and save it in a single commit.
+
+
+\end{findoutmore}
+
+\sphinxAtStartPar
+Let’s see how it looks like:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }revert\PYG{+w}{ }713e79d3✂SHA1
+\PYG{g+go}{[main 6d3d93b] Revert \PYGZdq{}did a bad modification\PYGZdq{}}
+\PYG{g+go}{ Date: Tue Jun 18 16:13:00 2019 +0000}
+\PYG{g+go}{ 1 file changed, 1 deletion(\PYGZhy{})}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This is the state of the file in which we reverted a modification:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }Gitjoke2.txt
+\PYG{g+go}{Knock knock. Who\PYGZsq{}s there? Git.}
+\PYG{g+go}{Git\PYGZhy{}who?}
+\PYG{g+go}{Sorry, \PYGZsq{}who\PYGZsq{} is not a git command \PYGZhy{} did you mean \PYGZsq{}show\PYGZsq{}?}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+It does not contain the bad modification anymore. And this is what happened in
+the history of the dataset:
+
+\fvset{hllines={, 6, 7, 8, 20,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{3}
+\PYG{g+go}{commit 6d3d93b9✂SHA1}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    Revert \PYGZdq{}did a bad modification\PYGZdq{}}
+
+\PYG{g+go}{    This reverts commit 713e79d3✂SHA1.}
+
+\PYG{g+go}{commit 04536a1e✂SHA1}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    add note on helpful git resource}
+
+\PYG{g+go}{commit 713e79d3✂SHA1}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    did a bad modification}
+\end{sphinxVerbatim}
+\sphinxresetverbatimhllines
+
+\sphinxAtStartPar
+The commit that introduced the bad modification is still present, but it
+transparently gets undone with the most recent commit. At the same time, the
+good modification of \sphinxcode{\sphinxupquote{notes.txt}} was not influenced in any way. The
+\sphinxcode{\sphinxupquote{git revert}} command is thus a transparent and safe way of undoing past
+changes. Note though that this command can only be used efficiently if the
+commits in your datasets history are meaningful, independent units \textendash{} having
+several unrelated modifications in a single commit may make an easy solution
+with \sphinxcode{\sphinxupquote{git revert}} impossible and instead require a complex
+\sphinxcode{\sphinxupquote{ checkout}}, \sphinxcode{\sphinxupquote{ revert}}, or \sphinxcode{\sphinxupquote{ rebase}} operation.
+
+\sphinxAtStartPar
+Finally, let’s take a look at the state of the dataset after this operation:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{untracked: Gitjoke1.txt (file)}
+\PYG{g+go}{untracked: Gitjoke3.txt (file)}
+\PYG{g+go}{untracked: apdffile.pdf (file)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+As you can see, unsurprisingly, the \sphinxcode{\sphinxupquote{git revert}} command had no
+effects on anything else but the specified commit, and previously untracked
+files are still present.
+
+\index{resolve merge conflict@\spxentry{resolve merge conflict}!with Git@\spxentry{with Git}}\index{with Git@\spxentry{with Git}!resolve merge conflict@\spxentry{resolve merge conflict}}\ignorespaces 
+
+\subsection{Oh no! I’m in a merge conflict!}
+\label{\detokenize{basics/101-137-history:oh-no-i-m-in-a-merge-conflict}}\label{\detokenize{basics/101-137-history:index-7}}
+\sphinxAtStartPar
+When working with the history of a dataset, especially when rewriting
+the history with an interactive rebase or when reverting commits, it is
+possible to run into so\sphinxhyphen{}called \sphinxstyleemphasis{merge conflicts}.
+Merge conflicts happen when Git needs assistance in deciding
+which changes to keep and which to apply. It will require
+you to edit the file the merge conflict is happening in with
+a text editor, but such merge conflict are by far not as scary as
+they may seem during the first few times of solving merge conflicts.
+
+\sphinxAtStartPar
+This section is not a guide on how to solve merge\sphinxhyphen{}conflicts, but a broad
+overview on the necessary steps, and a pointer to a more comprehensive guide.
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+The first thing to do if you end up in a merge conflict is
+to read the instructions Git is giving you \textendash{} they are a useful guide.
+
+\item {} 
+\sphinxAtStartPar
+Also, it is reassuring to remember that you can always get out of
+a merge conflict by aborting the operation that led to it (e.g.,
+\sphinxcode{\sphinxupquote{git rebase \sphinxhyphen{}\sphinxhyphen{}abort}}).
+
+\item {} 
+\sphinxAtStartPar
+To actually solve a merge conflict, you will have to edit files: In the
+documents the merge conflict applies to, Git marks the sections it needs
+help with with markers that consists of \sphinxcode{\sphinxupquote{\textgreater{}}}, \sphinxcode{\sphinxupquote{\textless{}}}, and \sphinxcode{\sphinxupquote{=}}
+signs and commit shasums or branch names.
+There will be two marked parts, and you have to delete the one you do not
+want to keep, as well as all markers.
+
+\item {} 
+\sphinxAtStartPar
+Afterwards, run \sphinxcode{\sphinxupquote{git add \textless{}path/to/file\textgreater{}}} and finally a \sphinxcode{\sphinxupquote{git commit}}.
+
+\end{itemize}
+
+\sphinxAtStartPar
+GitHub has an \dlhbhref{G3E}{excellent resource on how to deal with merge conflicts}.
+
+
+\subsection{Summary}
+\label{\detokenize{basics/101-137-history:summary}}
+\sphinxAtStartPar
+This guest lecture has given you a glimpse into how to work with the
+history of your DataLad datasets.
+To conclude this section, let’s remove all untracked contents from
+the dataset. This can be done with \sphinxcode{\sphinxupquote{git clean}}: The command
+\sphinxcode{\sphinxupquote{git clean \sphinxhyphen{}f}} swipes your dataset clean and removes any untracked
+file.
+\sphinxstylestrong{Careful! This is not revertible, and content lost with this commands cannot be recovered!}
+If you want to be extra sure, run \sphinxcode{\sphinxupquote{git clean \sphinxhyphen{}fn}} beforehand \textendash{} this will
+give you a list of the files that would be deleted.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }clean\PYG{+w}{ }\PYGZhy{}f
+\PYG{g+go}{Removing Gitjoke1.txt}
+\PYG{g+go}{Removing Gitjoke3.txt}
+\PYG{g+go}{Removing apdffile.pdf}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Afterwards, the \sphinxcode{\sphinxupquote{datalad status}} returns nothing, indicating a
+clean dataset state with no untracked files or modifications.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{nothing to save, working tree clean}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Finally, if you want, apply your new knowledge about reverting commits
+to remove the \sphinxcode{\sphinxupquote{Gitjoke2.txt}} file.
+
+\sphinxstepscope
+
+
+\section{How to get help}
+\label{\detokenize{basics/101-135-help:how-to-get-help}}\label{\detokenize{basics/101-135-help:help}}\label{\detokenize{basics/101-135-help::doc}}
+\sphinxAtStartPar
+All DataLad errors or problems you encounter during \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} are intentional
+and serve illustrative purposes. But what if you run into any DataLad errors
+outside of this course?
+Fortunately, the syllabus has a whole section on that, and on
+one lazy, warm summer\sphinxhyphen{}afternoon you flip through it.
+
+\begin{figure}[tbp]
+\centering
+
+\noindent\sphinxincludegraphics[width=0.500\linewidth]{{reading}.pdf}
+\end{figure}
+
+\sphinxAtStartPar
+You realize that you already know the most important things:
+The number one advice on how to get help is
+“Read the error message”.
+The second advice it
+“I’m not kidding: Read the error message”.
+The third advice, finally, says
+“Honestly, read the f***ing error message”.
+
+
+\subsection{Help yourself}
+\label{\detokenize{basics/101-135-help:help-yourself}}
+\sphinxAtStartPar
+If you run into a DataLad problem and you have followed the three
+steps above, but the error message
+\dlhbhref{X1C}{does not give you a clue on how to proceed},
+the first you should do is
+\begin{enumerate}
+\sphinxsetlistlabels{\arabic}{enumi}{enumii}{}{.}%
+\item {} 
+\sphinxAtStartPar
+find out which \sphinxstyleemphasis{version} of DataLad you use
+
+\item {} 
+\sphinxAtStartPar
+read the \sphinxstyleemphasis{help page} of the command that failed
+
+\end{enumerate}
+
+\sphinxAtStartPar
+The first step is important in order to find out whether a
+command failed due to using a wrong DataLad version. In order
+to use this book and follow along, your DataLad version
+should be \sphinxcode{\sphinxupquote{datalad\sphinxhyphen{}0.18}} or higher, for example.
+
+\sphinxAtStartPar
+To find out which version you are using, run
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }\PYGZhy{}\PYGZhy{}version
+\PYG{g+go}{datalad 0.19.3}
+\end{sphinxVerbatim}
+
+\index{wtf@\spxentry{wtf}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!wtf@\spxentry{wtf}}\index{get system information@\spxentry{get system information}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!get system information@\spxentry{get system information}}\ignorespaces 
+\sphinxAtStartPar
+If you want a comprehensive overview of your full setup,
+\sphinxcode{\sphinxupquote{datalad wtf}}%
+\begin{footnote}\sphinxAtStartFootnote
+\sphinxcode{\sphinxupquote{wtf}} in \sphinxcode{\sphinxupquote{datalad wtf}} could stand for many things. “Why the Face?”
+“Wow, that’s fantastic!”, “What’s this for?”, “What to fix”, “What the FAQ”,
+“Where’s the fire?”, “Wipe the floor”, “Welcome to fun”,
+“Waste Treatment Facility”, “What’s this foolishness”, “What the fruitcake”, …
+Pick a translation of your choice and make running this command more joyful.
+%
+\end{footnote} is the command to turn to. Running this command will
+generate a report about the DataLad installation and configuration.
+The output below shows an excerpt.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }wtf
+\PYG{g+gp}{\PYGZsh{} }WTF
+\PYG{g+gp}{\PYGZsh{}}\PYG{c+c1}{\PYGZsh{} configuration \PYGZlt{}SENSITIVE, report disabled by configuration\PYGZgt{}}
+\PYG{g+gp}{\PYGZsh{}}\PYG{c+c1}{\PYGZsh{} credentials}
+\PYG{g+go}{  \PYGZhy{} keyring:}
+\PYG{g+go}{    \PYGZhy{} active\PYGZus{}backends:}
+\PYG{g+go}{      \PYGZhy{} PlaintextKeyring with no encyption v.1.0 at /home/me/.local/share/python\PYGZus{}keyring/keyring\PYGZus{}pass.cfg}
+\PYG{g+go}{    \PYGZhy{} config\PYGZus{}file: /home/me/.config/python\PYGZus{}keyring/keyringrc.cfg}
+\PYG{g+go}{    \PYGZhy{} data\PYGZus{}root: /home/me/.local/share/python\PYGZus{}keyring}
+\PYG{g+gp}{\PYGZsh{}}\PYG{c+c1}{\PYGZsh{} datalad}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This lengthy output will report all information that might
+be relevant \textendash{} from DataLad to {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}} or Python
+up to your operating system.
+
+\sphinxAtStartPar
+The second step, finding and reading the help page of the command
+in question, is important in order to find out how the
+command that failed is used. Are arguments specified correctly?
+Does the help list any caveats?
+
+\sphinxAtStartPar
+There are multiple ways to find help on DataLad commands.
+You could turn to the \dlhbhref{D1}{documentation}.
+Alternatively, to get help right inside the terminal,
+run any command with the \sphinxcode{\sphinxupquote{\sphinxhyphen{}h}}/\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}help}} option (shown
+as an excerpt here):
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }get\PYG{+w}{ }\PYGZhy{}\PYGZhy{}help
+\PYG{g+go}{Usage: datalad get [\PYGZhy{}h] [\PYGZhy{}s LABEL] [\PYGZhy{}d PATH] [\PYGZhy{}r] [\PYGZhy{}R LEVELS] [\PYGZhy{}n]}
+\PYG{g+go}{                   [\PYGZhy{}D DESCRIPTION] [\PYGZhy{}\PYGZhy{}reckless [auto|ephemeral|shared\PYGZhy{}...]]}
+\PYG{g+go}{                   [\PYGZhy{}J NJOBS] [\PYGZhy{}\PYGZhy{}version]}
+\PYG{g+go}{                   [PATH [PATH ...]]}
+
+\PYG{g+go}{Get any dataset content (files/directories/subdatasets).}
+
+\PYG{g+go}{This command only operates on dataset content. To obtain a new independent}
+\PYG{g+go}{dataset from some source use the CLONE command.}
+
+\PYG{g+go}{By default this command operates recursively within a dataset, but not}
+\PYG{g+go}{across potential subdatasets, i.e. if a directory is provided, all files in}
+\PYG{g+go}{the directory are obtained. Recursion into subdatasets is supported too. If}
+\PYG{g+go}{enabled, relevant subdatasets are detected and installed in order to}
+\PYG{g+go}{fulfill a request.}
+
+\PYG{g+go}{NOTE}
+\PYG{g+go}{  Power\PYGZhy{}user info: This command uses git annex get to fulfill}
+\PYG{g+go}{  file handles.}
+
+\PYG{g+go}{*Examples*}
+
+\PYG{g+go}{Get a single file::}
+
+\PYG{g+gp}{   \PYGZpc{} }datalad\PYG{+w}{ }get\PYG{+w}{ }\PYGZlt{}path/to/file\PYGZgt{}
+
+\PYG{g+go}{Get (clone) a registered subdataset, but don\PYGZsq{}t retrieve data::}
+
+\PYG{g+gp}{   \PYGZpc{} }datalad\PYG{+w}{ }get\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYGZlt{}path/to/subds\PYGZgt{}
+
+\PYG{g+go}{positional arguments:}
+\PYG{g+go}{  PATH                  path/name of the requested dataset component. The}
+\PYG{g+go}{                        component must already be known to a dataset. To add}
+\PYG{g+go}{                        new components to a dataset use the ADD command.}
+\PYG{g+go}{                        Constraints: value must be a string or value must be}
+\PYG{g+go}{                        NONE}
+
+\PYG{g+go}{\PYGZhy{}✂\PYGZhy{}\PYGZhy{}✂\PYGZhy{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This, for example, is the help page on \sphinxcode{\sphinxupquote{datalad get}}, the same you would find in the documentation, but in your terminal (here heavily trimmed to only show the main components).
+It contains a command description, a list
+of all the available options with a short explanation of them, and
+example commands. The two \sphinxstyleemphasis{arguments} sections provide a comprehensive
+list of command arguments with details on their possibilities and
+requirements. A first thing to check would be whether your command call
+specified all of the required arguments.
+
+
+\subsection{Asking questions (right)}
+\label{\detokenize{basics/101-135-help:asking-questions-right}}
+\sphinxAtStartPar
+If nothing you do on your own helps to solve the problem,
+consider asking others. Check out \dlhbhref{N1}{neurostars}
+and search for your problem \textendash{} likely,
+\dlhbhref{X1E}{somebody already encountered the same error before}
+and fixed it, but if not, just ask a new question with a \sphinxcode{\sphinxupquote{datalad}} tag.
+
+\sphinxAtStartPar
+Make sure your question is as informative as it can be for others.
+Include
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleemphasis{context} \textendash{} what did you want to do and why?
+
+\item {} 
+\sphinxAtStartPar
+the \sphinxstyleemphasis{problem} \textendash{} paste the error message (all of it), and provide the
+steps necessary to reproduce it.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleemphasis{technical details} \textendash{} what version of DataLad are you using, what version
+of git\sphinxhyphen{}annex, and which git\sphinxhyphen{}annex repository type, what is your operating
+system and \textendash{} if applicable \textendash{} Python version? \sphinxcode{\sphinxupquote{datalad wtf}} is your friend
+to find all of this information.
+
+\end{itemize}
+
+\index{debugging@\spxentry{debugging}}\ignorespaces 
+
+\subsection{Debugging like a DataLad\sphinxhyphen{}developer}
+\label{\detokenize{basics/101-135-help:debugging-like-a-datalad-developer}}\label{\detokenize{basics/101-135-help:index-1}}
+\sphinxAtStartPar
+If you have read a command’s help from start to end, checked all software versions twice, even \dlhbhref{X1D}{asked colleagues to reproduce your problem (unsuccessfully)}, and you still don’t have any clue what is going on, then welcome to the debugging section!
+
+\begin{figure}[tbp]
+\centering
+\capstart
+
+\noindent\sphinxincludegraphics[width=0.500\linewidth]{{debug}.pdf}
+\caption{It’s not as bad as this}\label{\detokenize{basics/101-135-help:id4}}\end{figure}
+
+\sphinxAtStartPar
+It is not always straightforward to see \sphinxstyleemphasis{why} a particular DataLad command has failed.
+Given that operations with DataLad can be quite complicated, and could involve complexities such as different forms of authentication, different file systems, interactions with the environment, configurations, and other software, and \sphinxstyleemphasis{much} more, there are what may feel like an infinite amount of sources for the problem at hand.
+The resulting error message, however, may not display the underlying cause correctly because the error message of whichever process failed is not propagated into the final result report.
+
+\sphinxAtStartPar
+In situations where there is no obvious reason for a command to fail, it can be helpful \textendash{} either for yourself or for further information to paste into {\hyperref[\detokenize{glossary:term-GitHub}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitHub}}}} issues \textendash{} to start \dlhbhref{X1B}{debugging}, or \sphinxstyleemphasis{logging at a higher granularity} than is the default.
+This allows you to gain more insights into the actions DataLad and its underlying tools are taking, where \sphinxstyleemphasis{exactly} they fail, and to even play around with the program at the state of the failure.
+
+\sphinxAtStartPar
+{\hyperref[\detokenize{glossary:term-debugging}]{\sphinxtermref{\DUrole{xref,std,std-term}{Debugging}}}} and {\hyperref[\detokenize{glossary:term-logging}]{\sphinxtermref{\DUrole{xref,std,std-term}{logging}}}} are not as complex as these terms may sound if you have never consciously debugged.
+
+\sphinxAtStartPar
+Procedurally, it can be as easy as adding an additional flag to a command call, and cognitively, it can be as easy as engaging your visual system in a visual search task for the color red or the word “error”, or reading more DataLad output than you are used to.
+We will start with the general concepts, and then collect concrete debugging strategies for different problems.
+
+
+\subsubsection{Logging}
+\label{\detokenize{basics/101-135-help:logging}}\label{\detokenize{basics/101-135-help:id2}}
+\sphinxAtStartPar
+In order to gain more insights into the steps performed by a program and capture as many details as possible for troubleshooting an error, you can turn to {\hyperref[\detokenize{glossary:term-logging}]{\sphinxtermref{\DUrole{xref,std,std-term}{logging}}}}.
+Logging simply refers to the fact that DataLad and its underlying tools tell you what they are doing:
+This information can be coarse, such as a mere \sphinxcode{\sphinxupquote{{[}INFO{]} Downloading \textless{}some\_url\textgreater{} into \textless{}some\_target\textgreater{}}}, or fine\sphinxhyphen{}grained, such as \sphinxcode{\sphinxupquote{{[}DEBUG{]} Resolved dataset for status reporting: \textless{}dataset\textgreater{}}}.
+The {\hyperref[\detokenize{glossary:term-log-level}]{\sphinxtermref{\DUrole{xref,std,std-term}{log level}}}} in brackets at the beginning of the line indicates how many details DataLad shares with you.
+
+\sphinxAtStartPar
+Note that {\hyperref[\detokenize{glossary:term-logging}]{\sphinxtermref{\DUrole{xref,std,std-term}{logging}}}} is not a sealed book, and happens automatically during the execution of any DataLad command.
+While you were reading this book, you have seen a lot of log messages already.
+Anything printed to your terminal preceded by \sphinxcode{\sphinxupquote{{[}INFO{]}}}, for example, is a log message (in this case, on the \sphinxcode{\sphinxupquote{info}} level).
+When you are \sphinxstyleemphasis{consciously} logging, you simply set the log\sphinxhyphen{}level to the desired amount of information, or increase the amount of verbosity until the output gives you a hint of what went wrong.
+Likewise, adjusting the log\sphinxhyphen{}level also works the other way around, and lets you \sphinxstyleemphasis{decrease} the amount of information you receive in your terminal.
+
+\index{log level@\spxentry{log level}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!log level@\spxentry{log level}}\ignorespaces \begin{findoutmore}[label={index-2}, before title={\thetcbcounter\ }, check odd page=true]{Log levels}
+\label{\detokenize{basics/101-135-help:index-2}}
+
+\sphinxAtStartPar
+Log levels provide the means to adjust how much information you want, and are described in human readable terms, ordered by the severity of the failures or problems reported.
+The following log levels can be chosen from:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{critical}: Only catastrophes are reported. Currently, there is nothing inside of DataLad that would log at this level, so setting the log level to \sphinxstyleemphasis{critical} will result in getting no details at all, not even about errors or failures.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{error}: With this log level you will receive reports on any errors that occurred within the program during command execution.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{warning}: At this log level, the command execution will report on usual situations and anything that \sphinxstyleemphasis{might} be a problem, in addition to report anything from the \sphinxstyleemphasis{error} log level. .
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{info}: This log level will include reports by the program that indicate normal behavior and serve to keep you up to date about the current state of things, in additions to warning and error logging messages.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{debug}: This log level is very useful to troubleshoot a problem, and results in DataLad telling you \sphinxstyleemphasis{a lot} about what it is doing.
+
+\end{itemize}
+
+\sphinxAtStartPar
+Other than log \sphinxstyleemphasis{levels}, you can also adjust the amount of information provided with numerical granularity. Instead of specifying a log level, provide an integer between 1 and 50, with lower values denoting more debugging information.
+
+\sphinxAtStartPar
+Raising the log level (e.g, to \sphinxcode{\sphinxupquote{error}}, or \sphinxcode{\sphinxupquote{40}}) will decrease the amount of information and output you will receive, while lowering it (e.g., to \sphinxcode{\sphinxupquote{debug}} or \sphinxcode{\sphinxupquote{10}}) will increase it.
+
+
+\end{findoutmore}
+
+\sphinxAtStartPar
+Setting a log level can be done in the form of an {\hyperref[\detokenize{glossary:term-environment-variable}]{\sphinxtermref{\DUrole{xref,std,std-term}{environment variable}}}}, a configuration, or with the \sphinxcode{\sphinxupquote{\sphinxhyphen{}l}}/\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}log\sphinxhyphen{}level}} flag appended directly after the main \sphinxcode{\sphinxupquote{ datalad}} command.
+To get extensive information on what \sphinxcode{\sphinxupquote{datalad status}} does underneath the hood, your command could look like this (but its output is shortened):
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }\PYGZhy{}\PYGZhy{}log\PYGZhy{}level\PYG{+w}{ }debug\PYG{+w}{ }status
+\PYG{g+go}{[DEBUG] Resolved dataset to report status: /home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101}
+\PYG{g+go}{[DEBUG] Done query repo: [\PYGZsq{}ls\PYGZhy{}files\PYGZsq{}, \PYGZsq{}\PYGZhy{}\PYGZhy{}stage\PYGZsq{}, \PYGZsq{}\PYGZhy{}z\PYGZsq{}, \PYGZsq{}\PYGZhy{}\PYGZhy{}exclude\PYGZhy{}standard\PYGZsq{}, \PYGZsq{}\PYGZhy{}o\PYGZsq{}, \PYGZsq{}\PYGZhy{}\PYGZhy{}directory\PYGZsq{}, \PYGZsq{}\PYGZhy{}\PYGZhy{}no\PYGZhy{}empty\PYGZhy{}directory\PYGZsq{}]}
+\PYG{g+go}{[DEBUG] Done AnnexRepo(/home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101/recordings/longnow).get\PYGZus{}content\PYGZus{}info(...)}
+\PYG{g+go}{[DEBUG] Run [\PYGZsq{}git\PYGZsq{}, \PYGZsq{}\PYGZhy{}c\PYGZsq{}, \PYGZsq{}diff.ignoreSubmodules=none\PYGZsq{}, \PYGZsq{}\PYGZhy{}c\PYGZsq{}, \PYGZsq{}core.quotepath=false\PYGZsq{}, \PYGZsq{}ls\PYGZhy{}files\PYGZsq{}, \PYGZsq{}\PYGZhy{}z\PYGZsq{}, \PYGZsq{}\PYGZhy{}m\PYGZsq{}, \PYGZsq{}\PYGZhy{}d\PYGZsq{}] (protocol\PYGZus{}class=GeneratorStdOutErrCapture) (cwd=/home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101/recordings/longnow)}
+\PYG{g+go}{[DEBUG] AnnexRepo(/home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101/recordings/longnow).get\PYGZus{}content\PYGZus{}info(...)}
+\PYG{g+go}{[DEBUG] Query repo: [\PYGZsq{}ls\PYGZhy{}tree\PYGZsq{}, \PYGZsq{}HEAD\PYGZsq{}, \PYGZsq{}\PYGZhy{}z\PYGZsq{}, \PYGZsq{}\PYGZhy{}r\PYGZsq{}, \PYGZsq{}\PYGZhy{}\PYGZhy{}full\PYGZhy{}tree\PYGZsq{}, \PYGZsq{}\PYGZhy{}l\PYGZsq{}]}
+\PYG{g+go}{[DEBUG] Run [\PYGZsq{}git\PYGZsq{}, \PYGZsq{}\PYGZhy{}c\PYGZsq{}, \PYGZsq{}diff.ignoreSubmodules=none\PYGZsq{}, \PYGZsq{}\PYGZhy{}c\PYGZsq{}, \PYGZsq{}core.quotepath=false\PYGZsq{}, \PYGZsq{}ls\PYGZhy{}tree\PYGZsq{}, \PYGZsq{}HEAD\PYGZsq{}, \PYGZsq{}\PYGZhy{}z\PYGZsq{}, \PYGZsq{}\PYGZhy{}r\PYGZsq{}, \PYGZsq{}\PYGZhy{}\PYGZhy{}full\PYGZhy{}tree\PYGZsq{}, \PYGZsq{}\PYGZhy{}l\PYGZsq{}] (protocol\PYGZus{}class=GeneratorStdOutErrCapture) (cwd=/home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101/recordings/longnow)}
+\PYG{g+go}{[DEBUG] Done query repo: [\PYGZsq{}ls\PYGZhy{}tree\PYGZsq{}, \PYGZsq{}HEAD\PYGZsq{}, \PYGZsq{}\PYGZhy{}z\PYGZsq{}, \PYGZsq{}\PYGZhy{}r\PYGZsq{}, \PYGZsq{}\PYGZhy{}\PYGZhy{}full\PYGZhy{}tree\PYGZsq{}, \PYGZsq{}\PYGZhy{}l\PYGZsq{}]}
+\PYG{g+go}{[DEBUG] Done AnnexRepo(/home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101/recordings/longnow).get\PYGZus{}content\PYGZus{}info(...)}
+\PYG{g+go}{nothing to save, working tree clean}
+\end{sphinxVerbatim}
+
+\index{configuration item@\spxentry{configuration item}!datalad.log.level@\spxentry{datalad.log.level}}\index{configure verbosity of command output@\spxentry{configure verbosity of command output}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!configure verbosity of command output@\spxentry{configure verbosity of command output}}\ignorespaces \begin{findoutmore}[label={index-3}, before title={\thetcbcounter\ }, check odd page=true]{How does it look when using environment variables or configurations?}
+\label{\detokenize{basics/101-135-help:index-3}}
+
+\sphinxAtStartPar
+The log level can also be set (for different scopes) using the \sphinxcode{\sphinxupquote{datalad.log.level}} configuration variable, or the corresponding environment variable \sphinxcode{\sphinxupquote{DATALAD\_LOG\_LEVEL}}.
+
+\sphinxAtStartPar
+To set the log level for a single command, for example, set it in front of the command:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nv}{DATALAD\PYGZus{}LOG\PYGZus{}LEVEL}\PYG{o}{=}debug\PYG{+w}{ }datalad\PYG{+w}{ }status
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+And to set the log level for the rest of the shell session, export it:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{export}\PYG{+w}{ }\PYG{n+nv}{DATALAD\PYGZus{}LOG\PYGZus{}LEVEL}\PYG{o}{=}debug
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+gp}{\PYGZdl{} }...
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+You can find out a bit more on environment variable {\hyperref[\detokenize{basics/101-123-config2:fom-envvar}]{\sphinxcrossref{\DUrole{std,std-ref}{in the Findoutmore on environment variables}}}} (\autopageref*{\detokenize{basics/101-123-config2:fom-envvar}}).
+
+\sphinxAtStartPar
+The configuration variable can be used to set the log level on a user (global) or system\sphinxhyphen{}wide level with the \sphinxcode{\sphinxupquote{git config}} command:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }config\PYG{+w}{ }\PYGZhy{}\PYGZhy{}global\PYG{+w}{ }datalad.log.level\PYG{+w}{ }debug
+\end{sphinxVerbatim}
+
+
+\end{findoutmore}
+
+\sphinxAtStartPar
+This output is extensive and detailed, but it precisely shows the sequence of commands and arguments that are run prior to a failure or crash, and all additional information that is reported with the log levels \sphinxcode{\sphinxupquote{info}} or \sphinxcode{\sphinxupquote{debug}} can be very helpful to find out what is wrong.
+Even if the vast amount of detail in output generated with \sphinxcode{\sphinxupquote{debug}} logging appears overwhelming, it can make sense to find out at which point an execution stalls, whether arguments, commands, or datasets reported in the debug output are what you expect them to be, and to forward all information into any potential GitHub issue you will be creating.
+
+\sphinxAtStartPar
+Finally, other than logging with a DataLad command, it sometimes can be useful to turn to {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}} or {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}} for logging.
+For failing \sphinxcode{\sphinxupquote{datalad get}} calls, it may be useful to retry the retrieval using \sphinxcode{\sphinxupquote{git annex get \sphinxhyphen{}d \sphinxhyphen{}v \textless{}file\textgreater{}}}, where \sphinxcode{\sphinxupquote{\sphinxhyphen{}d}} (debug) and \sphinxcode{\sphinxupquote{\sphinxhyphen{}v}} (verbose) increase the amount of detail about the command execution and failure.
+In rare cases where you suspect something might be wrong with Git, setting the environment variables \sphinxcode{\sphinxupquote{GIT\_TRACE}} and \sphinxcode{\sphinxupquote{GIT\_TRACE\_SETUP}} to \sphinxcode{\sphinxupquote{2}} prior to running a Git command will give you debugging output.
+
+
+\subsubsection{Debugging}
+\label{\detokenize{basics/101-135-help:debug}}\label{\detokenize{basics/101-135-help:id3}}
+\sphinxAtStartPar
+If the additional level of detail provided by logging messages is not enough, you can go further with actual {\hyperref[\detokenize{glossary:term-debugging}]{\sphinxtermref{\DUrole{xref,std,std-term}{debugging}}}}.
+For this, add the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}dbg}} or \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}idbg}} flag to the main \sphinxcode{\sphinxupquote{ datalad}} command, as in \sphinxcode{\sphinxupquote{datalad \sphinxhyphen{}\sphinxhyphen{}dbg status}}.
+Adding this flag will enter a \sphinxhref{https://docs.python.org/3/library/pdb.html}{Python} or \dlhbhref{I3}{IPython debugger} when something unexpectedly crashes.
+This allows you to debug the program right when it fails, inspect available variables and their values, or step back and forth through the source code.
+Note that debugging experience is not a prerequisite when using DataLad \textendash{} although it is \dlhbhref{M2A}{an exciting life skill}.
+\dlhbhref{P1A}{The official Python docs} provide a good overview on the available debugger commands if you are interested in learning more about this.
+
+
+\subsubsection{Debugging: A concrete example}
+\label{\detokenize{basics/101-135-help:debugging-a-concrete-example}}
+\sphinxAtStartPar
+It is common for \sphinxcode{\sphinxupquote{datalad get}} errors to originate in {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}}, the software used by DataLad to transfer data. Here are a few suggestions to debug them:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Take a deep breath, or preferably a walk in a nice park :)
+
+\item {} \begin{description}
+\sphinxlineitem{Check that you are using a recent version of git\sphinxhyphen{}annex}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{git\sphinxhyphen{}annex version}} returns the version of git\sphinxhyphen{}annex on the first line of its input, and it is also reported in the output of \sphinxcode{\sphinxupquote{datalad wtf}}.
+
+\item {} 
+\sphinxAtStartPar
+The version number contains the release date of the version in use. For instance, git\sphinxhyphen{}annex version: \sphinxcode{\sphinxupquote{8.20200330\sphinxhyphen{}g971791563}} was released on 30 March 2020.
+
+\item {} 
+\sphinxAtStartPar
+If the version that you are using is older than a few months, consider updating using the instructions in {\hyperref[\detokenize{intro/installation:install}]{\sphinxcrossref{\DUrole{std,std-ref}{Installation and configuration}}}} (\autopageref*{\detokenize{intro/installation:install}}).
+
+\end{itemize}
+
+\end{description}
+
+\item {} 
+\sphinxAtStartPar
+Try to download the file using \sphinxcode{\sphinxupquote{git\sphinxhyphen{}annex get \sphinxhyphen{}v \sphinxhyphen{}d \textless{}file\_name\textgreater{}}}. If this doesn’t succeed, the DataLad command may not succeed. Options \sphinxcode{\sphinxupquote{\sphinxhyphen{}d/\sphinxhyphen{}\sphinxhyphen{}debug}} and \sphinxcode{\sphinxupquote{\sphinxhyphen{}v}} are here to provide as much verbosity in error messages as possible
+
+\item {} 
+\sphinxAtStartPar
+Read the output of {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}}, identify the error, breathe again, and solve the issue!
+
+\end{itemize}
+
+
+\subsection{Common warnings and errors}
+\label{\detokenize{basics/101-135-help:common-warnings-and-errors}}
+\sphinxAtStartPar
+A lot of output you will see while working with DataLad originates from warnings
+or errors by DataLad, git\sphinxhyphen{}annex, or Git.
+Some of these outputs can be wordy and not trivial to comprehend \sphinxhyphen{} and even if
+everything works, some warnings can be hard to understand.
+This following section will list some common git\sphinxhyphen{}annex warnings and errors and
+attempts to explain them. If you encounter warnings or errors that you would
+like to see explained in this book, please let us know by
+\dlhbhref{G2G}{filing an issue}.
+
+
+\subsubsection{Output produced by Git}
+\label{\detokenize{basics/101-135-help:output-produced-by-git}}
+\sphinxAtStartPar
+\sphinxstylestrong{Unset Git identity}
+
+\sphinxAtStartPar
+If you have not configured your Git identity, you will
+see warnings like this when running any DataLad command:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+go}{[WARNING] It is highly recommended to configure git first (set both user.name and user.email) before using DataLad.}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+To set your Git identity, go back to section {\hyperref[\detokenize{intro/installation:installconfig}]{\sphinxcrossref{\DUrole{std,std-ref}{Initial configuration}}}} (\autopageref*{\detokenize{intro/installation:installconfig}}).
+
+\sphinxAtStartPar
+\sphinxstylestrong{Rejected pushes}
+
+\sphinxAtStartPar
+One error you can run into when publishing dataset contents is that your
+\sphinxcode{\sphinxupquote{datalad push}} to a sibling is rejected.
+One example is this:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }push\PYG{+w}{ }\PYGZhy{}\PYGZhy{}to\PYG{+w}{ }public
+\PYG{g+go}{ [ERROR  ] refs/heads/main\PYGZhy{}\PYGZgt{}public:refs/heads/main [rejected] (non\PYGZhy{}fast\PYGZhy{}forward) [publish(/home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101)]}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This example is an attempt to push a local dataset to its sibling on GitHub. The
+push is rejected because it is a \sphinxcode{\sphinxupquote{non\sphinxhyphen{}fast\sphinxhyphen{}forward}} merge situation. Usually,
+this means that the sibling contains changes that your local dataset does not yet
+know about. It can be fixed by updating from the sibling first with a
+\sphinxcode{\sphinxupquote{datalad update \sphinxhyphen{}\sphinxhyphen{}merge}}.
+
+\phantomsection\label{\detokenize{basics/101-135-help:nonbarepush}}
+\sphinxAtStartPar
+Here is a different push rejection:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }push\PYG{+w}{ }\PYGZhy{}\PYGZhy{}to\PYG{+w}{ }roommate
+\PYG{g+go}{ publish(ok): . (dataset) [refs/heads/git\PYGZhy{}annex\PYGZhy{}\PYGZgt{}roommate:refs/heads/git\PYGZhy{}annex 023a541..59a6f8d]}
+\PYG{g+go}{ [ERROR  ] refs/heads/main\PYGZhy{}\PYGZgt{}roommate:refs/heads/main [remote rejected] (branch is currently checked out) [publish(/home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101)]}
+\PYG{g+go}{ publish(error): . (dataset) [refs/heads/main\PYGZhy{}\PYGZgt{}roommate:refs/heads/main [remote rejected] (branch is currently checked out)]}
+\PYG{g+go}{ action summary:}
+\PYG{g+go}{   publish (error: 1, ok: 1)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+As you can see, the {\hyperref[\detokenize{glossary:term-git-annex-branch}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex branch}}}} was pushed successfully, but updating
+the \sphinxcode{\sphinxupquote{main}} branch was rejected: \sphinxcode{\sphinxupquote{{[}remote rejected{]} (branch is currently checked out) {[}publish(/home/me/dl\sphinxhyphen{}101/DataLad\sphinxhyphen{}101){]}}}.
+In this particular case, this is because it was an attempt to push from \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}}
+to the \sphinxcode{\sphinxupquote{roommate}} sibling that was created in chapter {\hyperref[\detokenize{basics/basics-collaboration:chapter-collaboration}]{\sphinxcrossref{\DUrole{std,std-ref}{Collaboration}}}} (\autopageref*{\detokenize{basics/basics-collaboration:chapter-collaboration}}).
+This is a special case of pushing, because it \textendash{} in technical terms \textendash{} is a push
+to a non\sphinxhyphen{}bare repository. Unlike {\hyperref[\detokenize{glossary:term-bare-Git-repositories}]{\sphinxtermref{\DUrole{xref,std,std-term}{bare Git repositories}}}}, non\sphinxhyphen{}bare
+repositories cannot be pushed to at all times. To fix this, you either want to
+checkout another branch
+in the \sphinxcode{\sphinxupquote{roommate}} sibling or push to a non\sphinxhyphen{}checked out branch in the \sphinxcode{\sphinxupquote{roommate}}
+sibling. Alternatively, you can configure \sphinxcode{\sphinxupquote{roommate}} to receive the push with
+Git’s \sphinxcode{\sphinxupquote{receive.denyCurrentBranch}} configuration key. By default, this configuration
+is set to \sphinxcode{\sphinxupquote{refuse}}. Setting it to \sphinxcode{\sphinxupquote{updateInstead}}
+with \sphinxcode{\sphinxupquote{git config receive.denyCurrentBranch updateInstead}} will allow updating
+the checked out branch. See \sphinxcode{\sphinxupquote{git config}}s
+\dlhbhref{G1N}{man page entry}
+on \sphinxcode{\sphinxupquote{receive.denyCurrentBranch}} for more.
+
+\sphinxAtStartPar
+\sphinxstylestrong{Detached HEADs}
+
+\sphinxAtStartPar
+One warning that you may encounter during an installation of a dataset is:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+go}{[INFO   ] Submodule HEAD got detached. Resetting branch main to point to 046713bb. Original location was 47e53498}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Even though “detached HEAD” sounds slightly worrisome, this is merely an information
+and does not require an action from your side. It is related to
+\dlhbhref{G1G}{Git submodules} (the underlying
+Git concept for subdatasets), and informs you about the current state a
+subdataset is saved in the superdataset you have just cloned.
+
+
+\subsubsection{Output produced by git\sphinxhyphen{}annex}
+\label{\detokenize{basics/101-135-help:output-produced-by-git-annex}}
+\sphinxAtStartPar
+\sphinxstylestrong{Unusable annexes}
+
+\sphinxAtStartPar
+Upon installation of a dataset, you may see:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+go}{[INFO    ]     Remote origin not usable by git\PYGZhy{}annex; setting annex\PYGZhy{}ignore}
+\PYG{g+go}{[INFO    ]     This could be a problem with the git\PYGZhy{}annex installation on the}
+\PYG{g+go}{remote. Please make sure that git\PYGZhy{}annex\PYGZhy{}shell is available in PATH when you}
+\PYG{g+go}{ssh into the remote. Once you have fixed the git\PYGZhy{}annex installation,}
+\PYG{g+go}{run: git annex enableremote origin}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This warning lets you know that git\sphinxhyphen{}annex will not attempt to download
+content from the {\hyperref[\detokenize{glossary:term-remote}]{\sphinxtermref{\DUrole{xref,std,std-term}{remote}}}} “origin”. This can have
+many reasons, but as long as there are other remotes you can access the
+data from, you are fine.
+
+\sphinxAtStartPar
+A similar warning message may appear when adding a sibling that is a pure Git
+{\hyperref[\detokenize{glossary:term-remote}]{\sphinxtermref{\DUrole{xref,std,std-term}{remote}}}}, such as a repository on GitHub:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+go}{[INFO ] Failed to enable annex remote github, could be a pure git or not}
+\PYG{g+go}{accessible}
+\PYG{g+go}{[WARNING] Failed to determine if github carries annex. Remote was marked by}
+\PYG{g+go}{annex as annex\PYGZhy{}ignore. Edit .git/config to reset if you think that was done}
+\PYG{g+go}{by mistake due to absent connection etc}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+These messages indicate that the sibling \sphinxcode{\sphinxupquote{github}} does not carry an annex.
+Thus, annexed file contents cannot be pushed to this sibling. This happens
+if the sibling indeed does not have an annex (which would be true, for example,
+for siblings on {\hyperref[\detokenize{glossary:term-GitHub}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitHub}}}}, {\hyperref[\detokenize{glossary:term-GitLab}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitLab}}}}, {\hyperref[\detokenize{glossary:term-Bitbucket}]{\sphinxtermref{\DUrole{xref,std,std-term}{Bitbucket}}}}, …, and
+would not require any further action or worry), or
+if the remote could not be reached, e.g., due to a missing internet
+connection (in which case you could set the key \sphinxcode{\sphinxupquote{annex\sphinxhyphen{}ignore}} in
+\sphinxcode{\sphinxupquote{.git/config}} to \sphinxcode{\sphinxupquote{false}}).
+
+\sphinxAtStartPar
+Speaking of remotes that are not available, this will probably be one of the most
+commonly occurring git\sphinxhyphen{}annex errors to see \sphinxhyphen{} failing \sphinxcode{\sphinxupquote{datalad get}} calls
+because remotes are not available:
+
+
+\subsection{Other errors}
+\label{\detokenize{basics/101-135-help:other-errors}}
+\sphinxAtStartPar
+Sometimes, registered subdatasets URLs have an {\hyperref[\detokenize{glossary:term-SSH}]{\sphinxtermref{\DUrole{xref,std,std-term}{SSH}}}} instead of {\hyperref[\detokenize{glossary:term-https}]{\sphinxtermref{\DUrole{xref,std,std-term}{https}}}} address, for example \sphinxcode{\sphinxupquote{git@github.com:datalad\sphinxhyphen{}datasets/longnow\sphinxhyphen{}podcasts.git}} instead of \sphinxcode{\sphinxupquote{https://github.com/datalad\sphinxhyphen{}datasets/longnow\sphinxhyphen{}podcasts.git}}.
+If one does not have an SSH key configured for the required service (e.g., GitHub, or a server), installing or getting the subdataset and its contents fails, with messages starting similar to this:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+go}{[INFO   ] Cloning https://github.com/psychoinformatics\PYGZhy{}de/paper\PYGZhy{}remodnav.git/remodnav [2 other candidates] into \PYGZsq{}/home/.../remodnav\PYGZsq{}}
+\PYG{g+go}{Permission denied (publickey).}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+If you encounter these errors, make sure to create and/or upload an SSH key (see section {\hyperref[\detokenize{basics/101-139-gin:gin}]{\sphinxcrossref{\DUrole{std,std-ref}{Walk\sphinxhyphen{}through: Dataset hosting on GIN}}}} (\autopageref*{\detokenize{basics/101-139-gin:gin}}) for an example) as necessary, or reconfigure/edit the URL into a HTTPS URL.
+
+\sphinxAtStartPar
+\sphinxstylestrong{git\sphinxhyphen{}annex as the default branch on GitHub}
+
+\sphinxAtStartPar
+If you publish a dataset to {\hyperref[\detokenize{glossary:term-GitHub}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitHub}}}}, but the resulting repository seems to consist of cryptic directories instead of your actual file names and directories, GitHub may have made the {\hyperref[\detokenize{glossary:term-git-annex-branch}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex branch}}}} the default.
+
+\begin{figure}[tbp]
+\centering
+
+\noindent\sphinxincludegraphics{{defaultgitannex_light}.png}
+\end{figure}
+
+\sphinxAtStartPar
+Typically, you can change the default branch settings in the webinterface to fix this.
+
+\sphinxAtStartPar
+\sphinxstylestrong{Windows adds whitespace line\sphinxhyphen{}endings to unchanged files}
+
+\sphinxAtStartPar
+The type of line ending (a typically invisible character that indicates a line break) differs between operating system.
+While Linux and macOS use a \sphinxstyleemphasis{line feed} (LF), Windows uses \sphinxstyleemphasis{carriage return} + \sphinxstyleemphasis{line feed} (CRLF).
+When you only collaborate across operating systems of the same type, this is a very boring fun fact at most.
+But if Windows\sphinxhyphen{} and Non\sphinxhyphen{}Windows users collaborate, or if you are working with files across different operating systems, the different type of line ending that Windows uses may show up as unintended modifications on other system.
+In most cases, this is prevented by a default cross\sphinxhyphen{}platform compatible line\sphinxhyphen{}ending configuration on Windows that is set during installation:
+
+\begin{figure}[tbp]
+\centering
+
+\noindent\sphinxincludegraphics{{crlf}.png}
+\end{figure}
+
+\sphinxAtStartPar
+To fix this behavior outside of the installation process and standardize line endings across operating systems, Windows users are advised to set the configuration \sphinxcode{\sphinxupquote{core.autcrlf true}} with \sphinxcode{\sphinxupquote{git config \sphinxhyphen{}\sphinxhyphen{}global core.autocrfl true}}.
+
+\sphinxstepscope
+
+
+\section{Gists}
+\label{\detokenize{basics/101-146-gists:gists}}\label{\detokenize{basics/101-146-gists:id1}}\label{\detokenize{basics/101-146-gists::doc}}
+\sphinxAtStartPar
+The more complex and larger your DataLad project, the more difficult it is to do
+efficient housekeeping.
+This section is a selection of code snippets tuned to perform specific,
+non\sphinxhyphen{}trivial tasks in datasets. Often, they are not limited to single commands of
+the version control tools you know, but combine helpful other command line
+tools and general Unix command line magic. Just like
+\dlhbhref{G12}{GitHub gists}, its a collection of lightweight
+and easily accessible tips and tricks. For a more basic command overview,
+take a look at the {\hyperref[\detokenize{basics/101-136-cheatsheet:cheat}]{\sphinxcrossref{\DUrole{std,std-ref}{DataLad cheat sheet}}}} (\autopageref*{\detokenize{basics/101-136-cheatsheet:cheat}}). The
+\dlhbhref{B1R}{tips collection of git\sphinxhyphen{}annex} is also
+a very valuable resource.
+
+\noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{gists}.pdf}\hspace*{\fill}}
+
+
+\subsection{Parallelize subdataset processing}
+\label{\detokenize{basics/101-146-gists:parallelize-subdataset-processing}}\label{\detokenize{basics/101-146-gists:parallelize}}
+\sphinxAtStartPar
+DataLad cannot yet parallelize processes that are performed
+independently over a large number of subdatasets. Pushing across a dataset
+hierarchy, for example, is performed one after the other.
+Unix however, has a few tools such as \dlhbhref{W1X}{xargs}
+or the \sphinxcode{\sphinxupquote{parallel}} tool of \dlhbhref{J1A}{moreutils}
+that can assist.
+
+\sphinxAtStartPar
+Here is an example of pushing all subdatasets (and their respective subdatasets)
+recursively to their (identically named) siblings:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }\PYGZhy{}f\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}\PYGZob{}path\PYGZcb{}\PYGZsq{}}\PYG{+w}{ }subdatasets\PYG{+w}{ }\PYG{p}{|}\PYG{+w}{ }xargs\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{1}\PYG{+w}{ }\PYGZhy{}P\PYG{+w}{ }\PYG{l+m}{10}\PYG{+w}{ }datalad\PYG{+w}{ }push\PYG{+w}{ }\PYGZhy{}r\PYG{+w}{ }\PYGZhy{}\PYGZhy{}to\PYG{+w}{ }\PYGZlt{}sibling\PYGZhy{}name\PYGZgt{}\PYG{+w}{ }\PYGZhy{}d
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{datalad \sphinxhyphen{}f \textquotesingle{}\{path\}\textquotesingle{} subdatasets}} discovers the paths of all subdatasets,
+and \sphinxcode{\sphinxupquote{xargs}} hands them individually (\sphinxcode{\sphinxupquote{\sphinxhyphen{}n 1}}) to a (recursive) \sphinxcode{\sphinxupquote{datalad push}},
+but performs 10 of these operations in parallel (\sphinxcode{\sphinxupquote{\sphinxhyphen{}P 10}}), thus achieving
+parallelization.
+
+\sphinxAtStartPar
+Here is an example of cross\sphinxhyphen{}dataset download parallelization:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }\PYGZhy{}f\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}\PYGZob{}path\PYGZcb{}\PYGZsq{}}\PYG{+w}{ }subdatasets\PYG{+w}{ }\PYG{p}{|}\PYG{+w}{ }xargs\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{1}\PYG{+w}{ }\PYGZhy{}P\PYG{+w}{ }\PYG{l+m}{10}\PYG{+w}{ }datalad\PYG{+w}{ }get\PYG{+w}{ }\PYGZhy{}d
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Operations like this can safely be attempted for all commands that are independent
+across subdatasets.
+
+
+\subsection{Check whether all file content is present locally}
+\label{\detokenize{basics/101-146-gists:check-whether-all-file-content-is-present-locally}}
+\sphinxAtStartPar
+In order to check if all the files in a dataset have their file contents locally
+available, you can ask git\sphinxhyphen{}annex:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }annex\PYG{+w}{ }find\PYG{+w}{ }\PYGZhy{}\PYGZhy{}not\PYG{+w}{ }\PYGZhy{}\PYGZhy{}in\PYG{o}{=}here
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Any file that does not have its contents locally available will be listed.
+If there are subdatasets you want to recurse into, use the following command
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }submodule\PYG{+w}{ }foreach\PYG{+w}{ }\PYGZhy{}\PYGZhy{}quiet\PYG{+w}{ }\PYGZhy{}\PYGZhy{}recursive\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}git annex find \PYGZhy{}\PYGZhy{}not \PYGZhy{}\PYGZhy{}in=here \PYGZhy{}\PYGZhy{}format=\PYGZdl{}displaypath/\PYGZdl{}\PYGZbs{}\PYGZbs{}\PYGZob{}file\PYGZbs{}\PYGZbs{}\PYGZcb{}\PYGZbs{}\PYGZbs{}n\PYGZsq{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Alternatively, to get very comprehensive output, you can use
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }\PYGZhy{}f\PYG{+w}{ }json\PYG{+w}{ }status\PYG{+w}{ }\PYGZhy{}\PYGZhy{}recursive\PYG{+w}{ }\PYGZhy{}\PYGZhy{}annex\PYG{+w}{ }availability
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The output will be returned as json, and the key \sphinxcode{\sphinxupquote{has\_content}} indicates local
+content availability (\sphinxcode{\sphinxupquote{true}} or \sphinxcode{\sphinxupquote{false}}). To filter through it, the command
+line tool \dlhbhref{G18A}{jq} works well:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }\PYGZhy{}f\PYG{+w}{ }json\PYG{+w}{ }status\PYG{+w}{ }\PYGZhy{}\PYGZhy{}recursive\PYG{+w}{ }\PYGZhy{}\PYGZhy{}annex\PYG{+w}{ }all\PYG{+w}{ }\PYG{p}{|}\PYG{+w}{ }jq\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}. | select(.has\PYGZus{}content == true).path\PYGZsq{}}
+\end{sphinxVerbatim}
+
+
+\subsection{Drop annexed files from all past commits}
+\label{\detokenize{basics/101-146-gists:drop-annexed-files-from-all-past-commits}}
+\sphinxAtStartPar
+If there is annexed file content that is not used anymore (i.e., data in the
+annex that no files in any branch point to anymore such as corrupt files),
+you can find out about it and remove this file content out of your dataset
+(i.e., completely and irrecoverably delete it) with git\sphinxhyphen{}annex’s commands
+\sphinxcode{\sphinxupquote{git annex unused}} and \sphinxcode{\sphinxupquote{git annex dropunused\textasciigrave{}}}.
+
+\sphinxAtStartPar
+Find out which file contents are unused (not referenced by any current branch):
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }annex\PYG{+w}{ }unused
+\PYG{g+go}{ unused . (checking for unused data...)}
+\PYG{g+go}{   Some annexed data is no longer used by any files in the repository.}
+\PYG{g+go}{     NUMBER  KEY}
+\PYG{g+go}{     1       SHA256\PYGZhy{}s86050597\PYGZhy{}\PYGZhy{}6ae2688bc533437766a48aa19f2c06be14d1bab9c70b468af445d4f07b65f41e}
+\PYG{g+go}{     2       SHA1\PYGZhy{}s14\PYGZhy{}\PYGZhy{}f1358ec1873d57350e3dc62054dc232bc93c2bd1}
+\PYG{g+go}{   (To see where data was previously used, try: git log \PYGZhy{}\PYGZhy{}stat \PYGZhy{}S\PYGZsq{}KEY\PYGZsq{})}
+\PYG{g+go}{   (To remove unwanted data: git\PYGZhy{}annex dropunused NUMBER)}
+\PYG{g+go}{ ok}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Remove a single unused file by specifying its number in the listing above:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }annex\PYG{+w}{ }dropunused\PYG{+w}{ }\PYG{l+m}{1}
+\PYG{g+go}{ dropunused 1 ok}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Or a range of unused data with
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }annex\PYG{+w}{ }dropunused\PYG{+w}{ }\PYG{l+m}{1}\PYGZhy{}1000
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Or all
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }annex\PYG{+w}{ }dropunused\PYG{+w}{ }all
+\end{sphinxVerbatim}
+
+
+\subsection{Getting single file sizes prior to downloading from the Python API and the CLI}
+\label{\detokenize{basics/101-146-gists:getting-single-file-sizes-prior-to-downloading-from-the-python-api-and-the-cli}}
+\sphinxAtStartPar
+For a single file, \sphinxcode{\sphinxupquote{datalad status \sphinxhyphen{}\sphinxhyphen{}annex \sphinxhyphen{}\sphinxhyphen{} myfile}} will report on
+the size of the file prior to a \sphinxcode{\sphinxupquote{datalad get}}.
+
+\sphinxAtStartPar
+If you want to do it in Python, try this approach:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{import} \PYG{n+nn}{datalad}\PYG{n+nn}{.}\PYG{n+nn}{api} \PYG{k}{as} \PYG{n+nn}{dl}
+
+\PYG{n}{ds} \PYG{o}{=} \PYG{n}{dl}\PYG{o}{.}\PYG{n}{Dataset}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{/path/to/some/dataset}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{results} \PYG{o}{=} \PYG{n}{ds}\PYG{o}{.}\PYG{n}{status}\PYG{p}{(}\PYG{n}{path}\PYG{o}{=}\PYG{o}{\PYGZlt{}}\PYG{n}{path} \PYG{o+ow}{or} \PYG{n+nb}{list} \PYG{n}{of} \PYG{n}{paths}\PYG{o}{\PYGZgt{}}\PYG{p}{,} \PYG{n}{annex}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{basic}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{result\PYGZus{}renderer}\PYG{o}{=}\PYG{k+kc}{None}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+
+\subsection{Check whether a dataset contains an annex}
+\label{\detokenize{basics/101-146-gists:check-whether-a-dataset-contains-an-annex}}
+\sphinxAtStartPar
+Datasets can be either GitRepos (i.e., sole Git repositories; this happens when
+they are created with the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}no\sphinxhyphen{}annex}} flag, for example), or AnnexRepos
+(i.e., datasets that contain an annex). Information on what kind of repository it
+is is stored in the dataset report of \sphinxcode{\sphinxupquote{datalad wtf}} under the key \sphinxcode{\sphinxupquote{repo}}.
+Here is a one\sphinxhyphen{}liner to get this info:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }\PYGZhy{}f\PYG{l+s+s1}{\PYGZsq{}\PYGZob{}infos[dataset][repo]\PYGZcb{}\PYGZsq{}}\PYG{+w}{ }wtf
+\end{sphinxVerbatim}
+
+\index{create\sphinxhyphen{}sibling@\spxentry{create\sphinxhyphen{}sibling}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!create\sphinxhyphen{}sibling@\spxentry{create\sphinxhyphen{}sibling}}\ignorespaces 
+
+\subsection{Backing\sphinxhyphen{}up datasets}
+\label{\detokenize{basics/101-146-gists:backing-up-datasets}}\label{\detokenize{basics/101-146-gists:index-0}}
+\sphinxAtStartPar
+In order to back\sphinxhyphen{}up datasets you can publish them to a
+{\hyperref[\detokenize{glossary:term-Remote-Indexed-Archive-RIA-store}]{\sphinxtermref{\DUrole{xref,std,std-term}{Remote Indexed Archive (RIA) store}}}} or to a sibling dataset. The former
+solution does not require Git, git\sphinxhyphen{}annex, or DataLad to be installed on the
+machine that the back\sphinxhyphen{}up is pushed to, the latter does require them.
+
+\sphinxAtStartPar
+To find out more about RIA stores, checkout the online\sphinxhyphen{}handbook.
+A sketch of how to implement a sibling for backups is below:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} create a back up sibling}
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }create\PYGZhy{}sibling\PYG{+w}{ }\PYGZhy{}\PYGZhy{}annex\PYGZhy{}wanted\PYG{+w}{ }anything\PYG{+w}{ }\PYGZhy{}r\PYG{+w}{ }myserver:/path/to/backup
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} publish a full backup of the current branch}
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }publish\PYG{+w}{ }\PYGZhy{}\PYGZhy{}to\PYG{o}{=}myserver\PYG{+w}{ }\PYGZhy{}r
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} subsequently, publish updates to be backed up with}
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }publish\PYG{+w}{ }\PYGZhy{}\PYGZhy{}to\PYG{o}{=}myserver\PYG{+w}{ }\PYGZhy{}r\PYG{+w}{ }\PYGZhy{}\PYGZhy{}since\PYG{o}{=}\PYG{+w}{ }\PYGZhy{}\PYGZhy{}missing\PYG{o}{=}inherit
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+In order to push not only the current branch, but refs, add the option
+\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}publish\sphinxhyphen{}by\sphinxhyphen{}default "refs/*"}} to the \sphinxcode{\sphinxupquote{datalad create\sphinxhyphen{}sibling}} call.
+Should you want to back up all annexed data, even past versions of files, use
+\sphinxcode{\sphinxupquote{git annex sync}} to push to the sibling:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }annex\PYG{+w}{ }sync\PYG{+w}{ }\PYGZhy{}\PYGZhy{}all\PYG{+w}{ }\PYGZhy{}\PYGZhy{}content\PYG{+w}{ }\PYGZlt{}sibling\PYGZhy{}name\PYGZgt{}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+For an in\sphinxhyphen{}depth explanation and example take a look at the
+\dlhbhref{G2N}{GitHub issue that raised this question}.
+
+
+\subsection{Retrieve partial content from a hierarchy of (uninstalled) datasets}
+\label{\detokenize{basics/101-146-gists:retrieve-partial-content-from-a-hierarchy-of-uninstalled-datasets}}\label{\detokenize{basics/101-146-gists:retrievehcp}}
+\sphinxAtStartPar
+In order to \sphinxcode{\sphinxupquote{datalad get}} dataset content across a range of subdatasets, a bit
+of UNIX command line foo can increase the efficiency of your command.
+
+\sphinxAtStartPar
+Example: consider retrieving all \sphinxcode{\sphinxupquote{ribbon.nii.gz}} files for all subjects in the
+\dlhbhref{G2D}{HCP open access dataset}
+(a dataset with about 4500 subdatasets).
+If all subject\sphinxhyphen{}subdatasets are installed (e.g., with \sphinxcode{\sphinxupquote{datalad get \sphinxhyphen{}n \sphinxhyphen{}r}} for
+a recursive installation without file retrieval), {\hyperref[\detokenize{glossary:term-globbing}]{\sphinxtermref{\DUrole{xref,std,std-term}{globbing}}}} with the
+shell works fine:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }get\PYG{+w}{ }HCP1200/*/T1W/ribbon.nii.gz
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The Gist {\hyperref[\detokenize{basics/101-146-gists:parallelize}]{\sphinxcrossref{\DUrole{std,std-ref}{Parallelize subdataset processing}}}} (\autopageref*{\detokenize{basics/101-146-gists:parallelize}}) can show you how to parallelize this.
+If the subdatasets are not yet installed, globbing will not work, because the
+shell can’t expand non\sphinxhyphen{}existent paths. As an alternative, you can pipe the output
+of an (arbitrarily complex) \sphinxcode{\sphinxupquote{datalad search}} command into
+\sphinxcode{\sphinxupquote{datalad get}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }\PYGZhy{}f\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}\PYGZob{}path\PYGZcb{}\PYGZsq{}}\PYG{+w}{ }\PYGZhy{}c\PYG{+w}{ }datalad.search.index\PYGZhy{}egrep\PYGZhy{}documenttype\PYG{o}{=}all\PYG{+w}{ }search\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}path:.*T1w.*\PYGZbs{}.nii.gz\PYGZsq{}}\PYG{+w}{ }\PYG{p}{|}\PYG{+w}{ }xargs\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{100}\PYG{+w}{ }datalad\PYG{+w}{ }get
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+However, if you know the file locations within the dataset hierarchy and they
+are predictably named and consistent, you can create a file containing all paths to
+be retrieved and pipe that into \sphinxcode{\sphinxupquote{datalad get}} as well:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} create file with all file paths}
+\PYG{g+gp}{\PYGZdl{} }\PYG{k}{for}\PYG{+w}{ }sub\PYG{+w}{ }\PYG{k}{in}\PYG{+w}{ }HCP1200/*\PYG{p}{;}\PYG{+w}{ }\PYG{k}{do}\PYG{+w}{ }\PYG{n+nb}{echo}\PYG{+w}{ }\PYG{l+s+si}{\PYGZdl{}\PYGZob{}}\PYG{n+nv}{sub}\PYG{l+s+si}{\PYGZcb{}}/T1w/ribbons.nii.gz\PYG{p}{;}\PYG{+w}{ }\PYG{k}{done}\PYG{+w}{ }\PYGZgt{}\PYG{+w}{ }toget.txt
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} pipe it into datalad get}
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }toget.txt\PYG{+w}{ }\PYG{p}{|}\PYG{+w}{ }xargs\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{100}\PYG{+w}{ }datalad\PYG{+w}{ }get
+\end{sphinxVerbatim}
+
+
+\subsection{Speed up status reports in large datasets}
+\label{\detokenize{basics/101-146-gists:speed-up-status-reports-in-large-datasets}}\label{\detokenize{basics/101-146-gists:speedystatus}}
+\sphinxAtStartPar
+In datasets with deep dataset hierarchies or large numbers of files,
+\sphinxcode{\sphinxupquote{datalad status}} calls can be expensive. Handily,
+the command provides options that can boost performance by limiting what is being
+tested and reported. In order to speed up subdataset state state evaluation,
+\sphinxcode{\sphinxupquote{\sphinxhyphen{}e/\sphinxhyphen{}\sphinxhyphen{}eval\sphinxhyphen{}subdataset\sphinxhyphen{}state}} can be set \sphinxcode{\sphinxupquote{commit}} or \sphinxcode{\sphinxupquote{no}}. Instead of checking
+recursively for uncommitted modifications in subdatasets, this would lead \sphinxcode{\sphinxupquote{status}}
+to only compare the most recent commit {\hyperref[\detokenize{glossary:term-shasum}]{\sphinxtermref{\DUrole{xref,std,std-term}{shasum}}}} in the subdataset against
+the recorded subdataset state in the superdataset (\sphinxcode{\sphinxupquote{commit}}), or skip subdataset
+state evaluation completely (\sphinxcode{\sphinxupquote{no}}). In order to speed up file type evaluation,
+the option \sphinxcode{\sphinxupquote{\sphinxhyphen{}t/\sphinxhyphen{}\sphinxhyphen{}report\sphinxhyphen{}filetype}} can be set to \sphinxcode{\sphinxupquote{raw}}. This skips an evaluation
+on whether symlinks are pointers to annexed file (upon which, if true, the symlink
+would be reported as type “file”). Instead, all symlinks will be reported as
+being of type “symlink”.
+
+
+\subsection{Squashing git\sphinxhyphen{}annex history}
+\label{\detokenize{basics/101-146-gists:squashing-git-annex-history}}
+\sphinxAtStartPar
+A large number of commits in the {\hyperref[\detokenize{glossary:term-git-annex-branch}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex branch}}}} (think: thousands
+rather than hundreds) can inflate your repository and increase the size of the
+\sphinxcode{\sphinxupquote{.git}} directory, which can lead to slower cloning operations.
+There are, however, ways to shrink the commit history in the annex branch.
+
+\sphinxAtStartPar
+In order to {\hyperref[\detokenize{glossary:term-squash}]{\sphinxtermref{\DUrole{xref,std,std-term}{squash}}}} the entire git\sphinxhyphen{}annex history into a single commit, run
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }annex\PYG{+w}{ }forget\PYG{+w}{ }\PYGZhy{}\PYGZhy{}drop\PYGZhy{}dead\PYG{+w}{ }\PYGZhy{}\PYGZhy{}force
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Afterwards, if your dataset has a sibling, the branch needs to be
+{\hyperref[\detokenize{glossary:term-force-push}]{\sphinxtermref{\DUrole{xref,std,std-term}{force\sphinxhyphen{}push}}}}ed. If you attempt an operation to shrink your git\sphinxhyphen{}annex
+history, also checkout
+\dlhbhref{B1E}{this thread}
+for more information on shrinking git\sphinxhyphen{}annex’s history and helpful safeguards and
+potential caveats.
+
+\appendix
+
+\sphinxstepscope
+
+

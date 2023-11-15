@@ -1,0 +1,1643 @@
+\chapter{DataLad, run!}
+\label{\detokenize{basics/basics-run:datalad-run}}\label{\detokenize{basics/basics-run:chapter-run}}\label{\detokenize{basics/basics-run:id1}}\label{\detokenize{basics/basics-run::doc}}
+\noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{keeptrack}.pdf}\hspace*{\fill}}
+
+\sphinxstepscope
+
+
+\section{Keeping track}
+\label{\detokenize{basics/101-108-run:keeping-track}}\label{\detokenize{basics/101-108-run:run}}\label{\detokenize{basics/101-108-run::doc}}
+\sphinxAtStartPar
+In previous examples, with the exception of \sphinxcode{\sphinxupquote{datalad download\sphinxhyphen{}url}}, all
+changes that happened to the dataset or the files it contains were
+saved to the dataset’s history by hand. We added larger and smaller
+files and saved them, and we also modified smaller file contents and
+saved these modifications.
+
+\sphinxAtStartPar
+Often, however, files get changed by shell commands
+or by scripts.
+Consider a data scientist.
+She has data files with numeric data,
+and code scripts in Python, R, Matlab or any other programming language
+that will use the data to compute results or figures. Such output is
+stored in new files, or modifies existing files.
+
+\sphinxAtStartPar
+But only a few weeks after these scripts were executed she finds it hard
+to remember which script was modified for which reason or created which
+output. How did this result came to be? Which script would she need
+to run again on which data to produce this particular figure?
+
+\sphinxAtStartPar
+In this section we will experience how DataLad can help
+to record the changes in a dataset after executing a script
+from the shell. Just as \sphinxcode{\sphinxupquote{datalad download\sphinxhyphen{}url}} was able to associate
+a file with its origin and store this information, we want to be
+able to associate a particular file with the commands, scripts, and inputs
+it was produced from, and thus capture and store full {\hyperref[\detokenize{glossary:term-provenance}]{\sphinxtermref{\DUrole{xref,std,std-term}{provenance}}}}.
+
+\sphinxAtStartPar
+Let’s say, for example, that you enjoyed the longnow podcasts a lot,
+and you start a podcast\sphinxhyphen{}night with friends to wind down from all of
+the exciting DataLad lectures. They propose to make a
+list of speakers and titles to cross out what they’ve already listened
+to, and ask you to prepare such a list.
+
+\sphinxAtStartPar
+“Mhh… probably there is a DataLad way to do this… wasn’t there also
+a note about metadata extraction at some point?” But as we are not that
+far into the lectures, you decide to write a short shell script
+to generate a text file that lists speaker and title
+name instead.
+
+\sphinxAtStartPar
+To do this, we are following a best practice that will reappear in the
+later section on {\hyperref[\detokenize{basics/101-127-yoda:yoda}]{\sphinxcrossref{\DUrole{std,std-ref}{YODA principles}}}} (\autopageref*{\detokenize{basics/101-127-yoda:yoda}}): Collecting all
+additional scripts that work with content of a subdataset \sphinxstyleemphasis{outside}
+of this subdataset, in a dedicated \sphinxcode{\sphinxupquote{code/}} directory,
+and collating the output of the execution of these scripts
+\sphinxstyleemphasis{outside} of the subdataset as well \textendash{} and
+therefore not modifying the subdataset.
+
+\sphinxAtStartPar
+The motivation behind this will become clear in later sections,
+but for now we’ll start with best\sphinxhyphen{}practice building.
+Therefore, create a subdirectory \sphinxcode{\sphinxupquote{code/}} in the \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}}
+superdataset:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }mkdir\PYG{+w}{ }code
+\PYG{g+gp}{\PYGZdl{} }tree\PYG{+w}{ }\PYGZhy{}d
+\PYG{g+go}{.}
+\PYG{g+go}{├── books}
+\PYG{g+go}{├── code}
+\PYG{g+go}{└── recordings}
+\PYG{g+go}{    └── longnow}
+\PYG{g+go}{        ├── Long\PYGZus{}Now\PYGZus{}\PYGZus{}Conversations\PYGZus{}at\PYGZus{}The\PYGZus{}Interval}
+\PYG{g+go}{        └── Long\PYGZus{}Now\PYGZus{}\PYGZus{}Seminars\PYGZus{}About\PYGZus{}Long\PYGZus{}term\PYGZus{}Thinking}
+
+\PYG{g+go}{6 directories}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Inside of \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101/code}}, create a simple shell script \sphinxcode{\sphinxupquote{list\_titles.sh}}.
+This script will carry out a simple task:
+It will loop through the file names of the \sphinxcode{\sphinxupquote{.mp3}} files and
+write out speaker names and talk titles in a very basic fashion.
+The \sphinxcode{\sphinxupquote{cat}} command will write the script content into \sphinxcode{\sphinxupquote{code/list\_titles.sh}}.
+Make sure to see the \textit{Windows-wit}~{\windowswiticoninline}\textit{\ref{ww-heredoc-alt}} {\hyperref[\detokenize{basics/101-108-run:ww-heredoc-alt}]{\sphinxcrossref{\DUrole{std,std-ref}{on an alternative}}}} (\autopageref*{\detokenize{basics/101-108-run:ww-heredoc-alt}}), and check
+the \textit{Windows-wit}~{\windowswiticoninline}\textit{\ref{ww-filename-extensions}} {\hyperref[\detokenize{basics/101-108-run:ww-filename-extensions}]{\sphinxcrossref{\DUrole{std,std-ref}{on automatic file name extensions}}}} (\autopageref*{\detokenize{basics/101-108-run:ww-filename-extensions}})
+to avoid confusion when creating files manually.
+\begin{windowswit}[label={ww-heredoc-alt}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{Here’s a script for Windows users}
+\label{\detokenize{basics/101-108-run:ww-heredoc-alt}}
+
+\sphinxAtStartPar
+Please use an editor of your choice to create a file \sphinxcode{\sphinxupquote{list\_titles.sh}} inside of the \sphinxcode{\sphinxupquote{code}} directory.
+These should be the contents:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{for}\PYG{+w}{ }i\PYG{+w}{ }\PYG{k}{in}\PYG{+w}{ }recordings/longnow/Long\PYGZus{}Now\PYGZus{}\PYGZus{}Seminars*/*.mp3\PYG{p}{;}\PYG{+w}{ }\PYG{k}{do}
+\PYG{+w}{   }\PYG{c+c1}{\PYGZsh{} get the filename}
+\PYG{+w}{   }\PYG{n+nv}{base}\PYG{o}{=}\PYG{k}{\PYGZdl{}(}basename\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}}\PYG{n+nv}{\PYGZdl{}i}\PYG{l+s+s2}{\PYGZdq{}}\PYG{k}{)}\PYG{p}{;}
+\PYG{+w}{   }\PYG{c+c1}{\PYGZsh{} strip the extension}
+\PYG{+w}{   }\PYG{n+nv}{base}\PYG{o}{=}\PYG{l+s+si}{\PYGZdl{}\PYGZob{}}\PYG{n+nv}{base}\PYG{p}{\PYGZpc{}.mp3}\PYG{l+s+si}{\PYGZcb{}}\PYG{p}{;}
+\PYG{+w}{   }\PYG{c+c1}{\PYGZsh{} date as yyyy\PYGZhy{}mm\PYGZhy{}dd}
+\PYG{+w}{   }\PYG{n+nb}{printf}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+si}{\PYGZdl{}\PYGZob{}}\PYG{n+nv}{base}\PYG{p}{\PYGZpc{}\PYGZpc{}\PYGZus{}\PYGZus{}*}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZbs{}t}\PYG{l+s+s2}{\PYGZdq{}}\PYG{+w}{ }\PYG{p}{|}\PYG{+w}{ }tr\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}\PYGZus{}\PYGZsq{}}\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{;}
+\PYG{+w}{   }\PYG{c+c1}{\PYGZsh{} name and title without underscores}
+\PYG{+w}{   }\PYG{n+nb}{printf}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+si}{\PYGZdl{}\PYGZob{}}\PYG{n+nv}{base}\PYG{p}{\PYGZsh{}*\PYGZus{}\PYGZus{}}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZbs{}n}\PYG{l+s+s2}{\PYGZdq{}}\PYG{+w}{ }\PYG{p}{|}\PYG{+w}{ }tr\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}\PYGZus{}\PYGZsq{}}\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{} \PYGZsq{}}\PYG{p}{;}
+\PYG{k}{done}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Note that this is not identical to the script in the text \textendash{} it lacks a few \sphinxcode{\sphinxupquote{\textbackslash{}}} characters, which is a meaningful difference.
+
+
+\end{windowswit}
+
+\index{hidden file name extensions@\spxentry{hidden file name extensions}!on Windows@\spxentry{on Windows}}\index{on Windows@\spxentry{on Windows}!hidden file name extensions@\spxentry{hidden file name extensions}}\ignorespaces \begin{windowswit}[label={ww-filename-extensions}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{Be mindful of hidden extensions when creating files!}
+\label{\detokenize{basics/101-108-run:ww-filename-extensions}}
+
+\sphinxAtStartPar
+By default, Windows does not show common file extensions when you view directory contents with a file explorer.
+Instead, it only displays the base of the file name and indicates the file type with the display icon.
+You can see if this is the case for you, too, by opening the \sphinxcode{\sphinxupquote{books\textbackslash{}}} directory in a file explorer, and checking if the file extension (\sphinxcode{\sphinxupquote{.pdf}}) is a part of the file name displayed underneath its PDF icon.
+
+\sphinxAtStartPar
+Hidden file extensions can be a confusing source of errors, because some Windows editors (for example, Notepad) automatically add a \sphinxcode{\sphinxupquote{.txt}} extension to your files \textendash{} when you save the script above under the name \sphinxcode{\sphinxupquote{list\_titles.sh}}, your editor may add an extension (\sphinxcode{\sphinxupquote{list\_titles.sh.txt}}), and the file explorer displays your file as \sphinxcode{\sphinxupquote{list\_titles.sh}} (hiding the \sphinxcode{\sphinxupquote{.txt}} extension).
+
+\sphinxAtStartPar
+To prevent confusion, configure the file explorer to always show you the file extension.
+For this, open the Explorer, click on the “View” tab, and tick the box “File name extensions”.
+
+\sphinxAtStartPar
+Beyond this, double check the correct naming of your file, ideally in the terminal.
+
+
+\end{windowswit}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }\PYGZlt{}\PYGZlt{}\PYG{+w}{ }EOT\PYG{+w}{ }\PYGZgt{}\PYG{+w}{ }code/list\PYGZus{}titles.sh
+\PYG{g+go}{for i in recordings/longnow/Long\PYGZus{}Now\PYGZus{}\PYGZus{}Seminars*/*.mp3; do}
+\PYG{g+gp}{   \PYGZsh{} }get\PYG{+w}{ }the\PYG{+w}{ }filename
+\PYG{g+go}{   base=\PYGZbs{}\PYGZdl{}(basename \PYGZdq{}\PYGZbs{}\PYGZdl{}i\PYGZdq{});}
+\PYG{g+gp}{   \PYGZsh{} }strip\PYG{+w}{ }the\PYG{+w}{ }extension
+\PYG{g+go}{   base=\PYGZbs{}\PYGZdl{}\PYGZob{}base\PYGZpc{}.mp3\PYGZcb{};}
+\PYG{g+gp}{   \PYGZsh{} }date\PYG{+w}{ }as\PYG{+w}{ }yyyy\PYGZhy{}mm\PYGZhy{}dd
+\PYG{g+go}{   printf \PYGZdq{}\PYGZbs{}\PYGZdl{}\PYGZob{}base\PYGZpc{}\PYGZpc{}\PYGZus{}\PYGZus{}*\PYGZcb{}\PYGZbs{}t\PYGZdq{} | tr \PYGZsq{}\PYGZus{}\PYGZsq{} \PYGZsq{}\PYGZhy{}\PYGZsq{};}
+\PYG{g+gp}{   \PYGZsh{} }name\PYG{+w}{ }and\PYG{+w}{ }title\PYG{+w}{ }without\PYG{+w}{ }underscores
+\PYG{g+go}{   printf \PYGZdq{}\PYGZbs{}\PYGZdl{}\PYGZob{}base\PYGZsh{}*\PYGZus{}\PYGZus{}\PYGZcb{}\PYGZbs{}n\PYGZdq{} | tr \PYGZsq{}\PYGZus{}\PYGZsq{} \PYGZsq{} \PYGZsq{};}
+\PYG{g+go}{done}
+\PYG{g+go}{EOT}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Save this script to the dataset.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{untracked: code (directory)}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}Add short script to write a list of podcast speakers and titles\PYGZdq{}}
+\PYG{g+go}{add(ok): code/list\PYGZus{}titles.sh (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Once we run this script, it will simply print dates, names and titles to
+your terminal. We can save its outputs to a new file
+\sphinxcode{\sphinxupquote{recordings/podcasts.tsv}} in the superdataset by redirecting these
+outputs with \sphinxcode{\sphinxupquote{bash code/list\_titles.sh \textgreater{} recordings/podcasts.tsv}}.
+
+\sphinxAtStartPar
+Obviously, we could create this file, and subsequently save it to the superdataset.
+However, just as in the example about the data scientist,
+in a bit of time, we will forget how this file came into existence, or
+that the script \sphinxcode{\sphinxupquote{code/list\_titles.sh}} is associated with this file, and
+can be used to update it later on.
+
+\index{run@\spxentry{run}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!run@\spxentry{run}}\index{run command with provenance capture@\spxentry{run command with provenance capture}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!run command with provenance capture@\spxentry{run command with provenance capture}}\index{run command with provenance capture@\spxentry{run command with provenance capture}!with DataLad run@\spxentry{with DataLad run}}\index{with DataLad run@\spxentry{with DataLad run}!run command with provenance capture@\spxentry{run command with provenance capture}}\ignorespaces 
+\sphinxAtStartPar
+The \sphinxcode{\sphinxupquote{datalad run}} command
+can help with this. Put simply, it records a command’s impact on a dataset. Put
+more technically, it will record a shell command, and \sphinxcode{\sphinxupquote{datalad save}} all changes
+this command triggered in the dataset \textendash{} be that new files or changes to existing
+files.
+
+\sphinxAtStartPar
+Let’s try the simplest way to use this command: \sphinxcode{\sphinxupquote{datalad run}},
+followed by a commit message (\sphinxcode{\sphinxupquote{\sphinxhyphen{}m "a concise summary"}}), and the
+command that executes the script from the shell: \sphinxcode{\sphinxupquote{bash code/list\_titles.sh \textgreater{} recordings/podcasts.tsv}}.
+It is helpful to enclose the command in quotation marks.
+
+\sphinxAtStartPar
+Note that we execute the command from the root of the superdataset.
+It is recommended to use \sphinxcode{\sphinxupquote{datalad run}} in the root of the dataset
+you want to record the changes in, so make sure to run this
+command from the root of \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}}.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }run\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}create a list of podcast titles\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{  }\PYG{l+s+s2}{\PYGZdq{}bash code/list\PYGZus{}titles.sh \PYGZgt{} recordings/podcasts.tsv\PYGZdq{}}
+\PYG{g+go}{[INFO] == Command start (output follows) =====}
+\PYG{g+go}{[INFO] == Command exit (modification check follows) =====}
+\PYG{g+go}{run(ok): /home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101 (dataset) [bash code/list\PYGZus{}titles.sh \PYGZgt{} recordings/po...]}
+\PYG{g+go}{add(ok): recordings/podcasts.tsv (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Let’s take a look into the history:
+
+\fvset{hllines={, 6, 11, 25,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}p\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{1}\PYG{+w}{   }\PYG{c+c1}{\PYGZsh{} On Windows, you may just want to type \PYGZdq{}git log\PYGZdq{}.}
+\PYG{g+go}{commit e37c9fc9✂SHA1}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    [DATALAD RUNCMD] create a list of podcast titles}
+
+\PYG{g+go}{    === Do not change lines below ===}
+\PYG{g+go}{    \PYGZob{}}
+\PYG{g+go}{     \PYGZdq{}chain\PYGZdq{}: [],}
+\PYG{g+go}{     \PYGZdq{}cmd\PYGZdq{}: \PYGZdq{}bash code/list\PYGZus{}titles.sh \PYGZgt{} recordings/podcasts.tsv\PYGZdq{},}
+\PYG{g+go}{     \PYGZdq{}dsid\PYGZdq{}: \PYGZdq{}e3e70682\PYGZhy{}c209\PYGZhy{}4cac\PYGZhy{}629f\PYGZhy{}6fbed82c07cd\PYGZdq{},}
+\PYG{g+go}{     \PYGZdq{}exit\PYGZdq{}: 0,}
+\PYG{g+go}{     \PYGZdq{}extra\PYGZus{}inputs\PYGZdq{}: [],}
+\PYG{g+go}{     \PYGZdq{}inputs\PYGZdq{}: [],}
+\PYG{g+go}{     \PYGZdq{}outputs\PYGZdq{}: [],}
+\PYG{g+go}{     \PYGZdq{}pwd\PYGZdq{}: \PYGZdq{}.\PYGZdq{}}
+\PYG{g+go}{    \PYGZcb{}}
+\PYG{g+go}{    \PYGZca{}\PYGZca{}\PYGZca{} Do not change lines above \PYGZca{}\PYGZca{}\PYGZca{}}
+
+\PYG{g+go}{diff \PYGZhy{}\PYGZhy{}git a/recordings/podcasts.tsv b/recordings/podcasts.tsv}
+\PYG{g+go}{new file mode 100644}
+\PYG{g+go}{index 0000000..f691b53}
+\PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{} /dev/null}
+\PYG{g+go}{+++ b/recordings/podcasts.tsv}
+\PYG{g+go}{@@ \PYGZhy{}0,0 +1,206 @@}
+\PYG{g+go}{+2003\PYGZhy{}11\PYGZhy{}15	Brian Eno  The Long Now}
+\PYG{g+go}{+2003\PYGZhy{}12\PYGZhy{}13	Peter Schwartz  The Art Of The Really Long View}
+\PYG{g+go}{+2004\PYGZhy{}01\PYGZhy{}10	George Dyson  There s Plenty of Room at the Top  Long term Thinking About Large scale Computing}
+\PYG{g+go}{+2004\PYGZhy{}02\PYGZhy{}14	James Dewar  Long term Policy Analysis}
+\end{sphinxVerbatim}
+\sphinxresetverbatimhllines
+
+\sphinxAtStartPar
+The commit message we have supplied with \sphinxcode{\sphinxupquote{\sphinxhyphen{}m}} directly after \sphinxcode{\sphinxupquote{datalad run}} appears
+in our history as a short summary.
+Additionally, the output of the command, \sphinxcode{\sphinxupquote{recordings/podcasts.tsv}},
+was saved right away.
+
+\sphinxAtStartPar
+But there is more in this log entry, a section in between the markers
+
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{=== Do not change lines below ===}} and
+
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{\textasciicircum{}\textasciicircum{}\textasciicircum{} Do not change lines above \textasciicircum{}\textasciicircum{}\textasciicircum{}}}.
+
+\sphinxAtStartPar
+This is the so\sphinxhyphen{}called \sphinxcode{\sphinxupquote{run record}} \textendash{} a recording of all of the
+information in the \sphinxcode{\sphinxupquote{datalad run}} command, generated by DataLad.
+In this case, it is a very simple summary. One informative
+part is highlighted:
+\sphinxcode{\sphinxupquote{"cmd": "bash code/list\_titles.sh"}} is the command that was run
+in the terminal.
+This information therefore maps the command, and with it the script,
+to the output file, in one commit. Nice, isn’t it?
+
+\sphinxAtStartPar
+Arguably, the {\hyperref[\detokenize{glossary:term-run-record}]{\sphinxtermref{\DUrole{xref,std,std-term}{run record}}}} is not the most human\sphinxhyphen{}readable way to display information.
+This representation however is less for the human user (the human user should
+rely on their informative commit message), but for DataLad, in particular for the
+\sphinxcode{\sphinxupquote{datalad rerun}} command, which you will see in action shortly. This
+\sphinxcode{\sphinxupquote{run record}} is machine\sphinxhyphen{}readable provenance that associates an output with
+the command that produced it.
+
+\sphinxAtStartPar
+You have probably already guessed that every \sphinxcode{\sphinxupquote{datalad run}} command
+ends with a \sphinxcode{\sphinxupquote{datalad save}}. A logical consequence from this fact is that any
+\sphinxcode{\sphinxupquote{datalad run}} that does not result in any changes in a dataset (no modification
+of existing content; no additional files) will not produce any record in the
+dataset’s history (just as a \sphinxcode{\sphinxupquote{datalad save}} with no modifications present
+will not create a history entry). Try to run the exact same
+command as before, and check whether anything in your log changes:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }run\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}Try again to create a list of podcast titles\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{  }\PYG{l+s+s2}{\PYGZdq{}bash code/list\PYGZus{}titles.sh \PYGZgt{} recordings/podcasts.tsv\PYGZdq{}}
+\PYG{g+go}{[INFO] == Command start (output follows) =====}
+\PYG{g+go}{[INFO] == Command exit (modification check follows) =====}
+\PYG{g+go}{run(ok): /home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101 (dataset) [bash code/list\PYGZus{}titles.sh \PYGZgt{} recordings/po...]}
+\end{sphinxVerbatim}
+
+\fvset{hllines={, 2,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}\PYGZhy{}oneline
+\PYG{g+go}{e37c9fc [DATALAD RUNCMD] create a list of podcast titles}
+\PYG{g+go}{e799b6b Add short script to write a list of podcast speakers and titles}
+\PYG{g+go}{87609a3 Add note on datalad clone}
+\PYG{g+go}{3c016f7 [DATALAD] Added subdataset}
+\end{sphinxVerbatim}
+\sphinxresetverbatimhllines
+
+\sphinxAtStartPar
+The most recent commit is still the \sphinxcode{\sphinxupquote{datalad run}} command from before,
+and there was no second \sphinxcode{\sphinxupquote{datalad run}} commit created.
+
+\sphinxAtStartPar
+The \sphinxcode{\sphinxupquote{datalad run}} can therefore help you to keep track of what you are doing
+in a dataset and capture provenance of your files: When, by whom, and how exactly
+was a particular file created or modified?
+The next sections will demonstrate how to make use of this information,
+and also how to extend the command with additional arguments that will prove to
+be helpful over the course of this chapter.
+
+\sphinxstepscope
+
+\index{rerun@\spxentry{rerun}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!rerun@\spxentry{rerun}}\ignorespaces 
+
+\section{DataLad, rerun!}
+\label{\detokenize{basics/101-109-rerun:datalad-rerun}}\label{\detokenize{basics/101-109-rerun:run2}}\label{\detokenize{basics/101-109-rerun:index-0}}\label{\detokenize{basics/101-109-rerun::doc}}
+\sphinxAtStartPar
+So far, you created a \sphinxcode{\sphinxupquote{.tsv}} file of all
+speakers and talk titles in the \sphinxcode{\sphinxupquote{longnow/}} podcasts subdataset.
+Let’s actually take a look into this file now:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }less\PYG{+w}{ }recordings/podcasts.tsv
+\PYG{g+go}{2003\PYGZhy{}11\PYGZhy{}15	Brian Eno  The Long Now}
+\PYG{g+go}{2003\PYGZhy{}12\PYGZhy{}13	Peter Schwartz  The Art Of The Really Long View}
+\PYG{g+go}{2004\PYGZhy{}02\PYGZhy{}14	James Dewar  Long term Policy Analysis}
+\PYG{g+go}{2004\PYGZhy{}03\PYGZhy{}13	Rusty Schweickart  The Asteroid Threat Over the Next 100 000 Years}
+\PYG{g+go}{2004\PYGZhy{}04\PYGZhy{}10	Daniel Janzen  Third World Conservation  It s ALL Gardening}
+\PYG{g+go}{\PYGZhy{}✂\PYGZhy{}\PYGZhy{}✂\PYGZhy{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Not too bad, and certainly good enough for the podcast night people.
+What’s been cool about creating this file is that it was created with
+a script within a \sphinxcode{\sphinxupquote{datalad run}} command. Thanks to \sphinxcode{\sphinxupquote{datalad run}},
+the output file \sphinxcode{\sphinxupquote{podcasts.tsv}} is associated with the script it
+generated.
+
+\sphinxAtStartPar
+Upon reviewing the list you realized that you made a mistake, though: you only
+listed the talks in the SALT series (the
+\sphinxcode{\sphinxupquote{Long\_Now\_\_Seminars\_About\_Long\_term\_Thinking/}} directory), but not
+in the \sphinxcode{\sphinxupquote{Long\_Now\_\_Conversations\_at\_The\_Interval/}} directory.
+Let’s fix this in the script. Replace the contents in \sphinxcode{\sphinxupquote{code/list\_titles.sh}}
+with the following, fixed script. Again, make sure to see the
+\textit{Windows-wit}~{\windowswiticoninline}\textit{\ref{ww-heredoc-alt2}} {\hyperref[\detokenize{basics/101-109-rerun:ww-heredoc-alt2}]{\sphinxcrossref{\DUrole{std,std-ref}{on an alternative}}}} (\autopageref*{\detokenize{basics/101-109-rerun:ww-heredoc-alt2}}).
+\begin{windowswit}[label={ww-heredoc-alt2}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{Here’s a script adjustment for Windows users}
+\label{\detokenize{basics/101-109-rerun:ww-heredoc-alt2}}
+
+\sphinxAtStartPar
+Please use an editor of your choice to replace the contents of \sphinxcode{\sphinxupquote{list\_titles.sh}} inside of the \sphinxcode{\sphinxupquote{code}} directory with the following:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{for}\PYG{+w}{ }i\PYG{+w}{ }\PYG{k}{in}\PYG{+w}{ }recordings/longnow/Long\PYGZus{}Now*/*.mp3\PYG{p}{;}\PYG{+w}{ }\PYG{k}{do}
+\PYG{+w}{   }\PYG{c+c1}{\PYGZsh{} get the filename}
+\PYG{+w}{   }\PYG{n+nv}{base}\PYG{o}{=}\PYG{k}{\PYGZdl{}(}basename\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}}\PYG{n+nv}{\PYGZdl{}i}\PYG{l+s+s2}{\PYGZdq{}}\PYG{k}{)}\PYG{p}{;}
+\PYG{+w}{   }\PYG{c+c1}{\PYGZsh{} strip the extension}
+\PYG{+w}{   }\PYG{n+nv}{base}\PYG{o}{=}\PYG{l+s+si}{\PYGZdl{}\PYGZob{}}\PYG{n+nv}{base}\PYG{p}{\PYGZpc{}.mp3}\PYG{l+s+si}{\PYGZcb{}}\PYG{p}{;}
+\PYG{+w}{   }\PYG{c+c1}{\PYGZsh{} date as yyyy\PYGZhy{}mm\PYGZhy{}dd}
+\PYG{+w}{   }\PYG{n+nb}{printf}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+si}{\PYGZdl{}\PYGZob{}}\PYG{n+nv}{base}\PYG{p}{\PYGZpc{}\PYGZpc{}\PYGZus{}\PYGZus{}*}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZbs{}t}\PYG{l+s+s2}{\PYGZdq{}}\PYG{+w}{ }\PYG{p}{|}\PYG{+w}{ }tr\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}\PYGZus{}\PYGZsq{}}\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{;}
+\PYG{+w}{   }\PYG{c+c1}{\PYGZsh{} name and title without underscores}
+\PYG{+w}{   }\PYG{n+nb}{printf}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+si}{\PYGZdl{}\PYGZob{}}\PYG{n+nv}{base}\PYG{p}{\PYGZsh{}*\PYGZus{}\PYGZus{}}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZbs{}n}\PYG{l+s+s2}{\PYGZdq{}}\PYG{+w}{ }\PYG{p}{|}\PYG{+w}{ }tr\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}\PYGZus{}\PYGZsq{}}\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{} \PYGZsq{}}\PYG{p}{;}
+\PYG{k}{done}
+\end{sphinxVerbatim}
+
+
+\end{windowswit}
+
+\fvset{hllines={, 2,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }\PYGZlt{}\PYGZlt{}\PYG{+w}{ }EOT\PYG{+w}{ }\PYGZgt{}\PYG{p}{|}\PYG{+w}{ }code/list\PYGZus{}titles.sh
+\PYG{g+go}{for i in recordings/longnow/Long\PYGZus{}Now*/*.mp3; do}
+\PYG{g+gp}{   \PYGZsh{} }get\PYG{+w}{ }the\PYG{+w}{ }filename
+\PYG{g+go}{   base=\PYGZbs{}\PYGZdl{}(basename \PYGZdq{}\PYGZbs{}\PYGZdl{}i\PYGZdq{});}
+\PYG{g+gp}{   \PYGZsh{} }strip\PYG{+w}{ }the\PYG{+w}{ }extension
+\PYG{g+go}{   base=\PYGZbs{}\PYGZdl{}\PYGZob{}base\PYGZpc{}.mp3\PYGZcb{};}
+\PYG{g+go}{   printf \PYGZdq{}\PYGZbs{}\PYGZdl{}\PYGZob{}base\PYGZpc{}\PYGZpc{}\PYGZus{}\PYGZus{}*\PYGZcb{}\PYGZbs{}t\PYGZdq{} | tr \PYGZsq{}\PYGZus{}\PYGZsq{} \PYGZsq{}\PYGZhy{}\PYGZsq{};}
+\PYG{g+gp}{   \PYGZsh{} }name\PYG{+w}{ }and\PYG{+w}{ }title\PYG{+w}{ }without\PYG{+w}{ }underscores
+\PYG{g+go}{   printf \PYGZdq{}\PYGZbs{}\PYGZdl{}\PYGZob{}base\PYGZsh{}*\PYGZus{}\PYGZus{}\PYGZcb{}\PYGZbs{}n\PYGZdq{} | tr \PYGZsq{}\PYGZus{}\PYGZsq{} \PYGZsq{} \PYGZsq{};}
+
+\PYG{g+go}{done}
+\PYG{g+go}{EOT}
+\end{sphinxVerbatim}
+\sphinxresetverbatimhllines
+
+\sphinxAtStartPar
+Because the script is now modified, save the modifications to the dataset.
+We can use the shorthand “BF” to denote “Bug fix” in the commit message.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{ modified: code/list\PYGZus{}titles.sh (file)}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}BF: list both directories content\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{  }code/list\PYGZus{}titles.sh
+\PYG{g+go}{add(ok): code/list\PYGZus{}titles.sh (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+What we \sphinxstyleemphasis{could} do is run the same \sphinxcode{\sphinxupquote{datalad run}} command as before to recreate
+the file, but now with all of the contents:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} do not execute this!}
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }run\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}create a list of podcast titles\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{  }\PYG{l+s+s2}{\PYGZdq{}bash code/list\PYGZus{}titles.sh \PYGZgt{} recordings/podcasts.tsv\PYGZdq{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+However, think about any situation where the command would be longer than this,
+or that is many months past the first execution. It would not be easy to remember
+the command, nor would it be very convenient to copy it from the \sphinxcode{\sphinxupquote{run record}}.
+
+\sphinxAtStartPar
+Luckily, a fellow student remembered the DataLad way of re\sphinxhyphen{}executing
+a \sphinxcode{\sphinxupquote{run}} command, and he’s eager to show it to you.
+
+\sphinxAtStartPar
+“In order to re\sphinxhyphen{}execute a \sphinxcode{\sphinxupquote{datalad run}} command,
+find the commit and use its {\hyperref[\detokenize{glossary:term-shasum}]{\sphinxtermref{\DUrole{xref,std,std-term}{shasum}}}} (or a {\hyperref[\detokenize{glossary:term-tag}]{\sphinxtermref{\DUrole{xref,std,std-term}{tag}}}}, or anything else that Git
+understands) as an argument for the
+\sphinxcode{\sphinxupquote{datalad rerun}} command! That’s it!”,
+he says happily.
+
+\sphinxAtStartPar
+So you go ahead and find the commit {\hyperref[\detokenize{glossary:term-shasum}]{\sphinxtermref{\DUrole{xref,std,std-term}{shasum}}}} in your history:
+
+\fvset{hllines={, 8,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{2}
+\PYG{g+go}{commit f7ea9f3d✂SHA1}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    BF: list both directories content}
+
+\PYG{g+go}{commit e37c9fc9✂SHA1}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    [DATALAD RUNCMD] create a list of podcast titles}
+\end{sphinxVerbatim}
+\sphinxresetverbatimhllines
+
+\sphinxAtStartPar
+Take that shasum and paste it after \sphinxcode{\sphinxupquote{datalad rerun}}
+(the first 6\sphinxhyphen{}8 characters of the shasum would be sufficient,
+here we are using all of them).
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }rerun\PYG{+w}{ }e37c9fc9✂SHA1
+\PYG{g+go}{[INFO] run commit e37c9fc; (create a list of ...)}
+\PYG{g+go}{[INFO] == Command start (output follows) =====}
+\PYG{g+go}{[INFO] == Command exit (modification check follows) =====}
+\PYG{g+go}{run(ok): /home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101 (dataset) [bash code/list\PYGZus{}titles.sh \PYGZgt{} recordings/po...]}
+\PYG{g+go}{add(ok): recordings/podcasts.tsv (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\PYG{g+go}{action summary:}
+\PYG{g+go}{  add (ok: 1)}
+\PYG{g+go}{  run (ok: 1)}
+\PYG{g+go}{  save (notneeded: 1, ok: 1)}
+\PYG{g+go}{  unlock (notneeded: 1)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Now DataLad has made use of the \sphinxcode{\sphinxupquote{run record}}, and
+re\sphinxhyphen{}executed the original command based on the information in it.
+Because we updated the script, the output \sphinxcode{\sphinxupquote{podcasts.tsv}}
+has changed and now contains the podcast
+titles of both subdirectories.
+You’ve probably already guessed it, but the easiest way
+to check whether a \sphinxcode{\sphinxupquote{datalad rerun}}
+has changed the desired output file is
+to check whether the rerun command appears in the datasets history:
+If a \sphinxcode{\sphinxupquote{datalad rerun}} does not add or change any content in the dataset,
+it will also not be recorded in the history.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{1}
+\PYG{g+go}{commit 08120c38✂SHA1}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    [DATALAD RUNCMD] create a list of podcast titles}
+
+\PYG{g+go}{    === Do not change lines below ===}
+\PYG{g+go}{    \PYGZob{}}
+\PYG{g+go}{     \PYGZdq{}chain\PYGZdq{}: [}
+\PYG{g+go}{      \PYGZdq{}e37c9fc9✂SHA1\PYGZdq{}}
+\PYG{g+go}{     ],}
+\PYG{g+go}{     \PYGZdq{}cmd\PYGZdq{}: \PYGZdq{}bash code/list\PYGZus{}titles.sh \PYGZgt{} recordings/podcasts.tsv\PYGZdq{},}
+\PYG{g+go}{     \PYGZdq{}dsid\PYGZdq{}: \PYGZdq{}e3e70682\PYGZhy{}c209\PYGZhy{}4cac\PYGZhy{}629f\PYGZhy{}6fbed82c07cd\PYGZdq{},}
+\PYG{g+go}{     \PYGZdq{}exit\PYGZdq{}: 0,}
+\PYG{g+go}{     \PYGZdq{}extra\PYGZus{}inputs\PYGZdq{}: [],}
+\PYG{g+go}{     \PYGZdq{}inputs\PYGZdq{}: [],}
+\PYG{g+go}{     \PYGZdq{}outputs\PYGZdq{}: [],}
+\PYG{g+go}{     \PYGZdq{}pwd\PYGZdq{}: \PYGZdq{}.\PYGZdq{}}
+\PYG{g+go}{    \PYGZcb{}}
+\PYG{g+go}{    \PYGZca{}\PYGZca{}\PYGZca{} Do not change lines above \PYGZca{}\PYGZca{}\PYGZca{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+In the dataset’s history,
+we can see that a new \sphinxcode{\sphinxupquote{datalad run}} was recorded. This action is
+committed by DataLad under the original commit message of the \sphinxcode{\sphinxupquote{run}}
+command, and looks just like the previous \sphinxcode{\sphinxupquote{datalad run}} commit.
+
+\index{diff@\spxentry{diff}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!diff@\spxentry{diff}}\ignorespaces 
+\sphinxAtStartPar
+Two cool tools that go beyond the \sphinxcode{\sphinxupquote{git log}}
+are the \sphinxcode{\sphinxupquote{datalad diff}} and \sphinxcode{\sphinxupquote{git diff}} commands.
+Both commands can report differences between two states of
+a dataset. Thus, you can get an overview of what changed between two commits.
+Both commands have a similar, but not identical structure: \sphinxcode{\sphinxupquote{datalad diff}}
+compares one state (a commit specified with \sphinxcode{\sphinxupquote{\sphinxhyphen{}f}}/\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}from}},
+by default the latest change)
+and another state from the dataset’s history (a commit specified with
+\sphinxcode{\sphinxupquote{\sphinxhyphen{}t}}/\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}to}}). Let’s do a \sphinxcode{\sphinxupquote{datalad diff}} between the current state
+of the dataset and the previous commit (called “\sphinxcode{\sphinxupquote{HEAD\textasciitilde{}1}}” in Git terminology%
+\begin{footnote}\sphinxAtStartFootnote
+The section {\hyperref[\detokenize{basics/101-137-history:history}]{\sphinxcrossref{\DUrole{std,std-ref}{Git things done}}}} (\autopageref*{\detokenize{basics/101-137-history:history}}) will elaborate more on common {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}} commands
+and terminology.
+%
+\end{footnote}).
+Check the \textit{Windows-wit}~{\windowswiticoninline}\textit{\ref{ww-diff-adjusted}} {\hyperref[\detokenize{basics/101-109-rerun:ww-diff-adjusted}]{\sphinxcrossref{\DUrole{std,std-ref}{on a command variant}}}} (\autopageref*{\detokenize{basics/101-109-rerun:ww-diff-adjusted}}).
+
+\index{show dataset modification@\spxentry{show dataset modification}!on Windows with DataLad@\spxentry{on Windows with DataLad}}\index{on Windows with DataLad@\spxentry{on Windows with DataLad}!show dataset modification@\spxentry{show dataset modification}}\index{diff@\spxentry{diff}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!diff@\spxentry{diff}}\index{corresponding branch@\spxentry{corresponding branch}!in adjusted mode@\spxentry{in adjusted mode}}\index{in adjusted mode@\spxentry{in adjusted mode}!corresponding branch@\spxentry{corresponding branch}}\ignorespaces \begin{windowswit}[label={ww-diff-adjusted}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{please use ‘datalad diff –from main –to HEAD~1’}
+\label{\detokenize{basics/101-109-rerun:ww-diff-adjusted}}
+
+\sphinxAtStartPar
+While this example works on Unix file systems, it will not provide the same output on Windows.
+This is due to different file handling on Windows.
+When executing this command, you will see \sphinxstyleemphasis{all} files being modified between the most recent and the second\sphinxhyphen{}most recent commit.
+On a technical level, this is correct given the underlying file handling on Windows, and chapter {\hyperref[\detokenize{basics/basics-annex:chapter-gitannex}]{\sphinxcrossref{\DUrole{std,std-ref}{Under the hood: git\sphinxhyphen{}annex}}}} (\autopageref*{\detokenize{basics/basics-annex:chapter-gitannex}}) will shed light on why that is.
+
+\sphinxAtStartPar
+For now, to get the same output as shown in the code snippet below, use the following command where \sphinxcode{\sphinxupquote{main}} (or \sphinxcode{\sphinxupquote{master}}) is the name of your default branch:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }diff\PYG{+w}{ }\PYGZhy{}\PYGZhy{}from\PYG{+w}{ }main\PYG{+w}{ }\PYGZhy{}\PYGZhy{}to\PYG{+w}{ }HEAD\PYGZti{}1
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}from}} argument specifies a different starting point for the comparison \sphinxhyphen{} the \sphinxcode{\sphinxupquote{main}} or {\hyperref[\detokenize{glossary:term-master}]{\sphinxtermref{\DUrole{xref,std,std-term}{master}}}} {\hyperref[\detokenize{glossary:term-branch}]{\sphinxtermref{\DUrole{xref,std,std-term}{branch}}}}, which would be the starting point on most Unix\sphinxhyphen{}based systems.
+
+
+\end{windowswit}
+
+\index{diff@\spxentry{diff}!Git command@\spxentry{Git command}}\index{Git command@\spxentry{Git command}!diff@\spxentry{diff}}\index{show dataset modification@\spxentry{show dataset modification}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!show dataset modification@\spxentry{show dataset modification}}\ignorespaces 
+\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-109-rerun:index-3}}}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }diff\PYG{+w}{ }\PYGZhy{}\PYGZhy{}to\PYG{+w}{ }HEAD\PYGZti{}1
+\PYG{g+go}{ modified: recordings/podcasts.tsv (file)}
+\end{sphinxVerbatim}
+
+\index{diff@\spxentry{diff}!Git command@\spxentry{Git command}}\index{Git command@\spxentry{Git command}!diff@\spxentry{diff}}\index{show dataset modification@\spxentry{show dataset modification}!with Git@\spxentry{with Git}}\index{with Git@\spxentry{with Git}!show dataset modification@\spxentry{show dataset modification}}\ignorespaces 
+\sphinxAtStartPar
+This indeed shows the output file as “modified”. However, we do not know
+what exactly changed. This is a task for \sphinxcode{\sphinxupquote{git diff}} (get out of the
+diff view by pressing \sphinxcode{\sphinxupquote{q}}):
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }diff\PYG{+w}{ }HEAD\PYGZti{}1
+\PYG{g+go}{diff \PYGZhy{}\PYGZhy{}git a/recordings/podcasts.tsv b/recordings/podcasts.tsv}
+\PYG{g+go}{index f691b53..d77891d 100644}
+\PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{} a/recordings/podcasts.tsv}
+\PYG{g+go}{+++ b/recordings/podcasts.tsv}
+\PYG{g+go}{@@ \PYGZhy{}1,3 +1,31 @@}
+\PYG{g+go}{+2017\PYGZhy{}06\PYGZhy{}09	How Digital Memory Is Shaping Our Future  Abby Smith Rumsey}
+\PYG{g+go}{+2017\PYGZhy{}06\PYGZhy{}09	Pace Layers Thinking  Stewart Brand  Paul Saffo}
+\PYG{g+go}{+2017\PYGZhy{}06\PYGZhy{}09	Proof  The Science of Booze  Adam Rogers}
+\PYG{g+go}{+2017\PYGZhy{}06\PYGZhy{}09	Seveneves at The Interval  Neal Stephenson}
+\PYG{g+go}{+2017\PYGZhy{}06\PYGZhy{}09	Talking with Robots about Architecture  Jeffrey McGrew}
+\PYG{g+go}{+2017\PYGZhy{}06\PYGZhy{}09	The Red Planet for Real  Andy Weir}
+\PYG{g+go}{+2017\PYGZhy{}07\PYGZhy{}03	Transforming Perception  One Sense at a Time  Kara Platoni}
+\PYG{g+go}{+2017\PYGZhy{}08\PYGZhy{}01	How Climate Will Evolve Government and Society  Kim Stanley Robinson}
+\PYG{g+go}{+2017\PYGZhy{}09\PYGZhy{}01	Envisioning Deep Time  Jonathon Keats}
+\PYG{g+go}{+2017\PYGZhy{}10\PYGZhy{}01	Thinking Long term About the Evolving Global Challenge  The Refugee Reality}
+\PYG{g+go}{+2017\PYGZhy{}11\PYGZhy{}01	The Web In An Eye Blink  Jason Scott}
+\PYG{g+go}{+2017\PYGZhy{}12\PYGZhy{}01	Ideology in our Genes  The Biological Basis for Political Traits  Rose McDermott}
+\PYG{g+go}{+2017\PYGZhy{}12\PYGZhy{}07	Can Democracy Survive the Internet   Nathaniel Persily}
+\PYG{g+go}{+2018\PYGZhy{}01\PYGZhy{}02	The New Deal You Don t Know  Louis Hyman}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This output actually shows the precise changes between the contents created
+with the first version of the script and the second script with the bug fix.
+All of the files that are added after the second directory
+was queried as well are shown in the \sphinxcode{\sphinxupquote{diff}}, preceded by a \sphinxcode{\sphinxupquote{+}}.
+
+\sphinxAtStartPar
+Quickly create a note about these two helpful commands in \sphinxcode{\sphinxupquote{notes.txt}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }\PYGZlt{}\PYGZlt{}\PYG{+w}{ }EOT\PYG{+w}{ }\PYGZgt{}\PYGZgt{}\PYG{+w}{ }notes.txt
+\PYG{g+go}{There are two useful functions to display changes between two}
+\PYG{g+go}{states of a dataset: \PYGZdq{}datalad diff \PYGZhy{}f/\PYGZhy{}\PYGZhy{}from COMMIT \PYGZhy{}t/\PYGZhy{}\PYGZhy{}to COMMIT\PYGZdq{}}
+\PYG{g+go}{and \PYGZdq{}git diff COMMIT COMMIT\PYGZdq{}, where COMMIT is a shasum of a commit}
+\PYG{g+go}{in the history.}
+
+\PYG{g+go}{EOT}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Finally, save this note.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}add note datalad and git diff\PYGZdq{}}
+\PYG{g+go}{add(ok): notes.txt (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Note that \sphinxcode{\sphinxupquote{datalad rerun}} can re\sphinxhyphen{}execute the run records of both a \sphinxcode{\sphinxupquote{datalad run}}
+or a \sphinxcode{\sphinxupquote{datalad rerun}} command,
+but not with any other type of DataLad command in your history
+such as a \sphinxcode{\sphinxupquote{datalad save}} on results or outputs after you executed a script.
+Therefore, make it a
+habit to record the execution of scripts by plugging it into \sphinxcode{\sphinxupquote{datalad run}}.
+
+\sphinxAtStartPar
+This very basic example of a \sphinxcode{\sphinxupquote{datalad run}} is as simple as it can get, but it
+is already
+convenient from a memory\sphinxhyphen{}load perspective: Now you do not need to
+remember the commands or scripts involved in creating an output. DataLad kept track
+of what you did, and you can instruct it to “\sphinxcode{\sphinxupquote{rerun}}” it.
+Also, incidentally, we have generated {\hyperref[\detokenize{glossary:term-provenance}]{\sphinxtermref{\DUrole{xref,std,std-term}{provenance}}}} information. It is
+now recorded in the history of the dataset how the output \sphinxcode{\sphinxupquote{podcasts.tsv}} came
+into existence. And we can interact with and use this provenance information with
+other tools than from the machine\sphinxhyphen{}readable \sphinxcode{\sphinxupquote{run record}}.
+For example, to find out who (or what) created or modified a file,
+give the file path to \sphinxcode{\sphinxupquote{git log}} (prefixed by \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}}}).
+Check the \textit{Windows-wit}~{\windowswiticoninline}\textit{\ref{ww-log-adjusted}} {\hyperref[\detokenize{basics/101-109-rerun:ww-log-adjusted}]{\sphinxcrossref{\DUrole{std,std-ref}{on a command variant}}}} (\autopageref*{\detokenize{basics/101-109-rerun:ww-log-adjusted}}).
+
+\index{show history for particular paths@\spxentry{show history for particular paths}!on Windows with Git@\spxentry{on Windows with Git}}\index{on Windows with Git@\spxentry{on Windows with Git}!show history for particular paths@\spxentry{show history for particular paths}}\index{log@\spxentry{log}!Git command@\spxentry{Git command}}\index{Git command@\spxentry{Git command}!log@\spxentry{log}}\index{corresponding branch@\spxentry{corresponding branch}!in adjusted mode@\spxentry{in adjusted mode}}\index{in adjusted mode@\spxentry{in adjusted mode}!corresponding branch@\spxentry{corresponding branch}}\ignorespaces \begin{windowswit}[label={ww-log-adjusted}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{use ‘git log main – recordings/podcasts.tsv’}
+\label{\detokenize{basics/101-109-rerun:ww-log-adjusted}}
+
+\sphinxAtStartPar
+A previous Windows Wit already advised to append \sphinxcode{\sphinxupquote{main}} or \sphinxcode{\sphinxupquote{master}}, the common “default {\hyperref[\detokenize{glossary:term-branch}]{\sphinxtermref{\DUrole{xref,std,std-term}{branch}}}}”, to any command that starts with \sphinxcode{\sphinxupquote{git log}}.
+Here, the last part of the command specifies a file (\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{} recordings/podcasts.tsv}}).
+Please append \sphinxcode{\sphinxupquote{main}} or \sphinxcode{\sphinxupquote{master}} to \sphinxcode{\sphinxupquote{git log}}, prior to the file specification.
+
+
+\end{windowswit}
+
+\index{show history for particular paths@\spxentry{show history for particular paths}!with Git@\spxentry{with Git}}\index{with Git@\spxentry{with Git}!show history for particular paths@\spxentry{show history for particular paths}}\ignorespaces 
+\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-109-rerun:index-6}}}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}\PYGZhy{}\PYG{+w}{ }recordings/podcasts.tsv
+\PYG{g+go}{commit 08120c38✂SHA1}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    [DATALAD RUNCMD] create a list of podcast titles}
+
+\PYG{g+go}{    === Do not change lines below ===}
+\PYG{g+go}{    \PYGZob{}}
+\PYG{g+go}{     \PYGZdq{}chain\PYGZdq{}: [}
+\PYG{g+go}{      \PYGZdq{}e37c9fc9✂SHA1\PYGZdq{}}
+\PYG{g+go}{     ],}
+\PYG{g+go}{     \PYGZdq{}cmd\PYGZdq{}: \PYGZdq{}bash code/list\PYGZus{}titles.sh \PYGZgt{} recordings/podcasts.tsv\PYGZdq{},}
+\PYG{g+go}{     \PYGZdq{}dsid\PYGZdq{}: \PYGZdq{}e3e70682\PYGZhy{}c209\PYGZhy{}4cac\PYGZhy{}629f\PYGZhy{}6fbed82c07cd\PYGZdq{},}
+\PYG{g+go}{     \PYGZdq{}exit\PYGZdq{}: 0,}
+\PYG{g+go}{     \PYGZdq{}extra\PYGZus{}inputs\PYGZdq{}: [],}
+\PYG{g+go}{     \PYGZdq{}inputs\PYGZdq{}: [],}
+\PYG{g+go}{     \PYGZdq{}outputs\PYGZdq{}: [],}
+\PYG{g+go}{     \PYGZdq{}pwd\PYGZdq{}: \PYGZdq{}.\PYGZdq{}}
+\PYG{g+go}{    \PYGZcb{}}
+\PYG{g+go}{    \PYGZca{}\PYGZca{}\PYGZca{} Do not change lines above \PYGZca{}\PYGZca{}\PYGZca{}}
+
+\PYG{g+go}{commit e37c9fc9✂SHA1}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    [DATALAD RUNCMD] create a list of podcast titles}
+
+\PYG{g+go}{    === Do not change lines below ===}
+\PYG{g+go}{    \PYGZob{}}
+\PYG{g+go}{     \PYGZdq{}chain\PYGZdq{}: [],}
+\PYG{g+go}{     \PYGZdq{}cmd\PYGZdq{}: \PYGZdq{}bash code/list\PYGZus{}titles.sh \PYGZgt{} recordings/podcasts.tsv\PYGZdq{},}
+\PYG{g+go}{     \PYGZdq{}dsid\PYGZdq{}: \PYGZdq{}e3e70682\PYGZhy{}c209\PYGZhy{}4cac\PYGZhy{}629f\PYGZhy{}6fbed82c07cd\PYGZdq{},}
+\PYG{g+go}{     \PYGZdq{}exit\PYGZdq{}: 0,}
+\PYG{g+go}{     \PYGZdq{}extra\PYGZus{}inputs\PYGZdq{}: [],}
+\PYG{g+go}{     \PYGZdq{}inputs\PYGZdq{}: [],}
+\PYG{g+go}{     \PYGZdq{}outputs\PYGZdq{}: [],}
+\PYG{g+go}{     \PYGZdq{}pwd\PYGZdq{}: \PYGZdq{}.\PYGZdq{}}
+\PYG{g+go}{    \PYGZcb{}}
+\PYG{g+go}{    \PYGZca{}\PYGZca{}\PYGZca{} Do not change lines above \PYGZca{}\PYGZca{}\PYGZca{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Neat, isn’t it?
+
+\sphinxAtStartPar
+Still, this \sphinxcode{\sphinxupquote{datalad run}} was very simple.
+The next section will demonstrate how \sphinxcode{\sphinxupquote{datalad run}} becomes handy in
+more complex standard use cases: situations with \sphinxstyleemphasis{locked} contents.
+
+\sphinxAtStartPar
+But prior to that, make a note about \sphinxcode{\sphinxupquote{datalad run}} and \sphinxcode{\sphinxupquote{datalad rerun}} in your
+\sphinxcode{\sphinxupquote{notes.txt}} file.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }\PYGZlt{}\PYGZlt{}\PYG{+w}{ }EOT\PYG{+w}{ }\PYGZgt{}\PYGZgt{}\PYG{+w}{ }notes.txt
+\PYG{g+go}{The datalad run command can record the impact a script or command has}
+\PYG{g+go}{on a Dataset. In its simplest form, datalad run only takes a commit}
+\PYG{g+go}{message and the command that should be executed.}
+
+\PYG{g+go}{Any datalad run command can be re\PYGZhy{}executed by using its commit shasum}
+\PYG{g+go}{as an argument in datalad rerun CHECKSUM. DataLad will take}
+\PYG{g+go}{information from the run record of the original commit, and re\PYGZhy{}execute}
+\PYG{g+go}{it. If no changes happen with a rerun, the command will not be written}
+\PYG{g+go}{to history. Note: you can also rerun a datalad rerun command!}
+
+\PYG{g+go}{EOT}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Finally, save this note.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}add note on basic datalad run and datalad rerun\PYGZdq{}}
+\PYG{g+go}{add(ok): notes.txt (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxstepscope
+
+
+\section{Input and output}
+\label{\detokenize{basics/101-110-run2:input-and-output}}\label{\detokenize{basics/101-110-run2:run3}}\label{\detokenize{basics/101-110-run2::doc}}
+\sphinxAtStartPar
+In the previous two sections, you created a simple \sphinxcode{\sphinxupquote{.tsv}} file of all
+speakers and talk titles in the \sphinxcode{\sphinxupquote{longnow/}} podcasts subdataset, and you have
+re\sphinxhyphen{}executed a \sphinxcode{\sphinxupquote{datalad run}} command after a bug\sphinxhyphen{}fix in your script.
+
+\sphinxAtStartPar
+But these previous \sphinxcode{\sphinxupquote{datalad run}} and \sphinxcode{\sphinxupquote{datalad rerun}} command were very simple.
+Maybe you noticed some values in the \sphinxcode{\sphinxupquote{run record}} were empty:
+\sphinxcode{\sphinxupquote{inputs}} and \sphinxcode{\sphinxupquote{outputs}} for example did not have an entry. Let’s experience
+a few situations in which
+these two arguments can become necessary.
+
+\sphinxAtStartPar
+In our DataLad\sphinxhyphen{}101 course we were given a group assignment. Everyone should
+give a small presentation about an open DataLad dataset they found. Conveniently,
+you decided to settle for the longnow podcasts right away.
+After all, you know the dataset quite well already,
+and after listening to almost a third of the podcasts
+and enjoying them a lot,
+you also want to recommend them to the others.
+
+\sphinxAtStartPar
+Almost all of the slides are ready, but what’s still missing is the logo of the
+longnow podcasts. Good thing that this is part of the subdataset,
+so you can simply retrieve it from there.
+
+\sphinxAtStartPar
+The logos (one for the SALT series, one for the Interval series \textendash{} the two
+directories in the subdataset)
+were originally extracted from the podcasts metadata information by DataLad.
+The online\sphinxhyphen{}handbook has a chapter on the metadata aggregation capabilities of DataLad,
+but for now, let’s just use the logos instead of finding out where they
+come from \textendash{} this will come later.
+As part of the metadata of the dataset, the logos are
+in the hidden paths
+\sphinxcode{\sphinxupquote{.datalad/feed\_metadata/logo\_salt.jpg}} and
+\sphinxcode{\sphinxupquote{.datalad/feed\_metadata/logo\_interval.jpg}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }ls\PYG{+w}{ }recordings/longnow/.datalad/feed\PYGZus{}metadata/*jpg
+\PYG{g+go}{recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}interval.jpg}
+\PYG{g+go}{recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}salt.jpg}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+For the slides you decide to prepare images of size 400x400 px, but
+the logos’ original size is much larger (both are 3000x3000 pixel). Therefore
+let’s try to resize the images \textendash{} currently, they are far too large to fit on a slide.
+
+\sphinxAtStartPar
+To resize an image from the command line we can use the Unix
+command \sphinxcode{\sphinxupquote{convert \sphinxhyphen{}resize}} from the \dlhbhref{I1A}{ImageMagick tool}.
+See the \textit{Windows-wit}~{\windowswiticoninline}\textit{\ref{ww-install-imagemagick}} {\hyperref[\detokenize{basics/101-110-run2:ww-install-imagemagick}]{\sphinxcrossref{\DUrole{std,std-ref}{on installing it}}}} (\autopageref*{\detokenize{basics/101-110-run2:ww-install-imagemagick}}), if your system does not provide it.
+The command takes a new size in pixels as an argument, a path to the file that should be
+resized, and a filename and path under which a new,
+resized image will be saved.
+To resize one image to 400x400 px, the command would thus be
+\sphinxcode{\sphinxupquote{convert \sphinxhyphen{}resize 400x400 path/to/file.jpg path/to/newfilename.jpg}}.
+
+\index{install ImageMagick@\spxentry{install ImageMagick}!on Windows@\spxentry{on Windows}}\index{on Windows@\spxentry{on Windows}!install ImageMagick@\spxentry{install ImageMagick}}\index{installation@\spxentry{installation}!ImageMagick@\spxentry{ImageMagick}}\ignorespaces \begin{windowswit}[label={ww-install-imagemagick}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{Tool installation}
+\label{\detokenize{basics/101-110-run2:ww-install-imagemagick}}
+
+\sphinxAtStartPar
+\dlhbhref{I1A}{ImageMagick} is not installed on Windows systems by default.
+To use it, you need to install it, using the provided \dlhbhref{I1B}{Windows Binary Release on the Download page}.
+During installation, it is important to install the tool into a place where it is easily accessible to your terminal, for example the \sphinxcode{\sphinxupquote{Program Files}} folder.
+Do also make sure to tick the box “install legacy commands” in the installation wizard.
+
+
+\end{windowswit}
+
+\sphinxAtStartPar
+Remembering the last lecture on \sphinxcode{\sphinxupquote{datalad run}}, you decide to plug this into
+\sphinxcode{\sphinxupquote{datalad run}}. Even though this is not a script, it is a command, and you can wrap
+commands like this conveniently with \sphinxcode{\sphinxupquote{datalad run}}.
+Because they will be quite long, we line break the commands in the upcoming examples
+for better readability \textendash{} in your terminal, you can always write the commands into
+a single line.
+
+\index{run command with provenance capture@\spxentry{run command with provenance capture}!with DataLad run@\spxentry{with DataLad run}}\index{with DataLad run@\spxentry{with DataLad run}!run command with provenance capture@\spxentry{run command with provenance capture}}\ignorespaces 
+\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-110-run2:index-1}}}
+\fvset{hllines={, 4,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }run\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}Resize logo for slides\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{l+s+s2}{\PYGZdq{}convert \PYGZhy{}resize 400x400 recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}salt.jpg recordings/salt\PYGZus{}logo\PYGZus{}small.jpg\PYGZdq{}}
+\PYG{g+go}{[INFO] == Command start (output follows) =====}
+\PYG{g+go}{convert convert: Unable to open file (recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}salt.jpg) [No such file or directory].}
+\PYG{g+go}{[INFO] == Command exit (modification check follows) =====}
+\PYG{g+go}{[INFO] The command had a non\PYGZhy{}zero exit code. If this is expected, you can save the changes with \PYGZsq{}datalad save \PYGZhy{}d . \PYGZhy{}r \PYGZhy{}F .git/COMMIT\PYGZus{}EDITMSG\PYGZsq{}}
+\PYG{g+go}{run(error): /home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101 (dataset) [convert \PYGZhy{}resize 400x400 recordings/longn...]}
+\end{sphinxVerbatim}
+\sphinxresetverbatimhllines
+
+\sphinxAtStartPar
+\sphinxstyleemphasis{Oh, crap!} Why didn’t this work?
+
+\sphinxAtStartPar
+Let’s take a look at the error message DataLad provides. In general, these error messages
+might seem wordy, and maybe a bit intimidating as well, but usually they provide helpful
+information to find out what is wrong. Whenever you encounter an error message,
+make sure to read it, even if it feels like a mushroom cloud exploded in your terminal.
+
+\sphinxAtStartPar
+A \sphinxcode{\sphinxupquote{datalad run}} error message has several parts. The first starts after
+
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{{[}INFO   {]} == Command start (output follows) =====}}.
+
+\sphinxAtStartPar
+This is displaying errors that the
+terminal command threw: The \sphinxcode{\sphinxupquote{convert}} tool complains that it cannot open
+the file, because there is “No such file or directory”.
+
+\sphinxAtStartPar
+The second part starts after
+
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{{[}INFO   {]} == Command exit (modification check follows) =====}}.
+
+\sphinxAtStartPar
+DataLad adds information about a “non\sphinxhyphen{}zero exit code”. A non\sphinxhyphen{}zero exit code indicates
+that something went wrong%
+\begin{footnote}\sphinxAtStartFootnote
+In shell programming, commands exit with a specific code that indicates
+whether they failed, and if so, how. Successful commands have the exit code zero. All failures
+have exit codes greater than zero.
+%
+\end{footnote}. In principle, you could go ahead and google what this
+specific exit status indicates. However, the solution might have already occurred to you when
+reading the first error report: The file is not present.
+
+\sphinxAtStartPar
+How can that be?
+
+\sphinxAtStartPar
+“Right!”, you exclaim with a facepalm.
+Just as the \sphinxcode{\sphinxupquote{.mp3}} files, the \sphinxcode{\sphinxupquote{.jpg}} file content is not present
+locally after a \sphinxcode{\sphinxupquote{datalad clone}}, and we did not \sphinxcode{\sphinxupquote{datalad get}} it yet!
+
+\index{declare command input@\spxentry{declare command input}!with DataLad run@\spxentry{with DataLad run}}\index{with DataLad run@\spxentry{with DataLad run}!declare command input@\spxentry{declare command input}}\ignorespaces 
+\sphinxAtStartPar
+This is where the \sphinxcode{\sphinxupquote{\sphinxhyphen{}i}}/\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}input}} option for a \sphinxcode{\sphinxupquote{datalad run}} becomes useful.
+The content of everything that is specified as an \sphinxcode{\sphinxupquote{input}} will be retrieved
+prior to running the command.
+
+\fvset{hllines={, 8,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }run\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}Resize logo for slides\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYGZhy{}\PYGZhy{}input\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}salt.jpg\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{l+s+s2}{\PYGZdq{}convert \PYGZhy{}resize 400x400 recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}salt.jpg recordings/salt\PYGZus{}logo\PYGZus{}small.jpg\PYGZdq{}}
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} or shorter:}
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }run\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}Resize logo for slides\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYGZhy{}i\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}salt.jpg\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{l+s+s2}{\PYGZdq{}convert \PYGZhy{}resize 400x400 recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}salt.jpg recordings/salt\PYGZus{}logo\PYGZus{}small.jpg\PYGZdq{}}
+\PYG{g+go}{get(ok): recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}salt.jpg (file) [from web...]}
+\PYG{g+go}{[INFO] == Command start (output follows) =====}
+\PYG{g+go}{[INFO] == Command exit (modification check follows) =====}
+\PYG{g+go}{run(ok): /home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101 (dataset) [convert \PYGZhy{}resize 400x400 recordings/longn...]}
+\PYG{g+go}{add(ok): recordings/salt\PYGZus{}logo\PYGZus{}small.jpg (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+\sphinxresetverbatimhllines
+
+\sphinxAtStartPar
+Cool! You can see in this output that prior to the data command execution, DataLad did a \sphinxcode{\sphinxupquote{datalad get}}.
+This is useful for several reasons. For one, it saved us the work of manually
+getting content. But moreover, this is useful for anyone with whom we might share the
+dataset: With an installed dataset one can very simply rerun \sphinxcode{\sphinxupquote{datalad run}} commands
+if they have the input argument appropriately specified. It is therefore good practice to
+specify the inputs appropriately. Remember from section {\hyperref[\detokenize{basics/101-105-install:installds}]{\sphinxcrossref{\DUrole{std,std-ref}{Install datasets}}}} (\autopageref*{\detokenize{basics/101-105-install:installds}})
+that \sphinxcode{\sphinxupquote{datalad get}} will only retrieve content if
+it is not yet present, all input already downloaded will not be downloaded again \textendash{} so
+specifying inputs even though they are already present will not do any harm.
+The \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-run-multiple-inputs}} {\hyperref[\detokenize{basics/101-110-run2:fom-run-multiple-inputs}]{\sphinxcrossref{\DUrole{std,std-ref}{on using more than one input}}}} (\autopageref*{\detokenize{basics/101-110-run2:fom-run-multiple-inputs}}) provides
+some more details.
+
+\index{path globbing@\spxentry{path globbing}!with DataLad run@\spxentry{with DataLad run}}\index{with DataLad run@\spxentry{with DataLad run}!path globbing@\spxentry{path globbing}}\ignorespaces \begin{findoutmore}[label={fom-run-multiple-inputs}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{What if there are several inputs?}
+\label{\detokenize{basics/101-110-run2:fom-run-multiple-inputs}}
+
+\sphinxAtStartPar
+Often, a command needs several inputs. In principle, every input (which could be files, directories, or subdatasets) gets its own \sphinxcode{\sphinxupquote{\sphinxhyphen{}i}}/\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}input}}
+flag. However, you can make use of {\hyperref[\detokenize{glossary:term-globbing}]{\sphinxtermref{\DUrole{xref,std,std-term}{globbing}}}}. For example,
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }run\PYG{+w}{ }\PYGZhy{}\PYGZhy{}input\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}*.jpg\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}COMMAND\PYGZdq{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+will retrieve all \sphinxcode{\sphinxupquote{.jpg}} files prior to command execution.
+
+
+\end{findoutmore}
+
+
+\subsection{If outputs already exist…}
+\label{\detokenize{basics/101-110-run2:if-outputs-already-exist}}
+\index{files are unlocked by default@\spxentry{files are unlocked by default}!on Windows@\spxentry{on Windows}}\index{on Windows@\spxentry{on Windows}!files are unlocked by default@\spxentry{files are unlocked by default}}\index{unlocked files@\spxentry{unlocked files}!in adjusted mode@\spxentry{in adjusted mode}}\index{in adjusted mode@\spxentry{in adjusted mode}!unlocked files@\spxentry{unlocked files}}\ignorespaces \begin{windowswit}[label={fom-rerun-unlocked}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{Good news! Here is something that is easier on Windows}
+\label{\detokenize{basics/101-110-run2:fom-rerun-unlocked}}
+
+\sphinxAtStartPar
+The section below describes something that is very confusing for people that have just started with DataLad: Some files in a dataset can’t be modified, and if one tries, it results in a “permission denied” error.
+Why is that?
+The remainder of this section and the upcoming chapter {\hyperref[\detokenize{basics/basics-annex:chapter-gitannex}]{\sphinxcrossref{\DUrole{std,std-ref}{Under the hood: git\sphinxhyphen{}annex}}}} (\autopageref*{\detokenize{basics/basics-annex:chapter-gitannex}}) contain a procedural explanation.
+However: This doesn’t happen on Windows.
+The “unlocking” that is necessary on almost all other systems to modify a file is already done on Windows.
+Thus, all files in your dataset will be readily modifiable, sparing you the need to adjust to the unexpected behavior that is described below.
+While it is easier, it isn’t a “more useful” behavior, though.
+A different Windows Wit in the next chapter will highlight how it rather is a suboptimal workaround.
+
+\sphinxAtStartPar
+Please don’t skip the next section \textendash{} it is useful to know how datasets behave on other systems.
+Just be mindful that you will not encounter the errors that the book displays next.
+And while this all sounds quite cryptic and vague, an upcoming Windows Wit will provide more information.
+
+
+\end{windowswit}
+
+\sphinxAtStartPar
+Looking at the resulting image, you wonder whether 400x400 might be a tiny bit to small.
+Maybe we should try to resize it to 450x450, and see whether that looks better?
+
+\sphinxAtStartPar
+Note that we cannot use a \sphinxcode{\sphinxupquote{datalad rerun}} for this: if we want to change the dimension option
+in the command, we have to define a new \sphinxcode{\sphinxupquote{datalad run}} command.
+If you would benefit from an extra bit of motivation, check the \textit{Windows-wit}~{\windowswiticoninline}\textit{\ref{fom-rerun-unlocked}} {\hyperref[\detokenize{basics/101-110-run2:fom-rerun-unlocked}]{\sphinxcrossref{\DUrole{std,std-ref}{on why what we will do now is, for once, simpler on Windows}}}} (\autopageref*{\detokenize{basics/101-110-run2:fom-rerun-unlocked}}).
+
+\sphinxAtStartPar
+To establish best\sphinxhyphen{}practices, let’s specify the input even though it is already present:
+
+\fvset{hllines={, 9,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }run\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}Resize logo for slides\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYGZhy{}\PYGZhy{}input\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}salt.jpg\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{l+s+s2}{\PYGZdq{}convert \PYGZhy{}resize 450x450 recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}salt.jpg recordings/salt\PYGZus{}logo\PYGZus{}small.jpg\PYGZdq{}}
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} or shorter:}
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }run\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}Resize logo for slides\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYGZhy{}i\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}salt.jpg\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{l+s+s2}{\PYGZdq{}convert \PYGZhy{}resize 450x450 recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}salt.jpg recordings/salt\PYGZus{}logo\PYGZus{}small.jpg\PYGZdq{}}
+\PYG{g+go}{[INFO] == Command start (output follows) =====}
+\PYG{g+go}{convert convert: Unable to open file (recordings/salt\PYGZus{}logo\PYGZus{}small.jpg) [Permission denied].}
+\PYG{g+go}{[INFO] == Command exit (modification check follows) =====}
+\PYG{g+go}{[INFO] The command had a non\PYGZhy{}zero exit code. If this is expected, you can save the changes with \PYGZsq{}datalad save \PYGZhy{}d . \PYGZhy{}r \PYGZhy{}F .git/COMMIT\PYGZus{}EDITMSG\PYGZsq{}}
+\PYG{g+go}{run(error): /home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101 (dataset) [convert \PYGZhy{}resize 450x450 recordings/longn...]}
+\end{sphinxVerbatim}
+\sphinxresetverbatimhllines
+
+\sphinxAtStartPar
+\sphinxstylestrong{Oh wtf}… \sphinxstyleemphasis{What is it now?}
+
+\sphinxAtStartPar
+A quick glimpse into the error message shows a different error than before:
+The tool complains that it is “unable to open” the image, because the “Permission {[}is{]} denied”.
+
+\sphinxAtStartPar
+We have not seen anything like this before, and we need to turn to our lecturer for help.
+Confused about what we might have
+done wrong, we raise our hand to ask the instructor.
+Knowingly, she smiles, and tells you about how DataLad protects content given
+to it:
+
+\sphinxAtStartPar
+“Content in your DataLad dataset is protected by {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}} from
+accidental changes” our instructor begins.
+
+\sphinxAtStartPar
+“Wait!” we interrupt. “First off, that wasn’t accidental. And second, I was told this
+course does not have \sphinxcode{\sphinxupquote{git\sphinxhyphen{}annex\sphinxhyphen{}101}} as a prerequisite?”
+
+\sphinxAtStartPar
+“Yes, hear me out” she says. “I promise you two different solutions at
+the end of this explanation, and the concept behind this is quite relevant”.
+
+\sphinxAtStartPar
+DataLad usually gives content to {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}} to store and track.
+git\sphinxhyphen{}annex, let’s just say, takes this task \sphinxstyleemphasis{really} seriously. One of its
+features that you have just experienced is that it \sphinxstyleemphasis{locks} content.
+
+\sphinxAtStartPar
+If files are \sphinxstyleemphasis{locked down}, their content cannot be modified. In principle,
+that’s not a bad thing: It could be your late grandma’s secret cherry\sphinxhyphen{}pie
+recipe, and you do not want to \sphinxstyleemphasis{accidentally} change that.
+Therefore, a file needs to be consciously \sphinxstyleemphasis{unlocked} to apply modifications.
+
+\sphinxAtStartPar
+In the attempt to resize the image to 450x450 you tried to overwrite
+\sphinxcode{\sphinxupquote{recordings/salt\_logo\_small.jpg}}, a file that was given to DataLad
+and thus protected by git\sphinxhyphen{}annex.
+
+\index{unlock@\spxentry{unlock}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!unlock@\spxentry{unlock}}\index{unlock file@\spxentry{unlock file}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!unlock file@\spxentry{unlock file}}\ignorespaces 
+\sphinxAtStartPar
+There is a DataLad command that takes care of unlocking file content,
+and thus making locked files modifiable again: \sphinxcode{\sphinxupquote{datalad unlock}}.
+Let us check out what it does, and also compare that to the
+\textit{Windows-wit}~{\windowswiticoninline}\textit{\ref{ww-unlocking-unlocked}} {\hyperref[\detokenize{basics/101-110-run2:ww-unlocking-unlocked}]{\sphinxcrossref{\DUrole{std,std-ref}{on an entirely different explanation}}}} (\autopageref*{\detokenize{basics/101-110-run2:ww-unlocking-unlocked}}).
+
+\index{files are unlocked by default@\spxentry{files are unlocked by default}!on Windows@\spxentry{on Windows}}\index{on Windows@\spxentry{on Windows}!files are unlocked by default@\spxentry{files are unlocked by default}}\index{adjusted branch@\spxentry{adjusted branch}!unlocked files@\spxentry{unlocked files}}\ignorespaces \begin{windowswit}[label={ww-unlocking-unlocked}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{What happens if I run ‘datalad unlock’ on Windows?}
+\label{\detokenize{basics/101-110-run2:ww-unlocking-unlocked}}
+
+\sphinxAtStartPar
+Nothing. All of the files in your dataset are always unlocked, and actually \sphinxstyleemphasis{cannot} be locked at all.
+Consequently, there will be nothing to show for \sphinxcode{\sphinxupquote{datalad status}} afterwards (as shown a few paragraphs below).
+This is due to a file system limitation, and will be explained in more detail in chapter {\hyperref[\detokenize{basics/basics-annex:chapter-gitannex}]{\sphinxcrossref{\DUrole{std,std-ref}{Under the hood: git\sphinxhyphen{}annex}}}} (\autopageref*{\detokenize{basics/basics-annex:chapter-gitannex}}).
+
+
+\end{windowswit}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }unlock\PYG{+w}{ }recordings/salt\PYGZus{}logo\PYGZus{}small.jpg
+\PYG{g+go}{unlock(ok): recordings/salt\PYGZus{}logo\PYGZus{}small.jpg (file)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Well, \sphinxcode{\sphinxupquote{unlock(ok)}} does not sound too bad for a start. As always, we
+feel the urge to run a \sphinxcode{\sphinxupquote{datalad status}} on this:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{ modified: recordings/salt\PYGZus{}logo\PYGZus{}small.jpg (file)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+“Ah, do not mind that for now”, our instructor says, and with a wink she
+continues: “We’ll talk about symlinks and object trees a while later”.
+You are not really sure whether that’s a good thing, but you have a task to focus
+on. Hastily, you run the command right from the terminal:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }convert\PYG{+w}{ }\PYGZhy{}resize\PYG{+w}{ }450x450\PYG{+w}{ }recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}salt.jpg\PYG{+w}{ }recordings/salt\PYGZus{}logo\PYGZus{}small.jpg
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Hey, no permission denied error! You note that the instructor still stands
+right next to you. “Sooo… now what do I do to \sphinxstyleemphasis{lock} the file again?” you ask.
+
+\sphinxAtStartPar
+“Well… what you just did there was quite suboptimal. Didn’t you want to
+use \sphinxcode{\sphinxupquote{datalad run}}? But, anyway, in order to lock the file again, you would need to
+run a \sphinxcode{\sphinxupquote{datalad save}}.”
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}resized picture by hand\PYGZdq{}}
+\PYG{g+go}{add(ok): recordings/salt\PYGZus{}logo\PYGZus{}small.jpg (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+“So”, you wonder aloud, “whenever I want to modify I need to
+\sphinxcode{\sphinxupquote{datalad unlock}} it, do the modifications, and then \sphinxcode{\sphinxupquote{datalad save}} it?”
+
+\sphinxAtStartPar
+“Well, this is certainly one way of doing it, and a completely valid workflow
+if you would do that outside of a \sphinxcode{\sphinxupquote{datalad run}} command.
+But within \sphinxcode{\sphinxupquote{datalad run}} there is actually a much easier way of doing this.
+Let’s use the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}output}} argument.”
+
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{datalad run}} \sphinxstyleemphasis{retrieves} everything that is specified as \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}input}} prior to
+command execution, and it \sphinxstyleemphasis{unlocks} everything specified as \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}output}} prior to
+command execution. Therefore, whenever the output of a \sphinxcode{\sphinxupquote{datalad run}} command already
+exists and is tracked, it should be specified as an argument in
+the \sphinxcode{\sphinxupquote{\sphinxhyphen{}o}}/\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}output}} option. See \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-output-glob}} {\hyperref[\detokenize{basics/101-110-run2:fom-output-glob}]{\sphinxcrossref{\DUrole{std,std-ref}{on dealing with many
+outputs}}}} (\autopageref*{\detokenize{basics/101-110-run2:fom-output-glob}}).
+
+\index{path globbing@\spxentry{path globbing}!with DataLad run@\spxentry{with DataLad run}}\index{with DataLad run@\spxentry{with DataLad run}!path globbing@\spxentry{path globbing}}\ignorespaces \begin{findoutmore}[label={fom-output-glob}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{But what if I have a lot of outputs?}
+\label{\detokenize{basics/101-110-run2:fom-output-glob}}
+
+\sphinxAtStartPar
+The use case here is simplistic \textendash{} a single file gets modified.
+But there are commands and tools that create full directories with
+many files as an output.
+The easiest way to specify this type of output
+is by supplying the directory name, or the directory name and a {\hyperref[\detokenize{glossary:term-globbing}]{\sphinxtermref{\DUrole{xref,std,std-term}{globbing}}}} character, such as
+\sphinxcode{\sphinxupquote{\sphinxhyphen{}o directory/*.dat}}.
+This would unlock all files with a \sphinxcode{\sphinxupquote{.dat}} extension inside of \sphinxcode{\sphinxupquote{directory}}.
+To glob for files in multiple levels of directories, use \sphinxcode{\sphinxupquote{**}} (a so\sphinxhyphen{}called \dlhbhref{L2A}{globstar}) for a recursive glob through any number directories.
+And, just as for \sphinxcode{\sphinxupquote{\sphinxhyphen{}i}}/\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}input}}, you could use multiple \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}output}} specifications.
+
+
+\end{findoutmore}
+
+\index{declare command output@\spxentry{declare command output}!with DataLad run@\spxentry{with DataLad run}}\index{with DataLad run@\spxentry{with DataLad run}!declare command output@\spxentry{declare command output}}\ignorespaces 
+\sphinxAtStartPar
+In order to execute \sphinxcode{\sphinxupquote{datalad run}} with both the \sphinxcode{\sphinxupquote{\sphinxhyphen{}i}}/\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}input}} and \sphinxcode{\sphinxupquote{\sphinxhyphen{}o}}/\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}output}}
+flag and see their magic, let’s crop the second logo, \sphinxcode{\sphinxupquote{logo\_interval.jpg}}.
+The \textit{Windows-wit}~{\windowswiticoninline}\textit{\ref{ww-run-outputs}} {\hyperref[\detokenize{basics/101-110-run2:ww-run-outputs}]{\sphinxcrossref{\DUrole{std,std-ref}{on output declaration}}}} (\autopageref*{\detokenize{basics/101-110-run2:ww-run-outputs}}) clarifies the impact
+of not doing so, when it is technically not needed.
+
+\index{files are unlocked by default@\spxentry{files are unlocked by default}!on Windows@\spxentry{on Windows}}\index{on Windows@\spxentry{on Windows}!files are unlocked by default@\spxentry{files are unlocked by default}}\index{run@\spxentry{run}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!run@\spxentry{run}}\index{unlocked files@\spxentry{unlocked files}!in adjusted mode@\spxentry{in adjusted mode}}\index{in adjusted mode@\spxentry{in adjusted mode}!unlocked files@\spxentry{unlocked files}}\ignorespaces \begin{windowswit}[label={ww-run-outputs}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{Wait, would I need to specify outputs, too?}
+\label{\detokenize{basics/101-110-run2:ww-run-outputs}}
+
+\sphinxAtStartPar
+Given that nothing in your dataset is locked, is there a \sphinxstyleemphasis{need} for you to bother with creating \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}output}} flags?
+Not for you personally, if you only stay on your Windows machine.
+However, you will be doing others that you share your dataset with a favor if they are not using Windows \textendash{} should you or others want to rerun a run record, \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}output}} flags will make it work on all operating systems.
+
+
+\end{windowswit}
+
+\fvset{hllines={, 11,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }run\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}Resize logo for slides\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYGZhy{}\PYGZhy{}input\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}interval.jpg\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYGZhy{}\PYGZhy{}output\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}recordings/interval\PYGZus{}logo\PYGZus{}small.jpg\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{l+s+s2}{\PYGZdq{}convert \PYGZhy{}resize 450x450 recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}interval.jpg recordings/interval\PYGZus{}logo\PYGZus{}small.jpg\PYGZdq{}}
+
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} or shorter:}
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }run\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}Resize logo for slides\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYGZhy{}i\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}interval.jpg\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYGZhy{}o\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}recordings/interval\PYGZus{}logo\PYGZus{}small.jpg\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{l+s+s2}{\PYGZdq{}convert \PYGZhy{}resize 450x450 recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}interval.jpg recordings/interval\PYGZus{}logo\PYGZus{}small.jpg\PYGZdq{}}
+\PYG{g+go}{get(ok): recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}interval.jpg (file) [from web...]}
+\PYG{g+go}{[INFO] == Command start (output follows) =====}
+\PYG{g+go}{[INFO] == Command exit (modification check follows) =====}
+\PYG{g+go}{run(ok): /home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101 (dataset) [convert \PYGZhy{}resize 450x450 recordings/longn...]}
+\PYG{g+go}{add(ok): recordings/interval\PYGZus{}logo\PYGZus{}small.jpg (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+\sphinxresetverbatimhllines
+
+\sphinxAtStartPar
+This time, with both \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}input}} and \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}output}}
+options specified, DataLad informs about the \sphinxcode{\sphinxupquote{datalad get}}
+operations it performs prior to the command
+execution, and \sphinxcode{\sphinxupquote{datalad run}} executes the command successfully.
+It does \sphinxstyleemphasis{not} inform about any \sphinxcode{\sphinxupquote{datalad unlock}} operation,
+because the output \sphinxcode{\sphinxupquote{recordings/interval\_logo\_small.jpg}} does not
+exist before the command is run. Should you rerun this command however,
+the summary will include a statement about content unlocking. You will
+see an example of this in the next section.
+
+\sphinxAtStartPar
+Note now how many individual commands a \sphinxcode{\sphinxupquote{datalad run}} saves us:
+\sphinxcode{\sphinxupquote{datalad get}}, \sphinxcode{\sphinxupquote{datalad unlock}}, and \sphinxcode{\sphinxupquote{datalad save}}!
+But even better: Beyond saving time \sphinxstyleemphasis{now}, running commands reproducibly and
+recorded with \sphinxcode{\sphinxupquote{datalad run}} saves us plenty of time in the future as soon
+as we want to rerun a command, or find out how a file came into existence.
+
+\sphinxAtStartPar
+With this last code snippet, you have experienced a full \sphinxcode{\sphinxupquote{datalad run}} command: commit message,
+input and output definitions (the order in which you give those two options is irrelevant),
+and the command to be executed. Whenever a command takes input or produces output you should specify
+this with the appropriate option.
+
+\sphinxAtStartPar
+Make a note of this behavior in your \sphinxcode{\sphinxupquote{notes.txt}} file.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }\PYGZlt{}\PYGZlt{}\PYG{+w}{ }EOT\PYG{+w}{ }\PYGZgt{}\PYGZgt{}\PYG{+w}{ }notes.txt
+\PYG{g+go}{You should specify all files that a command takes as input with an}
+\PYG{g+go}{\PYGZhy{}i/\PYGZhy{}\PYGZhy{}input flag. These files will be retrieved prior to the command}
+\PYG{g+go}{execution. Any content that is modified or produced by the command}
+\PYG{g+go}{should be specified with an \PYGZhy{}o/\PYGZhy{}\PYGZhy{}output flag. Upon a run or rerun of}
+\PYG{g+go}{the command, the contents of these files will get unlocked so that}
+\PYG{g+go}{they can be modified.}
+
+\PYG{g+go}{EOT}
+\end{sphinxVerbatim}
+
+
+\subsection{Save yourself the preparation time}
+\label{\detokenize{basics/101-110-run2:save-yourself-the-preparation-time}}
+\sphinxAtStartPar
+Its generally good practice to specify \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}input}} and \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}output}} even if your input files are already retrieved and your output files unlocked \textendash{} it makes sure that a recomputation can succeed, even if inputs are not yet retrieved, or if output needs to be unlocked.
+However, the internal preparation steps of checking that inputs exist or that outputs are unlocked can take a bit of time, especially if it involves checking a large number of files.
+
+\sphinxAtStartPar
+If you want to avoid the expense of unnecessary preparation steps you can make use of the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}assume\sphinxhyphen{}ready}} argument of \sphinxcode{\sphinxupquote{datalad run}}.
+Depending on whether your inputs are already retrieved, your outputs already unlocked (or not needed to be unlocked), or both, specify \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}assume\sphinxhyphen{}ready}} with the argument \sphinxcode{\sphinxupquote{inputs}}, \sphinxcode{\sphinxupquote{outputs}} or \sphinxcode{\sphinxupquote{both}} and save yourself a few seconds, without sacrificing the ability to rerun your command under conditions in which the preparation would be necessary.
+
+
+\subsection{Placeholders}
+\label{\detokenize{basics/101-110-run2:placeholders}}
+\sphinxAtStartPar
+Just after writing the note, you had to relax your fingers a bit. “Man, this was
+so much typing. Not only did I need to specify the inputs and outputs, I also had
+to repeat all of these lengthy paths in the command line call…” you think.
+
+\sphinxAtStartPar
+There is a neat little trick to spare you half of this typing effort, though: \sphinxstyleemphasis{Placeholders}
+for inputs and outputs. This is how it works:
+
+\sphinxAtStartPar
+Instead of running
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }run\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}Resize logo for slides\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYGZhy{}\PYGZhy{}input\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}interval.jpg\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYGZhy{}\PYGZhy{}output\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}recordings/interval\PYGZus{}logo\PYGZus{}small.jpg\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{l+s+s2}{\PYGZdq{}convert \PYGZhy{}resize 450x450 recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}interval.jpg recordings/interval\PYGZus{}logo\PYGZus{}small.jpg\PYGZdq{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+you could shorten this to
+
+\fvset{hllines={, 4,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }run\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}Resize logo for slides\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYGZhy{}\PYGZhy{}input\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}interval.jpg\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYGZhy{}\PYGZhy{}output\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}recordings/interval\PYGZus{}logo\PYGZus{}small.jpg\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{l+s+s2}{\PYGZdq{}convert \PYGZhy{}resize 450x450 \PYGZob{}inputs\PYGZcb{} \PYGZob{}outputs\PYGZcb{}\PYGZdq{}}
+\end{sphinxVerbatim}
+\sphinxresetverbatimhllines
+
+\sphinxAtStartPar
+The placeholder \sphinxcode{\sphinxupquote{\{inputs\}}} will expand to the path given as \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}input}}, and
+the placeholder \sphinxcode{\sphinxupquote{\{outputs\}}} will expand to the path given as \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}output}}.
+This means instead of writing the full paths in the command, you can simply reuse
+the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}input}} and \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}output}} specification done before.
+The \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-multiple-inoutputs}} {\hyperref[\detokenize{basics/101-110-run2:fom-multiple-inoutputs}]{\sphinxcrossref{\DUrole{std,std-ref}{on dealing with multiple inputs and outputs}}}} (\autopageref*{\detokenize{basics/101-110-run2:fom-multiple-inoutputs}}) provides more details on the general usage of this feature.
+
+\index{multiple command inputs@\spxentry{multiple command inputs}!with DataLad run@\spxentry{with DataLad run}}\index{with DataLad run@\spxentry{with DataLad run}!multiple command inputs@\spxentry{multiple command inputs}}\ignorespaces \begin{findoutmore}[label={fom-multiple-inoutputs}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{What if I have multiple inputs or outputs?}
+\label{\detokenize{basics/101-110-run2:fom-multiple-inoutputs}}
+
+\sphinxAtStartPar
+If multiple values are specified, e.g., as in
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }run\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}move a few files around\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYGZhy{}\PYGZhy{}input\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}file1\PYGZdq{}}\PYG{+w}{ }\PYGZhy{}\PYGZhy{}input\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}file2\PYGZdq{}}\PYG{+w}{ }\PYGZhy{}\PYGZhy{}input\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}file3\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYGZhy{}\PYGZhy{}output\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}directory\PYGZus{}a/\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{l+s+s2}{\PYGZdq{}mv \PYGZob{}inputs\PYGZcb{} \PYGZob{}outputs\PYGZcb{}\PYGZdq{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+the values will be joined by a space like this:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }run\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}move a few files around\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYGZhy{}\PYGZhy{}input\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}file1\PYGZdq{}}\PYG{+w}{ }\PYGZhy{}\PYGZhy{}input\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}file2\PYGZdq{}}\PYG{+w}{ }\PYGZhy{}\PYGZhy{}input\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}file3\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYGZhy{}\PYGZhy{}output\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}directory\PYGZus{}a/\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{l+s+s2}{\PYGZdq{}mv file1 file2 file3 directory\PYGZus{}a/\PYGZdq{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The order of the values will match that order from the command line.
+
+\sphinxAtStartPar
+If you use globs for input specification, as in
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }run\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}move a few files around\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYGZhy{}\PYGZhy{}input\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}file*\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYGZhy{}\PYGZhy{}output\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}directory\PYGZus{}a/\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{l+s+s2}{\PYGZdq{}mv \PYGZob{}inputs\PYGZcb{} \PYGZob{}outputs\PYGZcb{}\PYGZdq{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+the globs will expanded in alphabetical order (like bash):
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }run\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}move a few files around\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYGZhy{}\PYGZhy{}input\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}file1\PYGZdq{}}\PYG{+w}{ }\PYGZhy{}\PYGZhy{}input\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}file2\PYGZdq{}}\PYG{+w}{ }\PYGZhy{}\PYGZhy{}input\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}file3\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYGZhy{}\PYGZhy{}output\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}directory\PYGZus{}a/\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{l+s+s2}{\PYGZdq{}mv file1 file2 file3 directory\PYGZus{}a/\PYGZdq{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+If the command only needs a subset of the inputs or outputs, individual values
+can be accessed with an integer index, e.g., \sphinxcode{\sphinxupquote{\{inputs{[}0{]}\}}} for the very first
+input.
+
+\sphinxAtStartPar
+Check the \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-run-curly}} {\hyperref[\detokenize{basics/101-110-run2:fom-run-curly}]{\sphinxcrossref{\DUrole{std,std-ref}{on how to deal with commands that include
+\{ or \} for other purposes}}}} (\autopageref*{\detokenize{basics/101-110-run2:fom-run-curly}}).
+
+
+\end{findoutmore}
+
+\index{run command with curly brackets@\spxentry{run command with curly brackets}!with DataLad run@\spxentry{with DataLad run}}\index{with DataLad run@\spxentry{with DataLad run}!run command with curly brackets@\spxentry{run command with curly brackets}}\ignorespaces \begin{findoutmore}[label={fom-run-curly}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{Wait, what if I need a curly bracket in my ‘datalad run’ call?}
+\label{\detokenize{basics/101-110-run2:fom-run-curly}}
+
+\sphinxAtStartPar
+If your command call involves a \sphinxcode{\sphinxupquote{\{}} or \sphinxcode{\sphinxupquote{\}}} character, you will need to escape
+this brace character by doubling it, i.e., \sphinxcode{\sphinxupquote{\{\{}} or \sphinxcode{\sphinxupquote{\}\}}}.
+
+
+\end{findoutmore}
+
+\index{dry\sphinxhyphen{}run@\spxentry{dry\sphinxhyphen{}run}!with DataLad run@\spxentry{with DataLad run}}\index{with DataLad run@\spxentry{with DataLad run}!dry\sphinxhyphen{}run@\spxentry{dry\sphinxhyphen{}run}}\ignorespaces 
+
+\subsection{Dry\sphinxhyphen{}running your run call}
+\label{\detokenize{basics/101-110-run2:dry-running-your-run-call}}\label{\detokenize{basics/101-110-run2:dryrun}}\label{\detokenize{basics/101-110-run2:index-12}}
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{datalad run}} commands can become confusing and long, especially when you make heavy use of placeholders or wrap a complex bash commands.
+To better anticipate what you will be running, or help debug a failed command, you can make use of the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}dry\sphinxhyphen{}run}}  flag of \sphinxcode{\sphinxupquote{datalad run}}.
+This option needs a mode specification (\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}dry\sphinxhyphen{}run=basic}} or \sphinxcode{\sphinxupquote{dry\sphinxhyphen{}run=command}}), followed by the \sphinxcode{\sphinxupquote{run}} command you want to execute, and it will decipher the commands elements:
+The mode \sphinxcode{\sphinxupquote{command}} will display the command that is about to be ran.
+The mode \sphinxcode{\sphinxupquote{basic}} will report a few important details about the execution:
+Apart from displaying the command that will be ran, you will learn \sphinxstyleemphasis{where} the command runs, what its \sphinxstyleemphasis{inputs} are (helpful if your \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}input}} specification includes a {\hyperref[\detokenize{glossary:term-globbing}]{\sphinxtermref{\DUrole{xref,std,std-term}{globbing}}}} term), and what its \sphinxstyleemphasis{outputs} are.
+
+\sphinxstepscope
+
+
+\section{Clean desk}
+\label{\detokenize{basics/101-112-run4:clean-desk}}\label{\detokenize{basics/101-112-run4:run5}}\label{\detokenize{basics/101-112-run4::doc}}
+\sphinxAtStartPar
+Just now you realize that you need to fit both logos onto the same slide.
+“Ah, damn, I might then really need to have them 400 by 400 pixel to fit”,
+you think. “Good that I know how to not run into the permission denied errors anymore!”
+
+\sphinxAtStartPar
+Therefore, we need to do the \sphinxcode{\sphinxupquote{datalad run}} command yet again \sphinxhyphen{} we wanted to have
+the image in 400x400 px size. “Now this definitely will be the last time I’m running this”,
+you think.
+
+\fvset{hllines={, 5,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }run\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}Resize logo for slides\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYGZhy{}\PYGZhy{}input\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}interval.jpg\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYGZhy{}\PYGZhy{}output\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}recordings/interval\PYGZus{}logo\PYGZus{}small.jpg\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{l+s+s2}{\PYGZdq{}convert \PYGZhy{}resize 400x400 recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}interval.jpg recordings/interval\PYGZus{}logo\PYGZus{}small.jpg\PYGZdq{}}
+\PYG{g+go}{run(impossible): /home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101 (dataset) [clean dataset required to detect changes from command; use `datalad status` to inspect unsaved changes]}
+\end{sphinxVerbatim}
+\sphinxresetverbatimhllines
+
+
+\subsection{Oh for f**** sake… run is “impossible”?}
+\label{\detokenize{basics/101-112-run4:oh-for-f-sake-run-is-impossible}}
+\sphinxAtStartPar
+Weird. After the initial annoyance about yet another error message faded,
+and you read on,
+DataLad informs that a “clean dataset” is required.
+Run a \sphinxcode{\sphinxupquote{datalad status}} to see what is meant by this:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{ modified: notes.txt (file)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Ah right. We forgot to save the notes we added, and thus there are
+unsaved modifications present in \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}}.
+But why is this a problem?
+
+\sphinxAtStartPar
+By default, at the end of a \sphinxcode{\sphinxupquote{datalad run}} is a \sphinxcode{\sphinxupquote{datalad save}}.
+Remember the section {\hyperref[\detokenize{basics/101-102-populate:populate}]{\sphinxcrossref{\DUrole{std,std-ref}{Populate a dataset}}}} (\autopageref*{\detokenize{basics/101-102-populate:populate}}): A general \sphinxcode{\sphinxupquote{datalad save}} without
+a path specification will save \sphinxstyleemphasis{all} of the modified or untracked
+contents to the dataset.
+
+\sphinxAtStartPar
+Therefore, in order to not mix any changes in the dataset that are unrelated
+to the command plugged into \sphinxcode{\sphinxupquote{datalad run}}, by default it will only run
+on a clean dataset with no changes or untracked files present.
+
+\sphinxAtStartPar
+There are two ways to get around this error message:
+The more obvious \textendash{} and recommended \textendash{} one is to save the modifications,
+and run the command in a clean dataset.
+We will try this way with the \sphinxcode{\sphinxupquote{logo\_interval.jpg}}.
+It would look like this:
+First, save the changes,
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}add additional notes on run options\PYGZdq{}}
+\PYG{g+go}{add(ok): notes.txt (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+and then try again:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }run\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}Resize logo for slides\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYGZhy{}\PYGZhy{}input\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}interval.jpg\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYGZhy{}\PYGZhy{}output\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}recordings/interval\PYGZus{}logo\PYGZus{}small.jpg\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{l+s+s2}{\PYGZdq{}convert \PYGZhy{}resize 400x400 recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}interval.jpg recordings/interval\PYGZus{}logo\PYGZus{}small.jpg\PYGZdq{}}
+\PYG{g+go}{unlock(ok): recordings/interval\PYGZus{}logo\PYGZus{}small.jpg (file)}
+\PYG{g+go}{[INFO] == Command start (output follows) =====}
+\PYG{g+go}{[INFO] == Command exit (modification check follows) =====}
+\PYG{g+go}{run(ok): /home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101 (dataset) [convert \PYGZhy{}resize 400x400 recordings/longn...]}
+\PYG{g+go}{add(ok): recordings/interval\PYGZus{}logo\PYGZus{}small.jpg (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Note how in this execution of \sphinxcode{\sphinxupquote{datalad run}}, output unlocking was actually
+necessary and DataLad provides a summary of this action in its output.
+
+\sphinxAtStartPar
+Add a quick addition to your notes about this way of cleaning up prior
+to a \sphinxcode{\sphinxupquote{datalad run}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }\PYGZlt{}\PYGZlt{}\PYG{+w}{ }EOT\PYG{+w}{ }\PYGZgt{}\PYGZgt{}\PYG{+w}{ }notes.txt
+\PYG{g+go}{Important! If the dataset is not \PYGZdq{}clean\PYGZdq{} (a datalad status output is}
+\PYG{g+go}{empty), datalad run will not work \PYGZhy{} you will have to save}
+\PYG{g+go}{modifications present in your dataset.}
+\PYG{g+go}{EOT}
+\end{sphinxVerbatim}
+
+\index{run command on dirty dataset@\spxentry{run command on dirty dataset}!with DataLad run@\spxentry{with DataLad run}}\index{with DataLad run@\spxentry{with DataLad run}!run command on dirty dataset@\spxentry{run command on dirty dataset}}\ignorespaces 
+\sphinxAtStartPar
+A way of executing a \sphinxcode{\sphinxupquote{datalad run}} \sphinxstyleemphasis{despite} an “unclean” dataset,
+though, is to add the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}explicit}} flag to \sphinxcode{\sphinxupquote{datalad run}}.
+We will try this flag with the remaining \sphinxcode{\sphinxupquote{logo\_salt.jpg}}. Note that
+we have an “unclean dataset” again because of the
+additional note in \sphinxcode{\sphinxupquote{notes.txt}}.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }run\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}Resize logo for slides\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYGZhy{}\PYGZhy{}input\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}salt.jpg\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYGZhy{}\PYGZhy{}output\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}recordings/salt\PYGZus{}logo\PYGZus{}small.jpg\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYGZhy{}\PYGZhy{}explicit\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{l+s+s2}{\PYGZdq{}convert \PYGZhy{}resize 400x400 recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}salt.jpg recordings/salt\PYGZus{}logo\PYGZus{}small.jpg\PYGZdq{}}
+\PYG{g+go}{unlock(ok): recordings/salt\PYGZus{}logo\PYGZus{}small.jpg (file)}
+\PYG{g+go}{[INFO] == Command start (output follows) =====}
+\PYG{g+go}{[INFO] == Command exit (modification check follows) =====}
+\PYG{g+go}{run(ok): /home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101 (dataset) [convert \PYGZhy{}resize 400x400 recordings/longn...]}
+\PYG{g+go}{add(ok): recordings/salt\PYGZus{}logo\PYGZus{}small.jpg (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+With this flag, DataLad considers the specification of inputs and outputs to be “explicit”.
+It does not warn if the repository is dirty, but importantly, it
+\sphinxstylestrong{only} saves modifications to the \sphinxstyleemphasis{listed outputs} (which is a problem in the
+vast amount of cases where one does not exactly know which outputs are produced).
+
+\index{explicit input/output declaration@\spxentry{explicit input/output declaration}!with DataLad run@\spxentry{with DataLad run}}\index{with DataLad run@\spxentry{with DataLad run}!explicit input/output declaration@\spxentry{explicit input/output declaration}}\ignorespaces \begin{importantnote}[label={index-1}, before title={\thetcbcounter\ }, check odd page=true]{Put explicit first!}
+\label{\detokenize{basics/101-112-run4:index-1}}
+
+\sphinxAtStartPar
+The \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}explicit}} flag has to be given anywhere \sphinxstyleemphasis{prior} to the command that
+should be run \textendash{} the command needs to be the last element of a
+\sphinxcode{\sphinxupquote{datalad run}} call.
+
+
+\end{importantnote}
+
+\sphinxAtStartPar
+A \sphinxcode{\sphinxupquote{datalad status}} will show that your previously modified \sphinxcode{\sphinxupquote{notes.txt}}
+is still modified:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{ modified: notes.txt (file)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Add an additional note on the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}explicit}} flag, and finally save your changes to \sphinxcode{\sphinxupquote{notes.txt}}.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }\PYGZlt{}\PYGZlt{}\PYG{+w}{ }EOT\PYG{+w}{ }\PYGZgt{}\PYGZgt{}\PYG{+w}{ }notes.txt
+\PYG{g+go}{A suboptimal alternative is the \PYGZhy{}\PYGZhy{}explicit flag, used to record only}
+\PYG{g+go}{those changes done to the files listed with \PYGZhy{}\PYGZhy{}output flags.}
+
+\PYG{g+go}{EOT}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}add note on clean datasets\PYGZdq{}}
+\PYG{g+go}{add(ok): notes.txt (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+To conclude this section on \sphinxcode{\sphinxupquote{datalad run}}, take a look at the last \sphinxcode{\sphinxupquote{datalad run}}
+commit to see a {\hyperref[\detokenize{glossary:term-run-record}]{\sphinxtermref{\DUrole{xref,std,std-term}{run record}}}} with more content:
+
+\fvset{hllines={, 10, 14, 15, 16, 17, 18, 19,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}p\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{2}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    [DATALAD RUNCMD] Resize logo for slides}
+
+\PYG{g+go}{    === Do not change lines below ===}
+\PYG{g+go}{    \PYGZob{}}
+\PYG{g+go}{     \PYGZdq{}chain\PYGZdq{}: [],}
+\PYG{g+go}{     \PYGZdq{}cmd\PYGZdq{}: \PYGZdq{}convert \PYGZhy{}resize 400x400 recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}salt.jpg recordings/salt\PYGZus{}logo\PYGZus{}small.jpg\PYGZdq{},}
+\PYG{g+go}{     \PYGZdq{}dsid\PYGZdq{}: \PYGZdq{}e3e70682\PYGZhy{}c209\PYGZhy{}4cac\PYGZhy{}629f\PYGZhy{}6fbed82c07cd\PYGZdq{},}
+\PYG{g+go}{     \PYGZdq{}exit\PYGZdq{}: 0,}
+\PYG{g+go}{     \PYGZdq{}extra\PYGZus{}inputs\PYGZdq{}: [],}
+\PYG{g+go}{     \PYGZdq{}inputs\PYGZdq{}: [}
+\PYG{g+go}{      \PYGZdq{}recordings/longnow/.datalad/feed\PYGZus{}metadata/logo\PYGZus{}salt.jpg\PYGZdq{}}
+\PYG{g+go}{     ],}
+\PYG{g+go}{     \PYGZdq{}outputs\PYGZdq{}: [}
+\PYG{g+go}{      \PYGZdq{}recordings/salt\PYGZus{}logo\PYGZus{}small.jpg\PYGZdq{}}
+\PYG{g+go}{     ],}
+\PYG{g+go}{     \PYGZdq{}pwd\PYGZdq{}: \PYGZdq{}.\PYGZdq{}}
+\PYG{g+go}{    \PYGZcb{}}
+\PYG{g+go}{    \PYGZca{}\PYGZca{}\PYGZca{} Do not change lines above \PYGZca{}\PYGZca{}\PYGZca{}}
+
+\PYG{g+go}{diff \PYGZhy{}\PYGZhy{}git a/recordings/salt\PYGZus{}logo\PYGZus{}small.jpg b/recordings/salt\PYGZus{}logo\PYGZus{}small.jpg}
+\PYG{g+go}{index 0985399..d90c601 120000}
+\PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{} a/recordings/salt\PYGZus{}logo\PYGZus{}small.jpg}
+\PYG{g+go}{+++ b/recordings/salt\PYGZus{}logo\PYGZus{}small.jpg}
+\PYG{g+go}{@@ \PYGZhy{}1 +1 @@}
+\end{sphinxVerbatim}
+\sphinxresetverbatimhllines
+
+\sphinxstepscope
+
+
+\section{Summary}
+\label{\detokenize{basics/101-113-summary:summary}}\label{\detokenize{basics/101-113-summary:run6}}\label{\detokenize{basics/101-113-summary::doc}}
+\sphinxAtStartPar
+In the last four sections, we demonstrated how to create a proper \sphinxcode{\sphinxupquote{datalad run}}
+command (\hyperref[\detokenize{basics/101-113-summary:fig-run-schema}]{Fig.\@ \ref{\detokenize{basics/101-113-summary:fig-run-schema}}}), and discovered the concept of \sphinxstyleemphasis{locked} content.
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{datalad run}} records and saves the changes a command makes in a dataset. That means
+that modifications to existing content or new content are associated with a specific command
+and saved to the dataset’s history. Essentially, \sphinxcode{\sphinxupquote{datalad run}} helps you to keep
+track of what you do in your dataset by capturing all {\hyperref[\detokenize{glossary:term-provenance}]{\sphinxtermref{\DUrole{xref,std,std-term}{provenance}}}}.
+
+\item {} 
+\sphinxAtStartPar
+A \sphinxcode{\sphinxupquote{datalad run}} command generates a \sphinxcode{\sphinxupquote{run record}} in the commit. This {\hyperref[\detokenize{glossary:term-run-record}]{\sphinxtermref{\DUrole{xref,std,std-term}{run record}}}} can be used
+by DataLad to re\sphinxhyphen{}execute a command with \sphinxcode{\sphinxupquote{datalad rerun SHASUM}}, where SHASUM is the
+commit hash of the \sphinxcode{\sphinxupquote{datalad run}} command that should be re\sphinxhyphen{}executed.
+
+\item {} 
+\sphinxAtStartPar
+If a \sphinxcode{\sphinxupquote{datalad run}} or \sphinxcode{\sphinxupquote{datalad rerun}} does not modify any content, it will not write a
+record to history.
+
+\item {} 
+\sphinxAtStartPar
+With any \sphinxcode{\sphinxupquote{datalad run}}, specify a commit message, and whenever appropriate, specify its inputs
+to the executed command (using the \sphinxcode{\sphinxupquote{\sphinxhyphen{}i}}/\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}input}} flag) and/or its output (using the \sphinxcode{\sphinxupquote{\sphinxhyphen{}o}}/
+\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}output}} flag). The full command structure is:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }run\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{    }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}commit message here\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{    }\PYGZhy{}\PYGZhy{}input\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}path/to/input/\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{    }\PYGZhy{}\PYGZhy{}output\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}path/to/output\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{    }\PYG{l+s+s2}{\PYGZdq{}command\PYGZdq{}}
+\end{sphinxVerbatim}
+
+\item {} 
+\sphinxAtStartPar
+Anything specified as \sphinxcode{\sphinxupquote{input}} will be retrieved if necessary with a \sphinxcode{\sphinxupquote{datalad get}} prior to command
+execution. Anything specified as \sphinxcode{\sphinxupquote{output}} will be \sphinxcode{\sphinxupquote{unlocked}} prior to modifications.
+
+\item {} 
+\sphinxAtStartPar
+It is good practice to specify \sphinxcode{\sphinxupquote{input}} and \sphinxcode{\sphinxupquote{output}} to ensure that a \sphinxcode{\sphinxupquote{datalad rerun}} works, and to capture the relevant elements of a computation in a machine\sphinxhyphen{}readable record.
+If you want to spare yourself preparation time in case everything is already retrieved and unlocked, you can use \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}assume\sphinxhyphen{}ready \{input|output|both\}}} to skip a check on whether inputs are already present or outputs already unlocked.
+
+\end{itemize}
+
+\begin{figure}[tbp]
+\centering
+\capstart
+
+\noindent\sphinxincludegraphics[width=0.800\linewidth]{{run}.pdf}
+\caption{Overview of \sphinxcode{\sphinxupquote{datalad run}}.}\label{\detokenize{basics/101-113-summary:id1}}\label{\detokenize{basics/101-113-summary:fig-run-schema}}\end{figure}
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Getting and unlocking content is not only convenient for yourself, but enormously helpful
+for anyone you share your dataset with, but this will be demonstrated in an upcoming section
+in detail.
+
+\item {} 
+\sphinxAtStartPar
+To execute a \sphinxcode{\sphinxupquote{datalad run}} or \sphinxcode{\sphinxupquote{datalad rerun}}, a \sphinxcode{\sphinxupquote{datalad status}}
+either needs to report that the dataset has no uncommitted changes (the dataset state
+should be “clean”), or the command needs to be extended with the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}explicit}} option.
+
+\end{itemize}
+
+
+\subsection{Now what can I do with that?}
+\label{\detokenize{basics/101-113-summary:now-what-can-i-do-with-that}}
+\sphinxAtStartPar
+You have procedurally experienced how to use \sphinxcode{\sphinxupquote{datalad run}} and \sphinxcode{\sphinxupquote{datalad rerun}}. Both
+of these commands make it easier for you and others to associate changes in a dataset with
+a script or command, and are helpful as the exact command for a given task is stored by
+DataLad, and does not need to be remembered.
+
+\sphinxAtStartPar
+Furthermore, by experiencing many common error messages in the context of \sphinxcode{\sphinxupquote{datalad run}}
+commands, you have gotten some clues on where to look for problems, should you encounter
+those errors in your own work.
+
+\sphinxAtStartPar
+Lastly, we’ve started to unveil some principles of {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}} that are relevant to
+understanding how certain commands work and why certain commands may fail. We have seen that
+git\sphinxhyphen{}annex locks large files’ content to prevent accidental modifications, and how the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}output}}
+flag in \sphinxcode{\sphinxupquote{datalad run}} can save us an intermediate \sphinxcode{\sphinxupquote{datalad unlock}} to unlock this content.
+The next section will elaborate on this a bit more.
+
+
+\subsection{Further reading}
+\label{\detokenize{basics/101-113-summary:further-reading}}
+\sphinxAtStartPar
+The chapter on \sphinxcode{\sphinxupquote{datalad run}} provided an almost complete feature overview of the command.
+If you want, you can extend this knowledge with computational environments and \sphinxcode{\sphinxupquote{datalad containers\sphinxhyphen{}run}} in chapter {\hyperref[\detokenize{basics/101-133-containersrun:containersrun}]{\sphinxcrossref{\DUrole{std,std-ref}{Computational reproducibility with software containers}}}} (\autopageref*{\detokenize{basics/101-133-containersrun:containersrun}}).
+In addition, you can read up on other forms of computing usecases \sphinxhyphen{} for example, how to use \sphinxcode{\sphinxupquote{datalad run}} in interactive computing environments such as \dlhbhref{P2A}{Jupyter Notebooks}.
+
+\sphinxstepscope
+
+

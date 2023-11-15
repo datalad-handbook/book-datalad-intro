@@ -1,0 +1,1819 @@
+\chapter{Modular data processing}
+\label{\detokenize{basics/basics-yoda:modular-data-processing}}\label{\detokenize{basics/basics-yoda:chapter-yoda}}\label{\detokenize{basics/basics-yoda::doc}}
+\noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{yoda}.pdf}\hspace*{\fill}}
+
+\sphinxstepscope
+
+
+\section{A data analysis project with DataLad}
+\label{\detokenize{basics/101-126-intro:a-data-analysis-project-with-datalad}}\label{\detokenize{basics/101-126-intro:intromidterm}}\label{\detokenize{basics/101-126-intro::doc}}
+\sphinxAtStartPar
+Time flies and the semester rapidly approaches the midterms.
+In DataLad\sphinxhyphen{}101, students are not given an exam \textendash{} instead, they are
+asked to complete and submit a data analysis project with DataLad.
+
+\sphinxAtStartPar
+The lecturer hands out the requirements: The project…
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+needs to be a data analysis project
+
+\item {} 
+\sphinxAtStartPar
+is to be prepared in the form of a DataLad dataset
+
+\item {} 
+\sphinxAtStartPar
+should incorporate DataLad whenever possible (data retrieval, publication,
+script execution, general version control) and
+
+\item {} 
+\sphinxAtStartPar
+needs to comply to the YODA principles
+
+\end{itemize}
+
+\sphinxAtStartPar
+Luckily, the midterms are only in a couple of weeks, and a lot of the
+requirements of the project will be taught in the upcoming sessions.
+Therefore, there’s little you can do to prepare for the midterm
+than to be extra attentive on the next lectures on the YODA
+principles and DataLad’s Python API.
+
+\sphinxstepscope
+
+\index{YODA principles@\spxentry{YODA principles}|spxpagem}\ignorespaces 
+
+\section{YODA: Best practices for data analyses in a dataset}
+\label{\detokenize{basics/101-127-yoda:yoda-best-practices-for-data-analyses-in-a-dataset}}\label{\detokenize{basics/101-127-yoda:yoda}}\label{\detokenize{basics/101-127-yoda:id1}}\label{\detokenize{basics/101-127-yoda:index-0}}\label{\detokenize{basics/101-127-yoda::doc}}
+\sphinxAtStartPar
+The last requirement for the midterm projects reads “needs to comply to the
+YODA principles”.
+“What are the YODA principles?” you ask, as you have never heard of this
+before.
+“The topic of today’s lecture: Organizational principles of data
+analyses in DataLad datasets. This lecture will show you the basic
+principles behind creating, sharing, and publishing reproducible,
+understandable, and open data analysis projects with DataLad.”, you
+hear in return.
+
+
+\subsection{The starting point…}
+\label{\detokenize{basics/101-127-yoda:the-starting-point}}
+\sphinxAtStartPar
+Data analyses projects are very common, both in science and industry.
+But it can be very difficult to produce a reproducible, let alone
+\sphinxstyleemphasis{comprehensible} data analysis project.
+Many data analysis projects do not start out with
+a stringent organization, or fail to keep the structural organization of a
+directory intact as the project develops. Often, this can be due to a lack of
+version\sphinxhyphen{}control. In these cases, a project will quickly end up
+with many
+\dlhbhref{P4A}{almost\sphinxhyphen{}identical scripts suffixed with “\_version\_xyz”},
+or a chaotic results structure split between various directories with names
+such as \sphinxcode{\sphinxupquote{results/}}, \sphinxcode{\sphinxupquote{results\_August19/}}, \sphinxcode{\sphinxupquote{results\_revision/}} and
+\sphinxcode{\sphinxupquote{now\_with\_nicer\_plots/}}. Something like this is a very
+common shape a data science project may take after a while:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+go}{├── code/}
+\PYG{g+go}{│   ├── code\PYGZus{}final/}
+\PYG{g+go}{│   │   ├── final\PYGZus{}2/}
+\PYG{g+go}{│   │   │   ├── main\PYGZus{}script\PYGZus{}fixed.py}
+\PYG{g+go}{│   │   │   └──takethisscriptformostthingsnow.py}
+\PYG{g+go}{│   │   ├── utils\PYGZus{}new.py}
+\PYG{g+go}{│   │   ├── main\PYGZus{}script.py}
+\PYG{g+go}{│   │   ├── utils\PYGZus{}new.py}
+\PYG{g+go}{│   │   ├── utils\PYGZus{}2.py}
+\PYG{g+go}{│   │   └── main\PYGZus{}analysis\PYGZus{}newparameters.py}
+\PYG{g+go}{│   └── main\PYGZus{}script\PYGZus{}DONTUSE.py}
+\PYG{g+go}{├── data/}
+\PYG{g+go}{│   ├── data\PYGZus{}updated/}
+\PYG{g+go}{│   │    └── dataset1/}
+\PYG{g+go}{│   │        ├── datafile\PYGZus{}a}
+\PYG{g+go}{│   ├── dataset1/}
+\PYG{g+go}{│   │   ├── datafile\PYGZus{}a}
+\PYG{g+go}{│   ├── outputs/}
+\PYG{g+go}{│   │   ├── figures/}
+\PYG{g+go}{│   │   │   ├── figures\PYGZus{}new.py}
+\PYG{g+go}{│   │   │   └── figures\PYGZus{}final\PYGZus{}forreal.py}
+\PYG{g+go}{│   │   ├── important\PYGZus{}results/}
+\PYG{g+go}{│   │   ├── random\PYGZus{}results\PYGZus{}file.tsv}
+\PYG{g+go}{│   │   ├── results\PYGZus{}for\PYGZus{}paper/}
+\PYG{g+go}{│   │   ├── results\PYGZus{}for\PYGZus{}paper\PYGZus{}revised/}
+\PYG{g+go}{│   │   └── results\PYGZus{}new\PYGZus{}data/}
+\PYG{g+go}{│   ├── random\PYGZus{}results\PYGZus{}file.tsv}
+\PYG{g+go}{│   ├── random\PYGZus{}results\PYGZus{}file\PYGZus{}v2.tsv}
+
+\PYG{g+go}{[...]}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+All data analysis endeavors in directories like this \sphinxstyleemphasis{can} work, for a while,
+if there is a person who knows the project well, and works on it all the time.
+But it inevitably will get messy once anyone tries to collaborate on a project
+like this, or simply goes on a two\sphinxhyphen{}week vacation and forgets whether
+the function in \sphinxcode{\sphinxupquote{main\_analysis\_newparameters.py}} or the one in
+\sphinxcode{\sphinxupquote{takethisscriptformostthingsnow.py}} was the one that created a particular figure.
+
+\sphinxAtStartPar
+But even if a project has an intuitive structure, and \sphinxstyleemphasis{is} version
+controlled, in many cases an analysis script will stop working, or maybe worse,
+will produce different results, because the software and tools used to
+conduct the analysis in the first place got an update. This update may have
+come with software changes that made functions stop working, or work differently
+than before.
+In the same vein, recomputing an analysis project on a different machine than
+the one the analysis was developed on can fail if the necessary
+software in the required versions is not installed or available on this new machine.
+The analysis might depend on software that runs on a Linux machine, but the project
+was shared with a Windows user. The environment during analysis development used
+Python 2, but the new system has only Python 3 installed. Or one of the dependent
+libraries needs to be in version X, but is installed as version Y.
+
+\sphinxAtStartPar
+The YODA principles are a clear set of organizational standards for
+datasets used for data analysis projects that aim to overcome issues like the
+ones outlined above. The name stands for
+“YODAs Organigram on Data Analysis”%
+\begin{footnote}\sphinxAtStartFootnote
+“Why does the acronym contain itself?” you ask confused.
+“That’s because it’s a \dlhbhref{W1O}{recursive acronym},
+where the first letter stands recursively for the whole acronym.” you get in response.
+“This is a reference to the recursiveness within a DataLad dataset \textendash{} all principles
+apply recursively to all the subdatasets a dataset has.”
+“And what does all of this have to do with Yoda?” you ask mildly amused.
+“Oh, well. That’s just because the DataLad team is full of geeks.”
+%
+\end{footnote}. The principles outlined
+in YODA set simple rules for directory names and structures, best\sphinxhyphen{}practices for
+version\sphinxhyphen{}controlling dataset elements and analyses, facilitate
+usage of tools to improve the reproducibility and accountability
+of data analysis projects, and make collaboration easier.
+They are summarized in three basic principles, that translate to both
+dataset structures and best practices regarding the analysis:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+{\hyperref[\detokenize{basics/101-127-yoda:p1}]{\sphinxcrossref{\DUrole{std,std-ref}{P1: One thing, one dataset}}}} (\autopageref*{\detokenize{basics/101-127-yoda:p1}})
+
+\item {} 
+\sphinxAtStartPar
+{\hyperref[\detokenize{basics/101-127-yoda:p2}]{\sphinxcrossref{\DUrole{std,std-ref}{P2: Record where you got it from, and where it is now}}}} (\autopageref*{\detokenize{basics/101-127-yoda:p2}})
+
+\item {} 
+\sphinxAtStartPar
+{\hyperref[\detokenize{basics/101-127-yoda:p3}]{\sphinxcrossref{\DUrole{std,std-ref}{P3: Record what you did to it, and with what}}}} (\autopageref*{\detokenize{basics/101-127-yoda:p3}})
+
+\end{itemize}
+
+\sphinxAtStartPar
+As you will see, complying to these principles is easy if you
+use DataLad. Let’s go through them one by one:
+
+
+\subsection{P1: One thing, one dataset}
+\label{\detokenize{basics/101-127-yoda:p1-one-thing-one-dataset}}\label{\detokenize{basics/101-127-yoda:p1}}
+\sphinxAtStartPar
+Whenever a particular collection of files could be useful in more
+than one context, make them a standalone, modular component.
+In the broadest sense, this means to structure your study elements (data, code,
+computational environments, results, …) in dedicated directories. For example:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Store \sphinxstylestrong{input data} for an analysis in a dedicated \sphinxcode{\sphinxupquote{inputs/}} directory.
+Keep different formats or processing\sphinxhyphen{}stages of your input data as individual,
+modular components:  Do not mix raw data, data that is already structured
+following community guidelines of the given field, or preprocessed data, but create
+one data component for each of them. And if your analysis
+relies on two or more data collections, these collections should each be an
+individual component, not combined into one.
+
+\item {} 
+\sphinxAtStartPar
+Store scripts or \sphinxstylestrong{code} used for the analysis of data in a dedicated \sphinxcode{\sphinxupquote{code/}}
+directory, outside of the data component of the dataset.
+
+\item {} 
+\sphinxAtStartPar
+Collect \sphinxstylestrong{results} of an analysis in a dedicated \sphinxcode{\sphinxupquote{outputs/}} directory, and
+leave the input data of an analysis untouched by your computations.
+
+\item {} 
+\sphinxAtStartPar
+Include a place for complete \sphinxstylestrong{execution environments}, such as
+\dlhbhref{L1}{singularity images} or
+\dlhbhref{D9A}{docker containers}%
+\begin{footnote}\sphinxAtStartFootnote
+If you want to learn more about Docker and Singularity, or general information
+about containerized computational environments for reproducible data science,
+check out \dlhbhref{N2A}{this section}
+in the wonderful book \dlhbhref{N2}{The Turing Way},
+a comprehensive guide to reproducible data science, or read about it in
+section {\hyperref[\detokenize{basics/101-133-containersrun:containersrun}]{\sphinxcrossref{\DUrole{std,std-ref}{Computational reproducibility with software containers}}}} (\autopageref*{\detokenize{basics/101-133-containersrun:containersrun}}).
+%
+\end{footnote}, in
+the form of an \sphinxcode{\sphinxupquote{envs/}} directory, if relevant for your analysis.
+
+\item {} 
+\sphinxAtStartPar
+And if you conduct multiple different analyses, create a dedicated
+project for each analysis, instead of conflating them.
+
+\end{itemize}
+
+\sphinxAtStartPar
+This, for example, would be a directory structure from the root of a
+superdataset of a very comprehensive data analysis project complying to the YODA principles:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+go}{├── ci/                         \PYGZsh{} continuous integration configuration}
+\PYG{g+go}{│   └── .travis.yml}
+\PYG{g+go}{├── code/                       \PYGZsh{} your code}
+\PYG{g+go}{│   ├── tests/                  \PYGZsh{} unit tests to test your code}
+\PYG{g+go}{│   │   └── test\PYGZus{}myscript.py}
+\PYG{g+go}{│   └── myscript.py}
+\PYG{g+go}{├── docs                        \PYGZsh{} documentation about the project}
+\PYG{g+go}{│   ├── build/}
+\PYG{g+go}{│   └── source/}
+\PYG{g+go}{├── envs                        \PYGZsh{} computational environments}
+\PYG{g+go}{│   └── Singularity}
+\PYG{g+go}{├── inputs/                     \PYGZsh{} dedicated inputs/, will not be changed by an analysis}
+\PYG{g+go}{│   └─── data/}
+\PYG{g+go}{│       ├── dataset1/           \PYGZsh{} one stand\PYGZhy{}alone data component}
+\PYG{g+go}{│       │   └── datafile\PYGZus{}a}
+\PYG{g+go}{│       └── dataset2/}
+\PYG{g+go}{│           └── datafile\PYGZus{}a}
+\PYG{g+go}{├── outputs/                    \PYGZsh{} outputs away from the input data}
+\PYG{g+go}{│   └── important\PYGZus{}results/}
+\PYG{g+go}{│       └── figures/}
+\PYG{g+go}{├── CHANGELOG.md                \PYGZsh{} notes for fellow humans about your project}
+\PYG{g+go}{├── HOWTO.md}
+\PYG{g+go}{└── README.md}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+You can get a few non\sphinxhyphen{}DataLad related advice for structuring your directories in the {\hyperref[\detokenize{basics/101-127-yoda:fom-yodaproject}]{\sphinxcrossref{\DUrole{std,std-ref}{on best practices for analysis organization}}}} (\autopageref*{\detokenize{basics/101-127-yoda:fom-yodaproject}}).
+
+\index{recommendation@\spxentry{recommendation}!dataset content organization@\spxentry{dataset content organization}}\index{dataset content organization@\spxentry{dataset content organization}!recommendation@\spxentry{recommendation}}\ignorespaces \begin{findoutmore}[label={fom-yodaproject}, before title={\thetcbcounter\ }, float, check odd page=true]{More best practices for organizing contents in directories}
+\label{\detokenize{basics/101-127-yoda:fom-yodaproject}}
+
+\sphinxAtStartPar
+The exemplary YODA directory structure is very comprehensive, and displays many best\sphinxhyphen{}practices for
+reproducible data science. For example,
+\begin{enumerate}
+\sphinxsetlistlabels{\arabic}{enumi}{enumii}{}{.}%
+\item {} 
+\sphinxAtStartPar
+Within \sphinxcode{\sphinxupquote{code/}}, it is best practice to add \sphinxstylestrong{tests} for the code.
+These tests can be run to check whether the code still works.
+
+\item {} 
+\sphinxAtStartPar
+It is even better to further use automated computing such as
+\dlhbhref{W1B}{continuous integration (CI) systems},
+to test the functionality of your functions and scripts automatically.
+If relevant, the setup for continuous integration frameworks (such as
+\dlhbhref{A3}{Appveyor}) lives outside of \sphinxcode{\sphinxupquote{code/}},
+in a dedicated \sphinxcode{\sphinxupquote{ci/}} directory.
+
+\item {} 
+\sphinxAtStartPar
+Include \sphinxstylestrong{documents for fellow humans}: Notes in a README.md or a HOWTO.md,
+or even proper documentation (for example, using  in a dedicated \sphinxcode{\sphinxupquote{docs/}} directory.
+Within these documents, include all relevant metadata for your analysis. If you are
+conducting a scientific study, this might be authorship, funding,
+change log, etc.
+
+\end{enumerate}
+
+\sphinxAtStartPar
+If writing tests for analysis scripts or using continuous integration
+is a new idea for you, but you want to learn more, check out
+\dlhbhref{N2B}{this chapter on testing}.
+
+
+\end{findoutmore}
+
+\sphinxAtStartPar
+There are many advantages to this modular way of organizing contents.
+Having input data as independent components that are not altered (only
+consumed) by an analysis does not conflate the data for
+an analysis with the results or the code, thus assisting understanding
+the project for anyone unfamiliar with it.
+But more than just structure, this organization aids modular reuse or
+publication of the individual components, for example data. In a
+YODA\sphinxhyphen{}compliant dataset, any processing stage of a data component can
+be reused in a new project or published and shared. The same is true
+for a whole analysis dataset. At one point you might also write a
+scientific paper about your analysis in a paper project, and the
+whole analysis project can easily become a modular component in a paper
+project, to make sharing paper, code, data, and results easy.
+
+\begin{figure}[tbp]
+\centering
+\capstart
+
+\noindent\sphinxincludegraphics[width=1.000\linewidth]{{dataset_modules}.pdf}
+\caption{Data are modular components that can be re\sphinxhyphen{}used easily.}\label{\detokenize{basics/101-127-yoda:dataset-modules}}\end{figure}
+
+\sphinxAtStartPar
+The directory tree above and \hyperref[\detokenize{basics/101-127-yoda:dataset-modules}]{Fig.\@ \ref{\detokenize{basics/101-127-yoda:dataset-modules}}} highlight different aspects
+of this principle. The directory tree illustrates the structure of
+the individual pieces on the file system from the point of view of
+a single top\sphinxhyphen{}level dataset with a particular purpose. For example, it
+could be an analysis dataset created by a statistician for a scientific
+project, and it could be shared between collaborators or
+with others during development of the project. In this
+superdataset, code is created that operates on input data to
+compute outputs, and the code and outputs are captured,
+version\sphinxhyphen{}controlled, and linked to the input data. Each input data in turn
+is a (potentially nested) subdataset, but this is not visible
+in the directory hierarchy.
+\hyperref[\detokenize{basics/101-127-yoda:dataset-modules}]{Fig.\@ \ref{\detokenize{basics/101-127-yoda:dataset-modules}}}, in comparison, emphasizes a process view on a project and
+the nested structure of input subdataset:
+You can see how the preprocessed data that serves as an input for
+the analysis datasets evolves from raw data to
+standardized data organization to its preprocessed state. Within
+the \sphinxcode{\sphinxupquote{data/}} directory of the file system hierarchy displayed
+above one would find data datasets with their previous version as
+a subdataset, and this is repeated recursively until one reaches
+the raw data as it was originally collected at one point. A finished
+analysis project in turn can be used as a component (subdataset) in
+a paper project, such that the paper is a fully reproducible research
+object that shares code, analysis results, and data, as well as the
+history of all of these components.
+
+\sphinxAtStartPar
+Principle 1, therefore, encourages to structure data analysis
+projects in a clear and modular fashion that makes use of nested
+DataLad datasets, yielding comprehensible structures and reusable
+components. Having each component version\sphinxhyphen{}controlled \textendash{}
+regardless of size \textendash{}  will aid keeping directories clean and
+organized, instead of piling up different versions of code, data,
+or results.
+
+
+\subsection{P2: Record where you got it from, and where it is now}
+\label{\detokenize{basics/101-127-yoda:p2-record-where-you-got-it-from-and-where-it-is-now}}\label{\detokenize{basics/101-127-yoda:p2}}
+\sphinxAtStartPar
+It is good to have data, but it is even better if you and anyone you
+collaborate or share the project or its components with can find
+out where the data came from, or how it
+is dependent on or linked to other data. Therefore, this principle
+aims to attach this information, the data’s {\hyperref[\detokenize{glossary:term-provenance}]{\sphinxtermref{\DUrole{xref,std,std-term}{provenance}}}}, to the components of
+your data analysis project.
+
+\sphinxAtStartPar
+Luckily, this is a no\sphinxhyphen{}brainer with DataLad, because the core data structure
+of DataLad, the dataset, and many of the DataLad commands already covered
+up to now fulfill this principle.
+
+\sphinxAtStartPar
+If data components of a project are DataLad datasets, they can
+be included in an analysis superdataset as subdatasets. Thanks to
+\sphinxcode{\sphinxupquote{datalad clone}}, information on the source of these subdatasets
+is stored in the history of the analysis superdataset, and they can even be
+updated from those sources if the original data dataset gets extended or changed.
+If you are including a file, for example, code from GitHub,
+the \sphinxcode{\sphinxupquote{datalad download\sphinxhyphen{}url}} command (introduced in section {\hyperref[\detokenize{basics/101-102-populate:populate}]{\sphinxcrossref{\DUrole{std,std-ref}{Populate a dataset}}}} (\autopageref*{\detokenize{basics/101-102-populate:populate}}))
+will record the source of it safely in the dataset’s history. And if you add anything to your dataset,
+from simple incremental coding progress in your analysis scripts up to
+files that a colleague sent you via email, a plain \sphinxcode{\sphinxupquote{datalad save}}
+with a helpful commit message goes a very long way to fulfill this principle
+on its own already.
+
+\sphinxAtStartPar
+One core aspect of this principle is \sphinxstyleemphasis{linking} between reusable data
+resource units (i.e., DataLad subdatasets containing pure data). You will
+be happy to hear that this is achieved by simply installing datasets
+as subdatasets.
+This part of this principle will therefore be absolutely obvious to you
+because you already know how to install and nest datasets within datasets.
+“I might just overcome my impostor syndrome if I experience such advanced
+reproducible analysis concepts as being obvious”, you think with a grin.
+
+\begin{figure}[tbp]
+\centering
+\capstart
+
+\noindent\sphinxincludegraphics[width=0.500\linewidth]{{data_origin}.pdf}
+\caption{Schematic illustration of two standalone data datasets installed as subdatasets
+into an analysis project.}\label{\detokenize{basics/101-127-yoda:id6}}\end{figure}
+
+\sphinxAtStartPar
+But more than linking datasets in a superdataset, linkage also needs to
+be established between components of your dataset. Scripts inside of
+your \sphinxcode{\sphinxupquote{code/}} directory should point to data not as {\hyperref[\detokenize{glossary:term-absolute-path}]{\sphinxtermref{\DUrole{xref,std,std-term}{absolute path}}}}s
+that would only work on your system, but instead as {\hyperref[\detokenize{glossary:term-relative-path}]{\sphinxtermref{\DUrole{xref,std,std-term}{relative path}}}}s
+that will work in any shared copy of your dataset. The next section
+demonstrates a YODA data analysis project and will show concrete examples of this.
+
+\sphinxAtStartPar
+Lastly, this principle also includes \sphinxstyleemphasis{moving}, \sphinxstyleemphasis{sharing}, and \sphinxstyleemphasis{publishing} your
+datasets or its components.
+It is usually costly to collect data, and economically unfeasible%
+\begin{footnote}\sphinxAtStartFootnote
+Substitute unfeasible with \sphinxstyleemphasis{wasteful}, \sphinxstyleemphasis{impractical}, or simply \sphinxstyleemphasis{stupid} if preferred.
+%
+\end{footnote} to keep
+it locked in a drawer (or similarly out of reach behind complexities of
+data retrieval or difficulties in understanding the data structure).
+But conducting several projects on the same dataset yourself, sharing it with
+collaborators, or publishing it is easy if the project is a DataLad dataset
+that can be installed and retrieved on demand, and is kept clean from
+everything that is not part of the data according to principle 1.
+Conducting transparent open science is easier if you can link code, data,
+and results within a dataset, and share everything together. In conjunction
+with principle 1, this means that you can distribute your analysis projects
+(or parts of it) in a comprehensible form.
+
+\begin{figure}[tbp]
+\centering
+\capstart
+
+\noindent\sphinxincludegraphics{{decentralized_publishing}.pdf}
+\caption{In a dataset that complies to the YODA principles, modular components
+(data, analysis results, papers) can be shared or published easily.}\label{\detokenize{basics/101-127-yoda:id7}}\end{figure}
+
+\sphinxAtStartPar
+Principle 2, therefore, facilitates transparent linkage of datasets and their
+components to other components, their original sources, or shared copies.
+With the DataLad tools you learned to master up to this point,
+you have all the necessary skills to comply to it already.
+
+
+\subsection{P3: Record what you did to it, and with what}
+\label{\detokenize{basics/101-127-yoda:p3-record-what-you-did-to-it-and-with-what}}\label{\detokenize{basics/101-127-yoda:p3}}
+\sphinxAtStartPar
+This last principle is about capturing \sphinxstyleemphasis{how exactly the content of
+every file came to be} that was not obtained from elsewhere. For example,
+this relates to results generated from inputs by scripts or commands.
+The section {\hyperref[\detokenize{basics/101-108-run:run}]{\sphinxcrossref{\DUrole{std,std-ref}{Keeping track}}}} (\autopageref*{\detokenize{basics/101-108-run:run}}) already outlined the problem of associating
+a result with an input and a script. It can be difficult to link a
+figure from your data analysis project with an input data file or a
+script, even if you created this figure yourself.
+The \sphinxcode{\sphinxupquote{datalad run}} command however mitigates these difficulties,
+and captures the provenance of any output generated with a
+\sphinxcode{\sphinxupquote{datalad run}} call in the history of the dataset. Thus, by using
+\sphinxcode{\sphinxupquote{datalad run}} in analysis projects, your dataset knows
+which result was generated when, by which author, from which inputs,
+and by means of which command.
+
+\sphinxAtStartPar
+With another DataLad command one can even go one step further:
+The command \sphinxcode{\sphinxupquote{datalad containers\sphinxhyphen{}run}} (it will be introduced in
+section {\hyperref[\detokenize{basics/101-133-containersrun:containersrun}]{\sphinxcrossref{\DUrole{std,std-ref}{Computational reproducibility with software containers}}}} (\autopageref*{\detokenize{basics/101-133-containersrun:containersrun}})) performs a command execution within
+a configured containerized environment. Thus, not only inputs,
+outputs, command, time, and author, but also the \sphinxstyleemphasis{software environment}
+are captured as provenance of a dataset component such as a results file,
+and, importantly, can be shared together with the dataset in the
+form of a software container.
+
+\sphinxAtStartPar
+Tip: Make use of \sphinxcode{\sphinxupquote{datalad run}}’s \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}dry\sphinxhyphen{}run}} option to craft your run\sphinxhyphen{}command (see {\hyperref[\detokenize{basics/101-110-run2:dryrun}]{\sphinxcrossref{\DUrole{std,std-ref}{Dry\sphinxhyphen{}running your run call}}}} (\autopageref*{\detokenize{basics/101-110-run2:dryrun}}))!
+
+\sphinxAtStartPar
+With this last principle, your dataset collects and stores provenance
+of all the contents you created in the wake of your analysis project.
+This established trust in your results, and enables others to understand
+where files derive from.
+
+
+\subsection{The YODA procedure}
+\label{\detokenize{basics/101-127-yoda:the-yoda-procedure}}\label{\detokenize{basics/101-127-yoda:yodaproc}}
+\sphinxAtStartPar
+There is one tool that can make starting a yoda\sphinxhyphen{}compliant data analysis
+easier: DataLad’s \sphinxcode{\sphinxupquote{yoda}} procedure. Just as the \sphinxcode{\sphinxupquote{text2git}} procedure
+from section {\hyperref[\detokenize{basics/101-101-create:createds}]{\sphinxcrossref{\DUrole{std,std-ref}{Create a dataset}}}} (\autopageref*{\detokenize{basics/101-101-create:createds}}), the \sphinxcode{\sphinxupquote{yoda}} procedure can be included in a
+\sphinxcode{\sphinxupquote{datalad create}} command and will apply useful configurations
+to your dataset:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }create\PYG{+w}{ }\PYGZhy{}c\PYG{+w}{ }yoda\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}my\PYGZus{}analysis\PYGZdq{}}
+
+\PYG{g+go}{[INFO   ] Creating a new annex repo at /home/me/repos/testing/my\PYGZus{}analysis}
+\PYG{g+go}{create(ok): /home/me/repos/testing/my\PYGZus{}analysis (dataset)}
+\PYG{g+go}{[INFO   ] Running procedure cfg\PYGZus{}yoda}
+\PYG{g+go}{[INFO   ] == Command start (output follows) =====}
+\PYG{g+go}{[INFO   ] == Command exit (modification check follows) =====}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Let’s take a look at what configurations and changes come with this procedure:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }tree\PYG{+w}{ }\PYGZhy{}a
+
+\PYG{g+go}{.}
+\PYG{g+go}{├── .gitattributes}
+\PYG{g+go}{├── CHANGELOG.md}
+\PYG{g+go}{├── code}
+\PYG{g+go}{│   ├── .gitattributes}
+\PYG{g+go}{│   └── README.md}
+\PYG{g+go}{└── README.md}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Let’s take a closer look into the \sphinxcode{\sphinxupquote{.gitattributes}} files:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }less\PYG{+w}{ }.gitattributes
+
+\PYG{g+go}{**/.git* annex.largefiles=nothing}
+\PYG{g+go}{CHANGELOG.md annex.largefiles=nothing}
+\PYG{g+go}{README.md annex.largefiles=nothing}
+
+\PYG{g+gp}{\PYGZdl{} }less\PYG{+w}{ }code/.gitattributes
+
+\PYG{g+go}{* annex.largefiles=nothing}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Summarizing these two glimpses into the dataset, this configuration has
+\begin{enumerate}
+\sphinxsetlistlabels{\arabic}{enumi}{enumii}{}{.}%
+\item {} 
+\sphinxAtStartPar
+included a code directory in your dataset
+
+\item {} 
+\sphinxAtStartPar
+included three files for human consumption (\sphinxcode{\sphinxupquote{README.md}}, \sphinxcode{\sphinxupquote{CHANGELOG.md}})
+
+\item {} 
+\sphinxAtStartPar
+configured everything in the \sphinxcode{\sphinxupquote{code/}} directory to be tracked by Git, not git\sphinxhyphen{}annex%
+\begin{footnote}\sphinxAtStartFootnote
+To re\sphinxhyphen{}read how \sphinxcode{\sphinxupquote{.gitattributes}} work, go back to section {\hyperref[\detokenize{basics/101-122-config:config}]{\sphinxcrossref{\DUrole{std,std-ref}{Local configuration}}}} (\autopageref*{\detokenize{basics/101-122-config:config}}), and to remind yourself
+about how this worked for the \sphinxcode{\sphinxupquote{text2git}} configuration, go back to section {\hyperref[\detokenize{basics/101-114-txt2git:text2git}]{\sphinxcrossref{\DUrole{std,std-ref}{Data safety}}}} (\autopageref*{\detokenize{basics/101-114-txt2git:text2git}}).
+%
+\end{footnote}
+
+\item {} 
+\sphinxAtStartPar
+and configured \sphinxcode{\sphinxupquote{README.md}} and \sphinxcode{\sphinxupquote{CHANGELOG.md}} in the root of the dataset to be
+tracked by Git.
+
+\end{enumerate}
+
+\sphinxAtStartPar
+Your next data analysis project can thus get a head start with useful configurations
+and the start of a comprehensible directory structure by applying the \sphinxcode{\sphinxupquote{yoda}} procedure.
+
+
+\subsection{Sources}
+\label{\detokenize{basics/101-127-yoda:sources}}
+\sphinxAtStartPar
+This section is based on a comprehensive
+\dlhbhref{F1A}{poster} and publicly
+available \dlhbhref{G2M}{slides} about the
+YODA principles.
+
+\sphinxstepscope
+
+
+\section{YODA\sphinxhyphen{}compliant data analysis projects}
+\label{\detokenize{basics/101-130-yodaproject:yoda-compliant-data-analysis-projects}}\label{\detokenize{basics/101-130-yodaproject:yoda-project}}\label{\detokenize{basics/101-130-yodaproject::doc}}
+\sphinxAtStartPar
+Now that you know about the YODA principles, it is time to start working on
+\sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}}’s midterm project. Because the midterm project guidelines
+require a YODA\sphinxhyphen{}compliant data analysis project, you will not only have theoretical
+knowledge about the YODA principles, but also gain practical experience.
+
+\sphinxAtStartPar
+In principle, you can prepare YODA\sphinxhyphen{}compliant data analyses in any programming
+language of your choice. But because you are already familiar with
+the \dlhbhref{P8}{Python} programming language, you decide
+to script your analysis in Python. Delighted, you find out that there is even
+a Python API for DataLad’s functionality that you can read about in {\hyperref[\detokenize{basics/101-130-yodaproject:fom-pythonapi}]{\sphinxcrossref{\DUrole{std,std-ref}{a Findoutmore on DataLad in Python}}}} (\autopageref*{\detokenize{basics/101-130-yodaproject:fom-pythonapi}}).
+
+\index{use DataLad API@\spxentry{use DataLad API}!with Python@\spxentry{with Python}}\index{with Python@\spxentry{with Python}!use DataLad API@\spxentry{use DataLad API}}\ignorespaces \phantomsection\label{\detokenize{basics/101-130-yodaproject:pythonapi}}\begin{findoutmore}[label={fom-pythonapi}, before title={\thetcbcounter\ }, float, check odd page=true]{DataLad’s Python API}
+\label{\detokenize{basics/101-130-yodaproject:fom-pythonapi}}
+\phantomsection\label{\detokenize{basics/101-130-yodaproject:python}}
+\sphinxAtStartPar
+Whatever you can do with DataLad from the command line, you can also do it with
+DataLad’s Python API.
+Thus, DataLad’s functionality can also be used within interactive Python sessions
+or Python scripts.
+All of DataLad’s user\sphinxhyphen{}oriented commands are exposed via \sphinxcode{\sphinxupquote{datalad.api}}.
+Thus, any command can be imported as a stand\sphinxhyphen{}alone command like this:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{from} \PYG{n+nn}{datalad}\PYG{n+nn}{.}\PYG{n+nn}{api} \PYG{k+kn}{import} \PYG{o}{\PYGZlt{}}\PYG{n}{COMMAND}\PYG{o}{\PYGZgt{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Alternatively, to import all commands, one can use
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{import} \PYG{n+nn}{datalad}\PYG{n+nn}{.}\PYG{n+nn}{api} \PYG{k}{as} \PYG{n+nn}{dl}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+and subsequently access commands as \sphinxcode{\sphinxupquote{dl.get()}}, \sphinxcode{\sphinxupquote{dl.clone()}}, and so forth.
+
+\sphinxAtStartPar
+The \dlhbhref{D1D}{developer documentation}
+of DataLad lists an overview of all commands, but naming is congruent to the
+command line interface. The only functionality that is not available at the
+command line is \sphinxcode{\sphinxupquote{datalad.api.Dataset}}, DataLad’s core Python data type.
+Just like any other command, it can be imported like this:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{from} \PYG{n+nn}{datalad}\PYG{n+nn}{.}\PYG{n+nn}{api} \PYG{k+kn}{import} \PYG{n}{Dataset}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+or like this:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{import} \PYG{n+nn}{datalad}\PYG{n+nn}{.}\PYG{n+nn}{api} \PYG{k}{as} \PYG{n+nn}{dl}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{dl}\PYG{o}{.}\PYG{n}{Dataset}\PYG{p}{(}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+A \sphinxcode{\sphinxupquote{Dataset}} is a \dlhbhref{P1B}{class}
+that represents a DataLad dataset. In addition to the
+stand\sphinxhyphen{}alone commands, all of DataLad’s functionality is also available via
+\dlhbhref{P1C}{methods}
+of this class. Thus, these are two equally valid ways to create a new
+dataset with DataLad in Python:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{from} \PYG{n+nn}{datalad}\PYG{n+nn}{.}\PYG{n+nn}{api} \PYG{k+kn}{import} \PYG{n}{create}\PYG{p}{,} \PYG{n}{Dataset}
+\PYG{g+go}{\PYGZsh{} create as a stand\PYGZhy{}alone command}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{create}\PYG{p}{(}\PYG{n}{path}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{scratch/test}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+\PYG{g+go}{[INFO   ] Creating a new annex repo at /.../scratch/test}
+\PYG{g+go}{Out[3]: \PYGZlt{}Dataset path=/home/me/scratch/test\PYGZgt{}}
+\PYG{g+go}{\PYGZsh{} create as a dataset method}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{ds} \PYG{o}{=} \PYG{n}{Dataset}\PYG{p}{(}\PYG{n}{path}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{scratch/test}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{ds}\PYG{o}{.}\PYG{n}{create}\PYG{p}{(}\PYG{p}{)}
+\PYG{g+go}{[INFO   ] Creating a new annex repo at /.../scratch/test}
+\PYG{g+go}{Out[3]: \PYGZlt{}Dataset path=/home/me/scratch/test\PYGZgt{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+As shown above, the only required parameter for a Dataset is the \sphinxcode{\sphinxupquote{path}} to
+its location, and this location may or may not exist yet.
+
+\sphinxAtStartPar
+Stand\sphinxhyphen{}alone functions have a \sphinxcode{\sphinxupquote{dataset=}} argument, corresponding to the
+\sphinxcode{\sphinxupquote{\sphinxhyphen{}d/\sphinxhyphen{}\sphinxhyphen{}dataset}} option in their command\sphinxhyphen{}line equivalent. You can specify
+the \sphinxcode{\sphinxupquote{dataset=}} argument with a path (string) to your dataset (such as
+\sphinxcode{\sphinxupquote{dataset=\textquotesingle{}.\textquotesingle{}}} for the current directory, or \sphinxcode{\sphinxupquote{dataset=\textquotesingle{}path/to/ds\textquotesingle{}}} to
+another location). Alternatively, you can pass a \sphinxcode{\sphinxupquote{Dataset}} instance to it:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{from} \PYG{n+nn}{datalad}\PYG{n+nn}{.}\PYG{n+nn}{api} \PYG{k+kn}{import} \PYG{n}{save}\PYG{p}{,} \PYG{n}{Dataset}
+\PYG{g+go}{\PYGZsh{} use save with dataset specified as a path}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{save}\PYG{p}{(}\PYG{n}{dataset}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{path/to/dataset/}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+\PYG{g+go}{\PYGZsh{} use save with dataset specified as a dataset instance}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{ds} \PYG{o}{=} \PYG{n}{Dataset}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{path/to/dataset}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{save}\PYG{p}{(}\PYG{n}{dataset}\PYG{o}{=}\PYG{n}{ds}\PYG{p}{,} \PYG{n}{message}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{saving all modifications}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+go}{\PYGZsh{} use save as a dataset method (no dataset argument)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{ds}\PYG{o}{.}\PYG{n}{save}\PYG{p}{(}\PYG{n}{message}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{saving all modifications}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+\sphinxstylestrong{Use cases for DataLad’s Python API}
+
+\sphinxAtStartPar
+Using the command line or the Python API of DataLad are both valid ways to accomplish the same results.
+Depending on your workflows, using the Python API can help to automate dataset operations, provides an alternative
+to the command line, or could be useful for scripting reproducible data analyses.
+One unique advantage of the Python API is the \sphinxcode{\sphinxupquote{Dataset}}:
+As the Python API does not suffer from the startup time cost of the command line,
+there is the potential for substantial speed\sphinxhyphen{}up when doing many calls to the API,
+and using a persistent Dataset object instance.
+You will also notice that the output of Python commands can be more verbose as the result records returned by each command do not get filtered by command\sphinxhyphen{}specific result renderers.
+Thus, the outcome of \sphinxcode{\sphinxupquote{dl.status(\textquotesingle{}myfile\textquotesingle{})}} matches that of \sphinxcode{\sphinxupquote{datalad status}} only when \sphinxcode{\sphinxupquote{\sphinxhyphen{}f}}/\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}output\sphinxhyphen{}format}} is set to \sphinxcode{\sphinxupquote{json}} or \sphinxcode{\sphinxupquote{json\_pp}}, as illustrated below.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{import} \PYG{n+nn}{datalad}\PYG{n+nn}{.}\PYG{n+nn}{api} \PYG{k}{as} \PYG{n+nn}{dl}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{dl}\PYG{o}{.}\PYG{n}{status}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{myfile}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+\PYG{g+go}{[\PYGZob{}\PYGZsq{}type\PYGZsq{}: \PYGZsq{}file\PYGZsq{},}
+\PYG{g+go}{\PYGZsq{}gitshasum\PYGZsq{}: \PYGZsq{}915983d6576b56792b4647bf0d9fa04d83ce948d\PYGZsq{},}
+\PYG{g+go}{\PYGZsq{}bytesize\PYGZsq{}: 85,}
+\PYG{g+go}{\PYGZsq{}prev\PYGZus{}gitshasum\PYGZsq{}: \PYGZsq{}915983d6576b56792b4647bf0d9fa04d83ce948d\PYGZsq{},}
+\PYG{g+go}{\PYGZsq{}state\PYGZsq{}: \PYGZsq{}clean\PYGZsq{},}
+\PYG{g+go}{\PYGZsq{}path\PYGZsq{}: \PYGZsq{}/home/me/my\PYGZhy{}ds/myfile\PYGZsq{},}
+\PYG{g+go}{\PYGZsq{}parentds\PYGZsq{}: \PYGZsq{}/home/me/my\PYGZhy{}ds\PYGZsq{},}
+\PYG{g+go}{\PYGZsq{}status\PYGZsq{}: \PYGZsq{}ok\PYGZsq{},}
+\PYG{g+go}{\PYGZsq{}refds\PYGZsq{}: \PYGZsq{}/home/me/my\PYGZhy{}ds\PYGZsq{},}
+\PYG{g+go}{\PYGZsq{}action\PYGZsq{}: \PYGZsq{}status\PYGZsq{}\PYGZcb{}]}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }\PYGZhy{}f\PYG{+w}{ }json\PYGZus{}pp\PYG{+w}{ }status\PYG{+w}{ }myfile
+\PYG{g+go}{ \PYGZob{}\PYGZdq{}action\PYGZdq{}: \PYGZdq{}status\PYGZdq{},}
+\PYG{g+go}{  \PYGZdq{}bytesize\PYGZdq{}: 85,}
+\PYG{g+go}{  \PYGZdq{}gitshasum\PYGZdq{}: \PYGZdq{}915983d6576b56792b4647bf0d9fa04d83ce948d\PYGZdq{},}
+\PYG{g+go}{  \PYGZdq{}parentds\PYGZdq{}: \PYGZdq{}/home/me/my\PYGZhy{}ds\PYGZdq{},}
+\PYG{g+go}{  \PYGZdq{}path\PYGZdq{}: \PYGZdq{}/home/me/my\PYGZhy{}ds/myfile\PYGZdq{},}
+\PYG{g+go}{  \PYGZdq{}prev\PYGZus{}gitshasum\PYGZdq{}: \PYGZdq{}915983d6576b56792b4647bf0d9fa04d83ce948d\PYGZdq{},}
+\PYG{g+go}{  \PYGZdq{}refds\PYGZdq{}: \PYGZdq{}/home/me/my\PYGZhy{}ds/\PYGZdq{},}
+\PYG{g+go}{  \PYGZdq{}state\PYGZdq{}: \PYGZdq{}clean\PYGZdq{},}
+\PYG{g+go}{  \PYGZdq{}status\PYGZdq{}: \PYGZdq{}ok\PYGZdq{},}
+\PYG{g+go}{  \PYGZdq{}type\PYGZdq{}: \PYGZdq{}file\PYGZdq{}\PYGZcb{}}
+\end{sphinxVerbatim}
+
+
+\end{findoutmore}
+
+\index{use DataLad API@\spxentry{use DataLad API}!with Matlab@\spxentry{with Matlab}}\index{with Matlab@\spxentry{with Matlab}!use DataLad API@\spxentry{use DataLad API}}\index{use DataLad API@\spxentry{use DataLad API}!with R@\spxentry{with R}}\index{with R@\spxentry{with R}!use DataLad API@\spxentry{use DataLad API}}\ignorespaces \begin{importantnote}[label={index-1}, before title={\thetcbcounter\ }, check odd page=true]{Use DataLad in languages other than Python}
+\label{\detokenize{basics/101-130-yodaproject:index-1}}
+
+\sphinxAtStartPar
+While there is a dedicated API for Python, DataLad’s functions can of course
+also be used with other programming languages, such as Matlab, or R, via standard
+system calls.
+
+\sphinxAtStartPar
+Even if you do not know or like Python, you can just copy\sphinxhyphen{}paste the code
+and follow along \textendash{} the high\sphinxhyphen{}level YODA principles demonstrated in this
+section generalize across programming languages.
+
+
+\end{importantnote}
+
+\sphinxAtStartPar
+For your midterm project submission, you decide to create a data analysis on the
+\dlhbhref{W1K}{iris flower data set}.
+It is a multivariate dataset on 50 samples of each of three species of Iris
+flowers (\sphinxstyleemphasis{Setosa}, \sphinxstyleemphasis{Versicolor}, or \sphinxstyleemphasis{Virginica}), with four variables: the length and width of the sepals and petals
+of the flowers in centimeters. It is often used in introductory data science
+courses for statistical classification techniques in machine learning, and
+widely available \textendash{} a perfect dataset for your midterm project!
+
+\index{reproducible paper@\spxentry{reproducible paper}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!reproducible paper@\spxentry{reproducible paper}}\ignorespaces \begin{importantnote}[label={index-2}, before title={\thetcbcounter\ }, check odd page=true]{Turn data analysis into dynamically generated documents}
+\label{\detokenize{basics/101-130-yodaproject:index-2}}
+
+\sphinxAtStartPar
+Beyond the contents of this section, we have transformed the example analysis also into a template to write a reproducible paper.
+If you are interested in checking that out, please head over to \dlhbhref{G2H}{github.com/datalad\sphinxhyphen{}handbook/repro\sphinxhyphen{}paper\sphinxhyphen{}sketch/}.
+
+
+\end{importantnote}
+
+
+\subsection{Raw data as a modular, independent entity}
+\label{\detokenize{basics/101-130-yodaproject:raw-data-as-a-modular-independent-entity}}
+\sphinxAtStartPar
+The first YODA principle stressed the importance of modularity in a data analysis
+project: Every component that could be used in more than one context should be
+an independent component.
+
+\sphinxAtStartPar
+The first aspect this applies to is the input data of your dataset: There can
+be thousands of ways to analyze it, and it is therefore immensely helpful to
+have a pristine raw iris dataset that does not get modified, but serves as
+input for these analysis.
+As such, the iris data should become a standalone DataLad dataset.
+For the purpose of this analysis, the online\sphinxhyphen{}handbook provides an \sphinxcode{\sphinxupquote{iris\_data}}
+dataset at \sphinxurl{https://github.com/datalad-handbook/iris\_data}.
+
+\sphinxAtStartPar
+You can either use this provided input dataset, or find out how to create an
+independent dataset from scratch in a {\hyperref[\detokenize{basics/101-130-yodaproject:fom-iris}]{\sphinxcrossref{\DUrole{std,std-ref}{dedicated Findoutmore}}}} (\autopageref*{\detokenize{basics/101-130-yodaproject:fom-iris}}).
+
+\index{create and publish dataset as dependency@\spxentry{create and publish dataset as dependency}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!create and publish dataset as dependency@\spxentry{create and publish dataset as dependency}}\ignorespaces \begin{findoutmore}[label={fom-iris}, before title={\thetcbcounter\ }, check odd page=true]{Creating an independent input dataset}
+\label{\detokenize{basics/101-130-yodaproject:fom-iris}}
+
+\sphinxAtStartPar
+If you acquire your own data for a data analysis, you will have
+to turn it into a DataLad dataset in order to install it as a subdataset.
+Any directory with data that exists on
+your computer can be turned into a dataset with \sphinxcode{\sphinxupquote{datalad create \sphinxhyphen{}\sphinxhyphen{}force}}
+and a subsequent \sphinxcode{\sphinxupquote{datalad save \sphinxhyphen{}m "add data" .}} to first create a dataset inside of
+an existing, non\sphinxhyphen{}empty directory, and subsequently save all of its contents into
+the history of the newly created dataset.
+
+\sphinxAtStartPar
+To create the \sphinxcode{\sphinxupquote{iris\_data}} dataset at \sphinxurl{https://github.com/datalad-handbook/iris\_data}
+we first created a DataLad dataset…
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZsh{} }make\PYG{+w}{ }sure\PYG{+w}{ }to\PYG{+w}{ }move\PYG{+w}{ }outside\PYG{+w}{ }of\PYG{+w}{ }DataLad\PYGZhy{}101!
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }../
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }create\PYG{+w}{ }iris\PYGZus{}data
+\PYG{g+go}{create(ok): /home/me/dl\PYGZhy{}101/iris\PYGZus{}data (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+and subsequently got the data from a publicly available
+\dlhbhref{G12A}{GitHub Gist}, a code snippet, or other short standalone information with a
+\sphinxcode{\sphinxupquote{datalad download\sphinxhyphen{}url}} command:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }iris\PYGZus{}data
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }download\PYGZhy{}url\PYG{+w}{ }https://gist.githubusercontent.com/netj/8836201/raw/6f9306ad21398ea43cba4f7d537619d0e07d5ae3/iris.csv
+\PYG{g+go}{download\PYGZus{}url(ok): /home/me/dl\PYGZhy{}101/iris\PYGZus{}data/iris.csv (file)}
+\PYG{g+go}{add(ok): iris.csv (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Finally, we \sphinxstyleemphasis{published} the dataset  to {\hyperref[\detokenize{glossary:term-GitHub}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitHub}}}}.
+
+\sphinxAtStartPar
+With this setup, the iris dataset (a single comma\sphinxhyphen{}separated (\sphinxcode{\sphinxupquote{.csv}})
+file) is downloaded, and, importantly, the dataset recorded \sphinxstyleemphasis{where} it
+was obtained from thanks to \sphinxcode{\sphinxupquote{datalad download\sphinxhyphen{}url}}, thus complying
+to the second YODA principle.
+This way, upon installation of the dataset, DataLad knows where to
+obtain the file content from. You can \sphinxcode{\sphinxupquote{datalad clone}} the iris
+dataset and find out with a \sphinxcode{\sphinxupquote{git annex whereis iris.csv}} command.
+
+
+\end{findoutmore}
+
+\sphinxAtStartPar
+“Nice, with this input dataset I have sufficient provenance capture for my
+input dataset, and I can install it as a modular component”, you think as you
+mentally tick off YODA principle number 1 and 2. “But before I can install it,
+I need an analysis superdataset first.”
+
+
+\subsection{Building an analysis dataset}
+\label{\detokenize{basics/101-130-yodaproject:building-an-analysis-dataset}}
+\sphinxAtStartPar
+There is an independent raw dataset as input data, but there is no place
+for your analysis to live, yet. Therefore, you start your midterm project
+by creating an analysis dataset. As this project is part of \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}},
+you do it as a subdataset of \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}}.
+Remember to specify the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}dataset}} option of \sphinxcode{\sphinxupquote{datalad create}}
+to link it as a subdataset!
+
+\sphinxAtStartPar
+You naturally want your dataset to follow the YODA principles, and, as a start,
+you use the \sphinxcode{\sphinxupquote{cfg\_yoda}} procedure to help you structure the dataset%
+\begin{footnote}\sphinxAtStartFootnote
+Note that you could have applied the YODA procedure not only right at
+creation of the dataset with \sphinxcode{\sphinxupquote{\sphinxhyphen{}c yoda}}, but also after creation
+with the \sphinxcode{\sphinxupquote{datalad run\sphinxhyphen{}procedure}} command:
+
+\sphinxSetupCodeBlockInFootnote
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }midterm\PYGZus{}project
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }run\PYGZhy{}procedure\PYG{+w}{ }cfg\PYGZus{}yoda
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Both ways of applying the YODA procedure will lead to the same
+outcome.
+%
+\end{footnote}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZsh{} }inside\PYG{+w}{ }of\PYG{+w}{ }DataLad\PYGZhy{}101
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }create\PYG{+w}{ }\PYGZhy{}c\PYG{+w}{ }yoda\PYG{+w}{ }\PYGZhy{}\PYGZhy{}dataset\PYG{+w}{ }.\PYG{+w}{ }midterm\PYGZus{}project
+\PYG{g+go}{[INFO] Running procedure cfg\PYGZus{}yoda}
+\PYG{g+go}{[INFO] == Command start (output follows) =====}
+\PYG{g+go}{[INFO] == Command exit (modification check follows) =====}
+\PYG{g+go}{run(ok): /home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101/midterm\PYGZus{}project (dataset) [VIRTUALENV/bin/python /home/a...]}
+\PYG{g+go}{add(ok): midterm\PYGZus{}project (dataset)}
+\PYG{g+go}{add(ok): .gitmodules (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\PYG{g+go}{create(ok): midterm\PYGZus{}project (dataset)}
+\end{sphinxVerbatim}
+
+\index{subdatasets@\spxentry{subdatasets}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!subdatasets@\spxentry{subdatasets}}\index{list subdatasets@\spxentry{list subdatasets}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!list subdatasets@\spxentry{list subdatasets}}\ignorespaces 
+\sphinxAtStartPar
+The \sphinxcode{\sphinxupquote{datalad subdatasets}} command can report on which subdatasets exist for
+\sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}}. This helps you verify that the command succeeded and the
+dataset was indeed linked as a subdataset to \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }subdatasets
+\PYG{g+go}{subdataset(ok): midterm\PYGZus{}project (dataset)}
+\PYG{g+go}{subdataset(ok): recordings/longnow (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Not only the \sphinxcode{\sphinxupquote{longnow}} subdataset, but also the newly created
+\sphinxcode{\sphinxupquote{midterm\_project}} subdataset are displayed \textendash{} wonderful!
+
+\sphinxAtStartPar
+But back to the midterm project now. So far, you have created a pre\sphinxhyphen{}structured
+analysis dataset. As a next step, you take care of installing and linking the
+raw dataset for your analysis adequately to your \sphinxcode{\sphinxupquote{midterm\_project}} dataset
+by installing it as a subdataset. Make sure to install it as a subdataset of
+\sphinxcode{\sphinxupquote{midterm\_project}}, and not \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}}!
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }midterm\PYGZus{}project
+\PYG{g+gp}{\PYGZsh{} }we\PYG{+w}{ }are\PYG{+w}{ }\PYG{k}{in}\PYG{+w}{ }midterm\PYGZus{}project,\PYG{+w}{ }thus\PYG{+w}{ }\PYGZhy{}d\PYG{+w}{ }.\PYG{+w}{ }points\PYG{+w}{ }to\PYG{+w}{ }the\PYG{+w}{ }root\PYG{+w}{ }of\PYG{+w}{ }it.
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }clone\PYG{+w}{ }\PYGZhy{}d\PYG{+w}{ }.\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{  }https://github.com/datalad\PYGZhy{}handbook/iris\PYGZus{}data.git\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{  }input/
+\PYG{g+go}{[INFO] Remote origin not usable by git\PYGZhy{}annex; setting annex\PYGZhy{}ignore}
+\PYG{g+go}{install(ok): input (dataset)}
+\PYG{g+go}{add(ok): input (dataset)}
+\PYG{g+go}{add(ok): .gitmodules (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\PYG{g+go}{add(ok): .gitmodules (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Note that we did not keep its original name, \sphinxcode{\sphinxupquote{iris\_data}}, but rather provided
+a path with a new name, \sphinxcode{\sphinxupquote{input}}, because this much more intuitively comprehensible.
+
+\sphinxAtStartPar
+After the input dataset is installed, the directory structure of \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}}
+looks like this:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }../
+\PYG{g+gp}{\PYGZdl{} }tree\PYG{+w}{ }\PYGZhy{}d
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }midterm\PYGZus{}project
+\PYG{g+go}{.}
+\PYG{g+go}{├── books}
+\PYG{g+go}{├── code}
+\PYG{g+go}{├── midterm\PYGZus{}project}
+\PYG{g+go}{│   ├── code}
+\PYG{g+go}{│   └── input}
+\PYG{g+go}{└── recordings}
+\PYG{g+go}{    └── longnow}
+\PYG{g+go}{        ├── Long\PYGZus{}Now\PYGZus{}\PYGZus{}Conversations\PYGZus{}at\PYGZus{}The\PYGZus{}Interval}
+\PYG{g+go}{        └── Long\PYGZus{}Now\PYGZus{}\PYGZus{}Seminars\PYGZus{}About\PYGZus{}Long\PYGZus{}term\PYGZus{}Thinking}
+
+\PYG{g+go}{9 directories}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Importantly, all of the subdatasets are linked to the higher\sphinxhyphen{}level datasets,
+and despite being inside of \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}}, your \sphinxcode{\sphinxupquote{midterm\_project}} is an independent
+dataset, as is its \sphinxcode{\sphinxupquote{input/}} subdataset:
+
+\begin{figure}[tbp]
+\centering
+
+\noindent\sphinxincludegraphics[width=0.500\linewidth]{{virtual_dstree_dl101_midterm}.pdf}
+\end{figure}
+
+
+\subsection{YODA\sphinxhyphen{}compliant analysis scripts}
+\label{\detokenize{basics/101-130-yodaproject:yoda-compliant-analysis-scripts}}
+\sphinxAtStartPar
+Now that you have an \sphinxcode{\sphinxupquote{input/}} directory with data, and a \sphinxcode{\sphinxupquote{code/}} directory
+(created by the YODA procedure) for your scripts, it is time to work on the script
+for your analysis. Within \sphinxcode{\sphinxupquote{midterm\_project}}, the \sphinxcode{\sphinxupquote{code/}} directory is where
+you want to place your scripts.
+
+\sphinxAtStartPar
+But first, you plan your research question. You decide to do a
+classification analysis with a k\sphinxhyphen{}nearest neighbors algorithm%
+\begin{footnote}\sphinxAtStartFootnote
+The choice of analysis method
+in this book is rather arbitrary, and understanding the k\sphinxhyphen{}nearest
+neighbor algorithm is by no means required for this section.
+%
+\end{footnote}. The iris
+dataset works well for such questions. Based on the features of the flowers
+(sepal and petal width and length) you will try to predict what type of
+flower (\sphinxstyleemphasis{Setosa}, \sphinxstyleemphasis{Versicolor}, or \sphinxstyleemphasis{Virginica}) a particular flower in the
+dataset is. You settle on two objectives for your analysis:
+\begin{enumerate}
+\sphinxsetlistlabels{\arabic}{enumi}{enumii}{}{.}%
+\item {} 
+\sphinxAtStartPar
+Explore and plot the relationship between variables in the dataset and save
+the resulting graphic as a first result.
+
+\item {} 
+\sphinxAtStartPar
+Perform a k\sphinxhyphen{}nearest neighbor classification on a subset of the dataset to
+predict class membership (flower type) of samples in a left\sphinxhyphen{}out test set.
+Your final result should be a statistical summary of this prediction.
+
+\end{enumerate}
+
+\sphinxAtStartPar
+To compute the analysis you create the following Python script inside of \sphinxcode{\sphinxupquote{code/}}:
+
+\fvset{hllines={, 11, 12, 13, 23, 43,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }\PYGZlt{}\PYGZlt{}\PYG{+w}{ }EOT\PYG{+w}{ }\PYGZgt{}\PYG{+w}{ }code/script.py
+
+\PYG{g+go}{import argparse}
+\PYG{g+go}{import pandas as pd}
+\PYG{g+go}{import seaborn as sns}
+\PYG{g+go}{from sklearn import model\PYGZus{}selection}
+\PYG{g+go}{from sklearn.neighbors import KNeighborsClassifier}
+\PYG{g+go}{from sklearn.metrics import classification\PYGZus{}report}
+
+\PYG{g+go}{parser = argparse.ArgumentParser(description=\PYGZdq{}Analyze iris data\PYGZdq{})}
+\PYG{g+go}{parser.add\PYGZus{}argument(\PYGZsq{}data\PYGZsq{}, help=\PYGZdq{}Input data (CSV) to process\PYGZdq{})}
+\PYG{g+go}{parser.add\PYGZus{}argument(\PYGZsq{}output\PYGZus{}figure\PYGZsq{}, help=\PYGZdq{}Output figure path\PYGZdq{})}
+\PYG{g+go}{parser.add\PYGZus{}argument(\PYGZsq{}output\PYGZus{}report\PYGZsq{}, help=\PYGZdq{}Output report path\PYGZdq{})}
+\PYG{g+go}{args = parser.parse\PYGZus{}args()}
+
+\PYG{g+gp}{\PYGZsh{} }prepare\PYG{+w}{ }the\PYG{+w}{ }data\PYG{+w}{ }as\PYG{+w}{ }a\PYG{+w}{ }pandas\PYG{+w}{ }dataframe
+\PYG{g+go}{df = pd.read\PYGZus{}csv(args.data)}
+\PYG{g+go}{attributes = [\PYGZdq{}sepal\PYGZus{}length\PYGZdq{}, \PYGZdq{}sepal\PYGZus{}width\PYGZdq{}, \PYGZdq{}petal\PYGZus{}length\PYGZdq{},\PYGZdq{}petal\PYGZus{}width\PYGZdq{}, \PYGZdq{}class\PYGZdq{}]}
+\PYG{g+go}{df.columns = attributes}
+
+\PYG{g+gp}{\PYGZsh{} }create\PYG{+w}{ }a\PYG{+w}{ }pairplot\PYG{+w}{ }to\PYG{+w}{ }plot\PYG{+w}{ }pairwise\PYG{+w}{ }relationships\PYG{+w}{ }\PYG{k}{in}\PYG{+w}{ }the\PYG{+w}{ }dataset
+\PYG{g+go}{plot = sns.pairplot(df, hue=\PYGZsq{}class\PYGZsq{}, palette=\PYGZsq{}muted\PYGZsq{})}
+\PYG{g+go}{plot.savefig(args.output\PYGZus{}figure)}
+
+\PYG{g+gp}{\PYGZsh{} }perform\PYG{+w}{ }a\PYG{+w}{ }K\PYGZhy{}nearest\PYGZhy{}neighbours\PYG{+w}{ }classification\PYG{+w}{ }with\PYG{+w}{ }scikit\PYGZhy{}learn
+\PYG{g+gp}{\PYGZsh{} }Step\PYG{+w}{ }\PYG{l+m}{1}:\PYG{+w}{ }split\PYG{+w}{ }data\PYG{+w}{ }\PYG{k}{in}\PYG{+w}{ }\PYG{n+nb}{test}\PYG{+w}{ }and\PYG{+w}{ }training\PYG{+w}{ }dataset\PYG{+w}{ }\PYG{o}{(}\PYG{l+m}{20}:80\PYG{o}{)}
+\PYG{g+go}{array = df.values}
+\PYG{g+go}{X = array[:,0:4]}
+\PYG{g+go}{Y = array[:,4]}
+\PYG{g+go}{test\PYGZus{}size = 0.20}
+\PYG{g+go}{seed = 7}
+\PYG{g+go}{X\PYGZus{}train, X\PYGZus{}test, Y\PYGZus{}train, Y\PYGZus{}test = model\PYGZus{}selection.train\PYGZus{}test\PYGZus{}split(}
+\PYG{g+go}{    X, Y,}
+\PYG{g+go}{    test\PYGZus{}size=test\PYGZus{}size,}
+\PYG{g+go}{    random\PYGZus{}state=seed)}
+\PYG{g+gp}{\PYGZsh{} }Step\PYG{+w}{ }\PYG{l+m}{2}:\PYG{+w}{ }Fit\PYG{+w}{ }the\PYG{+w}{ }model\PYG{+w}{ }and\PYG{+w}{ }make\PYG{+w}{ }predictions\PYG{+w}{ }on\PYG{+w}{ }the\PYG{+w}{ }\PYG{n+nb}{test}\PYG{+w}{ }dataset
+\PYG{g+go}{knn = KNeighborsClassifier()}
+\PYG{g+go}{knn.fit(X\PYGZus{}train, Y\PYGZus{}train)}
+\PYG{g+go}{predictions = knn.predict(X\PYGZus{}test)}
+
+\PYG{g+gp}{\PYGZsh{} }Step\PYG{+w}{ }\PYG{l+m}{3}:\PYG{+w}{ }Save\PYG{+w}{ }the\PYG{+w}{ }classification\PYG{+w}{ }report
+\PYG{g+go}{report = classification\PYGZus{}report(Y\PYGZus{}test, predictions, output\PYGZus{}dict=True)}
+\PYG{g+go}{df\PYGZus{}report = pd.DataFrame(report).transpose().to\PYGZus{}csv(args.output\PYGZus{}report)}
+
+\PYG{g+go}{EOT}
+\end{sphinxVerbatim}
+\sphinxresetverbatimhllines
+
+\sphinxAtStartPar
+This script will
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+take three positional arguments: The input data, a path to save a figure under, and path to save the final prediction report under. By including these input and output specifications in a \sphinxcode{\sphinxupquote{datalad run}} command when we run the analysis, we can ensure that input data is retrieved prior to the script execution, and that as much actionable provenance as possible is recorded%
+\begin{footnote}\sphinxAtStartFootnote
+Alternatively, if you were to use DataLad’s Python API, you could import and expose it as \sphinxcode{\sphinxupquote{dl.\textless{}COMMAND\textgreater{}}} and \sphinxcode{\sphinxupquote{dl.get()}} the relevant files. This however, would not record them as provenance in the dataset’s history.
+%
+\end{footnote}.
+
+\item {} 
+\sphinxAtStartPar
+read in the data, perform the analysis, and save the resulting figure and \sphinxcode{\sphinxupquote{.csv}} prediction report into the root of \sphinxcode{\sphinxupquote{midterm\_project/}}. Note how this helps to fulfil YODA principle 1 on modularity:
+Results are stored outside of the pristine input subdataset.
+
+\end{itemize}
+
+\sphinxAtStartPar
+A short help text explains how the script shall be used:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }python\PYG{+w}{ }code/script.py\PYG{+w}{ }\PYGZhy{}h
+\PYG{g+go}{usage: script.py [\PYGZhy{}h] data output\PYGZus{}figure output\PYGZus{}report}
+
+\PYG{g+go}{Analyze iris data}
+
+\PYG{g+go}{positional arguments:}
+\PYG{g+go}{   data           Input data (CSV) to process}
+\PYG{g+go}{   output\PYGZus{}figure  Output figure path}
+\PYG{g+go}{   output\PYGZus{}report  Output report path}
+
+\PYG{g+go}{optional arguments:}
+\PYG{g+go}{\PYGZhy{}h, \PYGZhy{}\PYGZhy{}help     show this help message and exit}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The script execution would thus be \sphinxcode{\sphinxupquote{python3 code/script.py \textless{}path\sphinxhyphen{}to\sphinxhyphen{}input\textgreater{} \textless{}path\sphinxhyphen{}to\sphinxhyphen{}figure\sphinxhyphen{}output\textgreater{} \textless{}path\sphinxhyphen{}to\sphinxhyphen{}report\sphinxhyphen{}output\textgreater{}}}.
+When parametrizing the input and output path parameters, we just need make sure that all paths  are \sphinxstyleemphasis{relative}, such that the \sphinxcode{\sphinxupquote{midterm\_project}} analysis is completely self\sphinxhyphen{}contained within the dataset, contributing to fulfill the second YODA principle.
+
+\sphinxAtStartPar
+Let’s run a quick \sphinxcode{\sphinxupquote{datalad status}}…
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{untracked: code/script.py (file)}
+\end{sphinxVerbatim}
+
+\index{tag dataset version@\spxentry{tag dataset version}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!tag dataset version@\spxentry{tag dataset version}}\ignorespaces 
+\sphinxAtStartPar
+… and save the script to the subdataset’s history. As the script completes your
+analysis setup, we \sphinxstyleemphasis{tag} the state of the dataset to refer to it easily at a later
+point with the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}version\sphinxhyphen{}tag}} option of \sphinxcode{\sphinxupquote{datalad save}}.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}add script for kNN classification and plotting\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{  }\PYGZhy{}\PYGZhy{}version\PYGZhy{}tag\PYG{+w}{ }ready4analysis\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{  }code/script.py
+\PYG{g+go}{add(ok): code/script.py (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\index{tag@\spxentry{tag}!Git concept@\spxentry{Git concept}}\index{Git concept@\spxentry{Git concept}!tag@\spxentry{tag}}\index{show@\spxentry{show}!Git command@\spxentry{Git command}}\index{Git command@\spxentry{Git command}!show@\spxentry{show}}\index{rerun command@\spxentry{rerun command}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!rerun command@\spxentry{rerun command}}\ignorespaces \begin{findoutmore}[label={index-6}, before title={\thetcbcounter\ }, check odd page=true]{What is a tag?}
+\label{\detokenize{basics/101-130-yodaproject:index-6}}
+
+\sphinxAtStartPar
+{\hyperref[\detokenize{glossary:term-tag}]{\sphinxtermref{\DUrole{xref,std,std-term}{tag}}}}s are markers that you can attach to commits in your dataset history.
+They can have any name, and can help you and others to identify certain commits
+or dataset states in the history of a dataset. Let’s take a look at how the tag
+you just created looks like in your history with \sphinxcode{\sphinxupquote{git show}}.
+Note how we can use a tag just as easily as a commit {\hyperref[\detokenize{glossary:term-shasum}]{\sphinxtermref{\DUrole{xref,std,std-term}{shasum}}}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }show\PYG{+w}{ }ready4analysis
+\PYG{g+go}{commit ca0c7477✂SHA1}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    add script for kNN classification and plotting}
+
+\PYG{g+go}{diff \PYGZhy{}\PYGZhy{}git a/code/script.py b/code/script.py}
+\PYG{g+go}{new file mode 100644}
+\PYG{g+go}{index 0000000..c7a6ea9}
+\PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{} /dev/null}
+\PYG{g+go}{+++ b/code/script.py}
+\PYG{g+go}{@@ \PYGZhy{}0,0 +1,43 @@}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This tag thus identifies the version state of the dataset in which this script
+was added.
+Later we can use this tag to identify the point in time at which
+the analysis setup was ready \textendash{} much more intuitive than a 40\sphinxhyphen{}character shasum!
+This is handy in the context of a \sphinxcode{\sphinxupquote{datalad rerun}}, for example:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }rerun\PYG{+w}{ }\PYGZhy{}\PYGZhy{}since\PYG{+w}{ }ready4analysis
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+would rerun any \sphinxcode{\sphinxupquote{datalad run}} command in the history performed between tagging
+and the current dataset state.
+
+
+\end{findoutmore}
+
+\sphinxAtStartPar
+Finally, with your directory structure being modular and intuitive,
+the input data installed, the script ready, and the dataset status clean,
+you can wrap the execution of the script in a \sphinxcode{\sphinxupquote{datalad run}} command. Note that
+simply executing the script would work as well \textendash{} thanks to DataLad’s Python API.
+But using \sphinxcode{\sphinxupquote{datalad run}} will capture full provenance, and will make
+re\sphinxhyphen{}execution with \sphinxcode{\sphinxupquote{datalad rerun}} easy.
+\begin{importantnote}[before title={\thetcbcounter\ }, check odd page=true]{Additional software requirements: pandas, seaborn, sklearn}
+
+\sphinxAtStartPar
+Note that you need to have the following Python packages installed to run the
+analysis%
+\begin{footnote}\sphinxAtStartFootnote
+It is recommended (but optional) to create a
+\dlhbhref{P1D}{virtual environment} and
+install the required Python packages inside of it:
+
+\sphinxSetupCodeBlockInFootnote
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} create and enter a new virtual environment (optional)}
+\PYG{g+gp}{\PYGZdl{} }virtualenv\PYG{+w}{ }\PYGZhy{}\PYGZhy{}python\PYG{o}{=}python3\PYG{+w}{ }\PYGZti{}/env/handbook
+\PYG{g+gp}{\PYGZdl{} }.\PYG{+w}{ }\PYGZti{}/env/handbook/bin/activate
+\end{sphinxVerbatim}
+
+\sphinxSetupCodeBlockInFootnote
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} install the Python packages from PyPi via pip}
+\PYG{g+gp}{\PYGZdl{} }pip\PYG{+w}{ }install\PYG{+w}{ }seaborn\PYG{+w}{ }pandas\PYG{+w}{ }sklearn
+\end{sphinxVerbatim}
+%
+\end{footnote}:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\dlhbhref{P3}{pandas}
+
+\item {} 
+\sphinxAtStartPar
+\dlhbhref{P7}{seaborn}
+
+\item {} 
+\sphinxAtStartPar
+\dlhbhref{S4}{sklearn}
+
+\end{itemize}
+
+\sphinxAtStartPar
+The packages can be installed via {\hyperref[\detokenize{glossary:term-pip}]{\sphinxtermref{\DUrole{xref,std,std-term}{pip}}}}.
+However, if you do not want to install any
+Python packages, do not execute the remaining code examples in this section
+\textendash{} an upcoming section on \sphinxcode{\sphinxupquote{datalad containers\sphinxhyphen{}run}} will allow you to
+perform the analysis without changing your Python software\sphinxhyphen{}setup.
+
+
+\end{importantnote}
+
+\index{python instead of python3@\spxentry{python instead of python3}!on Windows@\spxentry{on Windows}}\index{on Windows@\spxentry{on Windows}!python instead of python3@\spxentry{python instead of python3}}\ignorespaces \begin{windowswit}[label={index-7}, before title={\thetcbcounter\ }, check odd page=true]{You may need to use ‘python’, not ‘python3’}
+\label{\detokenize{basics/101-130-yodaproject:index-7}}
+
+\sphinxAtStartPar
+If executing the code below returns an exit code of 9009, there may be no \sphinxcode{\sphinxupquote{python3}} \textendash{} instead, it is called solely \sphinxcode{\sphinxupquote{python}}.
+Please run the following instead (adjusted for line breaks, you should be able to copy\sphinxhyphen{}paste this as a whole):
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+go}{\PYGZgt{} datalad run \PYGZhy{}m \PYGZdq{}analyze iris data with classification analysis\PYGZdq{} \PYGZca{}}
+\PYG{g+go}{ \PYGZhy{}\PYGZhy{}input \PYGZdq{}input/iris.csv\PYGZdq{} \PYGZca{}}
+\PYG{g+go}{ \PYGZhy{}\PYGZhy{}output \PYGZdq{}pairwise\PYGZus{}relationships.png\PYGZdq{} \PYGZca{}}
+\PYG{g+go}{ \PYGZhy{}\PYGZhy{}output \PYGZdq{}prediction\PYGZus{}report.csv\PYGZdq{} \PYGZca{}}
+\PYG{g+go}{ \PYGZdq{}python code/script.py \PYGZob{}inputs\PYGZcb{} \PYGZob{}outputs\PYGZcb{}\PYGZdq{}}
+\end{sphinxVerbatim}
+
+
+\end{windowswit}
+
+\index{run command with provenance capture@\spxentry{run command with provenance capture}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!run command with provenance capture@\spxentry{run command with provenance capture}}\ignorespaces 
+\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-130-yodaproject:index-8}}}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }run\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}analyze iris data with classification analysis\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{  }\PYGZhy{}\PYGZhy{}input\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}input/iris.csv\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{  }\PYGZhy{}\PYGZhy{}output\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}pairwise\PYGZus{}relationships.png\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{  }\PYGZhy{}\PYGZhy{}output\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}prediction\PYGZus{}report.csv\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{  }\PYG{l+s+s2}{\PYGZdq{}python3 code/script.py \PYGZob{}inputs\PYGZcb{} \PYGZob{}outputs\PYGZcb{}\PYGZdq{}}
+\PYG{g+go}{get(ok): input/iris.csv (file) [from web...]}
+\PYG{g+go}{[INFO] == Command start (output follows) =====}
+\PYG{g+go}{[INFO] == Command exit (modification check follows) =====}
+\PYG{g+go}{run(ok): /home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101/midterm\PYGZus{}project (dataset) [python3 code/script.py input/iris.csv pa...]}
+\PYG{g+go}{add(ok): pairwise\PYGZus{}relationships.png (file)}
+\PYG{g+go}{add(ok): prediction\PYGZus{}report.csv (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+As the successful command summary indicates, your analysis seems to work! Two
+files were created and saved to the dataset: \sphinxcode{\sphinxupquote{pairwise\_relationships.png}}
+and \sphinxcode{\sphinxupquote{prediction\_report.csv}}. If you want, take a look and interpret
+your analysis. But what excites you even more than a successful data science
+project on first try is that you achieved complete provenance capture:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Every single file in this dataset is associated with an author and a time
+stamp for each modification thanks to \sphinxcode{\sphinxupquote{datalad save}}.
+
+\item {} 
+\sphinxAtStartPar
+The raw dataset knows where the data came from thanks to \sphinxcode{\sphinxupquote{datalad clone}}
+and \sphinxcode{\sphinxupquote{datalad download\sphinxhyphen{}url}}.
+
+\item {} 
+\sphinxAtStartPar
+The subdataset is linked to the superdataset thanks to
+\sphinxcode{\sphinxupquote{datalad clone \sphinxhyphen{}d}}.
+
+\item {} 
+\sphinxAtStartPar
+The \sphinxcode{\sphinxupquote{datalad run}} command took care of linking the outputs of your
+analysis with the script and the input data it was generated from, fulfilling
+the third YODA principle.
+
+\end{itemize}
+
+\sphinxAtStartPar
+Let’s take a look at the history of the \sphinxcode{\sphinxupquote{midterm\_project}} analysis
+dataset:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}\PYGZhy{}oneline
+\PYG{g+go}{9aadac7 [DATALAD RUNCMD] analyze iris data with classification analysis}
+\PYG{g+go}{ca0c747 add script for kNN classification and plotting}
+\PYG{g+go}{4f945ed [DATALAD] Added subdataset}
+\PYG{g+go}{18f4a98 Apply YODA dataset setup}
+\PYG{g+go}{bf231d5 [DATALAD] new dataset}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+“Wow, this is so clean and intuitive!” you congratulate yourself. “And I think
+this was and will be the fastest I have ever completed a midterm project!”
+But what is still missing is a human readable description of your dataset.
+The YODA procedure kindly placed a \sphinxcode{\sphinxupquote{README.md}} file into the root of your
+dataset that you can use for this%
+\begin{footnote}\sphinxAtStartFootnote
+All \sphinxcode{\sphinxupquote{README.md}} files the YODA procedure created are
+version controlled by Git, not git\sphinxhyphen{}annex, thanks to the
+configurations that YODA supplied. This makes it easy to change the
+\sphinxcode{\sphinxupquote{README.md}} file. The previous section detailed how the YODA procedure
+configured your dataset. If you want to re\sphinxhyphen{}read the full chapter on
+configurations and run\sphinxhyphen{}procedures, start with section {\hyperref[\detokenize{basics/101-122-config:config}]{\sphinxcrossref{\DUrole{std,std-ref}{Local configuration}}}} (\autopageref*{\detokenize{basics/101-122-config:config}}).
+%
+\end{footnote}.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZsh{} }with\PYG{+w}{ }the\PYG{+w}{ }\PYGZgt{}\PYG{p}{|}\PYG{+w}{ }redirection\PYG{+w}{ }we\PYG{+w}{ }are\PYG{+w}{ }replacing\PYG{+w}{ }existing\PYG{+w}{ }contents\PYG{+w}{ }\PYG{k}{in}\PYG{+w}{ }the\PYG{+w}{ }file
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }\PYG{l+s}{\PYGZlt{}\PYGZlt{} EOT \PYGZgt{}| RE}ADME.md
+
+\PYG{g+gp}{\PYGZsh{} }Midterm\PYG{+w}{ }YODA\PYG{+w}{ }Data\PYG{+w}{ }Analysis\PYG{+w}{ }Project
+
+\PYG{g+gp}{\PYGZsh{}}\PYG{c+c1}{\PYGZsh{} Dataset structure}
+
+\PYG{g+go}{\PYGZhy{} All inputs (i.e. building blocks from other sources) are located in input/.}
+\PYG{g+go}{\PYGZhy{} All custom code is located in code/.}
+\PYG{g+go}{\PYGZhy{} All results (i.e., generated files) are located in the root of the dataset:}
+\PYG{g+go}{  \PYGZhy{} \PYGZdq{}prediction\PYGZus{}report.csv\PYGZdq{} contains the main classification metrics.}
+\PYG{g+go}{  \PYGZhy{} \PYGZdq{}output/pairwise\PYGZus{}relationships.png\PYGZdq{} is a plot of the relations between features.}
+
+\PYG{g+go}{EOT}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{ modified: README.md (file)}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}Provide project description\PYGZdq{}}\PYG{+w}{ }README.md
+\PYG{g+go}{add(ok): README.md (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Note that one feature of the YODA procedure was that it configured certain files
+(for example, everything inside of \sphinxcode{\sphinxupquote{code/}}, and the \sphinxcode{\sphinxupquote{README.md}} file in the
+root of the dataset) to be saved in Git instead of git\sphinxhyphen{}annex. This was the
+reason why the \sphinxcode{\sphinxupquote{README.md}} in the root of the dataset was easily modifiable.
+
+\index{save@\spxentry{save}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!save@\spxentry{save}}\index{save file content directly in Git (no annex)@\spxentry{save file content directly in Git}\spxextra{no annex}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!save file content directly in Git (no annex)@\spxentry{save file content directly in Git}\spxextra{no annex}}\ignorespaces \begin{findoutmore}[label={index-9}, before title={\thetcbcounter\ }, check odd page=true]{Saving contents with Git regardless of configuration with –to-git}
+\label{\detokenize{basics/101-130-yodaproject:index-9}}
+
+\sphinxAtStartPar
+The \sphinxcode{\sphinxupquote{yoda}} procedure in \sphinxcode{\sphinxupquote{midterm\_project}} applied a different configuration
+within \sphinxcode{\sphinxupquote{.gitattributes}} than the \sphinxcode{\sphinxupquote{text2git}} procedure did in \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}}.
+Within \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}}, any text file is automatically stored in {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}}.
+This is not true in \sphinxcode{\sphinxupquote{midterm\_project}}: Only the existing \sphinxcode{\sphinxupquote{README.md}} files and
+anything within \sphinxcode{\sphinxupquote{code/}} are stored \textendash{} everything else will be annexed.
+That means that if you create any other file, even text files, inside of
+\sphinxcode{\sphinxupquote{midterm\_project}} (but not in \sphinxcode{\sphinxupquote{code/}}), it will be managed by {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}}
+and content\sphinxhyphen{}locked after a \sphinxcode{\sphinxupquote{datalad save}} \textendash{} an inconvenience if it
+would be a file that is small enough to be handled by Git.
+
+\sphinxAtStartPar
+Luckily, there is a handy shortcut to saving files in Git that does not
+require you to edit configurations in \sphinxcode{\sphinxupquote{.gitattributes}}: The \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}to\sphinxhyphen{}git}}
+option for \sphinxcode{\sphinxupquote{datalad save}}.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}add sometextfile.txt\PYGZdq{}}\PYG{+w}{ }\PYGZhy{}\PYGZhy{}to\PYGZhy{}git\PYG{+w}{ }sometextfile.txt
+\end{sphinxVerbatim}
+
+
+\end{findoutmore}
+
+\sphinxAtStartPar
+After adding this short description to your \sphinxcode{\sphinxupquote{README.md}}, your dataset now also
+contains sufficient human\sphinxhyphen{}readable information to ensure that others can understand
+everything you did easily.
+The only thing left to do is to hand in your assignment. According to the
+syllabus, this should be done via {\hyperref[\detokenize{glossary:term-GitHub}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitHub}}}}.
+
+\index{dataset hosting@\spxentry{dataset hosting}!GitHub@\spxentry{GitHub}}\ignorespaces \begin{findoutmore}[label={index-10}, before title={\thetcbcounter\ }, check odd page=true]{What is GitHub?}
+\label{\detokenize{basics/101-130-yodaproject:index-10}}
+
+\sphinxAtStartPar
+GitHub is a web based hosting service for Git repositories. Among many
+different other useful perks it adds features that allow collaboration on
+Git repositories. \dlhbhref{G8}{GitLab} is a similar
+service with highly similar features, but its source code is free and open,
+whereas GitHub is a subsidiary of Microsoft.
+
+\sphinxAtStartPar
+Web\sphinxhyphen{}hosting services like GitHub and {\hyperref[\detokenize{glossary:term-GitLab}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitLab}}}} integrate wonderfully with
+DataLad. They are especially useful for making your dataset publicly available,
+if you have figured out storage for your large files otherwise (as large content
+cannot be hosted for free by GitHub). You can make DataLad publish large file content to one location
+and afterwards automatically push an update to GitHub, such that
+users can install directly from GitHub/GitLab and seemingly also obtain large file
+content from GitHub. GitHub can also resolve subdataset links to other GitHub
+repositories, which lets you navigate through nested datasets in the web\sphinxhyphen{}interface.
+
+\noindent\sphinxincludegraphics{{screenshot_midtermproject}.png}
+
+\sphinxAtStartPar
+The above screenshot shows the linkage between the analysis project you will create
+and its subdataset. Clicking on the subdataset (highlighted) will take you to the iris dataset
+the online\sphinxhyphen{}handbook provides, shown below.
+
+\noindent\sphinxincludegraphics{{screenshot_submodule}.png}
+
+
+\end{findoutmore}
+
+\index{create\sphinxhyphen{}sibling\sphinxhyphen{}github@\spxentry{create\sphinxhyphen{}sibling\sphinxhyphen{}github}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!create\sphinxhyphen{}sibling\sphinxhyphen{}github@\spxentry{create\sphinxhyphen{}sibling\sphinxhyphen{}github}}\ignorespaces 
+
+\subsection{Publishing the dataset to GitHub}
+\label{\detokenize{basics/101-130-yodaproject:publishing-the-dataset-to-github}}\label{\detokenize{basics/101-130-yodaproject:publishtogithub}}\label{\detokenize{basics/101-130-yodaproject:index-11}}
+\sphinxAtStartPar
+For this, you need to
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+create a GitHub account, if you do not yet have one
+
+\item {} 
+\sphinxAtStartPar
+create a repository for this dataset on GitHub,
+
+\item {} 
+\sphinxAtStartPar
+configure this GitHub repository to be a {\hyperref[\detokenize{glossary:term-sibling}]{\sphinxtermref{\DUrole{xref,std,std-term}{sibling}}}} of the \sphinxcode{\sphinxupquote{midterm\_project}} dataset,
+
+\item {} 
+\sphinxAtStartPar
+and \sphinxstyleemphasis{publish} your dataset to GitHub.
+
+\end{itemize}
+
+\index{create\sphinxhyphen{}sibling\sphinxhyphen{}gitlab@\spxentry{create\sphinxhyphen{}sibling\sphinxhyphen{}gitlab}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!create\sphinxhyphen{}sibling\sphinxhyphen{}gitlab@\spxentry{create\sphinxhyphen{}sibling\sphinxhyphen{}gitlab}}\ignorespaces 
+\sphinxAtStartPar
+Luckily, DataLad can make this very easy with the
+\sphinxcode{\sphinxupquote{datalad create\sphinxhyphen{}sibling\sphinxhyphen{}github}}
+command (or, for \dlhbhref{G8}{GitLab}, \sphinxcode{\sphinxupquote{datalad create\sphinxhyphen{}sibling\sphinxhyphen{}gitlab}}).
+
+\sphinxAtStartPar
+The two commands have different arguments and options.
+Here, we look at \sphinxcode{\sphinxupquote{datalad create\sphinxhyphen{}sibling\sphinxhyphen{}github}}.
+The command takes a repository name and GitHub authentication credentials
+(either in the command line call with options \sphinxcode{\sphinxupquote{github\sphinxhyphen{}login \textless{}TOKEN\textgreater{}}}, with an \sphinxstyleemphasis{oauth} \dlhbhref{G3B}{token} stored in the Git
+configuration, or interactively).
+
+\index{GitHub token@\spxentry{GitHub token}!credential@\spxentry{credential}}\index{credential@\spxentry{credential}!GitHub token@\spxentry{GitHub token}}\ignorespaces \begin{importantnote}[label={index-13}, before title={\thetcbcounter\ }, check odd page=true]{Generate a GitHub token}
+\label{\detokenize{basics/101-130-yodaproject:index-13}}
+
+\sphinxAtStartPar
+GitHub \dlhbhref{G9A}{deprecated user\sphinxhyphen{}password authentication} and instead supports authentication via personal access token.
+To ensure successful authentication, don’t supply your password, but create a personal access token at \dlhbhref{G2P}{github.com/settings/tokens}%
+\begin{footnote}\sphinxAtStartFootnote
+Instead of using GitHub’s WebUI you could also obtain a token using the command line GitHub interface (\sphinxurl{https://github.com/sociomantic-tsunami/git-hub}) by running \sphinxcode{\sphinxupquote{git hub setup}} (if no 2FA is used).
+%
+\end{footnote} instead, and either
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+supply the token with the argument \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}github\sphinxhyphen{}login \textless{}TOKEN\textgreater{}}} from the command line,
+
+\item {} 
+\sphinxAtStartPar
+or supply the token from the command line when queried for a password
+
+\end{itemize}
+
+
+\end{importantnote}
+
+\sphinxAtStartPar
+Based on the credentials and the
+repository name, it will create a new, empty repository on GitHub, and
+configure this repository as a sibling of the dataset:
+
+\index{credential@\spxentry{credential}!entry@\spxentry{entry}}\index{typed credentials are not displayed@\spxentry{typed credentials are not displayed}!on Windows@\spxentry{on Windows}}\index{on Windows@\spxentry{on Windows}!typed credentials are not displayed@\spxentry{typed credentials are not displayed}}\ignorespaces \begin{windowswit}[label={index-14}, before title={\thetcbcounter\ }, check odd page=true]{Your shell will not display credentials}
+\label{\detokenize{basics/101-130-yodaproject:index-14}}
+
+\sphinxAtStartPar
+Don’t be confused if you are prompted for your GitHub credentials, but can’t seem to type \textendash{} the terminal protects your private information by not displaying what you type.
+Simply type in what is requested, and press enter.
+
+
+\end{windowswit}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }create\PYGZhy{}sibling\PYGZhy{}github\PYG{+w}{ }\PYGZhy{}d\PYG{+w}{ }.\PYG{+w}{ }midtermproject
+\PYG{g+go}{.: github(\PYGZhy{}) [https://github.com/adswa/midtermproject.git (git)]}
+\PYG{g+go}{\PYGZsq{}https://github.com/adswa/midtermproject.git\PYGZsq{} configured as sibling \PYGZsq{}github\PYGZsq{} for \PYGZlt{}Dataset path=/home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101/midterm\PYGZus{}project\PYGZgt{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Verify that this worked by listing the siblings of the dataset:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }siblings
+\PYG{g+go}{[WARNING] Failed to determine if github carries annex.}
+\PYG{g+go}{.: here(+) [git]}
+\PYG{g+go}{.: github(\PYGZhy{}) [https://github.com/adswa/midtermproject.git (git)]}
+\end{sphinxVerbatim}
+
+\index{sibling (GitHub)@\spxentry{sibling}\spxextra{GitHub}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!sibling (GitHub)@\spxentry{sibling}\spxextra{GitHub}}\ignorespaces \begin{gitusernote}[label={index-15}, before title={\thetcbcounter\ }, check odd page=true]{Create-sibling-github internals}
+\label{\detokenize{basics/101-130-yodaproject:index-15}}
+
+\sphinxAtStartPar
+Creating a sibling on GitHub will create a new empty repository under the
+account that you provide and set up a \sphinxstyleemphasis{remote} to this repository. Upon a
+\sphinxcode{\sphinxupquote{datalad push}} to this sibling, your datasets history
+will be pushed there.
+
+
+\end{gitusernote}
+
+\index{push@\spxentry{push}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!push@\spxentry{push}}\index{push (dataset)@\spxentry{push}\spxextra{dataset}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!push (dataset)@\spxentry{push}\spxextra{dataset}}\ignorespaces 
+\sphinxAtStartPar
+On GitHub, you will see a new, empty repository with the name
+\sphinxcode{\sphinxupquote{midtermproject}}. However, the repository does not yet contain
+any of your dataset’s history or files. This requires \sphinxstyleemphasis{publishing} the current
+state of the dataset to this {\hyperref[\detokenize{glossary:term-sibling}]{\sphinxtermref{\DUrole{xref,std,std-term}{sibling}}}} with the \sphinxcode{\sphinxupquote{datalad push}}
+command.
+\begin{importantnote}[before title={\thetcbcounter\ }, check odd page=true]{Learn how to push “on the job”}
+
+\sphinxAtStartPar
+Publishing is one of the remaining big concepts that this book tries to
+convey. However, publishing is a complex concept that encompasses a large
+proportion of this book’s content so far as a prerequisite. In order to be
+not too overwhelmingly detailed, the upcoming sections will approach
+\sphinxcode{\sphinxupquote{datalad push}} from a “learning\sphinxhyphen{}by\sphinxhyphen{}doing” perspective:
+First, you will see a \sphinxcode{\sphinxupquote{datalad push}} to GitHub, and the {\hyperref[\detokenize{basics/101-130-yodaproject:fom-midtermclone}]{\sphinxcrossref{\DUrole{std,std-ref}{Findoutmore on the published dataset}}}} (\autopageref*{\detokenize{basics/101-130-yodaproject:fom-midtermclone}})
+at the end of this section will already give a practical glimpse into the
+difference between annexed contents and contents stored in Git when pushed
+to GitHub. The chapter {\hyperref[\detokenize{basics/basics-thirdparty:chapter-thirdparty}]{\sphinxcrossref{\DUrole{std,std-ref}{Distributing datasets}}}} (\autopageref*{\detokenize{basics/basics-thirdparty:chapter-thirdparty}}) will extend on this,
+but the section {\hyperref[\detokenize{basics/101-141-push:push}]{\sphinxcrossref{\DUrole{std,std-ref}{The datalad push command}}}} (\autopageref*{\detokenize{basics/101-141-push:push}})
+will finally combine and link all the previous contents to give a comprehensive
+and detailed wrap up of the concept of publishing datasets. In this section,
+you will also find a detailed overview on how \sphinxcode{\sphinxupquote{datalad push}} works and which
+options are available. If you are impatient or need an overview on publishing,
+feel free to skip ahead. If you have time to follow along, reading the next
+sections will get you towards a complete picture of publishing a bit more
+small\sphinxhyphen{}stepped and gently.
+For now, we will start with learning by doing, and
+the fundamental basics of \sphinxcode{\sphinxupquote{datalad push}}: The command
+will make the last saved state of your dataset available (i.e., publish it)
+to the {\hyperref[\detokenize{glossary:term-sibling}]{\sphinxtermref{\DUrole{xref,std,std-term}{sibling}}}} you provide with the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}to}} option.
+
+
+\end{importantnote}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }push\PYG{+w}{ }\PYGZhy{}\PYGZhy{}to\PYG{+w}{ }github
+\PYG{g+go}{copy(ok): pairwise\PYGZus{}relationships.png (file) [to github...]}
+\PYG{g+go}{copy(ok): prediction\PYGZus{}report.csv (file) [to github...]}
+\PYG{g+go}{publish(ok): . (dataset) [refs/heads/git\PYGZhy{}annex\PYGZhy{}\PYGZgt{}github:refs/heads/git\PYGZhy{}annex ✂FROM✂..✂TO✂]}
+\PYG{g+go}{publish(ok): . (dataset) [refs/heads/main\PYGZhy{}\PYGZgt{}github:refs/heads/main [new branch]]}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Thus, you have now published your dataset’s history to a public place for others
+to see and clone. Now we will explore how this may look and feel for others.
+\begin{gitusernote}[before title={\thetcbcounter\ }, check odd page=true]{Push internals}
+
+\sphinxAtStartPar
+The \sphinxcode{\sphinxupquote{datalad push}} uses \sphinxcode{\sphinxupquote{git push}}, and \sphinxcode{\sphinxupquote{git annex copy}} under
+the hood. Publication targets need to either be configured remote Git repositories,
+or git\sphinxhyphen{}annex special remotes (if they support data upload).
+
+
+\end{gitusernote}
+
+\sphinxAtStartPar
+There is one important detail first, though: By default, your tags will not be published.
+Thus, the tag \sphinxcode{\sphinxupquote{ready4analysis}} is not pushed to GitHub, and currently this
+version identifier is unavailable to anyone else but you.
+The reason for this is that tags are viral \textendash{} they can be removed locally, and old
+published tags can cause confusion or unwanted changes. In order to publish a tag,
+an additional \sphinxcode{\sphinxupquote{git push}}  with the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}tags}} option is required:
+
+\index{push@\spxentry{push}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!push@\spxentry{push}}\index{push (tag)@\spxentry{push}\spxextra{tag}!with Git@\spxentry{with Git}}\index{with Git@\spxentry{with Git}!push (tag)@\spxentry{push}\spxextra{tag}}\ignorespaces 
+\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-130-yodaproject:index-17}}}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }push\PYG{+w}{ }github\PYG{+w}{ }\PYGZhy{}\PYGZhy{}tags
+\end{sphinxVerbatim}
+
+\index{push (tag)@\spxentry{push}\spxextra{tag}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!push (tag)@\spxentry{push}\spxextra{tag}}\ignorespaces \begin{gitusernote}[label={index-18}, before title={\thetcbcounter\ }, check odd page=true]{Pushing tags}
+\label{\detokenize{basics/101-130-yodaproject:index-18}}
+
+\sphinxAtStartPar
+Note that this is a \sphinxcode{\sphinxupquote{git push}}, not \sphinxcode{\sphinxupquote{datalad push}}.
+Tags could be pushed upon a \sphinxcode{\sphinxupquote{datalad push}}, though, if one
+configures (what kind of) tags to be pushed. This would need to be done
+on a per\sphinxhyphen{}sibling basis in \sphinxcode{\sphinxupquote{.git/config}} in the \sphinxcode{\sphinxupquote{remote.*.push}}
+configuration. If you had a {\hyperref[\detokenize{glossary:term-sibling}]{\sphinxtermref{\DUrole{xref,std,std-term}{sibling}}}} “github”, the following
+configuration would push all tags that start with a \sphinxcode{\sphinxupquote{v}} upon a
+\sphinxcode{\sphinxupquote{datalad push \sphinxhyphen{}\sphinxhyphen{}to github}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }config\PYG{+w}{ }\PYGZhy{}\PYGZhy{}local\PYG{+w}{ }remote.github.push\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}refs/tags/v*\PYGZsq{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This configuration would result in the following entry in \sphinxcode{\sphinxupquote{.git/config}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{[remote \PYGZdq{}github\PYGZdq{}]}
+\PYG{+w}{      }\PYG{n+na}{url}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{git@github.com/adswa/midtermproject.git}
+\PYG{+w}{      }\PYG{n+na}{fetch}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{+refs/heads/*:refs/remotes/github/*}
+\PYG{+w}{      }\PYG{n+na}{annex\PYGZhy{}ignore}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{true}
+\PYG{+w}{      }\PYG{n+na}{push}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{refs/tags/v*}
+\end{sphinxVerbatim}
+
+
+\end{gitusernote}
+
+\sphinxAtStartPar
+Yay! Consider your midterm project submitted! Others can now install your
+dataset and check out your data science project \textendash{} and even better: they can
+reproduce your data science project easily from scratch!
+
+\index{work on published YODA dataset@\spxentry{work on published YODA dataset}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!work on published YODA dataset@\spxentry{work on published YODA dataset}}\index{rerun command@\spxentry{rerun command}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!rerun command@\spxentry{rerun command}}\ignorespaces 
+
+\subsection{On the looks and feels of a published dataset}
+\label{\detokenize{basics/101-130-yodaproject:on-the-looks-and-feels-of-a-published-dataset}}\label{\detokenize{basics/101-130-yodaproject:index-19}}
+\sphinxAtStartPar
+Now that you have created and published such a YODA\sphinxhyphen{}compliant dataset, you
+are understandably excited how this dataset must look and feel for others.
+Therefore, you decide to install this dataset into a new location on your
+computer, just to get a feel for it.
+
+\sphinxAtStartPar
+Replace the \sphinxcode{\sphinxupquote{url}} in the \sphinxcode{\sphinxupquote{datalad clone}} command with the path
+to your own \sphinxcode{\sphinxupquote{midtermproject}} GitHub repository, or clone the “public”
+\sphinxcode{\sphinxupquote{midterm\_project}} repository that is available via the online\sphinxhyphen{}handbook’s GitHub
+organization at \dlhbhref{G2G}{github.com/datalad\sphinxhyphen{}handbook/midterm\_project}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }../../
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }clone\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}https://github.com/adswa/midtermproject.git\PYGZdq{}}
+\PYG{g+go}{[INFO] Remote origin not usable by git\PYGZhy{}annex; setting annex\PYGZhy{}ignore}
+\PYG{g+go}{install(ok): /home/me/dl\PYGZhy{}101/midtermproject (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Let’s start with the subdataset, and see whether we can retrieve the
+input \sphinxcode{\sphinxupquote{iris.csv}} file. This should not be a problem, since its origin
+is recorded:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }midtermproject
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }get\PYG{+w}{ }input/iris.csv
+\PYG{g+go}{[INFO] Remote origin not usable by git\PYGZhy{}annex; setting annex\PYGZhy{}ignore}
+\PYG{g+go}{install(ok): /home/me/dl\PYGZhy{}101/midtermproject/input (dataset) [Installed subdataset in order to get /home/me/dl\PYGZhy{}101/midtermproject/input/iris.csv]}
+\PYG{g+go}{get(ok): input/iris.csv (file) [from web...]}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Nice, this worked well. The output files, however, cannot be easily
+retrieved:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }get\PYG{+w}{ }prediction\PYGZus{}report.csv\PYG{+w}{ }pairwise\PYGZus{}relationships.png
+\PYG{g+go}{get(error): pairwise\PYGZus{}relationships.png (file) [not available; (Note that these git remotes have annex\PYGZhy{}ignore set: origin)]}
+\PYG{g+go}{get(error): prediction\PYGZus{}report.csv (file) [not available; (Note that these git remotes have annex\PYGZhy{}ignore set: origin)]}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Why is that? This is the first detail of publishing datasets we will dive into.
+When publishing dataset content to GitHub with \sphinxcode{\sphinxupquote{datalad push}}, it is
+the dataset’s \sphinxstyleemphasis{history}, i.e., everything that is stored in Git, that is
+published. The file \sphinxstyleemphasis{content} of these particular files, though, is managed
+by {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}} and not stored in Git, and
+thus only information about the file name and location is known to Git.
+Because GitHub does not host large data for free, annexed file content always
+needs to be deposited somewhere else (e.g., a web server) to make it
+accessible via \sphinxcode{\sphinxupquote{datalad get}}. The chapter {\hyperref[\detokenize{basics/basics-thirdparty:chapter-thirdparty}]{\sphinxcrossref{\DUrole{std,std-ref}{Distributing datasets}}}} (\autopageref*{\detokenize{basics/basics-thirdparty:chapter-thirdparty}})
+will demonstrate how this can be done. For this dataset, it is not
+necessary to make the outputs available, though: Because all provenance
+on their creation was captured, we can simply recompute them with the
+\sphinxcode{\sphinxupquote{datalad rerun}} command. If the tag was published we can simply
+rerun any \sphinxcode{\sphinxupquote{datalad run}} command since this tag:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }rerun\PYG{+w}{ }\PYGZhy{}\PYGZhy{}since\PYG{+w}{ }ready4analysis
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+But without the published tag, we can rerun the analysis by specifying its
+shasum:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }rerun\PYG{+w}{ }d715890b✂SHA1
+\PYG{g+go}{[INFO] run commit d715890; (analyze iris data...)}
+\PYG{g+go}{run.remove(ok): pairwise\PYGZus{}relationships.png (file) [Removed file]}
+\PYG{g+go}{run.remove(ok): prediction\PYGZus{}report.csv (file) [Removed file]}
+\PYG{g+go}{[INFO] == Command start (output follows) =====}
+\PYG{g+go}{action summary:}
+\PYG{g+go}{  get (notneeded: 2)}
+\PYG{g+go}{[INFO] == Command exit (modification check follows) =====}
+\PYG{g+go}{run(ok): /home/me/dl\PYGZhy{}101/midtermproject (dataset) [python3 code/script.py]}
+\PYG{g+go}{add(ok): pairwise\PYGZus{}relationships.png (file)}
+\PYG{g+go}{add(ok): prediction\PYGZus{}report.csv (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\PYG{g+go}{action summary:}
+\PYG{g+go}{  add (ok: 2)}
+\PYG{g+go}{  get (notneeded: 3)}
+\PYG{g+go}{  run (ok: 1)}
+\PYG{g+go}{  run.remove (ok: 2)}
+\PYG{g+go}{  save (notneeded: 1, ok: 1)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Hooray, your analysis was reproduced! You happily note that rerunning your
+analysis was incredibly easy \textendash{} it would not even be necessary to have any
+knowledge about the analysis at all to reproduce it!
+With this, you realize again how letting DataLad take care of linking input,
+output, and code can make your life and others’ lives so much easier.
+Applying the YODA principles to your data analysis was very beneficial indeed.
+Proud of your midterm project you cannot wait to use those principles the
+next time again.
+
+\noindent\sphinxincludegraphics[width=0.500\linewidth]{{reproduced}.pdf}
+
+\index{push@\spxentry{push}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!push@\spxentry{push}}\ignorespaces \begin{gitusernote}[label={index-20}, before title={\thetcbcounter\ }, check odd page=true]{Push internals}
+\label{\detokenize{basics/101-130-yodaproject:index-20}}
+
+\sphinxAtStartPar
+The \sphinxcode{\sphinxupquote{datalad push}} uses \sphinxcode{\sphinxupquote{git push}}, and \sphinxcode{\sphinxupquote{git annex copy}} under
+the hood. Publication targets need to either be configured remote Git repositories,
+or git\sphinxhyphen{}annex {\hyperref[\detokenize{glossary:term-special-remote}]{\sphinxtermref{\DUrole{xref,std,std-term}{special remote}}}}s (if they support data upload).
+
+
+\end{gitusernote}
+
+\sphinxstepscope
+
+
+\section{Summary}
+\label{\detokenize{basics/101-128-summary_yoda:summary}}\label{\detokenize{basics/101-128-summary_yoda:summary-yoda}}\label{\detokenize{basics/101-128-summary_yoda::doc}}
+\sphinxAtStartPar
+The YODA principles are a small set of guidelines that can make a huge
+difference towards reproducibility, comprehensibility, and transparency
+in a data analysis project. By applying them in your own midterm analysis
+project, you have experienced their immediate benefits.
+
+\sphinxAtStartPar
+You also noticed that these standards are not complex \textendash{} quite the opposite,
+they are very intuitive.
+They structure essential components of a data analysis project \textendash{}
+data, code, potentially computational environments, and lastly also the results \textendash{}
+in a modular and practical way, and use basic principles and commands
+of DataLad you are already familiar with.
+
+\sphinxAtStartPar
+There are many advantages to this organization of contents.
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Having input data as independent dataset(s) that are not influenced (only
+consumed) by an analysis allows for a modular reuse of pure data datasets,
+and does not conflate the data of an analysis with the results or the code.
+You have experienced this with the \sphinxcode{\sphinxupquote{iris\_data}} subdataset.
+
+\item {} 
+\sphinxAtStartPar
+Keeping code within an independent, version\sphinxhyphen{}controlled directory, but as a part
+of the analysis dataset, makes sharing code easy and transparent, and helps
+to keep directories neat and organized. Moreover,
+with the data as subdatasets, data and code can be automatically shared together.
+By complying to this principle, you were able to submit both code and data
+in a single superdataset.
+
+\item {} 
+\sphinxAtStartPar
+Keeping an analysis dataset fully self\sphinxhyphen{}contained with relative instead of
+absolute paths in scripts is critical to ensure that an analysis reproduces
+easily on a different computer.
+
+\item {} 
+\sphinxAtStartPar
+DataLad’s Python API makes all of DataLad’s functionality available in
+Python, either as standalone functions that are exposed via \sphinxcode{\sphinxupquote{datalad.api}},
+or as methods of the \sphinxcode{\sphinxupquote{Dataset}} class.
+This provides an alternative to the command line, but it also opens up the
+possibility of performing DataLad commands directly inside of scripts.
+
+\item {} 
+\sphinxAtStartPar
+Including the computational environment into an analysis dataset encapsulates
+software and software versions, and thus prevents re\sphinxhyphen{}computation failures
+(or sudden differences in the results) once
+software is updated, and software conflicts arising on different machines
+than the one the analysis was originally conducted on. You have not yet
+experienced how to do this first\sphinxhyphen{}hand, but you will in a later section.
+
+\item {} 
+\sphinxAtStartPar
+Having all of these components as part of a DataLad dataset allows version
+controlling all pieces within the analysis regardless of their size, and
+generates provenance for everything, especially if you make use of the tools
+that DataLad provides. This way, anyone can understand and even reproduce
+your analysis without much knowledge about your project.
+
+\item {} 
+\sphinxAtStartPar
+The yoda procedure is a good starting point to build your next data analysis
+project up on.
+
+\end{itemize}
+
+
+\subsection{Now what can I do with it?}
+\label{\detokenize{basics/101-128-summary_yoda:now-what-can-i-do-with-it}}
+\sphinxAtStartPar
+Using tools that DataLad provides you are able to make the most out of
+your data analysis project. The YODA principles are a guide to accompany
+you on your path to reproducibility and provenance\sphinxhyphen{}tracking.
+
+\sphinxAtStartPar
+What should have become clear in this section is that you are already
+equipped with enough DataLad tools and knowledge that complying to these
+standards felt completely natural and effortless in your midterm analysis
+project.
+
+\sphinxstepscope
+
+

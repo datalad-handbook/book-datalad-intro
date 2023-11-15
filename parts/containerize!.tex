@@ -1,0 +1,920 @@
+\chapter{Containerize!}
+\label{\detokenize{basics/basics-containers:containerize}}\label{\detokenize{basics/basics-containers:chapter-containersrun}}\label{\detokenize{basics/basics-containers::doc}}
+\noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{forward}.pdf}\hspace*{\fill}}
+
+\sphinxstepscope
+
+\index{dataset nesting@\spxentry{dataset nesting}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!dataset nesting@\spxentry{dataset nesting}}\ignorespaces 
+
+\section{Turtles all the way down}
+\label{\detokenize{basics/101-132-advancednesting:turtles-all-the-way-down}}\label{\detokenize{basics/101-132-advancednesting:nesting2}}\label{\detokenize{basics/101-132-advancednesting:index-0}}\label{\detokenize{basics/101-132-advancednesting::doc}}
+\sphinxAtStartPar
+You may have noticed how working in the subdataset felt as if you would be
+working in an independent dataset \textendash{} there was no information or influence at
+all from the top\sphinxhyphen{}level \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} superdataset, and you build up a
+completely stand\sphinxhyphen{}alone history:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}\PYGZhy{}oneline
+\PYG{g+go}{6fc0d0f Provide project description}
+\PYG{g+go}{9aadac7 [DATALAD RUNCMD] analyze iris data with classification analysis}
+\PYG{g+go}{ca0c747 add script for kNN classification and plotting}
+\PYG{g+go}{4f945ed [DATALAD] Added subdataset}
+\PYG{g+go}{18f4a98 Apply YODA dataset setup}
+\PYG{g+go}{bf231d5 [DATALAD] new dataset}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+In principle, this is no news to you. From section {\hyperref[\detokenize{basics/101-106-nesting:nesting}]{\sphinxcrossref{\DUrole{std,std-ref}{Dataset nesting}}}} (\autopageref*{\detokenize{basics/101-106-nesting:nesting}}) and the
+YODA principles you already know that nesting allows for a modular reuse of
+any other DataLad dataset, and that this reuse is possible and simple
+precisely because all of the information is kept within a (sub)dataset.
+
+\sphinxAtStartPar
+What is new now, however, is that you applied changes to the dataset. While
+you already explored the looks and feels of the \sphinxcode{\sphinxupquote{longnow}} subdataset in
+previous sections, you now \sphinxstyleemphasis{modified} the contents of the \sphinxcode{\sphinxupquote{midterm\_project}}
+subdataset.
+How does this influence the superdataset, and how does this look like in the
+superdataset’s history? You know from section {\hyperref[\detokenize{basics/101-106-nesting:nesting}]{\sphinxcrossref{\DUrole{std,std-ref}{Dataset nesting}}}} (\autopageref*{\detokenize{basics/101-106-nesting:nesting}}) that the
+superdataset only stores the \sphinxstyleemphasis{state} of the subdataset. Upon creation of the
+dataset, the very first, initial state of the subdataset was thus recorded in
+the superdataset. But now, after you finished your project, your subdataset
+evolved. Let’s query the superdataset what it thinks about this.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} move into the superdataset}
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }../
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{ modified: midterm\PYGZus{}project (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+From the superdataset’s perspective, the subdataset appears as being
+“modified”. Note how it is not individual files that show up as “modified”, but
+indeed the complete subdataset as a single entity.
+
+\sphinxAtStartPar
+What this shows you is that the modifications of the subdataset you performed are not
+automatically recorded to the superdataset. This makes sense, after all it
+should be up to you to decide whether you want record something or not.
+But it is worth repeating: If you modify a subdataset, you will need to save
+this \sphinxstyleemphasis{in the superdataset} in order to have a clean superdataset status.
+
+\sphinxAtStartPar
+Let’s save the modification of the subdataset into the history of the
+superdataset. For this, to avoid confusion, you can specify explicitly to
+which dataset you want to save a modification. \sphinxcode{\sphinxupquote{\sphinxhyphen{}d .}} specifies the current
+dataset, i.e., \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}}, as the dataset to save to.
+The \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-save-subds}} {\hyperref[\detokenize{basics/101-132-advancednesting:fom-save-subds}]{\sphinxcrossref{\DUrole{std,std-ref}{on saving subdatasets}}}} (\autopageref*{\detokenize{basics/101-132-advancednesting:fom-save-subds}}) provides some more details.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}d\PYG{+w}{ }.\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}finished my midterm project\PYGZdq{}}\PYG{+w}{ }midterm\PYGZus{}project
+\PYG{g+go}{add(ok): midterm\PYGZus{}project (dataset)}
+\PYG{g+go}{add(ok): .gitmodules (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\index{save modification in nested dataset@\spxentry{save modification in nested dataset}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!save modification in nested dataset@\spxentry{save modification in nested dataset}}\ignorespaces \begin{findoutmore}[label={fom-save-subds}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{‘datalad save’ on nested datasets}
+\label{\detokenize{basics/101-132-advancednesting:fom-save-subds}}
+
+\sphinxAtStartPar
+In a superdataset with subdatasets, \sphinxcode{\sphinxupquote{datalad save}} by default
+tries to figure out on its own which dataset’s history of all available
+datasets a \sphinxcode{\sphinxupquote{datalad save}} should be written to. However, it can reduce
+confusion or allow specific operations to be very explicit in the command
+call and tell DataLad where to save what kind of modifications to.
+
+\sphinxAtStartPar
+If you want to save the current state of the subdataset into the superdataset
+(as necessary here), start a \sphinxcode{\sphinxupquote{save}} from the superdataset and have the
+\sphinxcode{\sphinxupquote{\sphinxhyphen{}d/\sphinxhyphen{}\sphinxhyphen{}dataset}} option point to its root:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} in the root of the superds}
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}d\PYG{+w}{ }.\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}update subdataset\PYGZdq{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+If you are in the superdataset, and you want to save an unsaved modification
+in a subdataset to the \sphinxstyleemphasis{subdatasets} history, let \sphinxcode{\sphinxupquote{\sphinxhyphen{}d/\sphinxhyphen{}\sphinxhyphen{}dataset}} point to
+the subdataset:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} in the superds}
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}d\PYG{+w}{ }path/to/subds\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}modified XY\PYGZdq{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The recursive option allows you to save any content underneath the specified
+directory, and recurse into any potential subdatasets:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }.\PYG{+w}{ }\PYGZhy{}\PYGZhy{}recursive
+\end{sphinxVerbatim}
+
+
+\end{findoutmore}
+
+\sphinxAtStartPar
+Let’s check which subproject commit is now recorded in the superdataset:
+
+\fvset{hllines={, 14,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}p\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{1}
+\PYG{g+go}{commit c5c90178✂SHA1}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    finished my midterm project}
+
+\PYG{g+go}{diff \PYGZhy{}\PYGZhy{}git a/midterm\PYGZus{}project b/midterm\PYGZus{}project}
+\PYG{g+go}{index 18f4a98..6fc0d0f 160000}
+\PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{} a/midterm\PYGZus{}project}
+\PYG{g+go}{+++ b/midterm\PYGZus{}project}
+\PYG{g+go}{@@ \PYGZhy{}1 +1 @@}
+\PYG{g+go}{\PYGZhy{}Subproject commit 18f4a981✂SHA1}
+\PYG{g+go}{+Subproject commit 6fc0d0f5✂SHA1}
+\end{sphinxVerbatim}
+\sphinxresetverbatimhllines
+
+\sphinxAtStartPar
+As you can see in the log entry, the subproject commit changed from the
+first commit hash in the subdataset history to the most recent one. With this
+change, therefore, your superdataset tracks the most recent version of
+the \sphinxcode{\sphinxupquote{midterm\_project}} dataset, and your dataset’s status is clean again.
+
+\sphinxAtStartPar
+This time in DataLad\sphinxhyphen{}101 is a convenient moment to dive a bit deeper
+into the functions of the \sphinxcode{\sphinxupquote{datalad status}} command. If you are
+interested in this, check out the \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-status}} {\hyperref[\detokenize{basics/101-132-advancednesting:fom-status}]{\sphinxcrossref{\DUrole{std,std-ref}{on this topic}}}} (\autopageref*{\detokenize{basics/101-132-advancednesting:fom-status}}).
+
+\index{status@\spxentry{status}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!status@\spxentry{status}}\index{check dataset for modification@\spxentry{check dataset for modification}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!check dataset for modification@\spxentry{check dataset for modification}}\ignorespaces \begin{findoutmore}[label={fom-status}, before title={\thetcbcounter\ }, float, check odd page=true]{More on ‘datalad status’}
+\label{\detokenize{basics/101-132-advancednesting:fom-status}}
+
+\sphinxAtStartPar
+First of all, let’s start with a quick overview of the different content \sphinxstyleemphasis{types}
+and content \sphinxstyleemphasis{states} various \sphinxcode{\sphinxupquote{datalad status}} commands in the course
+of DataLad\sphinxhyphen{}101 have shown up to this point.
+You have seen the following \sphinxstyleemphasis{content types}:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{file}}, e.g., \sphinxcode{\sphinxupquote{notes.txt}}: any file (or symlink that is a placeholder to an annexed file)
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{directory}}, e.g., \sphinxcode{\sphinxupquote{books}}: any directory that does not qualify for the \sphinxcode{\sphinxupquote{dataset}} type
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{symlink}}, e.g., the \sphinxcode{\sphinxupquote{.jgp}} that was manually unlocked in section {\hyperref[\detokenize{basics/101-110-run2:run3}]{\sphinxcrossref{\DUrole{std,std-ref}{Input and output}}}} (\autopageref*{\detokenize{basics/101-110-run2:run3}}):
+any symlink that is not used as a placeholder for an annexed file
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{dataset}}, e.g., the \sphinxcode{\sphinxupquote{midterm\_project}}: any top\sphinxhyphen{}level dataset, or any subdataset
+that is properly registered in the superdataset
+
+\end{itemize}
+
+\sphinxAtStartPar
+And you have seen the following \sphinxstyleemphasis{content states}: \sphinxcode{\sphinxupquote{modified}} and \sphinxcode{\sphinxupquote{untracked}}.
+The section {\hyperref[\detokenize{basics/101-136-filesystem:file-system}]{\sphinxcrossref{\DUrole{std,std-ref}{Dataset ops}}}} (\autopageref*{\detokenize{basics/101-136-filesystem:file-system}}) will show you many instances of \sphinxcode{\sphinxupquote{deleted}} content
+state as well.
+
+\sphinxAtStartPar
+But beyond understanding the report of \sphinxcode{\sphinxupquote{datalad status}}, there is also
+additional functionality:
+\sphinxcode{\sphinxupquote{datalad status}} can handle status reports for a whole hierarchy
+of datasets, and it can report on a subset of the content across any number of
+datasets in this hierarchy by providing selected paths. This is useful as soon
+as datasets become more complex and contain subdatasets with changing contents.
+
+\sphinxAtStartPar
+When performed without any arguments, \sphinxcode{\sphinxupquote{datalad status}} will report
+the state of the current dataset. However, you can specify a path to any
+sub\sphinxhyphen{} or superdataset with the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}dataset}} option.
+In order to demonstrate this a bit better, we will make sure that not only the
+state of the subdataset \sphinxstyleemphasis{within} the superdataset is modified, but also that the
+subdataset contains a modification. For this, let’s add an empty text file into
+the \sphinxcode{\sphinxupquote{midterm\_project}} subdataset:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }touch\PYG{+w}{ }midterm\PYGZus{}project/an\PYGZus{}empty\PYGZus{}file
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+If you are in the root of \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}}, but interested in the status
+\sphinxstyleemphasis{within} the subdataset, simply provide a path (relative to your current location)
+to the command:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status\PYG{+w}{ }midterm\PYGZus{}project
+\PYG{g+go}{untracked: midterm\PYGZus{}project/an\PYGZus{}empty\PYGZus{}file (file)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Alternatively, to achieve the same, specify the superdataset as the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}dataset}}
+and provide a path to the subdataset \sphinxstyleemphasis{with a trailing path separator} like
+this:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status\PYG{+w}{ }\PYGZhy{}d\PYG{+w}{ }.\PYG{+w}{ }midterm\PYGZus{}project/
+\PYG{g+go}{untracked: midterm\PYGZus{}project/an\PYGZus{}empty\PYGZus{}file (file)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Note that both of these commands return only the \sphinxcode{\sphinxupquote{untracked}} file and not
+not the \sphinxcode{\sphinxupquote{modified}} subdataset because we’re explicitly querying only the
+subdataset for its status.
+If you however, as done outside of this Find\sphinxhyphen{}out\sphinxhyphen{}more, you want to know about
+the subdataset record in the superdataset without causing a status query for
+the state \sphinxstyleemphasis{within} the subdataset itself, you can also provide an explicit
+path to the dataset (without a trailing path separator). This can be used
+to specify a specific subdataset in the case of a dataset with many subdatasets:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status\PYG{+w}{ }\PYGZhy{}d\PYG{+w}{ }.\PYG{+w}{ }midterm\PYGZus{}project
+\PYG{g+go}{ modified: midterm\PYGZus{}project (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+But if you are interested in both the state within the subdataset, and
+the state of the subdataset within the superdataset, you can combine the
+two paths:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status\PYG{+w}{ }\PYGZhy{}d\PYG{+w}{ }.\PYG{+w}{ }midterm\PYGZus{}project\PYG{+w}{ }midterm\PYGZus{}project/
+\PYG{g+go}{ modified: midterm\PYGZus{}project (dataset)}
+\PYG{g+go}{untracked: midterm\PYGZus{}project/an\PYGZus{}empty\PYGZus{}file (file)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Finally, if these subtle differences in the paths are not easy to memorize,
+the \sphinxcode{\sphinxupquote{\sphinxhyphen{}r/\sphinxhyphen{}\sphinxhyphen{}recursive}} option will also report you both status aspects:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status\PYG{+w}{ }\PYGZhy{}\PYGZhy{}recursive
+\PYG{g+go}{ modified: midterm\PYGZus{}project (dataset)}
+\PYG{g+go}{untracked: midterm\PYGZus{}project/an\PYGZus{}empty\PYGZus{}file (file)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Importantly, the regular output from a \sphinxcode{\sphinxupquote{datalad status}} command in the commandline is “condensed” to the most important information by a tailored result renderer.
+You can, however, also get \sphinxcode{\sphinxupquote{status}}’ unfiltered full output by switching the \sphinxcode{\sphinxupquote{\sphinxhyphen{}f}}/\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}output\sphinxhyphen{}format}} from \sphinxcode{\sphinxupquote{tailored}} (the default) to \sphinxcode{\sphinxupquote{json}} or, for the same infos as \sphinxcode{\sphinxupquote{json}} but better readability, \sphinxcode{\sphinxupquote{json\_pp}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }\PYGZhy{}f\PYG{+w}{ }json\PYGZus{}pp\PYG{+w}{ }status\PYG{+w}{ }\PYGZhy{}d\PYG{+w}{ }.\PYG{+w}{ }midterm\PYGZus{}project
+\PYG{g+go}{\PYGZob{}}
+\PYG{g+go}{  \PYGZdq{}action\PYGZdq{}: \PYGZdq{}status\PYGZdq{},}
+\PYG{g+go}{  \PYGZdq{}gitshasum\PYGZdq{}: \PYGZdq{}6fc0d0f5✂SHA1\PYGZdq{},}
+\PYG{g+go}{  \PYGZdq{}parentds\PYGZdq{}: \PYGZdq{}/home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101\PYGZdq{},}
+\PYG{g+go}{  \PYGZdq{}path\PYGZdq{}: \PYGZdq{}/home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101/midterm\PYGZus{}project\PYGZdq{},}
+\PYG{g+go}{  \PYGZdq{}prev\PYGZus{}gitshasum\PYGZdq{}: \PYGZdq{}6fc0d0f5✂SHA1\PYGZdq{},}
+\PYG{g+go}{  \PYGZdq{}refds\PYGZdq{}: \PYGZdq{}/home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101\PYGZdq{},}
+\PYG{g+go}{  \PYGZdq{}state\PYGZdq{}: \PYGZdq{}modified\PYGZdq{},}
+\PYG{g+go}{  \PYGZdq{}status\PYGZdq{}: \PYGZdq{}ok\PYGZdq{},}
+\PYG{g+go}{  \PYGZdq{}type\PYGZdq{}: \PYGZdq{}dataset\PYGZdq{}}
+\PYG{g+go}{\PYGZcb{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This still was not all of the available functionality of the
+\sphinxcode{\sphinxupquote{datalad status}} command. You could, for example, adjust whether and
+how untracked dataset content should be reported with the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}untracked}}
+option, or get additional information from annexed content with the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}annex}}
+option (especially powerful when combined with \sphinxcode{\sphinxupquote{\sphinxhyphen{}f json\_pp}}). To get a complete overview on what you could do, check out the technical
+documentation of \sphinxcode{\sphinxupquote{datalad status}} \dlhbhref{D1C}{here}.
+
+\sphinxAtStartPar
+Before we leave this Find\sphinxhyphen{}out\sphinxhyphen{}more, lets undo the modification of the subdataset
+by removing the untracked file:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }rm\PYG{+w}{ }midterm\PYGZus{}project/an\PYGZus{}empty\PYGZus{}file
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status\PYG{+w}{ }\PYGZhy{}\PYGZhy{}recursive
+\PYG{g+go}{nothing to save, working tree clean}
+\end{sphinxVerbatim}
+
+
+\end{findoutmore}
+
+\sphinxAtStartPar
+While there is much more to say and discover about this topic, this section showed the basic handling of datasets that are composed of, arbitrarily deeply, nested datasets.
+Each (sub)dataset can be simultaneously: 1) an independently managed data module, usable and reusable in different contexts; and 2) a tightly integrated component that contributes to a look and feel of such a multi\sphinxhyphen{}unit dataset that is not unlike a \dlhbhref{W1M}{mono repo}.
+The nesting pattern can be repeated as often as necessary or sensible.
+It can be “turtles all the way down”.
+
+\sphinxstepscope
+
+
+\section{Computational reproducibility with software containers}
+\label{\detokenize{basics/101-133-containersrun:computational-reproducibility-with-software-containers}}\label{\detokenize{basics/101-133-containersrun:containersrun}}\label{\detokenize{basics/101-133-containersrun::doc}}
+\sphinxAtStartPar
+Just after submitting your midterm data analysis project, you get together
+with your friends. “I’m curious: So what kind of analyses did y’all carry out?”
+you ask. The variety of methods and datasets the others used is huge, and
+one analysis interests you in particular. Later that day, you decide to
+install this particular analysis dataset to learn more about the methods used
+in there. However, when you \sphinxcode{\sphinxupquote{datalad rerun}} your friends analysis script,
+it throws an error. Hastily, you call her \textendash{} maybe she can quickly fix her
+script and resubmit the project with only minor delays. “I don’t know what
+you mean”, you hear in return.
+“On my machine, everything works fine!”
+
+\sphinxAtStartPar
+On its own, DataLad datasets can contain almost anything that is relevant to
+ensure reproducibility: Data, code, human\sphinxhyphen{}readable analysis descriptions
+(e.g., \sphinxcode{\sphinxupquote{README.md}} files), provenance on the origin of all files
+obtained from elsewhere, and machine\sphinxhyphen{}readable records that link generated
+outputs to the commands, scripts, and data they were created from.
+
+\sphinxAtStartPar
+This however may not be sufficient to ensure that an analysis \sphinxstyleemphasis{reproduces}
+(i.e., produces the same or highly similar results), let alone \sphinxstyleemphasis{works} on a
+computer different than the one it was initially composed on. This is because
+the analysis does not only depend on data and code, but also the
+\sphinxstyleemphasis{software environment} that it is conducted in.
+
+\sphinxAtStartPar
+A lack of information about the operating system of the computer, the precise
+versions of installed software, or their configurations may
+make it impossible to replicate your analysis on a different machine, or even
+on your own machine once a new software update is installed. Therefore, it is
+important to communicate all details about the computational environment for
+an analysis as thoroughly as possible. Luckily, DataLad provides an extension
+that can link computational environments to datasets, the
+\dlhbhref{D1E}{datalad containers}
+extension.
+
+\sphinxAtStartPar
+This section will give a quick overview on what containers are and
+demonstrate how \sphinxcode{\sphinxupquote{datalad\sphinxhyphen{}container}} helps to capture full provenance of an
+analysis by linking containers to datasets and analyses.
+\begin{importantnote}[before title={\thetcbcounter\ }, check odd page=true]{Install the datalad-container extension}
+
+\sphinxAtStartPar
+This section uses the {\hyperref[\detokenize{glossary:term-DataLad-extension}]{\sphinxtermref{\DUrole{xref,std,std-term}{DataLad extension}}}} \sphinxcode{\sphinxupquote{datalad\sphinxhyphen{}container}}.
+As other extensions, it is a stand\sphinxhyphen{}alone Python package, and can be installed using {\hyperref[\detokenize{glossary:term-pip}]{\sphinxtermref{\DUrole{xref,std,std-term}{pip}}}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYGZdl{}\PYG{+w}{ }pip\PYG{+w}{ }install\PYG{+w}{ }datalad\PYGZhy{}container
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+As with DataLad and other Python packages, you might want to do the installation in a {\hyperref[\detokenize{glossary:term-virtual-environment}]{\sphinxtermref{\DUrole{xref,std,std-term}{virtual environment}}}}.
+
+
+\end{importantnote}
+
+\index{recipe@\spxentry{recipe}!software container concept@\spxentry{software container concept}}\index{software container concept@\spxentry{software container concept}!recipe@\spxentry{recipe}}\index{image@\spxentry{image}!software container concept@\spxentry{software container concept}}\index{software container concept@\spxentry{software container concept}!image@\spxentry{image}}\index{container@\spxentry{container}!software container concept@\spxentry{software container concept}}\index{software container concept@\spxentry{software container concept}!container@\spxentry{container}}\ignorespaces 
+
+\subsection{Containers}
+\label{\detokenize{basics/101-133-containersrun:containers}}\label{\detokenize{basics/101-133-containersrun:index-0}}
+\sphinxAtStartPar
+To put it simple, computational containers are cut\sphinxhyphen{}down virtual machines that
+allow you to package all software libraries and their dependencies (all in the
+precise version your analysis requires) into a bundle you can share with
+others. On your own and other’s machines, the container constitutes a secluded
+software environment that
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+contains the exact software environment that you specified, ready to run
+analyses
+
+\item {} 
+\sphinxAtStartPar
+does not effect any software outside of the container
+
+\end{itemize}
+
+\sphinxAtStartPar
+Unlike virtual machines, software containers do not run a full operating
+system on virtualized hardware. Instead, they use basic services of the host operating system
+(in a read\sphinxhyphen{}only fashion). This makes them
+lightweight and still portable. By sharing software environments with containers,
+others (and also yourself) have easy access to the correct software
+without the need to modify the software environment of the machine the
+container runs on. Thus, containers are ideal to encapsulate the software
+environment and share it together with the analysis code and data to ensure
+computational reproducibility of your analyses, or to create a suitable
+software environment on a computer that you do not have permissions to deploy
+software on.
+
+\sphinxAtStartPar
+There are a number of different tools to create and use containers, with
+\dlhbhref{D9}{Docker} being one of the most well\sphinxhyphen{}known of them.
+While being a powerful tool, it is only rarely used on high performance computing
+(HPC) infrastructure%
+\begin{footnote}\sphinxAtStartFootnote
+The main reason why Docker is not deployed on HPC systems is because
+it grants users “\dlhbhref{W1V}{superuser privileges}”.
+On multi\sphinxhyphen{}user systems such as HPC, users should not have those
+privileges, as it would enable them to tamper with other’s or shared
+data and resources, posing a severe security threat.
+%
+\end{footnote}. An alternative is \dlhbhref{S8A}{Singularity}.
+Both of these tools share core terminology:
+\begin{description}
+\sphinxlineitem{{\hyperref[\detokenize{glossary:term-container-recipe}]{\sphinxtermref{\DUrole{xref,std,std-term}{container recipe}}}}}
+\sphinxAtStartPar
+A text file that lists all required components of the computational environment.
+It is made by a human user.
+
+\sphinxlineitem{{\hyperref[\detokenize{glossary:term-container-image}]{\sphinxtermref{\DUrole{xref,std,std-term}{container image}}}}}
+\sphinxAtStartPar
+This is \sphinxstyleemphasis{built} from the recipe file. It is a static file system inside a file,
+populated with the software specified in the recipe, and some initial configuration.
+
+\sphinxlineitem{{\hyperref[\detokenize{glossary:term-container}]{\sphinxtermref{\DUrole{xref,std,std-term}{container}}}}}
+\sphinxAtStartPar
+A running instance of an image that you can actually use for your computations.
+If you want to create and run your own software container, you start by writing
+a recipe file and build an image from it. Alternatively, you can can also \sphinxstyleemphasis{pull}
+an image built from a publicly shared recipe from the \sphinxstyleemphasis{Hub} of the tool you are using.
+
+\sphinxlineitem{hub}
+\sphinxAtStartPar
+A storage resource to share and consume images. Examples are
+{\hyperref[\detokenize{glossary:term-Singularity-Hub}]{\sphinxtermref{\DUrole{xref,std,std-term}{Singularity\sphinxhyphen{}Hub}}}}, {\hyperref[\detokenize{glossary:term-Docker-Hub}]{\sphinxtermref{\DUrole{xref,std,std-term}{Docker\sphinxhyphen{}Hub}}}}, and \dlhbhref{A2A}{Amazon ECR} which hosts Docker images.
+
+\end{description}
+
+\sphinxAtStartPar
+Note that as of now, the \sphinxcode{\sphinxupquote{datalad\sphinxhyphen{}container}} extension supports
+Singularity and Docker images.
+Singularity furthermore is compatible with Docker \textendash{} you can use
+Docker images as a basis for Singularity images, or run Docker images with
+Singularity (even without having Docker installed).
+See the \textit{Windows-wit}~{\windowswiticoninline}\textit{\ref{ww-docker}} {\hyperref[\detokenize{basics/101-133-containersrun:ww-docker}]{\sphinxcrossref{\DUrole{std,std-ref}{on Docker}}}} (\autopageref*{\detokenize{basics/101-133-containersrun:ww-docker}}) for installation options.
+\begin{importantnote}[before title={\thetcbcounter\ }, check odd page=true]{Additional requirement: Singularity}
+
+\sphinxAtStartPar
+To use Singularity containers you have to
+\dlhbhref{S2B}{install} the software singularity.
+
+
+\end{importantnote}
+
+\index{installation@\spxentry{installation}!Docker@\spxentry{Docker}}\index{Docker@\spxentry{Docker}!installation@\spxentry{installation}}\index{install Docker@\spxentry{install Docker}!on Windows@\spxentry{on Windows}}\index{on Windows@\spxentry{on Windows}!install Docker@\spxentry{install Docker}}\ignorespaces \begin{windowswit}[label={ww-docker}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{Docker installation}
+\label{\detokenize{basics/101-133-containersrun:ww-docker}}
+
+\sphinxAtStartPar
+The software singularity is not available for Windows.
+Windows users therefore need to install {\hyperref[\detokenize{glossary:term-Docker}]{\sphinxtermref{\DUrole{xref,std,std-term}{Docker}}}}.
+The currently recommended way to do so is by installing \dlhbhref{D5A}{Docker Desktop}, and use its “WSL2” backend (a choice one can set during the installation).
+In the case of an “outdated WSL kernel version” issue, run \sphinxcode{\sphinxupquote{wsl \sphinxhyphen{}\sphinxhyphen{}update}} in a regular Windows Command Prompt (CMD).
+After the installation, run Docker Desktop, and wait several minutes for it to start the Docker engine in the background.
+To verify that everything works as it should, run \sphinxcode{\sphinxupquote{docker ps}} in a Windows Command Prompt (CMD).
+If it reports an error that asks “Is the docker daemon running?” give it a few more minutes to let Docker Desktop start it.
+If it can’t find the docker command, something went wrong during installation.
+
+
+\end{windowswit}
+
+\index{containers\sphinxhyphen{}add@\spxentry{containers\sphinxhyphen{}add}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!containers\sphinxhyphen{}add@\spxentry{containers\sphinxhyphen{}add}}\index{containers\sphinxhyphen{}run@\spxentry{containers\sphinxhyphen{}run}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!containers\sphinxhyphen{}run@\spxentry{containers\sphinxhyphen{}run}}\ignorespaces 
+
+\subsection{Using \sphinxstyleliteralintitle{\sphinxupquote{datalad containers}}}
+\label{\detokenize{basics/101-133-containersrun:using-datalad-containers}}\label{\detokenize{basics/101-133-containersrun:index-2}}
+\sphinxAtStartPar
+One core feature of the \sphinxcode{\sphinxupquote{datalad containers}} extension is that it registers
+computational containers with a dataset. This is done with the
+\sphinxcode{\sphinxupquote{datalad containers\sphinxhyphen{}add}} command.
+Once a container is registered, arbitrary commands can be executed inside of
+it, i.e., in the precise software environment the container encapsulates. All it
+needs for this it to swap the \sphinxcode{\sphinxupquote{datalad run}} command introduced in
+section {\hyperref[\detokenize{basics/101-108-run:run}]{\sphinxcrossref{\DUrole{std,std-ref}{Keeping track}}}} (\autopageref*{\detokenize{basics/101-108-run:run}}) with the \sphinxcode{\sphinxupquote{datalad containers\sphinxhyphen{}run}} command.
+
+\sphinxAtStartPar
+Let’s see this in action for the \sphinxcode{\sphinxupquote{midterm\_analysis}} dataset by rerunning
+the analysis you did for the midterm project within a Singularity container.
+We start by registering a container to the dataset.
+For this, we will pull an image from Singularity hub. This image was made
+for the online\sphinxhyphen{}handbook, and it contains the relevant Python setup for
+the analysis. Its recipe lives in the online\sphinxhyphen{}handbook’s
+\dlhbhref{G2K}{resources repository}.
+If you are curious how to create a Singularity image, the \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-container-creation}} {\hyperref[\detokenize{basics/101-133-containersrun:fom-container-creation}]{\sphinxcrossref{\DUrole{std,std-ref}{on this topic}}}} (\autopageref*{\detokenize{basics/101-133-containersrun:fom-container-creation}}) has some pointers:
+
+\index{build container image@\spxentry{build container image}!with Singularity@\spxentry{with Singularity}}\index{with Singularity@\spxentry{with Singularity}!build container image@\spxentry{build container image}}\ignorespaces \begin{findoutmore}[label={fom-container-creation}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{How to make a Singularity image}
+\label{\detokenize{basics/101-133-containersrun:fom-container-creation}}
+
+\sphinxAtStartPar
+Singularity containers are build from image files, often
+called “recipes”, that hold a “definition” of the software container and its
+contents and components. The
+\dlhbhref{S2A}{singularity documentation}
+has its own tutorial on how to build such images from scratch.
+An alternative to writing the image file by hand is to use
+\dlhbhref{G2A}{Neurodocker}. This
+command\sphinxhyphen{}line program can help you generate custom Singularity recipes (and
+also \sphinxcode{\sphinxupquote{Dockerfiles}}, from which Docker images are built). A wonderful tutorial
+on how to use Neurodocker is
+\dlhbhref{G14A}{this introduction}
+by Michael Notter.
+
+\sphinxAtStartPar
+Once a recipe exists, the command
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }sudo\PYG{+w}{ }singularity\PYG{+w}{ }build\PYG{+w}{ }\PYGZlt{}NAME\PYGZgt{}\PYG{+w}{ }\PYGZlt{}RECIPE\PYGZgt{}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+will build a container (called \sphinxcode{\sphinxupquote{\textless{}NAME\textgreater{}}}) from the recipe. Note that this
+command requires \sphinxcode{\sphinxupquote{root}} privileges (”\sphinxcode{\sphinxupquote{sudo}}”). You can build the container
+on any machine, though, not necessarily the one that is later supposed to
+actually run the analysis, e.g., your own laptop versus a compute cluster.
+
+
+\end{findoutmore}
+
+\index{add container image to dataset@\spxentry{add container image to dataset}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!add container image to dataset@\spxentry{add container image to dataset}}\ignorespaces 
+\sphinxAtStartPar
+The \sphinxcode{\sphinxupquote{datalad containers\sphinxhyphen{}add}} command takes an arbitrary
+name to give to the container, and a path or URL to a container image:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} we are in the midterm\PYGZus{}project subdataset}
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }containers\PYGZhy{}add\PYG{+w}{ }midterm\PYGZhy{}software\PYG{+w}{ }\PYGZhy{}\PYGZhy{}url\PYG{+w}{ }shub://adswa/resources:2
+\PYG{g+go}{[INFO] Initializing special remote datalad}
+\PYG{g+go}{add(ok): .datalad/config (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\PYG{g+go}{add(ok): .datalad/config (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\PYG{g+go}{containers\PYGZus{}add(ok): /home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101/midterm\PYGZus{}project/.datalad/environments/midterm\PYGZhy{}software/image (file)}
+\end{sphinxVerbatim}
+
+\index{hub@\spxentry{hub}!Docker@\spxentry{Docker}}\index{Docker@\spxentry{Docker}!hub@\spxentry{hub}}\ignorespaces \begin{findoutmore}[label={fom-container-add}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{How do I add an image from Docker-Hub, Amazon ECR, or a local container?}
+\label{\detokenize{basics/101-133-containersrun:fom-container-add}}
+
+\sphinxAtStartPar
+Should the image you want to use sit on Dockerhub, specify the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}url}}
+option prefixed with \sphinxcode{\sphinxupquote{docker://}} or \sphinxcode{\sphinxupquote{dhub://}} instead of \sphinxcode{\sphinxupquote{shub://}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }containers\PYGZhy{}add\PYG{+w}{ }midterm\PYGZhy{}software\PYG{+w}{ }\PYGZhy{}\PYGZhy{}url\PYG{+w}{ }docker://adswa/resources:2
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+If your image lives on Amazon ECR, use a \sphinxcode{\sphinxupquote{dhub://}} prefix followed by the AWS ECR URL as in
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }containers\PYGZhy{}add\PYG{+w}{ }\PYGZhy{}\PYGZhy{}url\PYG{+w}{ }dhub://12345678.dkr.ecr.us\PYGZhy{}west\PYGZhy{}2.amazonaws.com/maze\PYGZhy{}code/data\PYGZhy{}import:latest\PYG{+w}{ }data\PYGZhy{}import
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+If you want to add a container that exists locally, specify the path to it
+like this:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }containers\PYGZhy{}add\PYG{+w}{ }midterm\PYGZhy{}software\PYG{+w}{ }\PYGZhy{}\PYGZhy{}url\PYG{+w}{ }path/to/container
+\end{sphinxVerbatim}
+
+
+\end{findoutmore}
+
+\sphinxAtStartPar
+This command downloaded the container from Singularity Hub, added it to
+the \sphinxcode{\sphinxupquote{midterm\_project}} dataset.
+This is not the only possible source for containers.
+Check the \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-container-add}} {\hyperref[\detokenize{basics/101-133-containersrun:fom-container-add}]{\sphinxcrossref{\DUrole{std,std-ref}{on more ways to add images}}}} (\autopageref*{\detokenize{basics/101-133-containersrun:fom-container-add}}).
+Once added, containers can be listed or removed.
+The \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-container-remove}} {\hyperref[\detokenize{basics/101-133-containersrun:fom-container-remove}]{\sphinxcrossref{\DUrole{std,std-ref}{on this topic}}}} (\autopageref*{\detokenize{basics/101-133-containersrun:fom-container-remove}}) shows how.
+
+\sphinxAtStartPar
+Adding a container recorded basic information on the
+container under its name “midterm\sphinxhyphen{}software” in the dataset’s configuration at
+\sphinxcode{\sphinxupquote{.datalad/config}}. You can find out more about them in an upcoming dedicated section on these additional configurations.
+Such configurations can, among other things, be important to ensure correct container invocation on specific systems or across systems.
+One example is \sphinxstyleemphasis{bind\sphinxhyphen{}mounting} directories into containers, i.e., making a specific directory and its contents available inside a container.
+Different containerization software (versions) or configurations of those determine \sphinxstyleemphasis{default bind\sphinxhyphen{}mounts} on a given system.
+Thus, depending on the system and the location of the dataset on this system, a shared dataset may be automatically bind\sphinxhyphen{}mounted or not.
+To ensure that the dataset is correctly bind\sphinxhyphen{}mounted on all systems, let’s add a call\sphinxhyphen{}format specification with a bind\sphinxhyphen{}mount to the current working directory.
+
+\index{configuration.item@\spxentry{configuration.item}!datalad.containers.\textless{}name\textgreater{}.cmdexec@\spxentry{datalad.containers.\textless{}name\textgreater{}.cmdexec}}\ignorespaces 
+\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-133-containersrun:index-6}}}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }config\PYG{+w}{ }\PYGZhy{}f\PYG{+w}{ }.datalad/config\PYG{+w}{ }datalad.containers.midterm\PYGZhy{}software.cmdexec\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}singularity exec \PYGZhy{}B \PYGZob{}\PYGZob{}pwd\PYGZcb{}\PYGZcb{} \PYGZob{}img\PYGZcb{} \PYGZob{}cmd\PYGZcb{}\PYGZsq{}}
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}Modify the container call format to bind\PYGZhy{}mount the working directory\PYGZdq{}}
+\PYG{g+go}{add(ok): .datalad/config (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\index{run command with provenance capture@\spxentry{run command with provenance capture}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!run command with provenance capture@\spxentry{run command with provenance capture}}\index{run command@\spxentry{run command}!with DataLad containers\sphinxhyphen{}run@\spxentry{with DataLad containers\sphinxhyphen{}run}}\index{with DataLad containers\sphinxhyphen{}run@\spxentry{with DataLad containers\sphinxhyphen{}run}!run command@\spxentry{run command}}\ignorespaces 
+\sphinxAtStartPar
+Now that we have a complete computational environment linked to the \sphinxcode{\sphinxupquote{midterm\_project}}
+dataset, we can execute commands in this environment. Let us, for example, try to repeat
+the \sphinxcode{\sphinxupquote{datalad run}} command from the section {\hyperref[\detokenize{basics/101-130-yodaproject:yoda-project}]{\sphinxcrossref{\DUrole{std,std-ref}{YODA\sphinxhyphen{}compliant data analysis projects}}}} (\autopageref*{\detokenize{basics/101-130-yodaproject:yoda-project}}) as a
+\sphinxcode{\sphinxupquote{datalad containers\sphinxhyphen{}run}} command.
+
+\sphinxAtStartPar
+The previous \sphinxcode{\sphinxupquote{run}} command looked like this:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }run\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}analyze iris data with classification analysis\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{  }\PYGZhy{}\PYGZhy{}input\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}input/iris.csv\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{  }\PYGZhy{}\PYGZhy{}output\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}pairwise\PYGZus{}relationships.png\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{  }\PYGZhy{}\PYGZhy{}output\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}prediction\PYGZus{}report.csv\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{  }\PYG{l+s+s2}{\PYGZdq{}python3 code/script.py \PYGZob{}inputs\PYGZcb{} \PYGZob{}outputs\PYGZcb{}\PYGZdq{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+How would it look like as a \sphinxcode{\sphinxupquote{containers\sphinxhyphen{}run}} command?
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }containers\PYGZhy{}run\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}rerun analysis in container\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{  }\PYGZhy{}\PYGZhy{}container\PYGZhy{}name\PYG{+w}{ }midterm\PYGZhy{}software\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{  }\PYGZhy{}\PYGZhy{}input\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}input/iris.csv\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{  }\PYGZhy{}\PYGZhy{}output\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}pairwise\PYGZus{}relationships.png\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{  }\PYGZhy{}\PYGZhy{}output\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}prediction\PYGZus{}report.csv\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{+w}{  }\PYG{l+s+s2}{\PYGZdq{}python3 code/script.py \PYGZob{}inputs\PYGZcb{} \PYGZob{}outputs\PYGZcb{}\PYGZdq{}}
+\PYG{g+go}{unlock(ok): pairwise\PYGZus{}relationships.png (file)}
+\PYG{g+go}{unlock(ok): prediction\PYGZus{}report.csv (file)}
+\PYG{g+go}{[INFO] == Command start (output follows) =====}
+\PYG{g+go}{[INFO] == Command exit (modification check follows) =====}
+\PYG{g+go}{run(ok): /home/me/dl\PYGZhy{}101/DataLad\PYGZhy{}101/midterm\PYGZus{}project (dataset) [singularity exec \PYGZhy{}B /home/me/dl\PYGZhy{}101/Data...]}
+\PYG{g+go}{add(ok): pairwise\PYGZus{}relationships.png (file)}
+\PYG{g+go}{add(ok): prediction\PYGZus{}report.csv (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\PYG{g+go}{action summary:}
+\PYG{g+go}{  add (ok: 2)}
+\PYG{g+go}{  get (notneeded: 4)}
+\PYG{g+go}{  run (ok: 1)}
+\PYG{g+go}{  save (notneeded: 1, ok: 1)}
+\PYG{g+go}{  unlock (ok: 2)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Almost exactly like a \sphinxcode{\sphinxupquote{datalad run}} command! The only additional parameter
+is \sphinxcode{\sphinxupquote{container\sphinxhyphen{}name}}. At this point, though, the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}container\sphinxhyphen{}name}}
+flag is even \sphinxstyleemphasis{optional} because there is only a single container registered to the dataset.
+But if your dataset contains more than one container you will \sphinxstyleemphasis{need} to specify
+the name of the container you want to use in your command.
+The complete command’s structure looks like this:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }containers\PYGZhy{}run\PYG{+w}{ }\PYGZhy{}\PYGZhy{}name\PYG{+w}{ }\PYGZlt{}containername\PYGZgt{}\PYG{+w}{ }\PYG{o}{[}\PYGZhy{}m\PYG{+w}{ }...\PYG{o}{]}\PYG{+w}{ }\PYG{o}{[}\PYGZhy{}\PYGZhy{}input\PYG{+w}{ }...\PYG{o}{]}\PYG{+w}{ }\PYG{o}{[}\PYGZhy{}\PYGZhy{}output\PYG{+w}{ }...\PYG{o}{]}\PYG{+w}{ }\PYGZlt{}COMMAND\PYGZgt{}
+\end{sphinxVerbatim}
+
+\index{containers\sphinxhyphen{}remove@\spxentry{containers\sphinxhyphen{}remove}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!containers\sphinxhyphen{}remove@\spxentry{containers\sphinxhyphen{}remove}}\index{containers\sphinxhyphen{}list@\spxentry{containers\sphinxhyphen{}list}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!containers\sphinxhyphen{}list@\spxentry{containers\sphinxhyphen{}list}}\index{list known containers@\spxentry{list known containers}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!list known containers@\spxentry{list known containers}}\ignorespaces \begin{findoutmore}[label={fom-container-remove}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{How can I list available containers or remove them?}
+\label{\detokenize{basics/101-133-containersrun:fom-container-remove}}
+
+\sphinxAtStartPar
+The command \sphinxcode{\sphinxupquote{datalad containers\sphinxhyphen{}list}} will list all containers in
+the current dataset:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }containers\PYGZhy{}list
+\PYG{g+go}{midterm\PYGZhy{}software \PYGZhy{}\PYGZgt{} .datalad/environments/midterm\PYGZhy{}software/image}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The command \sphinxcode{\sphinxupquote{datalad containers\sphinxhyphen{}remove}} will remove a container
+from the dataset, if there exists a container with name given to the
+command. Note that this will remove not only the image from the dataset,
+but also the configuration for it in \sphinxcode{\sphinxupquote{.datalad/config}}.
+
+
+\end{findoutmore}
+
+\sphinxAtStartPar
+Here is how the history entry looks like:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}p\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{1}
+\PYG{g+go}{commit 4f00ad07✂SHA1}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    [DATALAD RUNCMD] rerun analysis in container}
+
+\PYG{g+go}{    === Do not change lines below ===}
+\PYG{g+go}{    \PYGZob{}}
+\PYG{g+go}{     \PYGZdq{}chain\PYGZdq{}: [],}
+\PYG{g+go}{     \PYGZdq{}cmd\PYGZdq{}: \PYGZdq{}singularity exec \PYGZhy{}B \PYGZob{}pwd\PYGZcb{} .datalad/environments/midterm\PYGZhy{}software/image python3 code/script.py \PYGZob{}inputs\PYGZcb{} \PYGZob{}outputs\PYGZcb{}\PYGZdq{},}
+\PYG{g+go}{     \PYGZdq{}dsid\PYGZdq{}: \PYGZdq{}d95bafc8\PYGZhy{}f2a4\PYGZhy{}d27b\PYGZhy{}dcf4\PYGZhy{}bb99f4bea973\PYGZdq{},}
+\PYG{g+go}{     \PYGZdq{}exit\PYGZdq{}: 0,}
+\PYG{g+go}{     \PYGZdq{}extra\PYGZus{}inputs\PYGZdq{}: [}
+\PYG{g+go}{      \PYGZdq{}.datalad/environments/midterm\PYGZhy{}software/image\PYGZdq{}}
+\PYG{g+go}{     ],}
+\PYG{g+go}{     \PYGZdq{}inputs\PYGZdq{}: [}
+\PYG{g+go}{      \PYGZdq{}input/iris.csv\PYGZdq{}}
+\PYG{g+go}{     ],}
+\PYG{g+go}{     \PYGZdq{}outputs\PYGZdq{}: [}
+\PYG{g+go}{      \PYGZdq{}pairwise\PYGZus{}relationships.png\PYGZdq{},}
+\PYG{g+go}{      \PYGZdq{}prediction\PYGZus{}report.csv\PYGZdq{}}
+\PYG{g+go}{     ],}
+\PYG{g+go}{     \PYGZdq{}pwd\PYGZdq{}: \PYGZdq{}.\PYGZdq{}}
+\PYG{g+go}{    \PYGZcb{}}
+\PYG{g+go}{    \PYGZca{}\PYGZca{}\PYGZca{} Do not change lines above \PYGZca{}\PYGZca{}\PYGZca{}}
+
+\PYG{g+go}{diff \PYGZhy{}\PYGZhy{}git a/pairwise\PYGZus{}relationships.png b/pairwise\PYGZus{}relationships.png}
+\PYG{g+go}{index a24e6b9..963d5a8 120000}
+\PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{} a/pairwise\PYGZus{}relationships.png}
+\PYG{g+go}{+++ b/pairwise\PYGZus{}relationships.png}
+\PYG{g+go}{@@ \PYGZhy{}1 +1 @@}
+\PYG{g+go}{\PYGZhy{}.git/annex/objects/G3/Mg/✂/MD5E\PYGZhy{}s260649\PYGZhy{}\PYGZhy{}127313ad✂MD5.png}
+\PYG{g+go}{\PYGZbs{} No newline at end of file}
+\PYG{g+go}{+.git/annex/objects/q1/gp/✂/MD5E\PYGZhy{}s261062\PYGZhy{}\PYGZhy{}025dc493✂MD5.png}
+\PYG{g+go}{\PYGZbs{} No newline at end of file}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+If you would \sphinxcode{\sphinxupquote{datalad rerun}} this commit, it would be re\sphinxhyphen{}executed in the
+software container registered to the dataset. If you would share the dataset
+with a friend and they would \sphinxcode{\sphinxupquote{datalad rerun}} this commit, the image would first
+be obtained from its registered url, and thus your
+friend can obtain the correct execution environment automatically.
+
+\sphinxAtStartPar
+Note that because this new \sphinxcode{\sphinxupquote{datalad containers\sphinxhyphen{}run}} command modified the
+\sphinxcode{\sphinxupquote{midterm\_project}} subdirectory, we need to also save
+the most recent state of the subdataset to the superdataset \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}}.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }../
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{ modified: midterm\PYGZus{}project (dataset)}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}d\PYG{+w}{ }.\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}add container and execute analysis within container\PYGZdq{}}\PYG{+w}{ }midterm\PYGZus{}project
+\PYG{g+go}{add(ok): midterm\PYGZus{}project (dataset)}
+\PYG{g+go}{add(ok): .gitmodules (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Software containers, the \sphinxcode{\sphinxupquote{datalad\sphinxhyphen{}container}} extension, and DataLad thus work well together
+to make your analysis completely reproducible \textendash{} by not only linking code, data,
+and outputs, but also the software environment of an analysis. And this does not
+only benefit your future self, but also whomever you share your dataset with, as
+the information about the container is shared together with the dataset. How cool
+is that?
+
+\index{DataLad concept@\spxentry{DataLad concept}!container image registration@\spxentry{container image registration}}\index{container image registration@\spxentry{container image registration}!DataLad concept@\spxentry{DataLad concept}}\ignorespaces 
+\sphinxAtStartPar
+What changes in .datalad/config when one adds a container?
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }.datalad/config
+\PYG{g+go}{[datalad \PYGZdq{}dataset\PYGZdq{}]}
+\PYG{g+go}{	id = d95bafc8\PYGZhy{}f2a4\PYGZhy{}d27b\PYGZhy{}dcf4\PYGZhy{}bb99f4bea973}
+\PYG{g+go}{[datalad \PYGZdq{}containers.midterm\PYGZhy{}software\PYGZdq{}]}
+\PYG{g+go}{	image = .datalad/environments/midterm\PYGZhy{}software/image}
+\PYG{g+go}{	cmdexec = singularity exec \PYGZob{}img\PYGZcb{} \PYGZob{}cmd\PYGZcb{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This recorded the image’s origin on Singularity\sphinxhyphen{}Hub, the location of the
+image in the dataset under \sphinxcode{\sphinxupquote{.datalad/environments/\textless{}NAME\textgreater{}/image}}, and it
+specifies the way in which the container should be used: The line
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n+na}{cmdexec}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{singularity exec \PYGZob{}img\PYGZcb{} \PYGZob{}cmd\PYGZcb{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+can be read as: “If this container is used, take the \sphinxcode{\sphinxupquote{cmd}} (what you wrap in a
+\sphinxcode{\sphinxupquote{datalad containers\sphinxhyphen{}run}} command) and plug it into a
+\sphinxcode{\sphinxupquote{ singularity exec}} command. The mode of calling Singularity,
+namely \sphinxcode{\sphinxupquote{exec}}, means that the command will be executed inside of the container.
+
+\sphinxAtStartPar
+You can configure this call format by modifying it in the config file, or calling \sphinxcode{\sphinxupquote{datalad containers\sphinxhyphen{}add}} with the option \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}call\sphinxhyphen{}fmt \textless{}alternative format\textgreater{}}}.
+This can be useful to, for example, automatically bind\sphinxhyphen{}mount the current working directory in the container.
+In the alternative call format, the placeholders \sphinxcode{\sphinxupquote{\{img\}}}, \sphinxcode{\sphinxupquote{\{cmd\}}}, and \sphinxcode{\sphinxupquote{\{img\_dspath\}}} (a relative path to the dataset containing the image) are available.
+In all other cases with variables that use curly brackets, you need to escape them with another curly bracket.
+Here is an example call format that bind\sphinxhyphen{}mounts the current working directory (and thus the dataset) automatically:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }containers\PYGZhy{}add\PYG{+w}{ }\PYGZhy{}\PYGZhy{}call\PYGZhy{}fmt\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}singularity exec \PYGZhy{}B \PYGZob{}\PYGZob{}pwd\PYGZcb{}\PYGZcb{} \PYGZhy{}\PYGZhy{}cleanenv \PYGZob{}img\PYGZcb{} \PYGZob{}cmd\PYGZcb{}\PYGZsq{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Note that the image is saved under \sphinxcode{\sphinxupquote{.datalad/environments}} and the
+configuration is done in \sphinxcode{\sphinxupquote{.datalad/config}} \textendash{} as these files are version
+controlled and shared with together with a dataset, your software
+container and the information where it can be reobtained from are linked
+to your dataset.
+
+\sphinxAtStartPar
+This is how the \sphinxcode{\sphinxupquote{containers\sphinxhyphen{}add}} command is recorded in your history:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{1}\PYG{+w}{ }\PYGZhy{}p
+\PYG{g+go}{commit 54aad5de✂SHA1}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    [DATALAD] Configure containerized environment \PYGZsq{}midterm\PYGZhy{}software\PYGZsq{}}
+
+\PYG{g+go}{diff \PYGZhy{}\PYGZhy{}git a/.datalad/config b/.datalad/config}
+\PYG{g+go}{index e99ec14..ad3e5d8 100644}
+\PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{} a/.datalad/config}
+\PYG{g+go}{+++ b/.datalad/config}
+\PYG{g+go}{@@ \PYGZhy{}1,2 +1,5 @@}
+\PYG{g+go}{ [datalad \PYGZdq{}dataset\PYGZdq{}]}
+\PYG{g+go}{ 	id = d95bafc8\PYGZhy{}f2a4\PYGZhy{}d27b\PYGZhy{}dcf4\PYGZhy{}bb99f4bea973}
+\PYG{g+go}{+[datalad \PYGZdq{}containers.midterm\PYGZhy{}software\PYGZdq{}]}
+\PYG{g+go}{+	image = .datalad/environments/midterm\PYGZhy{}software/image}
+\PYG{g+go}{+	cmdexec = singularity exec \PYGZob{}img\PYGZcb{} \PYGZob{}cmd\PYGZcb{}}
+\PYG{g+go}{diff \PYGZhy{}\PYGZhy{}git a/.datalad/environments/midterm\PYGZhy{}software/image b/.datalad/environments/midterm\PYGZhy{}software/image}
+\PYG{g+go}{new file mode 120000}
+\PYG{g+go}{index 0000000..75c8b41}
+\PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{} /dev/null}
+\PYG{g+go}{+++ b/.datalad/environments/midterm\PYGZhy{}software/image}
+\PYG{g+go}{@@ \PYGZhy{}0,0 +1 @@}
+\PYG{g+go}{+../../../.git/annex/objects/F1/K3/✂/MD5E\PYGZhy{}s230694943\PYGZhy{}\PYGZhy{}944b0300✂MD5}
+\PYG{g+go}{\PYGZbs{} No newline at end of file}
+\end{sphinxVerbatim}
+
+\sphinxstepscope
+
+
+\section{Summary}
+\label{\detokenize{basics/101-134-summary:summary}}\label{\detokenize{basics/101-134-summary:summary-containers}}\label{\detokenize{basics/101-134-summary::doc}}
+\sphinxAtStartPar
+The last two sections have first of all extended your knowledge on dataset nesting:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+When subdatasets are created or installed, they are registered to the superdataset
+in their current version state (as identified by their most recent commit’s hash).
+For a freshly created subdatasets, the most recent commit is at the same time its
+first commit.
+
+\item {} 
+\sphinxAtStartPar
+Once the subdataset evolves, the superdataset recognizes this as a \sphinxcode{\sphinxupquote{modification}}
+of the subdatasets version state. If you want to record this, you need to
+\sphinxcode{\sphinxupquote{datalad save}} it in the superdataset:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}a short summary of changes in subds\PYGZdq{}}\PYG{+w}{ }\PYGZlt{}path\PYG{+w}{ }to\PYG{+w}{ }subds\PYGZgt{}
+\end{sphinxVerbatim}
+
+\end{itemize}
+
+\sphinxAtStartPar
+But more than nesting concepts, they have also extended your knowledge on
+reproducible analyses with \sphinxcode{\sphinxupquote{datalad run}} and you have experienced
+for yourself why and how software containers can go hand\sphinxhyphen{}in\sphinxhyphen{}hand with DataLad:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+A software container encapsulates a complete software environment, independent
+from the environment of the computer it runs on. This allows you to create or
+use secluded software and also share it together with your analysis to ensure
+computational reproducibility. The DataLad extension
+\dlhbhref{D1E}{datalad containers}
+can make this possible.
+
+\item {} 
+\sphinxAtStartPar
+The command \sphinxcode{\sphinxupquote{datalad containers\sphinxhyphen{}add}} registers an {\hyperref[\detokenize{glossary:term-container-image}]{\sphinxtermref{\DUrole{xref,std,std-term}{container image}}}} from a path or
+URL to your dataset.
+
+\item {} 
+\sphinxAtStartPar
+If you use \sphinxcode{\sphinxupquote{datalad containers\sphinxhyphen{}run}} instead of \sphinxcode{\sphinxupquote{datalad run}},
+you can reproducibly execute a command of your choice \sphinxstyleemphasis{within} the software
+environment.
+
+\item {} 
+\sphinxAtStartPar
+A \sphinxcode{\sphinxupquote{datalad rerun}} of a commit produced with \sphinxcode{\sphinxupquote{datalad containers\sphinxhyphen{}run}}
+will re\sphinxhyphen{}execute the command in the same software environment.
+
+\end{itemize}
+
+\index{hub@\spxentry{hub}!Docker@\spxentry{Docker}}\index{Docker@\spxentry{Docker}!hub@\spxentry{hub}}\ignorespaces 
+
+\subsection{Now what can I do with it?}
+\label{\detokenize{basics/101-134-summary:now-what-can-i-do-with-it}}\label{\detokenize{basics/101-134-summary:index-0}}
+\sphinxAtStartPar
+For one, you will not be surprised if you ever see a subdataset being shown as
+\sphinxcode{\sphinxupquote{modified}} by \sphinxcode{\sphinxupquote{datalad status}}: You now know that if a subdataset
+evolves, it’s most recent state needs to be explicitly saved to the superdatasets
+history.
+
+\sphinxAtStartPar
+On a different matter, you are now able to capture and share analysis provenance that
+includes the relevant software environment. This does not only make your analyses
+projects automatically reproducible, but automatically \sphinxstyleemphasis{computationally} reproducible \sphinxhyphen{}
+you can make sure that your analyses runs on any computer with Singularity,
+regardless of the software environment on this computer. Even if you are unsure how you can wrap up an
+environment into a software {\hyperref[\detokenize{glossary:term-container-image}]{\sphinxtermref{\DUrole{xref,std,std-term}{container image}}}} at this point, you could make use of
+hundreds of publicly available images on \dlhbhref{S5}{Singularity\sphinxhyphen{}Hub} and
+\dlhbhref{D6}{Docker\sphinxhyphen{}Hub}.
+
+\sphinxAtStartPar
+With this, you have also gotten a first glimpse into an extension of DataLad: A
+Python module you can install with Python package managers such as \sphinxcode{\sphinxupquote{pip}} that
+extends DataLad’s functionality.
+
+\sphinxstepscope
+
+

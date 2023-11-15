@@ -1,0 +1,40 @@
+\frontmatter
+
+\begin{titlepage}
+\raggedleft
+\rule{1pt}{\textheight}
+\hspace{0.05\textwidth}
+\parbox[b]{0.75\textwidth}{
+  \hfill{\footnotesize \version}\\[1\baselineskip]
+
+  \vspace{-11.8mm}
+
+  \hspace{-1mm}\includegraphics[width=0.75\textwidth]{datalad_logo_wide_bw.pdf}\\
+
+  \vspace{-8.5mm}
+  {\Large\sffamily\bfseries An Introduction}
+
+  \vspace{8mm}
+
+  {\large\textsc{Adina S.~Wagner \& Michael~Hanke}\\[1\baselineskip]}
+  {\small \textit{with}}\\[1\baselineskip]
+  {
+  \raggedright
+  \withauthors\\
+  }
+}
+\clearpage
+\input{imprint.sty}
+\end{titlepage}
+
+
+\fancypagestyle{plain}{%
+  \fancyhead[LE]{\small\thepage}
+  \fancyhead[RO]{\small\thepage}
+  \fancyhead[RE]{\small\nouppercase{\leftmark}}
+  \fancyhead[LO]{\small\nouppercase{\rightmark}}
+  % keep the head rule, we only have 2mm headsep and need the
+  % visual guide
+  %\renewcommand*{\headrule}{}%
+  \fancyfoot{}%
+}

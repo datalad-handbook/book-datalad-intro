@@ -1,0 +1,1622 @@
+\chapter{Tuning datasets to your needs}
+\label{\detokenize{basics/basics-configuration:tuning-datasets-to-your-needs}}\label{\detokenize{basics/basics-configuration:chapter-config}}\label{\detokenize{basics/basics-configuration:id1}}\label{\detokenize{basics/basics-configuration::doc}}
+\noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{settings}.pdf}\hspace*{\fill}}
+
+\sphinxstepscope
+
+
+\section{Local configuration}
+\label{\detokenize{basics/101-122-config:local-configuration}}\label{\detokenize{basics/101-122-config:config}}\label{\detokenize{basics/101-122-config::doc}}
+\sphinxAtStartPar
+Back in section {\hyperref[\detokenize{basics/101-114-txt2git:text2git}]{\sphinxcrossref{\DUrole{std,std-ref}{Data safety}}}} (\autopageref*{\detokenize{basics/101-114-txt2git:text2git}}), you already learned that there
+are dataset configurations, and that these configurations can
+be modified, for example, with the \sphinxcode{\sphinxupquote{\sphinxhyphen{}c text2git}} option.
+This option applies a configuration template to store text
+files in {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}} instead of {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}}, and thereby
+modifies the DataLad dataset’s default configuration to store
+every file in git\sphinxhyphen{}annex.
+
+\sphinxAtStartPar
+The lecture today focuses entirely on the topic of configurations,
+and aims to equip everyone with the basics to configure
+their general and dataset specific setup to their needs.
+This is not only a handy way to tune a dataset to one’s
+wishes, but also helpful to understand potential differences in
+command execution and file handling between two users,
+computers, or datasets.
+
+\sphinxAtStartPar
+“First of all, when we talk about configurations, we have
+to differentiate between different scopes of configuration,
+and different tools the configuration belongs or applies to”,
+our lecturer starts. “In DataLad datasets, different tools can
+have a configuration: {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}}, {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}}, and
+DataLad itself. Because these tools are all
+combined by DataLad to help you manage your data,
+it is important to understand how the configuration of one
+software is used by or influences a second tool, or the overall
+dataset performance.”
+
+\sphinxAtStartPar
+“Oh crap, one of these theoretical lectures again” mourns a
+student from the row behind you. Personally, you’d also
+be much more excited
+about any hands\sphinxhyphen{}on lecture filled with commands. But the
+recent lecture about {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}} and the {\hyperref[\detokenize{glossary:term-object-tree}]{\sphinxtermref{\DUrole{xref,std,std-term}{object\sphinxhyphen{}tree}}}}
+was surprisingly captivating, so you are actually looking forward to today.
+“Shht! I want to hear this!”, you shush him with a wink.
+
+\sphinxAtStartPar
+“We will start by looking into the very first configuration
+you did, already before the course started: The \sphinxstyleemphasis{global}
+Git configuration.” the lecturer says.
+
+\index{config@\spxentry{config}!Git command@\spxentry{Git command}}\index{Git command@\spxentry{Git command}!config@\spxentry{config}}\ignorespaces 
+\sphinxAtStartPar
+At one point in time, you likely followed instructions such as
+in {\hyperref[\detokenize{intro/installation:install}]{\sphinxcrossref{\DUrole{std,std-ref}{Installation and configuration}}}} (\autopageref*{\detokenize{intro/installation:install}}) and configured your
+\sphinxstyleemphasis{Git identity} with the commands:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }config\PYG{+w}{ }\PYGZhy{}\PYGZhy{}global\PYG{+w}{ }\PYGZhy{}\PYGZhy{}add\PYG{+w}{ }user.name\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}Elena Piscopia\PYGZdq{}}
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }config\PYG{+w}{ }\PYGZhy{}\PYGZhy{}global\PYG{+w}{ }\PYGZhy{}\PYGZhy{}add\PYG{+w}{ }user.email\PYG{+w}{ }elena@example.net
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+“What the above commands do is very simple: They search for
+a specific configuration file, and set the variables specified
+in the command \textendash{} in this case user name and user email address
+\textendash{} to the values provided with the command.” she explains.
+
+\sphinxAtStartPar
+“This general procedure, specifying a value for a configuration
+variable in a configuration file, is how you can configure the
+different tools to your needs. The configuration, therefore,
+is really easy. Even if you are only used to ticking boxes
+in the \sphinxcode{\sphinxupquote{settings}} tab of a software tool so far, it’s intuitive
+to understand how a configuration file in principle works and also
+how to use it. The only piece of information you will need
+are the necessary files, or the command that writes to them, and
+the available options for configuration, that’s it. And what’s
+really cool is that all tools we’ll be looking at \textendash{} Git, git\sphinxhyphen{}annex,
+and DataLad \textendash{} can be configured using the \sphinxcode{\sphinxupquote{git config}}
+command%
+\begin{footnote}\sphinxAtStartFootnote
+As an alternative to a \sphinxcode{\sphinxupquote{git config}} command, you could also run configuration
+templates or procedures that apply predefined configurations or in some cases even
+add the information to the configuration file by hand and save it using an editor of your choice. See {\hyperref[\detokenize{basics/101-124-procedures:procedures}]{\sphinxcrossref{\DUrole{std,std-ref}{Configurations to go}}}} (\autopageref*{\detokenize{basics/101-124-procedures:procedures}}) for more info.
+%
+\end{footnote}. Therefore, once you understand the syntax of this
+command, you already know half of what’s relevant. The other half
+is understanding what you are doing. Now then, let’s learn \sphinxstyleemphasis{how}
+to configure settings, but also \sphinxstyleemphasis{understand} what we are doing
+with these configurations.”
+
+\sphinxAtStartPar
+“This seems easy enough”, you think. Let’s see what types of
+configurations there are.
+
+
+\subsection{Git config files}
+\label{\detokenize{basics/101-122-config:git-config-files}}
+\sphinxAtStartPar
+The user name and email configuration
+is a \sphinxstyleemphasis{user\sphinxhyphen{}specific} configuration (called \sphinxstyleemphasis{global}
+configuration by Git), and therefore applies to your user account.
+Wherever on your computer \sphinxstyleemphasis{you} run a Git, git\sphinxhyphen{}annex, or DataLad
+command, this global configuration will
+associate the name and email address you supplied in
+the \sphinxcode{\sphinxupquote{git config}} commands above with this action.
+For example, whenever you
+\sphinxcode{\sphinxupquote{datalad save}}, the information in this file is used for the
+history entry about commit author and email.
+
+\sphinxAtStartPar
+Apart from \sphinxstyleemphasis{global} Git configurations, there are also \sphinxstyleemphasis{system\sphinxhyphen{}wide}%
+\begin{footnote}\sphinxAtStartFootnote
+The third scope of a Git configuration are the system wide configurations.
+These are stored (if they exist) in \sphinxcode{\sphinxupquote{/etc/gitconfig}} and contain settings that would
+apply to every user on the computer you are using. These configurations
+are not relevant for DataLad\sphinxhyphen{}101, and we will thus skip them. You can
+read more about Git’s configurations and different files
+\dlhbhref{G1K}{here}.
+%
+\end{footnote}
+and \sphinxstyleemphasis{repository} configurations. Each of these configurations
+resides in its own file. The global configuration is stored in a file called
+\sphinxcode{\sphinxupquote{.gitconfig}} in your home directory. Among
+your name and email address, this file can store general
+per\sphinxhyphen{}user configurations, such as a default editor%
+\begin{footnote}\sphinxAtStartFootnote
+If your default editor is {\hyperref[\detokenize{glossary:term-vim}]{\sphinxtermref{\DUrole{xref,std,std-term}{vim}}}} and you do not like this, now can be the time
+to change it! Chose either of two options:
+\begin{enumerate}
+\sphinxsetlistlabels{\arabic}{enumi}{enumii}{}{)}%
+\item {} 
+\sphinxAtStartPar
+Open up the file with an editor for your choice (e.g., \dlhbhref{H2A}{nano}), and either paste the following configuration or edit it if it already exists:
+
+\end{enumerate}
+
+\sphinxSetupCodeBlockInFootnote
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{[core]}
+\PYG{+w}{    }\PYG{n+na}{editor}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{nano}
+\end{sphinxVerbatim}
+\begin{enumerate}
+\sphinxsetlistlabels{\arabic}{enumi}{enumii}{}{)}%
+\setcounter{enumi}{1}
+\item {} 
+\sphinxAtStartPar
+Run the following command, but exchange \sphinxcode{\sphinxupquote{nano}} with an editor of your choice:
+
+\end{enumerate}
+
+\sphinxSetupCodeBlockInFootnote
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n+na}{\PYGZdl{} git config \PYGZhy{}\PYGZhy{}global \PYGZhy{}\PYGZhy{}add core.editor \PYGZdq{}nano\PYGZdq{}}
+\end{sphinxVerbatim}
+%
+\end{footnote}, or highlighting
+options.
+
+\sphinxAtStartPar
+The \sphinxstyleemphasis{repository\sphinxhyphen{}specific} configurations apply to each individual
+repository. Their scope is more limited than the \sphinxstyleemphasis{global}
+configuration (namely to a single repository), but it can overrule global
+configurations: The more specific the scope of a configuration file is, the more
+important it is, and the variables in the more specific configuration
+will take precedence over variables in less specific configuration files.
+One could, for example, have {\hyperref[\detokenize{glossary:term-vim}]{\sphinxtermref{\DUrole{xref,std,std-term}{vim}}}} configured to be the default editor
+on a global scope, but could overrule this by setting the editor to \sphinxcode{\sphinxupquote{nano}}
+in a given repository. For this reason, the repository\sphinxhyphen{}specific configuration
+does not reside in a file in your home directory, but in \sphinxcode{\sphinxupquote{.git/config}}
+within every Git repository (and thus DataLad dataset).
+
+\sphinxAtStartPar
+Thus, there are three different scopes of Git configuration, and each is defined
+in a \sphinxcode{\sphinxupquote{config}} file in a different location. The configurations will determine
+how Git behaves. In principle, all of these files can configure
+the same variables differently, but more specific scopes take precedence over broader
+scopes. Conveniently, not only can DataLad and git\sphinxhyphen{}annex be configured with
+the same command as Git, but in many cases they will also use exactly the same
+files as Git for their own configurations.
+
+\index{configuration file@\spxentry{configuration file}!.git/config@\spxentry{.git/config}|spxpagem}\ignorespaces 
+\sphinxAtStartPar
+Let’s find out how the repository\sphinxhyphen{}specific configuration file in the \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}}
+superdataset looks like:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }.git/config
+\PYG{g+go}{[core]}
+\PYG{g+go}{	repositoryformatversion = 0}
+\PYG{g+go}{	filemode = true}
+\PYG{g+go}{	bare = false}
+\PYG{g+go}{	logallrefupdates = true}
+\PYG{g+go}{[annex]}
+\PYG{g+go}{	uuid = 46b169aa\PYGZhy{}bb91\PYGZhy{}42d6\PYGZhy{}be06\PYGZhy{}355d957fb4f7}
+\PYG{g+go}{	version = 10}
+\PYG{g+go}{[filter \PYGZdq{}annex\PYGZdq{}]}
+\PYG{g+go}{	smudge = git\PYGZhy{}annex smudge \PYGZhy{}\PYGZhy{} \PYGZpc{}f}
+\PYG{g+go}{	clean = git\PYGZhy{}annex smudge \PYGZhy{}\PYGZhy{}clean \PYGZhy{}\PYGZhy{} \PYGZpc{}f}
+\PYG{g+go}{	process = git\PYGZhy{}annex filter\PYGZhy{}process}
+\PYG{g+go}{[submodule \PYGZdq{}recordings/longnow\PYGZdq{}]}
+\PYG{g+go}{	active = true}
+\PYG{g+go}{	url = https://github.com/datalad\PYGZhy{}datasets/longnow\PYGZhy{}podcasts.git}
+\PYG{g+go}{[remote \PYGZdq{}roommate\PYGZdq{}]}
+\PYG{g+go}{	url = ../mock\PYGZus{}user/DataLad\PYGZhy{}101}
+\PYG{g+go}{	fetch = +refs/heads/*:refs/remotes/roommate/*}
+\PYG{g+go}{	annex\PYGZhy{}uuid = ✂UUID✂}
+\PYG{g+go}{	annex\PYGZhy{}ignore = false}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This file consists of so called “sections” with the section names
+in square brackets (e.g., \sphinxcode{\sphinxupquote{core}}). Occasionally, a section can have
+subsections: This is indicated by subsection names in
+quotation marks after the section name. For example, \sphinxcode{\sphinxupquote{roommate}} is a subsection
+of the section \sphinxcode{\sphinxupquote{remote}}.
+Within each section, \sphinxcode{\sphinxupquote{variable = value}} pairs specify configurations
+for the given (sub)section.
+
+\index{configure editor@\spxentry{configure editor}!with Git@\spxentry{with Git}}\index{with Git@\spxentry{with Git}!configure editor@\spxentry{configure editor}}\ignorespaces 
+\sphinxAtStartPar
+The first section is called \sphinxcode{\sphinxupquote{core}} \textendash{} as the name suggests,
+this configures core Git functionality. There are
+\dlhbhref{G1L}{many more}
+configurations than the ones in this config file, but
+they are related to Git, and less related or important to the configuration of
+a DataLad dataset. We will use this section to showcase the anatomy of the
+\sphinxcode{\sphinxupquote{git config}} command. If, for example, you would want to specifically
+configure {\hyperref[\detokenize{glossary:term-nano}]{\sphinxtermref{\DUrole{xref,std,std-term}{nano}}}} to be the default editor in this dataset, you
+can do it like this:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }config\PYG{+w}{ }\PYGZhy{}\PYGZhy{}local\PYG{+w}{ }\PYGZhy{}\PYGZhy{}add\PYG{+w}{ }core.editor\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}nano\PYGZdq{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The command consists of the base command \sphinxcode{\sphinxupquote{git config}},
+a specification of the scope of the configuration with the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}local}}
+flag, a \sphinxcode{\sphinxupquote{name}} specification consisting of section and key with the
+notation \sphinxcode{\sphinxupquote{section.variable}} (here: \sphinxcode{\sphinxupquote{core.editor}}), and finally the value
+specification \sphinxcode{\sphinxupquote{"nano"}}.
+
+\sphinxAtStartPar
+Let’s see what has changed:
+
+\fvset{hllines={, 7,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }.git/config
+\PYG{g+go}{[core]}
+\PYG{g+go}{	repositoryformatversion = 0}
+\PYG{g+go}{	filemode = true}
+\PYG{g+go}{	bare = false}
+\PYG{g+go}{	logallrefupdates = true}
+\PYG{g+go}{	editor = nano}
+\PYG{g+go}{[annex]}
+\PYG{g+go}{	uuid = 46b169aa\PYGZhy{}bb91\PYGZhy{}42d6\PYGZhy{}be06\PYGZhy{}355d957fb4f7}
+\PYG{g+go}{	version = 10}
+\PYG{g+go}{[filter \PYGZdq{}annex\PYGZdq{}]}
+\PYG{g+go}{	smudge = git\PYGZhy{}annex smudge \PYGZhy{}\PYGZhy{} \PYGZpc{}f}
+\PYG{g+go}{	clean = git\PYGZhy{}annex smudge \PYGZhy{}\PYGZhy{}clean \PYGZhy{}\PYGZhy{} \PYGZpc{}f}
+\PYG{g+go}{	process = git\PYGZhy{}annex filter\PYGZhy{}process}
+\PYG{g+go}{[submodule \PYGZdq{}recordings/longnow\PYGZdq{}]}
+\PYG{g+go}{	active = true}
+\PYG{g+go}{	url = https://github.com/datalad\PYGZhy{}datasets/longnow\PYGZhy{}podcasts.git}
+\PYG{g+go}{[remote \PYGZdq{}roommate\PYGZdq{}]}
+\PYG{g+go}{	url = ../mock\PYGZus{}user/DataLad\PYGZhy{}101}
+\PYG{g+go}{	fetch = +refs/heads/*:refs/remotes/roommate/*}
+\PYG{g+go}{	annex\PYGZhy{}uuid = ✂UUID✂}
+\PYG{g+go}{	annex\PYGZhy{}ignore = false}
+\end{sphinxVerbatim}
+\sphinxresetverbatimhllines
+
+\sphinxAtStartPar
+With this additional line in your repository’s Git configuration, \sphinxcode{\sphinxupquote{nano}} will
+be used as a default editor regardless of the configuration in your global
+or system\sphinxhyphen{}wide configuration. Note that the flag \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}local}} applies the
+configuration to your repository’s \sphinxcode{\sphinxupquote{.git/config}} file, whereas \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}global}}
+would apply it as a user specific configuration, and \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}system}} as a
+system\sphinxhyphen{}wide configuration.
+If you would want to change this existing line in your \sphinxcode{\sphinxupquote{.git/config}}
+file, you would replace \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}add}} with \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}replace\sphinxhyphen{}all}} such as in:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }config\PYG{+w}{ }\PYGZhy{}\PYGZhy{}local\PYG{+w}{ }\PYGZhy{}\PYGZhy{}replace\PYGZhy{}all\PYG{+w}{ }core.editor\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}vim\PYGZdq{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+to configure {\hyperref[\detokenize{glossary:term-vim}]{\sphinxtermref{\DUrole{xref,std,std-term}{vim}}}} to be your default editor.
+Note that while being a good toy example, it is not a common thing to
+configure repository\sphinxhyphen{}specific editors.
+
+\sphinxAtStartPar
+This example demonstrated the structure of a \sphinxcode{\sphinxupquote{git config}}
+command. By specifying the \sphinxcode{\sphinxupquote{name}} option with \sphinxcode{\sphinxupquote{section.variable}}
+(or \sphinxcode{\sphinxupquote{section.subsection.variable}} if there is a subsection), and
+a value, one can configure Git, git\sphinxhyphen{}annex, and DataLad.
+\sphinxstyleemphasis{Most} of these configurations will be written to a \sphinxcode{\sphinxupquote{config}} file
+of Git, depending on the scope (local, global, system\sphinxhyphen{}wide)
+specified in the command. Should you happen to make a mistake,
+it is typically simple to rectify things again. Check the
+\textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-git-config}} {\hyperref[\detokenize{basics/101-122-config:fom-git-config}]{\sphinxcrossref{\DUrole{std,std-ref}{on \textquotesingle{}git config\textquotesingle{}}}}} (\autopageref*{\detokenize{basics/101-122-config:fom-git-config}}).
+
+\index{unset configuration@\spxentry{unset configuration}!with Git@\spxentry{with Git}}\index{with Git@\spxentry{with Git}!unset configuration@\spxentry{unset configuration}}\ignorespaces \begin{findoutmore}[label={fom-git-config}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{If things go wrong during Git config}
+\label{\detokenize{basics/101-122-config:fom-git-config}}
+
+\sphinxAtStartPar
+If something goes wrong during the \sphinxcode{\sphinxupquote{git config}} command,
+for example, you end up having two keys of the same name because you
+added a key instead of replacing an existing one, you can use the
+\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}unset}} option to remove the line. Alternatively, you can also open
+the config file in an editor and remove or change sections by hand.
+
+
+\end{findoutmore}
+
+\sphinxAtStartPar
+The only information you need, therefore, is the name of a section and
+variable to configure, and the value you want to specify. But in many cases
+it is also useful to find out which configurations are already set in
+which way and where. For this, the \sphinxcode{\sphinxupquote{git config \sphinxhyphen{}\sphinxhyphen{}list \sphinxhyphen{}\sphinxhyphen{}show\sphinxhyphen{}origin}}
+is useful. It will display all configurations and their location:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }config\PYG{+w}{ }\PYGZhy{}\PYGZhy{}list\PYG{+w}{ }\PYGZhy{}\PYGZhy{}show\PYGZhy{}origin
+\PYG{g+go}{file:/home/bob/.gitconfig   user.name=Bob McBobface}
+\PYG{g+go}{file:/home/bob/.gitconfig   user.email=bob@mcbobface.com}
+\PYG{g+go}{file:.git/config    annex.uuid=1f83595e\PYGZhy{}bcba\PYGZhy{}4226\PYGZhy{}aa2c\PYGZhy{}6f0153eb3c54}
+\PYG{g+go}{file:.git/config    annex.backends=MD5E}
+\PYG{g+go}{file:.git/config    submodule.recordings/longnow.url=https://github.com/✂}
+\PYG{g+go}{file:.git/config    submodule.recordings/longnow.active=true}
+\PYG{g+go}{file:.git/config    remote.roommate.url=../mock\PYGZus{}user/onemoredir/DataLad\PYGZhy{}101}
+\PYG{g+go}{file:.git/config    remote.roommate.annex\PYGZhy{}uuid=a5ae24de\PYGZhy{}1533\PYGZhy{}4b09\PYGZhy{}98b9\PYGZhy{}cd9ba6bf303c}
+\PYG{g+go}{file:.git/config    submodule.longnow.url=https://github.com/✂}
+\PYG{g+go}{file:.git/config    submodule.longnow.active=true}
+\PYG{g+go}{...}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This example shows some configurations in the global \sphinxcode{\sphinxupquote{.gitconfig}}
+file, and the configurations within \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101/.git/config}}.
+The command is very handy to display all configurations at once to identify
+configuration problems, find the right configuration file to make a change to,
+or simply remind oneself of the existing configurations, and it is a useful
+helper to keep in the back of your head.
+
+\sphinxAtStartPar
+At this point you may feel like many of these configurations or the configuration file
+inside of \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} do not appear to be
+intuitively understandable enough to confidently apply changes to them,
+or identify necessary changes. And indeed, most of the sections and variables
+or values in there are irrelevant for understanding the book, your dataset,
+or DataLad, and can just be left as they are. The previous section merely served
+to de\sphinxhyphen{}mystify the \sphinxcode{\sphinxupquote{git config}} command and the configuration files.
+Nevertheless, it can be helpful to get an overview on the meaning of the
+remaining sections in that file, and the \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-gitconfig}} {\hyperref[\detokenize{basics/101-122-config:fom-gitconfig}]{\sphinxcrossref{\DUrole{std,std-ref}{on the Git config file}}}} (\autopageref*{\detokenize{basics/101-122-config:fom-gitconfig}}) offers a glimpse at that.
+
+\index{dataset configuration@\spxentry{dataset configuration}}\ignorespaces \begin{findoutmore}[label={fom-gitconfig}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{Dissecting a Git config file further}
+\label{\detokenize{basics/101-122-config:fom-gitconfig}}
+
+\sphinxAtStartPar
+Let’s walk through the Git config file of \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}}:
+As mentioned above, git\sphinxhyphen{}annex will use the
+{\hyperref[\detokenize{glossary:term-Git-config-file}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git config file}}}} for some of its configurations, such as the second section.
+It lists the repository version and {\hyperref[\detokenize{glossary:term-annex-UUID}]{\sphinxtermref{\DUrole{xref,std,std-term}{annex UUID}}}}%
+\begin{footnote}\sphinxAtStartFootnote
+A UUID is a universally unique identifier \textendash{} a 128\sphinxhyphen{}bit number
+that unambiguously identifies information.
+%
+\end{footnote} (\sphinxcode{\sphinxupquote{git annex whereis}} displays information about where the
+annexed content is with these UUIDs).
+
+\sphinxAtStartPar
+You may recognize the fourth part of the configuration, the subsection
+\sphinxcode{\sphinxupquote{"recordings/longnow"}} in the section \sphinxcode{\sphinxupquote{submodule}}.
+Clearly, this is a reference to the \sphinxcode{\sphinxupquote{longnow}} podcasts
+we cloned as a subdataset. The name \sphinxstyleemphasis{submodule} is Git
+terminology, and describes a Git repository inside of
+another Git repository \textendash{} just like
+the super\sphinxhyphen{} and subdataset principles you discovered in the
+section {\hyperref[\detokenize{basics/101-106-nesting:nesting}]{\sphinxcrossref{\DUrole{std,std-ref}{Dataset nesting}}}} (\autopageref*{\detokenize{basics/101-106-nesting:nesting}}). When you clone a DataLad dataset
+as a subdataset, it gets \sphinxstyleemphasis{registered} in this file.
+For each subdataset, an individual submodule entry
+will store the information about the subdataset’s
+\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}source}} or \sphinxstyleemphasis{origin} (the “url”).
+Thus, every subdataset in your dataset
+will be listed in this file.
+If you want, go back to section {\hyperref[\detokenize{basics/101-105-install:installds}]{\sphinxcrossref{\DUrole{std,std-ref}{Install datasets}}}} (\autopageref*{\detokenize{basics/101-105-install:installds}}) to see that the
+“url” is the same URL we cloned the longnow dataset from, and
+go back to section {\hyperref[\detokenize{basics/101-116-sharelocal:sharelocal1}]{\sphinxcrossref{\DUrole{std,std-ref}{Looking without touching}}}} (\autopageref*{\detokenize{basics/101-116-sharelocal:sharelocal1}}) to remind yourself of
+how cloning a dataset with subdatasets looked and felt like.
+
+\sphinxAtStartPar
+Another interesting part is the last section, “remote”.
+Here we can find the {\hyperref[\detokenize{glossary:term-sibling}]{\sphinxtermref{\DUrole{xref,std,std-term}{sibling}}}} “roommate” we defined
+in {\hyperref[\detokenize{basics/101-121-siblings:sibling}]{\sphinxcrossref{\DUrole{std,std-ref}{Networking}}}} (\autopageref*{\detokenize{basics/101-121-siblings:sibling}}). The term {\hyperref[\detokenize{glossary:term-remote}]{\sphinxtermref{\DUrole{xref,std,std-term}{remote}}}} is Git\sphinxhyphen{}terminology and is
+used to describe other repositories or DataLad datasets that the
+repository knows about.
+This file, therefore, is where DataLad \sphinxstyleemphasis{registered} the sibling
+with \sphinxcode{\sphinxupquote{datalad siblings add}}, and thanks to it you can
+collaborate with your room mate.
+The value to the \sphinxcode{\sphinxupquote{url}} variable is a \sphinxstyleemphasis{path}. If at any point
+either your superdataset or the remote moves on your file system,
+the association between the two datasets breaks \textendash{} this can be fixed by adjusting this
+path, and a demonstration of this is in section {\hyperref[\detokenize{basics/101-136-filesystem:file-system}]{\sphinxcrossref{\DUrole{std,std-ref}{Dataset ops}}}} (\autopageref*{\detokenize{basics/101-136-filesystem:file-system}}).
+\sphinxtitleref{fetch} contains a specification which parts of the repository are
+updated \textendash{} in this case everything (all of the branches).
+Lastly, the \sphinxcode{\sphinxupquote{annex\sphinxhyphen{}ignore = false}} configuration allows git\sphinxhyphen{}annex
+to query the remote when it tries to retrieve data from annexed content.
+
+
+\end{findoutmore}
+
+\index{configuration@\spxentry{configuration}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!configuration@\spxentry{configuration}}\index{set configuration@\spxentry{set configuration}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!set configuration@\spxentry{set configuration}}\ignorespaces 
+
+\subsection{The \sphinxstyleliteralintitle{\sphinxupquote{datalad configuration}} command}
+\label{\detokenize{basics/101-122-config:the-datalad-configuration-command}}\label{\detokenize{basics/101-122-config:index-5}}
+\sphinxAtStartPar
+Although this section put a focus on the \sphinxcode{\sphinxupquote{git config}} command, it is important to mention that there also is a \sphinxcode{\sphinxupquote{datalad configuration}} command.
+It is not identical to \sphinxcode{\sphinxupquote{git config}}, but while it lacks some feature of \sphinxcode{\sphinxupquote{git config}}, such as the ability to set system\sphinxhyphen{}wide configuration, it has additional features.
+Beyond the \sphinxcode{\sphinxupquote{local}} and \sphinxcode{\sphinxupquote{global}} scopes, it also supports {\hyperref[\detokenize{glossary:term-branch}]{\sphinxtermref{\DUrole{xref,std,std-term}{branch}}}} specific configurations in the \sphinxcode{\sphinxupquote{.datalad/config}} file (further discussed in the next section), setting configurations recursively through dataset hierarchies, and multi\sphinxhyphen{}configuration queries (such as \sphinxcode{\sphinxupquote{datalad configuration get user.name user.email}}).
+By default, \sphinxcode{\sphinxupquote{datalad configuration}} will \sphinxcode{\sphinxupquote{dump}} (list) the effective configuration including relevant \sphinxcode{\sphinxupquote{DATALAD\_*}} {\hyperref[\detokenize{glossary:term-environment-variable}]{\sphinxtermref{\DUrole{xref,std,std-term}{environment variable}}}}s, and also annotate the purpose of many common configuration items.
+The subcommands \sphinxcode{\sphinxupquote{datalad configuration get}} or \sphinxcode{\sphinxupquote{datalad configuration set}} perform queries or set configurations.
+You can find out more information on this command in the command documentation.
+
+
+\subsection{\sphinxstyleliteralintitle{\sphinxupquote{.git/config}} versus other (configuration) files}
+\label{\detokenize{basics/101-122-config:git-config-versus-other-configuration-files}}
+\sphinxAtStartPar
+One crucial aspect distinguishes the \sphinxcode{\sphinxupquote{.git/config}} file from many other files
+in your dataset: Even though it is part of your dataset, it won’t be shared together
+with the dataset. The reason for this is that this file is not version
+controlled, as it lies within the \sphinxcode{\sphinxupquote{.git}} directory.
+Repository\sphinxhyphen{}specific configurations within your \sphinxcode{\sphinxupquote{.git/config}}
+file are thus not written to history. Any local configuration in \sphinxcode{\sphinxupquote{.git/config}}
+applies to the dataset, but it does not \sphinxstyleemphasis{stick} to the dataset.
+One can have the misconception that because the configurations were made \sphinxstyleemphasis{in}
+the dataset, these configurations will also be shared together with the dataset.
+\sphinxcode{\sphinxupquote{.git/config}}, however, behaves just as your global or system\sphinxhyphen{}wide configurations.
+These configurations are in effect on a system, or for a user, or for a dataset,
+but are not shared.
+A \sphinxcode{\sphinxupquote{datalad clone}} command of someone’s dataset will not get you their
+editor configuration, should they have included one in their config file.
+Instead, upon a \sphinxcode{\sphinxupquote{datalad clone}}, a new config file will be created.
+
+\sphinxAtStartPar
+This means, however, that configurations that should “stick” to a dataset%
+\begin{footnote}\sphinxAtStartFootnote
+Please note that not all configurations can be written to files other than \sphinxcode{\sphinxupquote{.git/config}}.
+Some of the files introduced in the next section will not be queried by Git, and in principle, it is a good thing that one cannot share arbitrary configurations together with a dataset, as this could be a potential security threat.
+In those cases where you need dataset clones to inherit certain non\sphinxhyphen{}sticky configurations, it is advised to write a custom procedure and distribute it together with the dataset.
+The next two sections contain concrete usecases and tutorials.
+%
+\end{footnote}
+need to be defined in different files \textendash{} files that are version controlled.
+The next section will talk about them.
+
+\sphinxstepscope
+
+
+\section{Shipping and overriding configuration}
+\label{\detokenize{basics/101-123-config2:shipping-and-overriding-configuration}}\label{\detokenize{basics/101-123-config2:config2}}\label{\detokenize{basics/101-123-config2::doc}}
+\sphinxAtStartPar
+As the last section already suggest, within a Git repository,
+\sphinxcode{\sphinxupquote{.git/config}} is not the only configuration file.
+There are also \sphinxcode{\sphinxupquote{.gitmodules}} and \sphinxcode{\sphinxupquote{.gitattributes}}, and in DataLad datasets
+there also is a \sphinxcode{\sphinxupquote{.datalad/config}} file.
+
+\sphinxAtStartPar
+All of these files store configurations, but have an important difference:
+They are version controlled, and upon sharing a dataset these configurations
+will be shared as well. An example for a shared configuration
+is the one that the \sphinxcode{\sphinxupquote{text2git}} configuration template applied:
+In the shared copy of your dataset from {\hyperref[\detokenize{basics/101-121-siblings:sibling}]{\sphinxcrossref{\DUrole{std,std-ref}{Networking}}}} (\autopageref*{\detokenize{basics/101-121-siblings:sibling}}), text files are also saved with Git,
+and not git\sphinxhyphen{}annex. The configuration responsible
+for this behavior is in a \sphinxcode{\sphinxupquote{.gitattributes}} file, and we’ll start this
+section by looking into it.
+
+\index{configuration file@\spxentry{configuration file}!.gitattributes@\spxentry{.gitattributes}|spxpagem}\ignorespaces 
+
+\subsection{\sphinxstyleliteralintitle{\sphinxupquote{.gitattributes}}}
+\label{\detokenize{basics/101-123-config2:gitattributes}}\label{\detokenize{basics/101-123-config2:index-0}}
+\sphinxAtStartPar
+This file lies right in the root of your superdataset:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }.gitattributes
+\PYG{g+go}{* annex.backend=MD5E}
+\PYG{g+go}{**/.git* annex.largefiles=nothing}
+\PYG{g+go}{* annex.largefiles=((mimeencoding=binary)and(largerthan=0))}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This looks neither spectacular nor pretty. Also, it does not follow the \sphinxcode{\sphinxupquote{section\sphinxhyphen{}option\sphinxhyphen{}value}}
+organization of the \sphinxcode{\sphinxupquote{.git/config}} file anymore. Instead, there are three lines,
+and all of these seem to have something to do with the configuration of git\sphinxhyphen{}annex.
+There even is one key word that you recognize: MD5E.
+If you have read the {\hyperref[\detokenize{basics/101-115-symlinks:objecttree}]{\sphinxcrossref{\DUrole{std,std-ref}{Find\sphinxhyphen{}out\sphinxhyphen{}more on object trees}}}} (\autopageref*{\detokenize{basics/101-115-symlinks:objecttree}})
+you will recognize it as a reference to the type of
+key used by git\sphinxhyphen{}annex to identify and store file content in the object\sphinxhyphen{}tree.
+The first row, \sphinxcode{\sphinxupquote{* annex.backend=MD5E}}, therefore translates to “The \sphinxcode{\sphinxupquote{MD5E}} git\sphinxhyphen{}annex backend should be used for any file”.
+But what is the rest? We’ll start with the last row:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+*\PYG{+w}{ }annex.largefiles\PYG{o}{=}\PYG{o}{(}\PYG{o}{(}\PYG{n+nv}{mimeencoding}\PYG{o}{=}binary\PYG{o}{)}and\PYG{o}{(}\PYG{n+nv}{largerthan}\PYG{o}{=}\PYG{l+m}{0}\PYG{o}{)}\PYG{o}{)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Uhhh, cryptic. The lecturer explains: “git\sphinxhyphen{}annex will \sphinxstyleemphasis{annex}, that is, \sphinxstyleemphasis{store in the object\sphinxhyphen{}tree},
+anything it considers to be a “large file”. By default, anything
+in your dataset would be a “large file”, that means anything would be annexed.
+However, in section {\hyperref[\detokenize{basics/101-115-symlinks:symlink}]{\sphinxcrossref{\DUrole{std,std-ref}{Data integrity}}}} (\autopageref*{\detokenize{basics/101-115-symlinks:symlink}}) I already mentioned that exceptions to this
+behavior can be defined based on
+\begin{enumerate}
+\sphinxsetlistlabels{\arabic}{enumi}{enumii}{}{.}%
+\item {} 
+\sphinxAtStartPar
+file size
+
+\item {} 
+\sphinxAtStartPar
+and/or path/pattern, and thus for example file extensions,
+or names, or file types (e.g., text files, as with the
+\sphinxcode{\sphinxupquote{text2git}} configuration template).
+
+\end{enumerate}
+
+\sphinxAtStartPar
+“In \sphinxcode{\sphinxupquote{.gitattributes}}, you can define what a large file and what is not
+by simply telling git\sphinxhyphen{}annex by writing such rules.”
+
+\sphinxAtStartPar
+What you can see in this \sphinxcode{\sphinxupquote{.gitattributes}} file is a rule based on \sphinxstylestrong{file types}:
+With \sphinxcode{\sphinxupquote{(mimeencoding=binary)}}%
+\begin{footnote}\sphinxAtStartFootnote
+When opening any file on a UNIX system, the file does not need to have a file
+extension (such as \sphinxcode{\sphinxupquote{.txt}}, \sphinxcode{\sphinxupquote{.pdf}}, \sphinxcode{\sphinxupquote{.jpg}}) for the operating system to know
+how to open or use this file (in contrast to Windows, which does not know how to
+open a file without an extension). To do this, Unix systems rely on a file’s
+MIME type \textendash{} an information about a file’s content. A \sphinxcode{\sphinxupquote{.txt}} file, for example,
+has MIME type \sphinxcode{\sphinxupquote{text/plain}} as does a bash script (\sphinxcode{\sphinxupquote{.sh}}), a Python
+script has MIME type \sphinxcode{\sphinxupquote{text/x\sphinxhyphen{}python}}, a \sphinxcode{\sphinxupquote{.jpg}} file is \sphinxcode{\sphinxupquote{image/jpg}}, and
+a \sphinxcode{\sphinxupquote{.pdf}} file has MIME type \sphinxcode{\sphinxupquote{application/pdf}}. You can find out the MIME type
+of a file by running:
+
+\sphinxSetupCodeBlockInFootnote
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }file\PYG{+w}{ }\PYGZhy{}\PYGZhy{}mime\PYGZhy{}type\PYG{+w}{ }path/to/file
+\end{sphinxVerbatim}
+%
+\end{footnote}, the \sphinxcode{\sphinxupquote{text2git}} configuration template
+configured git\sphinxhyphen{}annex to regard all files of type “binary” as a large file.
+Thanks to this little line, your text files are not annexed, but stored
+directly in Git.
+
+\sphinxAtStartPar
+The patterns \sphinxcode{\sphinxupquote{*}} and \sphinxcode{\sphinxupquote{**}} are so\sphinxhyphen{}called “wildcards” you might recognize from used in {\hyperref[\detokenize{glossary:term-globbing}]{\sphinxtermref{\DUrole{xref,std,std-term}{globbing}}}}.
+In Git configuration files, an asterisk “*” matches anything except a slash.
+The third row therefore
+translates to “Do not annex anything that is a text file” for git\sphinxhyphen{}annex.
+Two leading “\sphinxcode{\sphinxupquote{**}}” followed by a slash matches
+\sphinxstyleemphasis{recursively} in all directories.
+Therefore, the second row instructs git\sphinxhyphen{}annex to regard nothing starting with \sphinxcode{\sphinxupquote{.git}} as a “large file”, including contents inside of \sphinxcode{\sphinxupquote{.git}} directories.
+This way, the \sphinxcode{\sphinxupquote{.git}} repositories are protected from being annexed.
+If you had a single file (\sphinxcode{\sphinxupquote{myfile.pdf}}) you would not want annexed, specifying a rule such as:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+myfile.pdf\PYG{+w}{ }annex.largefiles\PYG{o}{=}nothing
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+will keep it stored in Git. To see an example of this, navigate into the longnow subdataset,
+and view this dataset’s \sphinxcode{\sphinxupquote{.gitattributes}} file:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }recordings/longnow/.gitattributes
+\PYG{g+go}{* annex.backend=MD5E}
+\PYG{g+go}{**/.git* annex.largefiles=nothing}
+\PYG{g+go}{README.md annex.largefiles=nothing}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The relevant part is \sphinxcode{\sphinxupquote{README.md annex.largefiles=nothing}}.
+This instructs git\sphinxhyphen{}annex to specifically not annex \sphinxcode{\sphinxupquote{README.md}}.
+
+\sphinxAtStartPar
+Lastly, if you wanted to configure a rule based on \sphinxstylestrong{size}, you could add a row such as:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+**\PYG{+w}{ }annex.largefiles\PYG{o}{(}\PYG{n+nv}{largerthan}\PYG{o}{=}20kb\PYG{o}{)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+to store only files exceeding 20KB in size in git\sphinxhyphen{}annex%
+\begin{footnote}\sphinxAtStartFootnote
+Specifying annex.largefiles in your .gitattributes file will make the configuration
+“portable” \textendash{} shared copies of your dataset will retain these configurations.
+You could however also set largefiles rules in your \sphinxcode{\sphinxupquote{.git/config}} file. Rules
+specified in there take precedence over rules in \sphinxcode{\sphinxupquote{.gitattributes}}. You can set
+them using the \sphinxcode{\sphinxupquote{git config}} command:
+
+\sphinxSetupCodeBlockInFootnote
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }config\PYG{+w}{ }annex.largefiles\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}largerthan=100kb and not (include=*.c or include=*.h)\PYGZsq{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The above command annexes files larger than 100KB, and will never annex files with a
+\sphinxcode{\sphinxupquote{.c}} or \sphinxcode{\sphinxupquote{.h}} extension.
+%
+\end{footnote}.
+
+\sphinxAtStartPar
+As you may have noticed, unlike \sphinxcode{\sphinxupquote{.git/config}} files,
+there can be multiple \sphinxcode{\sphinxupquote{.gitattributes}} files within a dataset. So far, you have seen one
+in the root of the superdataset, and in the root of the \sphinxcode{\sphinxupquote{longnow}} subdataset.
+In principle, you can add one to every directory\sphinxhyphen{}level of your dataset.
+For example, there is another \sphinxcode{\sphinxupquote{.gitattributes}} file within the
+\sphinxcode{\sphinxupquote{.datalad}} directory:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }.datalad/.gitattributes
+\PYG{g+go}{config annex.largefiles=nothing}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+As with Git configuration files, more specific or lower\sphinxhyphen{}level configurations take precedence
+over more general or higher\sphinxhyphen{}level configurations. Specifications in a subdirectory can
+therefore overrule specifications made in the \sphinxcode{\sphinxupquote{.gitattributes}} file of the parent
+directory.
+
+\sphinxAtStartPar
+In summary, the \sphinxcode{\sphinxupquote{.gitattributes}} files will give you the possibility to configure
+what should be annexed and what should not be annexed up to individual file level.
+This can be very handy, and allows you to tune your dataset to your custom needs.
+For example, files you will often edit by hand could be stored in Git if they are
+not too large to ease modifying them%
+\begin{footnote}\sphinxAtStartFootnote
+Should you ever need to, this file is also where one would change the git\sphinxhyphen{}annex
+backend in order to store new files with a new backend. Switching the backend of
+\sphinxstyleemphasis{all} files (new as well as existing ones) requires the \sphinxcode{\sphinxupquote{git annex migrate}}
+command
+(see \dlhbhref{B1E}{the documentation} for
+more information on this command).
+%
+\end{footnote}.
+Once you know the basics of this type of configuration syntax, writing
+your own rules is easy. For more tips on how configure git\sphinxhyphen{}annex’s content
+management in \sphinxcode{\sphinxupquote{.gitattributes}}, take a look at \dlhbhref{B1O}{the git\sphinxhyphen{}annex documentation}.
+Later however you will see preconfigured DataLad \sphinxstyleemphasis{procedures} such as \sphinxcode{\sphinxupquote{text2git}} that
+can apply useful configurations for you, just as \sphinxcode{\sphinxupquote{text2git}} added the last line
+in the root \sphinxcode{\sphinxupquote{.gitattributes}} file.
+
+\index{configuration file@\spxentry{configuration file}!.gitmodules@\spxentry{.gitmodules}|spxpagem}\ignorespaces 
+
+\subsection{\sphinxstyleliteralintitle{\sphinxupquote{.gitmodules}}}
+\label{\detokenize{basics/101-123-config2:gitmodules}}\label{\detokenize{basics/101-123-config2:index-1}}
+\sphinxAtStartPar
+On last configuration file that Git creates is the \sphinxcode{\sphinxupquote{.gitmodules}} file.
+There is one right in the root of your dataset:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }.gitmodules
+\PYG{g+go}{[submodule \PYGZdq{}recordings/longnow\PYGZdq{}]}
+\PYG{g+go}{	path = recordings/longnow}
+\PYG{g+go}{	url = https://github.com/datalad\PYGZhy{}datasets/longnow\PYGZhy{}podcasts.git}
+\PYG{g+go}{	datalad\PYGZhy{}id = b3ca2718\PYGZhy{}8901\PYGZhy{}11e8\PYGZhy{}99aa\PYGZhy{}a0369f7c647e}
+\PYG{g+go}{	datalad\PYGZhy{}url = https://github.com/datalad\PYGZhy{}datasets/longnow\PYGZhy{}podcasts.git}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Based on these contents, you might have already guessed what this file
+stores. The \sphinxcode{\sphinxupquote{.gitmodules}} file is a configuration file that stores the mapping between
+your own dataset and any subdatasets you have installed in it.
+There will be an entry for each submodule (subdataset) in your dataset.
+The name \sphinxstyleemphasis{submodule} is Git terminology, and describes a Git repository inside of
+another Git repository, i.e., the super\sphinxhyphen{} and subdataset principles.
+Upon sharing your dataset, the information about subdatasets and where to retrieve
+them from is stored and shared with this file.
+In addition to modifying it with the \sphinxcode{\sphinxupquote{git config}} command or by hand, the \sphinxcode{\sphinxupquote{datalad subdatasets}} command also has a \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}set\sphinxhyphen{}property NAME VALUE}} option that you can use to set subdataset properties.
+
+\sphinxAtStartPar
+Section {\hyperref[\detokenize{basics/101-116-sharelocal:sharelocal1}]{\sphinxcrossref{\DUrole{std,std-ref}{Looking without touching}}}} (\autopageref*{\detokenize{basics/101-116-sharelocal:sharelocal1}}) already mentioned one additional configuration option in a footnote: The \sphinxcode{\sphinxupquote{datalad\sphinxhyphen{}recursiveinstall}} key.
+This key is defined on a per subdataset basis, and if set to “\sphinxcode{\sphinxupquote{skip}}”, the given subdataset will not be recursively installed unless it is explicitly specified as a path to \sphinxcode{\sphinxupquote{datalad get {[}\sphinxhyphen{}n/\sphinxhyphen{}\sphinxhyphen{}no\sphinxhyphen{}data{]} \sphinxhyphen{}r}}.
+If you are a maintainer of a superdataset with monstrous amounts of subdatasets, you can set this option and share it together with the dataset to prevent an accidental, large recursive installation in particularly deeply nested subdatasets.
+Below is a minimally functional example on how to apply the configuration and how it works:
+
+\sphinxAtStartPar
+Let’s create a dataset hierarchy to work with (note that we concatenate multiple commands into a single line using bash’s “and” \sphinxcode{\sphinxupquote{\&\&}} operator):
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} create a superdataset with two subdatasets}
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }create\PYG{+w}{ }superds\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }datalad\PYG{+w}{ }\PYGZhy{}C\PYG{+w}{ }superds\PYG{+w}{ }create\PYG{+w}{ }\PYGZhy{}d\PYG{+w}{ }.\PYG{+w}{ }subds1\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }datalad\PYG{+w}{ }\PYGZhy{}C\PYG{+w}{ }superds\PYG{+w}{ }create\PYG{+w}{ }\PYGZhy{}d\PYG{+w}{ }.\PYG{+w}{ }subds2
+\PYG{g+go}{create(ok): /tmp/superds (dataset)}
+\PYG{g+go}{add(ok): subds1 (file)}
+\PYG{g+go}{add(ok): .gitmodules (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\PYG{g+go}{create(ok): subds1 (dataset)}
+\PYG{g+go}{add(ok): subds2 (file)}
+\PYG{g+go}{add(ok): .gitmodules (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\PYG{g+go}{create(ok): subds2 (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Next, we create subdatasets in the subdatasets:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} create two subdatasets in subds1}
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }\PYGZhy{}C\PYG{+w}{ }superds/subds1\PYG{+w}{ }create\PYG{+w}{ }\PYGZhy{}d\PYG{+w}{ }.\PYG{+w}{ }subsubds1\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }datalad\PYG{+w}{ }\PYGZhy{}C\PYG{+w}{ }superds/subds1\PYG{+w}{ }create\PYG{+w}{ }\PYGZhy{}d\PYG{+w}{ }.\PYG{+w}{ }subsubds2
+\PYG{g+go}{add(ok): subsubds1 (file)}
+\PYG{g+go}{add(ok): .gitmodules (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\PYG{g+go}{create(ok): subsubds1 (dataset)}
+\PYG{g+go}{add(ok): subsubds2 (file)}
+\PYG{g+go}{add(ok): .gitmodules (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\PYG{g+go}{create(ok): subsubds2 (dataset)}
+
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} create two subdatasets in subds2}
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }\PYGZhy{}C\PYG{+w}{ }superds/subds2\PYG{+w}{ }create\PYG{+w}{ }\PYGZhy{}d\PYG{+w}{ }.\PYG{+w}{ }subsubds1\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }datalad\PYG{+w}{ }\PYGZhy{}C\PYG{+w}{ }superds/subds2\PYG{+w}{ }create\PYG{+w}{ }\PYGZhy{}d\PYG{+w}{ }.\PYG{+w}{ }subsubds2
+\PYG{g+go}{add(ok): subsubds1 (file)}
+\PYG{g+go}{add(ok): .gitmodules (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\PYG{g+go}{create(ok): subsubds1 (dataset)}
+\PYG{g+go}{add(ok): subsubds2 (file)}
+\PYG{g+go}{add(ok): .gitmodules (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\PYG{g+go}{create(ok): subsubds2 (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Here is the directory structure:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }../\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }tree
+\PYG{g+go}{.}
+\PYG{g+go}{├── subds1}
+\PYG{g+go}{│   ├── subsubds1}
+\PYG{g+go}{│   └── subsubds2}
+\PYG{g+go}{└── subds2}
+\PYG{g+go}{    ├── subsubds1}
+\PYG{g+go}{    └── subsubds2}
+
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} save in the superdataset}
+\PYG{g+go}{datalad save \PYGZhy{}m \PYGZdq{}add a few sub and subsub datasets\PYGZdq{}}
+\PYG{g+go}{add(ok): subds1 (file)}
+\PYG{g+go}{add(ok): subds2 (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Now, we can apply the \sphinxcode{\sphinxupquote{datalad\sphinxhyphen{}recursiveinstall}} configuration to skip recursive installations for \sphinxcode{\sphinxupquote{subds1}}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }config\PYG{+w}{ }\PYGZhy{}f\PYG{+w}{ }.gitmodules\PYG{+w}{ }\PYGZhy{}\PYGZhy{}add\PYG{+w}{ }submodule.subds1.datalad\PYGZhy{}recursiveinstall\PYG{+w}{ }skip
+
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} save this configuration}
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}prevent recursion into subds1, unless explicitly given as path\PYGZdq{}}
+\PYG{g+go}{add(ok): .gitmodules (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+If the dataset is cloned, and someone runs a recursive \sphinxcode{\sphinxupquote{datalad get}}, the subdatasets of \sphinxcode{\sphinxupquote{subds1}} will not be installed, the subdatasets of \sphinxcode{\sphinxupquote{subds2}}, however, will be.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} clone the dataset somewhere else}
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }../\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }datalad\PYG{+w}{ }clone\PYG{+w}{ }superds\PYG{+w}{ }clone\PYGZus{}of\PYGZus{}superds
+\PYG{g+go}{[INFO   ] Cloning superds into \PYGZsq{}/tmp/clone\PYGZus{}of\PYGZus{}superds\PYGZsq{}}
+\PYG{g+go}{install(ok): /tmp/clone\PYGZus{}of\PYGZus{}superds (dataset)}
+
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} recursively get all contents (without data)}
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }clone\PYGZus{}of\PYGZus{}superds\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }datalad\PYG{+w}{ }get\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYGZhy{}r\PYG{+w}{ }.
+\PYG{g+go}{get(ok): /tmp/clone\PYGZus{}of\PYGZus{}superds/subds2 (dataset)}
+\PYG{g+go}{get(ok): /tmp/clone\PYGZus{}of\PYGZus{}superds/subds2/subsubds1 (dataset)}
+\PYG{g+go}{get(ok): /tmp/clone\PYGZus{}of\PYGZus{}superds/subds2/subsubds2 (dataset)}
+
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} only subsubds of subds2 are installed, not of subds1:}
+\PYG{g+gp}{\PYGZdl{} }tree
+\PYG{g+go}{.}
+\PYG{g+go}{├── subds1}
+\PYG{g+go}{└── subds2}
+\PYG{g+go}{    ├── subsubds1}
+\PYG{g+go}{    └── subsubds2}
+
+\PYG{g+go}{4 directories, 0 files}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Nevertheless, if \sphinxcode{\sphinxupquote{subds1}} is provided with an explicit path, its subdataset \sphinxcode{\sphinxupquote{subsubds}} will be cloned, essentially overriding the configuration:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{}  }datalad\PYG{+w}{ }get\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYGZhy{}r\PYG{+w}{ }subds1\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }tree
+\PYG{g+go}{install(ok): /tmp/clone\PYGZus{}of\PYGZus{}superds/subds1 (dataset) [Installed subdataset in order to get /tmp/clone\PYGZus{}of\PYGZus{}superds/subds1]}
+\PYG{g+go}{.}
+\PYG{g+go}{├── subds1}
+\PYG{g+go}{│   ├── subsubds1}
+\PYG{g+go}{│   └── subsubds2}
+\PYG{g+go}{└── subds2}
+\PYG{g+go}{    ├── subsubds1}
+\PYG{g+go}{    └── subsubds2}
+
+\PYG{g+go}{6 directories, 0 files}
+\end{sphinxVerbatim}
+
+\index{configuration file@\spxentry{configuration file}!.datalad/config@\spxentry{.datalad/config}|spxpagem}\ignorespaces 
+
+\subsection{\sphinxstyleliteralintitle{\sphinxupquote{.datalad/config}}}
+\label{\detokenize{basics/101-123-config2:datalad-config}}\label{\detokenize{basics/101-123-config2:index-2}}
+\sphinxAtStartPar
+DataLad adds a repository\sphinxhyphen{}specific configuration file as well.
+It can be found in the \sphinxcode{\sphinxupquote{.datalad}} directory, and just like \sphinxcode{\sphinxupquote{.gitattributes}}
+and \sphinxcode{\sphinxupquote{.gitmodules}} it is version controlled and is thus shared together with
+the dataset. One can configure
+\dlhbhref{D1A}{many options},
+but currently, our \sphinxcode{\sphinxupquote{.datalad/config}} file only stores a {\hyperref[\detokenize{glossary:term-dataset-ID}]{\sphinxtermref{\DUrole{xref,std,std-term}{dataset ID}}}}.
+This ID serves to identify a dataset as a unit, across its entire history and flavors.
+In a geeky way, this is your dataset’s social security number: It will only exist
+one time on this planet.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }.datalad/config
+\PYG{g+go}{[datalad \PYGZdq{}dataset\PYGZdq{}]}
+\PYG{g+go}{	id = e3e70682\PYGZhy{}c209\PYGZhy{}4cac\PYGZhy{}629f\PYGZhy{}6fbed82c07cd}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Note, though, that local configurations within a Git configuration file
+will take precedence over configurations that can be distributed with a dataset.
+Otherwise, dataset updates with \sphinxcode{\sphinxupquote{datalad update}} (or, for Git\sphinxhyphen{}users,
+\sphinxcode{\sphinxupquote{git pull}}) could suddenly and unintentionally alter local DataLad
+behavior that was specifically configured.
+Also, {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}} and {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}} will not query this file for configurations, so please store only sticky options that are specific to DataLad (i.e., under the \sphinxcode{\sphinxupquote{datalad.*}} namespace) in it.
+
+\index{modify configuration@\spxentry{modify configuration}!with Git@\spxentry{with Git}}\index{with Git@\spxentry{with Git}!modify configuration@\spxentry{modify configuration}}\ignorespaces 
+
+\subsection{Writing to configuration files other than \sphinxstyleliteralintitle{\sphinxupquote{.git/config}}}
+\label{\detokenize{basics/101-123-config2:writing-to-configuration-files-other-than-git-config}}\label{\detokenize{basics/101-123-config2:index-3}}
+\sphinxAtStartPar
+“Didn’t you say that knowing the \sphinxcode{\sphinxupquote{git config}} command is already
+half of what I need to know?” you ask. “Now there are three other configuration
+files, and I do not know with which command I can write into these files.”
+
+\sphinxAtStartPar
+“Excellent question”, you hear in return, “but in reality, you \sphinxstylestrong{do} know:
+it’s also the \sphinxcode{\sphinxupquote{git config}} command. The only part of it you need to
+adjust is the \sphinxcode{\sphinxupquote{\sphinxhyphen{}f}}, \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}file}} parameter. By default, the command writes to
+a Git config file. But it can write to a different file if you specify it
+appropriately. For example,
+\begin{quote}
+
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{git config \sphinxhyphen{}\sphinxhyphen{}file=.gitmodules \sphinxhyphen{}\sphinxhyphen{}replace\sphinxhyphen{}all submodule."name".url "new URL"}}
+\end{quote}
+
+\sphinxAtStartPar
+will update your submodule’s URL. Keep in mind though that you would need
+to commit this change, as \sphinxcode{\sphinxupquote{.gitmodules}} is version controlled”.
+
+\sphinxAtStartPar
+Let’s try this:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }config\PYG{+w}{ }\PYGZhy{}\PYGZhy{}file\PYG{o}{=}.gitmodules\PYG{+w}{ }\PYGZhy{}\PYGZhy{}replace\PYGZhy{}all\PYG{+w}{ }submodule.\PYG{l+s+s2}{\PYGZdq{}recordings/longnow\PYGZdq{}}.url\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}git@github.com:datalad\PYGZhy{}datasets/longnow\PYGZhy{}podcasts.git\PYGZdq{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This command will replace the submodule’s https URL with an SSH URL.
+The latter is often used if someone has an \sphinxstyleemphasis{SSH key pair} and added the
+public key to their GitHub account (you can read more about this
+\dlhbhref{G3C}{here}).
+We will revert this change shortly, but use it to show the difference between
+a \sphinxcode{\sphinxupquote{git config}} on a \sphinxcode{\sphinxupquote{.git/config}} file and on a version controlled file:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{ modified: .gitmodules (file)}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }diff
+\PYG{g+go}{diff \PYGZhy{}\PYGZhy{}git a/.gitmodules b/.gitmodules}
+\PYG{g+go}{index 9bc9ee9..11273e1 100644}
+\PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{} a/.gitmodules}
+\PYG{g+go}{+++ b/.gitmodules}
+\PYG{g+go}{@@ \PYGZhy{}1,5 +1,5 @@}
+\PYG{g+go}{ [submodule \PYGZdq{}recordings/longnow\PYGZdq{}]}
+\PYG{g+go}{ 	path = recordings/longnow}
+\PYG{g+go}{\PYGZhy{}	url = https://github.com/datalad\PYGZhy{}datasets/longnow\PYGZhy{}podcasts.git}
+\PYG{g+go}{+	url = git@github.com:datalad\PYGZhy{}datasets/longnow\PYGZhy{}podcasts.git}
+\PYG{g+go}{ 	datalad\PYGZhy{}id = b3ca2718\PYGZhy{}8901\PYGZhy{}11e8\PYGZhy{}99aa\PYGZhy{}a0369f7c647e}
+\PYG{g+go}{ 	datalad\PYGZhy{}url = https://github.com/datalad\PYGZhy{}datasets/longnow\PYGZhy{}podcasts.git}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+As these two commands show, the \sphinxcode{\sphinxupquote{.gitmodules}} file is modified. The https URL
+has been deleted (note the \sphinxcode{\sphinxupquote{\sphinxhyphen{}}}), and a SSH URL has been added. To keep these
+changes, we would need to \sphinxcode{\sphinxupquote{datalad save}} them. However, as we want to stay with
+https URLs, we will just \sphinxstyleemphasis{checkout} this change \textendash{} using a Git tool to undo an
+unstaged modification.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }checkout\PYG{+w}{ }.gitmodules
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{Updated 1 path from the index}
+\PYG{g+go}{nothing to save, working tree clean}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Note, though, that the \sphinxcode{\sphinxupquote{.gitattributes}} file cannot be modified with a \sphinxcode{\sphinxupquote{git config}}
+command. This is due to its different format that does not comply to the
+\sphinxcode{\sphinxupquote{section.variable.value}} structure of all other configuration files. This file, therefore,
+has to be edited by hand, with an editor of your choice.
+
+\index{environment variable@\spxentry{environment variable}|spxpagem}\ignorespaces 
+
+\subsection{Environment variables}
+\label{\detokenize{basics/101-123-config2:environment-variables}}\label{\detokenize{basics/101-123-config2:envvars}}\label{\detokenize{basics/101-123-config2:index-4}}
+\sphinxAtStartPar
+An {\hyperref[\detokenize{glossary:term-environment-variable}]{\sphinxtermref{\DUrole{xref,std,std-term}{environment variable}}}} is a variable set up in your shell
+that affects the way the shell or certain software works \textendash{} for example,
+the environment variables \sphinxcode{\sphinxupquote{HOME}}, \sphinxcode{\sphinxupquote{PWD}}, or \sphinxcode{\sphinxupquote{PATH}}.
+Configuration options that determine the behavior of Git, git\sphinxhyphen{}annex, and
+DataLad that could be defined in a configuration file can also be set (or overridden)
+by the associated environment variables of these configuration options.
+Many configuration items have associated environment variables.
+If this environment variable is set, it takes precedence over options set in
+configuration files, thus providing both an alternative way to define configurations
+as well as an override mechanism. For example, the \sphinxcode{\sphinxupquote{user.name}}
+configuration of Git can be overridden by its associated environment variable,
+\sphinxcode{\sphinxupquote{GIT\_AUTHOR\_NAME}}. Likewise, one can define the environment variable instead
+of setting the \sphinxcode{\sphinxupquote{user.name}} configuration in a configuration file.
+
+\index{configuration item@\spxentry{configuration item}!datalad.log.level@\spxentry{datalad.log.level}}\ignorespaces 
+\sphinxAtStartPar
+Git, git\sphinxhyphen{}annex, and DataLad have more environment variables than anyone would want to
+remember. \dlhbhref{G1C}{The ProGit book}
+has a good overview on Git’s most useful available environment variables for a start.
+All of DataLad’s configuration options can be translated to their
+associated environment variables. Any environment variable with a name that starts with \sphinxcode{\sphinxupquote{DATALAD\_}}
+will be available as the corresponding \sphinxcode{\sphinxupquote{datalad.}} configuration variable,
+replacing any \sphinxcode{\sphinxupquote{\_\_}} (two underscores) with a hyphen, then any \sphinxcode{\sphinxupquote{\_}} (single underscore)
+with a dot, and finally converting all letters to lower case. The \sphinxcode{\sphinxupquote{datalad.log.level}}
+configuration option thus is the environment variable \sphinxcode{\sphinxupquote{DATALAD\_LOG\_LEVEL}}.
+If you are new to the concept of environment variables, check out the
+\textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-envvar}} {\hyperref[\detokenize{basics/101-123-config2:fom-envvar}]{\sphinxcrossref{\DUrole{std,std-ref}{on them}}}} (\autopageref*{\detokenize{basics/101-123-config2:fom-envvar}}).
+
+\index{operating system concept@\spxentry{operating system concept}!environment variable@\spxentry{environment variable}}\ignorespaces \begin{findoutmore}[label={fom-envvar}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{Some more general information on environment variables}
+\label{\detokenize{basics/101-123-config2:fom-envvar}}
+
+\sphinxAtStartPar
+Names of environment variables are often all\sphinxhyphen{}uppercase, but they need not be.
+While the \sphinxcode{\sphinxupquote{\$}} is not part of
+the name of the environment variable, it is necessary to \sphinxstyleemphasis{refer} to the environment
+variable: To reference the value of the environment variable \sphinxcode{\sphinxupquote{HOME}}, for example, you would
+need to use \sphinxcode{\sphinxupquote{echo \$HOME}} and not \sphinxcode{\sphinxupquote{echo HOME}}. However, environment variables are
+set without a leading \sphinxcode{\sphinxupquote{\$}}. There are several ways to set an environment variable
+(note that there are no spaces before and after the equals sign!), leading to different
+levels of availability of the variable:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{THEANSWER=42 \textless{}command\textgreater{}}} makes the variable \sphinxcode{\sphinxupquote{THEANSWER}} available for the process in \sphinxcode{\sphinxupquote{\textless{}command\textgreater{}}}.
+For example, \sphinxcode{\sphinxupquote{DATALAD\_LOG\_LEVEL=debug datalad get \textless{}file\textgreater{}}} will execute the \sphinxcode{\sphinxupquote{datalad get}}
+command (and only this one) with the log level set to “debug”.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{export THEANSWER=42}} makes the variable \sphinxcode{\sphinxupquote{THEANSWER}} available for other processes in the
+same session, but it will not be available to other shells.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{echo \textquotesingle{}export THEANSWER=42\textquotesingle{} \textgreater{}\textgreater{} \textasciitilde{}/.bashrc}} will write the variable definition in the
+\sphinxcode{\sphinxupquote{.bashrc}} file and thus available to all future shells of the user (i.e., this will make
+the variable permanent for the user)
+
+\end{itemize}
+
+\sphinxAtStartPar
+To list all of the configured environment variables, type \sphinxcode{\sphinxupquote{env}} into your terminal.
+
+
+\end{findoutmore}
+
+
+\subsection{Summary}
+\label{\detokenize{basics/101-123-config2:summary}}
+\sphinxAtStartPar
+This has been an intense lecture, you have to admit. One definite
+take\sphinxhyphen{}away from it has been that you now know a second reason why the hidden
+\sphinxcode{\sphinxupquote{.git}} and \sphinxcode{\sphinxupquote{.datalad}} directory contents and also the contents of \sphinxcode{\sphinxupquote{.gitmodules}} and
+\sphinxcode{\sphinxupquote{.gitattributes}} should not be carelessly tampered with \textendash{} they contain all of
+the repository’s configurations.
+
+\sphinxAtStartPar
+But you now also know how to modify these configurations with enough
+care and background knowledge such that nothing should go wrong once you
+want to work with and change them. You can use the \sphinxcode{\sphinxupquote{git config}} command
+for Git configuration files on different scopes, and even the \sphinxcode{\sphinxupquote{.gitmodules}} or \sphinxcode{\sphinxupquote{datalad/config}}
+files. Of course you do not yet know all of the available configuration options. However,
+you already know some core Git configurations such as name, email, and editor. Even more
+important, you know how to configure git\sphinxhyphen{}annex’s content management based on \sphinxcode{\sphinxupquote{largefile}}
+rules, and you understand the  variables within \sphinxcode{\sphinxupquote{.gitmodules}} or the sections
+in \sphinxcode{\sphinxupquote{.git/config}}. Slowly, you realize with pride,
+you are more and more becoming a DataLad power\sphinxhyphen{}user.
+
+\sphinxAtStartPar
+Write a note about configurations in datasets into \sphinxcode{\sphinxupquote{notes.txt}}.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }\PYGZlt{}\PYGZlt{}\PYG{+w}{ }EOT\PYG{+w}{ }\PYGZgt{}\PYGZgt{}\PYG{+w}{ }notes.txt
+\PYG{g+go}{Configurations for datasets exist on different levels (systemwide,}
+\PYG{g+go}{global, and local), and in different types of files (not version}
+\PYG{g+go}{controlled (git)config files, or version controlled .datalad/config,}
+\PYG{g+go}{.gitattributes, or gitmodules files), or environment variables.}
+\PYG{g+go}{With the exception of .gitattributes, all configuration files share a}
+\PYG{g+go}{common structure, and can be modified with the git config command, but}
+\PYG{g+go}{also with an editor by hand.}
+
+\PYG{g+go}{Depending on whether a configuration file is version controlled or}
+\PYG{g+go}{not, the configurations will be shared together with the dataset.}
+\PYG{g+go}{More specific configurations and not\PYGZhy{}shared configurations will always}
+\PYG{g+go}{take precedence over more global or hared configurations, and}
+\PYG{g+go}{environment variables take precedence over configurations in files.}
+
+\PYG{g+go}{The git config \PYGZhy{}\PYGZhy{}list \PYGZhy{}\PYGZhy{}show\PYGZhy{}origin command is a useful tool to give}
+\PYG{g+go}{an overview over existing configurations. Particularly important may}
+\PYG{g+go}{be the .gitattributes file, in which one can set rules for git\PYGZhy{}annex}
+\PYG{g+go}{about which files should be version\PYGZhy{}controlled with Git instead of}
+\PYG{g+go}{being annexed.}
+
+\PYG{g+go}{EOT}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}add note on configurations and git config\PYGZdq{}}
+\PYG{g+go}{add(ok): notes.txt (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxstepscope
+
+\index{procedures@\spxentry{procedures}|spxpagem}\index{run\sphinxhyphen{}procedures@\spxentry{run\sphinxhyphen{}procedures}}\ignorespaces 
+
+\section{Configurations to go}
+\label{\detokenize{basics/101-124-procedures:configurations-to-go}}\label{\detokenize{basics/101-124-procedures:procedures}}\label{\detokenize{basics/101-124-procedures:index-0}}\label{\detokenize{basics/101-124-procedures::doc}}
+\sphinxAtStartPar
+The past two sections should have given you a comprehensive
+overview on the different configuration options the tools
+Git, git\sphinxhyphen{}annex, and DataLad provide. They not only
+showed you a way to configure everything you may need to
+configure, but also gave explanations about what the
+configuration options actually mean.
+
+\sphinxAtStartPar
+But figuring out which configurations are useful and how
+to apply them are also not the easiest tasks. Therefore,
+some clever people decided to assist with
+these tasks, and created pre\sphinxhyphen{}configured \sphinxstyleemphasis{procedures}
+that process datasets in a particular way.
+These procedures can be shipped within DataLad or its extensions,
+lie on a system, or can be shared together with datasets.
+
+\sphinxAtStartPar
+One of such procedures is the \sphinxcode{\sphinxupquote{text2git}} configuration.
+In order to learn about procedures in general, let’s demystify
+what the \sphinxcode{\sphinxupquote{text2git}} procedure exactly is: It is
+nothing more than a simple script that
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+writes the relevant \sphinxcode{\sphinxupquote{annex\_largefiles}} configuration,  i.e., “Do not put anything that is a text file in the annex”) to the \sphinxcode{\sphinxupquote{.gitattributes}} file of a dataset, and
+
+\item {} 
+\sphinxAtStartPar
+saves this modification with the commit message “Instruct annex to add text files to Git”.
+
+\end{itemize}
+
+\sphinxAtStartPar
+This particular procedure lives in a script called
+\sphinxcode{\sphinxupquote{cfg\_text2git}} in the sourcecode of DataLad. The amount of code
+in this script is not large, and the relevant lines of code
+are highlighted:
+
+\fvset{hllines={, 12, 16, 17,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ \PYG{k+kn}{import} \PYG{n+nn}{sys}
+ \PYG{k+kn}{import} \PYG{n+nn}{os}\PYG{n+nn}{.}\PYG{n+nn}{path} \PYG{k}{as} \PYG{n+nn}{op}
+
+ \PYG{k+kn}{from} \PYG{n+nn}{datalad}\PYG{n+nn}{.}\PYG{n+nn}{distribution}\PYG{n+nn}{.}\PYG{n+nn}{dataset} \PYG{k+kn}{import} \PYG{n}{require\PYGZus{}dataset}
+
+ \PYG{n}{ds} \PYG{o}{=} \PYG{n}{require\PYGZus{}dataset}\PYG{p}{(}
+     \PYG{n}{sys}\PYG{o}{.}\PYG{n}{argv}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{,}
+     \PYG{n}{check\PYGZus{}installed}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,}
+     \PYG{n}{purpose}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{configuration}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+
+ \PYG{c+c1}{\PYGZsh{} the relevant configuration:}
+ \PYG{n}{annex\PYGZus{}largefiles} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{((mimeencoding=binary)and(largerthan=0))}\PYG{l+s+s1}{\PYGZsq{}}
+ \PYG{n}{attrs} \PYG{o}{=} \PYG{n}{ds}\PYG{o}{.}\PYG{n}{repo}\PYG{o}{.}\PYG{n}{get\PYGZus{}gitattributes}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{*}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+ \PYG{k}{if} \PYG{o+ow}{not} \PYG{n}{attrs}\PYG{o}{.}\PYG{n}{get}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{*}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,} \PYG{p}{\PYGZob{}}\PYG{p}{\PYGZcb{}}\PYG{p}{)}\PYG{o}{.}\PYG{n}{get}\PYG{p}{(}
+         \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{annex.largefiles}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,} \PYG{k+kc}{None}\PYG{p}{)} \PYG{o}{==} \PYG{n}{annex\PYGZus{}largefiles}\PYG{p}{:}
+     \PYG{n}{ds}\PYG{o}{.}\PYG{n}{repo}\PYG{o}{.}\PYG{n}{set\PYGZus{}gitattributes}\PYG{p}{(}\PYG{p}{[}
+         \PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{*}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,} \PYG{p}{\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{annex.largefiles}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{:} \PYG{n}{annex\PYGZus{}largefiles}\PYG{p}{\PYGZcb{}}\PYG{p}{)}\PYG{p}{]}\PYG{p}{)}
+
+ \PYG{n}{git\PYGZus{}attributes\PYGZus{}file} \PYG{o}{=} \PYG{n}{op}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{ds}\PYG{o}{.}\PYG{n}{path}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{.gitattributes}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+ \PYG{n}{ds}\PYG{o}{.}\PYG{n}{save}\PYG{p}{(}
+     \PYG{n}{git\PYGZus{}attributes\PYGZus{}file}\PYG{p}{,}
+     \PYG{n}{message}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Instruct annex to add text files to Git}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
+ \PYG{p}{)}
+\end{sphinxVerbatim}
+\sphinxresetverbatimhllines
+
+\sphinxAtStartPar
+Just like \sphinxcode{\sphinxupquote{cfg\_text2git}}, all DataLad procedures are
+executables (such as a script, or compiled code).
+In principle, they can be written in any language, and perform
+any task inside of a dataset.
+The \sphinxcode{\sphinxupquote{text2git}} configuration, for example, applies a configuration for how
+git\sphinxhyphen{}annex treats different file types. Other procedures do not
+only modify \sphinxcode{\sphinxupquote{.gitattributes}}, but can also populate a dataset
+with particular content, or automate routine tasks such as
+synchronizing dataset content with certain siblings.
+What makes them a particularly versatile and flexible tool is
+that anyone can write their own procedures.
+If a workflow is a standard in a team and needs to be applied often, turning it into
+a script can save time and effort.
+To learn how to do this, read the tutorial on writing own procedures in an upcoming section.
+By pointing DataLad to the location the procedures reside in they can be applied, and by
+including them in a dataset they can even be shared.
+And even if the script is simple, it is very handy to have preconfigured
+procedures that can be run in a single command line call. In the
+case of \sphinxcode{\sphinxupquote{text2git}}, all text files in a dataset will be stored
+in Git \textendash{} this is a useful configuration that is applicable to a
+wide range of datasets. It is a shortcut that
+spares naive users the necessity to learn about the \sphinxcode{\sphinxupquote{.gitattributes}}
+file when setting up a dataset.
+
+\index{run\sphinxhyphen{}procedure@\spxentry{run\sphinxhyphen{}procedure}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!run\sphinxhyphen{}procedure@\spxentry{run\sphinxhyphen{}procedure}}\index{discover dataset procedures@\spxentry{discover dataset procedures}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!discover dataset procedures@\spxentry{discover dataset procedures}}\index{discover@\spxentry{discover}!dataset procedure@\spxentry{dataset procedure}}\index{dataset procedure@\spxentry{dataset procedure}!discover@\spxentry{discover}}\ignorespaces 
+\sphinxAtStartPar
+To find out available procedures, the command
+\sphinxcode{\sphinxupquote{datalad run\sphinxhyphen{}procedure \sphinxhyphen{}\sphinxhyphen{}discover}} is helpful.
+This command will make DataLad search the default location for
+procedures in a dataset, the source code of DataLad or
+installed DataLad extensions, and the default locations for
+procedures on the system for available procedures:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }run\PYGZhy{}procedure\PYG{+w}{ }\PYGZhy{}\PYGZhy{}discover
+\PYG{g+go}{cfg\PYGZus{}metadatatypes (VIRTUALENV/lib/python3.8/site\PYGZhy{}packages/datalad\PYGZus{}deprecated/resources/procedures/cfg\PYGZus{}metadatatypes.py) [python\PYGZus{}script]}
+\PYG{g+go}{cfg\PYGZus{}noannex (VIRTUALENV/lib/python3.8/site\PYGZhy{}packages/datalad/resources/procedures/cfg\PYGZus{}noannex.py) [python\PYGZus{}script]}
+\PYG{g+go}{cfg\PYGZus{}text2git (VIRTUALENV/lib/python3.8/site\PYGZhy{}packages/datalad/resources/procedures/cfg\PYGZus{}text2git.py) [python\PYGZus{}script]}
+\PYG{g+go}{cfg\PYGZus{}yoda (VIRTUALENV/lib/python3.8/site\PYGZhy{}packages/datalad/resources/procedures/cfg\PYGZus{}yoda.py) [python\PYGZus{}script]}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The output shows that four procedures available in this particular dataset and the system it exists on:
+\sphinxcode{\sphinxupquote{cfg\_metadatatypes}}, \sphinxcode{\sphinxupquote{cfg\_text2git}}, \sphinxcode{\sphinxupquote{cfg\_yoda}}, and \sphinxcode{\sphinxupquote{cfg\_noannex}}.
+It also lists where they are stored \textendash{} in this case,
+they are all part of the source code of DataLad%
+\begin{footnote}\sphinxAtStartFootnote
+In theory, because procedures can exist on different levels, and
+because anyone can create (and thus name) their own procedures, there
+can be name conflicts. The order of precedence in such cases is:
+user\sphinxhyphen{}level, system\sphinxhyphen{}level, dataset, DataLad extension, DataLad, i.e.,
+local procedures take precedence over those coming from “outside” via
+datasets or DataLad extensions.
+If procedures in a higher\sphinxhyphen{}level dataset and a subdataset have the same
+name, the procedure closer to the dataset \sphinxcode{\sphinxupquote{run\sphinxhyphen{}procedure}} is
+operating on takes precedence.
+%
+\end{footnote}.
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{cfg\_noannex}} configures a dataset to not have an annex at all.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{cfg\_yoda}} configures a dataset according to the yoda
+principles \textendash{} the section {\hyperref[\detokenize{basics/101-127-yoda:yoda}]{\sphinxcrossref{\DUrole{std,std-ref}{YODA: Best practices for data analyses in a dataset}}}} (\autopageref*{\detokenize{basics/101-127-yoda:yoda}}) talks about this in detail.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{cfg\_text2git}} configures text files to be stored in Git.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{cfg\_metadatatypes}} lets users configure additional metadata
+types.
+
+\end{itemize}
+
+\index{run dataset procedure@\spxentry{run dataset procedure}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!run dataset procedure@\spxentry{run dataset procedure}}\index{run@\spxentry{run}!dataset procedure@\spxentry{dataset procedure}}\index{dataset procedure@\spxentry{dataset procedure}!run@\spxentry{run}}\ignorespaces 
+
+\subsection{Applying procedures}
+\label{\detokenize{basics/101-124-procedures:applying-procedures}}\label{\detokenize{basics/101-124-procedures:index-2}}
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{datalad run\sphinxhyphen{}procedure}} not only \sphinxstyleemphasis{discovers}
+but also \sphinxstyleemphasis{executes} procedures. If given the name of
+a procedure, this command will apply the procedure to
+the current dataset, or the dataset that is specified
+with the \sphinxcode{\sphinxupquote{\sphinxhyphen{}d/\sphinxhyphen{}\sphinxhyphen{}dataset}} flag:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+datalad\PYG{+w}{ }run\PYGZhy{}procedure\PYG{+w}{ }\PYG{o}{[}\PYGZhy{}d\PYG{+w}{ }\PYGZlt{}PATH\PYGZgt{}\PYG{o}{]}\PYG{+w}{ }cfg\PYGZus{}text2git
+\end{sphinxVerbatim}
+
+\index{run dataset procedure on dataset creation@\spxentry{run dataset procedure on dataset creation}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!run dataset procedure on dataset creation@\spxentry{run dataset procedure on dataset creation}}\index{run on dataset creation@\spxentry{run on dataset creation}!dataset procedure@\spxentry{dataset procedure}}\index{dataset procedure@\spxentry{dataset procedure}!run on dataset creation@\spxentry{run on dataset creation}}\ignorespaces 
+\sphinxAtStartPar
+The typical workflow is to create a dataset and apply
+a procedure afterwards.
+However, some procedures shipped with DataLad or its extensions with a
+\sphinxcode{\sphinxupquote{cfg\_}} prefix can also be applied right at the creation of a dataset
+with the \sphinxcode{\sphinxupquote{\sphinxhyphen{}c/\sphinxhyphen{}\sphinxhyphen{}cfg\sphinxhyphen{}proc \textless{}name\textgreater{}}} option in a \sphinxcode{\sphinxupquote{datalad create}}
+command. This is a peculiarity of these procedures because, by convention,
+all of these procedures are written to not require arguments.
+The command structure looks like this:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }create\PYG{+w}{ }\PYGZhy{}c\PYG{+w}{ }text2git\PYG{+w}{ }DataLad\PYGZhy{}101
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Note that the \sphinxcode{\sphinxupquote{cfg\_}} prefix of the procedures is omitted in these
+calls to keep it extra simple and short. The
+available procedures in this example (\sphinxcode{\sphinxupquote{cfg\_yoda}}, \sphinxcode{\sphinxupquote{cfg\_text2git}})
+could thus be applied within a \sphinxcode{\sphinxupquote{datalad create}} as
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{datalad create \sphinxhyphen{}c yoda \textless{}DSname\textgreater{}}}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{datalad create \sphinxhyphen{}c text2git \textless{}DSname\textgreater{}}}
+
+\end{itemize}
+
+\index{dataset procedure@\spxentry{dataset procedure}!apply more than one configuration@\spxentry{apply more than one configuration}}\ignorespaces 
+\sphinxAtStartPar
+You can also apply multiple configuration procedures at once. However,
+the need to be compatible and complement each other. DataLad does not
+guarantee that per\sphinxhyphen{}se. This is how it could look:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }create\PYG{+w}{ }\PYGZhy{}c\PYG{+w}{ }yoda\PYG{+w}{ }\PYGZhy{}c\PYG{+w}{ }text2git
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+And lastly, procedures can also be applied to subdatasets. See the
+\textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-subds-procedures}} {\hyperref[\detokenize{basics/101-124-procedures:fom-subds-procedures}]{\sphinxcrossref{\DUrole{std,std-ref}{on this topic}}}} (\autopageref*{\detokenize{basics/101-124-procedures:fom-subds-procedures}}) for details.
+
+\index{dataset procedure@\spxentry{dataset procedure}!apply to subdatasets@\spxentry{apply to subdatasets}}\ignorespaces \begin{findoutmore}[label={fom-subds-procedures}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{Applying procedures in subdatasets}
+\label{\detokenize{basics/101-124-procedures:fom-subds-procedures}}
+
+\sphinxAtStartPar
+Procedures can be applied in datasets on any level in the dataset hierarchy, i.e.,
+also in subdatasets. Note, though, that a subdataset will show up as being
+\sphinxcode{\sphinxupquote{modified}} in \sphinxcode{\sphinxupquote{datalad status}} \sphinxstyleemphasis{in the superdataset}
+after applying a procedure.
+This is expected, and it would also be the case with any other modification
+(saved or not) in the subdataset, as the version of the subdataset that is tracked
+in the superdataset simply changed. A \sphinxcode{\sphinxupquote{datalad save}} in the superdataset
+will make sure that the version of the subdataset gets updated in the superdataset.
+The section {\hyperref[\detokenize{basics/101-132-advancednesting:nesting2}]{\sphinxcrossref{\DUrole{std,std-ref}{Turtles all the way down}}}} (\autopageref*{\detokenize{basics/101-132-advancednesting:nesting2}}) will elaborate on this general principle later in this
+book.
+
+
+\end{findoutmore}
+
+\sphinxAtStartPar
+As a general note, it can be useful to apply procedures
+early in the life of a dataset. Procedures such
+as \sphinxcode{\sphinxupquote{cfg\_yoda}}, explained in detail in section {\hyperref[\detokenize{basics/101-127-yoda:yoda}]{\sphinxcrossref{\DUrole{std,std-ref}{YODA: Best practices for data analyses in a dataset}}}} (\autopageref*{\detokenize{basics/101-127-yoda:yoda}}),
+create files, change \sphinxcode{\sphinxupquote{.gitattributes}}, or apply other configurations.
+If many other (possibly complex) configurations are
+already in place, or if files of the same name as the ones created by
+a procedure are already in existence, this can lead to unexpected
+problems or failures, especially for naive users. Applying \sphinxcode{\sphinxupquote{cfg\_text2git}}
+to a default dataset in which one has saved many text files already
+(as per default added to the annex) will not place the existing, saved
+files into Git \textendash{} only those text files created \sphinxstyleemphasis{after} the configuration
+was applied.
+
+\index{configuration item@\spxentry{configuration item}!datalad.locations.system\sphinxhyphen{}procedures@\spxentry{datalad.locations.system\sphinxhyphen{}procedures}}\index{configuration item@\spxentry{configuration item}!datalad.locations.user\sphinxhyphen{}procedures@\spxentry{datalad.locations.user\sphinxhyphen{}procedures}}\index{configuration item@\spxentry{configuration item}!datalad.locations.dataset\sphinxhyphen{}procedures@\spxentry{datalad.locations.dataset\sphinxhyphen{}procedures}}\index{configuration item@\spxentry{configuration item}!datalad.procedures.\textless{}name\textgreater{}.call\sphinxhyphen{}format@\spxentry{datalad.procedures.\textless{}name\textgreater{}.call\sphinxhyphen{}format}}\index{configuration item@\spxentry{configuration item}!datalad.procedures.\textless{}name\textgreater{}.help@\spxentry{datalad.procedures.\textless{}name\textgreater{}.help}}\index{datasets procedures@\spxentry{datasets procedures}!write your own@\spxentry{write your own}}\ignorespaces 
+
+\subsection{Write your own procedures}
+\label{\detokenize{basics/101-124-procedures:write-your-own-procedures}}\label{\detokenize{basics/101-124-procedures:index-6}}
+\sphinxAtStartPar
+Procedures can come with DataLad or its extensions, but anyone can
+write their own ones in addition, and deploy them on individual machines,
+or ship them within DataLad datasets. This allows to
+automate routine configurations or tasks in a dataset, or share configurations that would otherwise not “stick” to the dataset.
+Here are some general rules for creating a custom procedure:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+A procedure can be any executable. Executables must have the
+appropriate permissions and, in the case of a script,
+must contain an appropriate {\hyperref[\detokenize{glossary:term-shebang}]{\sphinxtermref{\DUrole{xref,std,std-term}{shebang}}}}.
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+If a procedure is not executable, but its filename ends with
+\sphinxcode{\sphinxupquote{.sh}}, it is automatically executed via {\hyperref[\detokenize{glossary:term-bash}]{\sphinxtermref{\DUrole{xref,std,std-term}{bash}}}}.
+
+\end{itemize}
+
+\item {} 
+\sphinxAtStartPar
+Procedures can implement any argument handling, but must be capable
+of taking at least one positional argument (the absolute path to the
+dataset they shall operate on).
+
+\item {} 
+\sphinxAtStartPar
+Custom procedures rely heavily on configurations in \sphinxcode{\sphinxupquote{.datalad/config}}
+(or the associated environment variables). Within \sphinxcode{\sphinxupquote{.datalad/config}},
+each procedure should get an individual entry that contains at least
+a short “help” description on what the procedure does. Below is a minimal
+\sphinxcode{\sphinxupquote{.datalad/config}} entry for a custom procedure:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{[datalad \PYGZdq{}procedures.\PYGZlt{}NAME\PYGZgt{}\PYGZdq{}]}
+\PYG{+w}{   }\PYG{n+na}{help}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{This is a string to describe what the procedure does}
+\end{sphinxVerbatim}
+
+\item {} 
+\sphinxAtStartPar
+By default, on GNU/Linux systems, DataLad will search for system\sphinxhyphen{}wide procedures
+(i.e., procedures on the \sphinxstyleemphasis{system} level) in \sphinxcode{\sphinxupquote{/etc/xdg/datalad/procedures}},
+for user procedures (i.e., procedures on the \sphinxstyleemphasis{global} level) in \sphinxcode{\sphinxupquote{\textasciitilde{}/.config/datalad/procedures}},
+and for dataset procedures (i.e., the \sphinxstyleemphasis{local} level%
+\begin{footnote}\sphinxAtStartFootnote
+Note that we simplify the level of procedures that exist within a dataset
+by calling them \sphinxstyleemphasis{local}. Even though they apply to a dataset just as \sphinxstyleemphasis{local}
+Git configurations, unlike Git’s \sphinxstyleemphasis{local} configurations in \sphinxcode{\sphinxupquote{.git/config}},
+the procedures and procedure configurations in \sphinxcode{\sphinxupquote{.datalad/config}} are committed
+and can be shared together with a dataset. The procedure level \sphinxstyleemphasis{local} therefore
+does not exactly corresponds to the \sphinxstyleemphasis{local} scope in the sense that Git uses it.
+%
+\end{footnote}) in \sphinxcode{\sphinxupquote{.datalad/procedures}}
+relative to a dataset root.
+Note that \sphinxcode{\sphinxupquote{.datalad/procedures}} does not exist by default, and the \sphinxcode{\sphinxupquote{procedures}}
+directory needs to be created first.
+
+\item {} 
+\sphinxAtStartPar
+Alternatively to the default locations, DataLad can be pointed to the location of a procedure with a configuration in \sphinxcode{\sphinxupquote{.datalad/config}} (or with the help of the associated {\hyperref[\detokenize{glossary:term-environment-variable}]{\sphinxtermref{\DUrole{xref,std,std-term}{environment variable}}}}s).
+The appropriate configuration keys for \sphinxcode{\sphinxupquote{.datalad/config}} are either \sphinxcode{\sphinxupquote{datalad.locations.system\sphinxhyphen{}procedures}} (for changing the \sphinxstyleemphasis{system} default), \sphinxcode{\sphinxupquote{datalad.locations.user\sphinxhyphen{}procedures}} (for changing the \sphinxstyleemphasis{global} default), or \sphinxcode{\sphinxupquote{datalad.locations.dataset\sphinxhyphen{}procedures}} (for changing the \sphinxstyleemphasis{local} default).
+An example \sphinxcode{\sphinxupquote{.datalad/config}} entry for the local scope is shown below.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{[datalad \PYGZdq{}locations\PYGZdq{}]}
+\PYG{+w}{        }\PYG{n+na}{dataset\PYGZhy{}procedures}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{relative/path/from/dataset\PYGZhy{}root}
+\end{sphinxVerbatim}
+
+\item {} 
+\sphinxAtStartPar
+By default, DataLad will call a procedure with a standard template defined by a format string:
+\begin{quote}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{interpreter} \PYG{p}{\PYGZob{}}\PYG{n}{script}\PYG{p}{\PYGZcb{}} \PYG{p}{\PYGZob{}}\PYG{n}{ds}\PYG{p}{\PYGZcb{}} \PYG{p}{\PYGZob{}}\PYG{n}{arguments}\PYG{p}{\PYGZcb{}}
+\end{sphinxVerbatim}
+\end{quote}
+
+\end{itemize}
+
+\sphinxAtStartPar
+where arguments can be any additional command line arguments a script (procedure) takes or requires.
+This default format string can be customized within \sphinxcode{\sphinxupquote{.datalad/config}} in \sphinxcode{\sphinxupquote{datalad.procedures.\textless{}NAME\textgreater{}.call\sphinxhyphen{}format}}.
+An example \sphinxcode{\sphinxupquote{.datalad/config}} entry with a changed call format string is shown below.
+\begin{quote}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{[datalad \PYGZdq{}procedures.\PYGZlt{}NAME\PYGZgt{}\PYGZdq{}]}
+\PYG{+w}{   }\PYG{n+na}{help}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{This is a string to describe what the procedure does}
+\PYG{+w}{   }\PYG{n+na}{call\PYGZhy{}format}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{python \PYGZob{}script\PYGZcb{} \PYGZob{}ds\PYGZcb{} \PYGZob{}somearg1\PYGZcb{} \PYGZob{}somearg2\PYGZcb{}}
+\end{sphinxVerbatim}
+\end{quote}
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+By convention, procedures should leave a dataset in a clean state.
+
+\end{itemize}
+
+\sphinxAtStartPar
+Therefore, in order to create a custom procedure, an executable script
+in the appropriate location is fine. Placing a script \sphinxcode{\sphinxupquote{myprocedure}}
+into \sphinxcode{\sphinxupquote{.datalad/procedures}} will allow running
+\sphinxcode{\sphinxupquote{datalad run\sphinxhyphen{}procedure myprocedure}} in your dataset, and because
+it is part of the dataset it will also allow distributing the procedure.
+Below is a toy\sphinxhyphen{}example for a custom procedure:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }create\PYG{+w}{ }somedataset\PYG{p}{;}\PYG{+w}{ }\PYG{n+nb}{cd}\PYG{+w}{ }somedataset
+\PYG{g+go}{create(ok): /home/me/procs/somedataset (dataset)}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }mkdir\PYG{+w}{ }.datalad/procedures
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }\PYGZlt{}\PYGZlt{}\PYG{+w}{ }EOT\PYG{+w}{ }\PYGZgt{}\PYG{+w}{ }.datalad/procedures/example.py
+\PYG{g+go}{\PYGZdq{}\PYGZdq{}\PYGZdq{}A simple procedure to create a file \PYGZsq{}example\PYGZsq{} and store}
+\PYG{g+go}{it in Git, and a file \PYGZsq{}example2\PYGZsq{} and annex it. The contents}
+\PYG{g+go}{of \PYGZsq{}example\PYGZsq{} must be defined with a positional argument.\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+
+\PYG{g+go}{import sys}
+\PYG{g+go}{import os.path as op}
+\PYG{g+go}{from datalad.distribution.dataset import require\PYGZus{}dataset}
+\PYG{g+go}{from datalad.utils import create\PYGZus{}tree}
+
+\PYG{g+go}{ds = require\PYGZus{}dataset(}
+\PYG{g+go}{    sys.argv[1],}
+\PYG{g+go}{    check\PYGZus{}installed=True,}
+\PYG{g+go}{    purpose=\PYGZsq{}showcase an example procedure\PYGZsq{})}
+
+\PYG{g+gp}{\PYGZsh{} }this\PYG{+w}{ }is\PYG{+w}{ }the\PYG{+w}{ }content\PYG{+w}{ }\PYG{k}{for}\PYG{+w}{ }file\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}example\PYGZdq{}}
+\PYG{g+go}{content = \PYGZdq{}\PYGZdq{}\PYGZdq{}\PYGZbs{}}
+\PYG{g+go}{This file was created by a custom procedure! Neat, huh?}
+\PYG{g+go}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+
+\PYG{g+gp}{\PYGZsh{} }create\PYG{+w}{ }a\PYG{+w}{ }directory\PYG{+w}{ }structure\PYG{+w}{ }template.\PYG{+w}{ }Write
+\PYG{g+go}{tmpl = \PYGZob{}}
+\PYG{g+go}{    \PYGZsq{}somedir\PYGZsq{}: \PYGZob{}}
+\PYG{g+go}{        \PYGZsq{}example\PYGZsq{}: content,}
+\PYG{g+go}{    \PYGZcb{},}
+\PYG{g+go}{    \PYGZsq{}example2\PYGZsq{}: sys.argv[2] if sys.argv[2] else \PYGZdq{}got no input\PYGZdq{}}
+\PYG{g+go}{\PYGZcb{}}
+
+\PYG{g+gp}{\PYGZsh{} }actually\PYG{+w}{ }create\PYG{+w}{ }the\PYG{+w}{ }structure\PYG{+w}{ }\PYG{k}{in}\PYG{+w}{ }the\PYG{+w}{ }dataset
+\PYG{g+go}{create\PYGZus{}tree(ds.path, tmpl)}
+
+\PYG{g+gp}{\PYGZsh{} }rule\PYG{+w}{ }to\PYG{+w}{ }store\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}example\PYGZsq{}}\PYG{+w}{ }Git
+\PYG{g+go}{ds.repo.set\PYGZus{}gitattributes([(\PYGZsq{}example\PYGZsq{}, \PYGZob{}\PYGZsq{}annex.largefiles\PYGZsq{}: \PYGZsq{}nothing\PYGZsq{}\PYGZcb{})])}
+
+\PYG{g+gp}{\PYGZsh{} }save\PYG{+w}{ }the\PYG{+w}{ }dataset\PYG{+w}{ }modifications
+\PYG{g+go}{ds.save(message=\PYGZdq{}Apply custom procedure\PYGZdq{})}
+
+\PYG{g+go}{EOT}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}add custom procedure\PYGZdq{}}
+\PYG{g+go}{add(ok): .datalad/procedures/example.py (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+At this point, the dataset contains the custom procedure \sphinxcode{\sphinxupquote{example}}.
+This is how it can be executed and what it does:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }run\PYGZhy{}procedure\PYG{+w}{ }example\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}this text will be in the file \PYGZsq{}example2\PYGZsq{}\PYGZdq{}}
+\PYG{g+go}{[INFO] Running procedure example}
+\PYG{g+go}{[INFO] == Command start (output follows) =====}
+\PYG{g+go}{add(ok): example2 (file)}
+\PYG{g+go}{add(ok): somedir/example (file)}
+\PYG{g+go}{add(ok): .gitattributes (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\PYG{g+go}{[INFO] == Command exit (modification check follows) =====}
+\PYG{g+go}{run(ok): /home/me/procs/somedataset (dataset) [VIRTUALENV/bin/python /home/m...]}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} the directory structure has been created}
+\PYG{g+gp}{\PYGZdl{} }tree
+\PYG{g+go}{.}
+\PYG{g+go}{├── example2 \PYGZhy{}\PYGZgt{} .git/annex/objects/G6/zw/✂/MD5E\PYGZhy{}s40\PYGZhy{}\PYGZhy{}2ed1bce0✂MD5}
+\PYG{g+go}{└── somedir}
+\PYG{g+go}{    └── example}
+
+\PYG{g+go}{1 directory, 2 files}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} lets check out the contents in the files}
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }example2\PYG{+w}{  }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{n+nb}{echo}\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}\PYGZsq{}}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }cat\PYG{+w}{ }somedir/example
+\PYG{g+go}{this text will be in the file \PYGZsq{}example2\PYGZsq{}}
+\PYG{g+go}{This file was created by a custom procedure! Neat, huh?}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }config\PYG{+w}{ }\PYGZhy{}f\PYG{+w}{ }.datalad/config\PYG{+w}{ }datalad.procedures.example.help\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}A toy example\PYGZdq{}}
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}add help description\PYGZdq{}}
+\PYG{g+go}{add(ok): .datalad/config (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+To find out more about a given procedure, you can ask for help:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }run\PYGZhy{}procedure\PYG{+w}{ }\PYGZhy{}\PYGZhy{}help\PYGZhy{}proc\PYG{+w}{ }example
+\PYG{g+go}{example (.datalad/procedures/example.py)}
+\PYG{g+go}{A toy example}
+\end{sphinxVerbatim}
+
+
+\subsection{Conclusions}
+\label{\detokenize{basics/101-124-procedures:conclusions}}
+\sphinxAtStartPar
+Summing up, DataLad’s \sphinxcode{\sphinxupquote{datalad run\sphinxhyphen{}procedure}} command is a handy tool
+with useful existing procedures but much flexibility for your own
+DIY procedure scripts. With the information of the last three sections
+you should be able to write and understand necessary configurations,
+but you can also rely on existing, preconfigured templates in the
+form of procedures, and even write and distribute your own.
+
+\sphinxAtStartPar
+Therefore, envision procedures as
+helper\sphinxhyphen{}tools that can minimize technical complexities
+in a dataset \textendash{} users can concentrate on the actual task while
+the dataset is set\sphinxhyphen{}up, structured, processed, or configured automatically
+with the help of a procedure.
+Especially in the case of trainees and new users, applying procedures
+instead of doing relevant routines “by hand” can help to ease
+working with the dataset. Other than by users, procedures can also be triggered to automatically
+run after any command execution if a command results matches a specific
+requirement.
+
+\sphinxAtStartPar
+Finally, make a note about running procedures inside of \sphinxcode{\sphinxupquote{notes.txt}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }\PYGZlt{}\PYGZlt{}\PYG{+w}{ }EOT\PYG{+w}{ }\PYGZgt{}\PYGZgt{}\PYG{+w}{ }notes.txt
+\PYG{g+go}{It can be useful to use pre\PYGZhy{}configured procedures that can apply}
+\PYG{g+go}{configurations, create files or file hierarchies, or perform arbitrary}
+\PYG{g+go}{tasks in datasets. They can be shipped with DataLad, its extensions,}
+\PYG{g+go}{or datasets, and you can even write your own procedures and distribute}
+\PYG{g+go}{them.}
+\PYG{g+go}{The \PYGZdq{}datalad run\PYGZhy{}procedure\PYGZdq{} command is used to apply such a procedure}
+\PYG{g+go}{to a dataset. Procedures shipped with DataLad or its extensions}
+\PYG{g+go}{starting with a \PYGZdq{}cfg\PYGZdq{} prefix can also be applied at the creation of a}
+\PYG{g+go}{dataset with \PYGZdq{}datalad create \PYGZhy{}c \PYGZlt{}PROC\PYGZhy{}NAME\PYGZgt{} \PYGZlt{}PATH\PYGZgt{}\PYGZdq{} (omitting the}
+\PYG{g+go}{\PYGZdq{}cfg\PYGZdq{} prefix).}
+
+\PYG{g+go}{EOT}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}add note on DataLad\PYGZsq{}s procedures\PYGZdq{}}
+\PYG{g+go}{add(ok): notes.txt (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxstepscope
+
+
+\section{Summary}
+\label{\detokenize{basics/101-125-summary:summary}}\label{\detokenize{basics/101-125-summary:summary-config}}\label{\detokenize{basics/101-125-summary::doc}}
+\sphinxAtStartPar
+This has been a substantial amount of information regarding various configuration
+types, methods, and files. After this lecture, you have greatly broadened
+your horizon about configurations of datasets:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Configurations exist at different scopes and for different tools. Each
+of such configuration scopes exists in an individual file, on a \sphinxstyleemphasis{system\sphinxhyphen{}wide},
+\sphinxstyleemphasis{global} (user\sphinxhyphen{}specific) or \sphinxstyleemphasis{local} (repository specific) level. In addition
+to Git’s \sphinxstyleemphasis{local} scope in \sphinxcode{\sphinxupquote{.git/config}}, DataLad introduces its own configurations within
+\sphinxcode{\sphinxupquote{.datalad/config}} that apply to a specific dataset, but are committed and
+therefore distributed. More specialized scopes take precedence over more global scopes.
+
+\item {} 
+\sphinxAtStartPar
+Almost all configurations can be set with the \sphinxcode{\sphinxupquote{git config}} command.
+Its structure looks like this:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+git\PYG{+w}{ }config\PYG{+w}{ }\PYGZhy{}\PYGZhy{}local/\PYGZhy{}\PYGZhy{}global/\PYGZhy{}\PYGZhy{}system\PYG{+w}{ }\PYGZhy{}\PYGZhy{}add/remove\PYGZhy{}all/\PYGZhy{}\PYGZhy{}list\PYG{+w}{ }section.\PYG{o}{[}subsection.\PYG{o}{]}variable\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}value\PYGZdq{}}
+\end{sphinxVerbatim}
+
+\item {} 
+\sphinxAtStartPar
+The \sphinxcode{\sphinxupquote{.git/config}} configuration file is not version controlled, other
+configuration files (\sphinxcode{\sphinxupquote{.gitmodules}}, \sphinxcode{\sphinxupquote{.gitattributes}}, \sphinxcode{\sphinxupquote{.datalad/config}})
+however are, and can be shared together with the dataset. Non\sphinxhyphen{}shared configurations
+will take precedence over shared configurations in a dataset clone.
+
+\item {} 
+\sphinxAtStartPar
+Other tools than Git can be configured with the \sphinxcode{\sphinxupquote{git config}} command
+as well. If configurations needs to be written to a file other than a
+\sphinxcode{\sphinxupquote{.git(/)config}} file, supply a path to this file with the \sphinxcode{\sphinxupquote{\sphinxhyphen{}f/\sphinxhyphen{}\sphinxhyphen{}file}} flag
+in a \sphinxcode{\sphinxupquote{git config}} command.
+
+\item {} 
+\sphinxAtStartPar
+The \sphinxcode{\sphinxupquote{.gitattributes}} file is the only configuration file the \sphinxcode{\sphinxupquote{git config}}
+command cannot write to, because it has a different layout. However, run\sphinxhyphen{}procedures or
+the user can write simple rules into it that determine which files are annexed
+and which are stored in Git.
+
+\item {} 
+\sphinxAtStartPar
+DataLad’s \sphinxcode{\sphinxupquote{run\sphinxhyphen{}procedure}}s offer an easy and fast alternative to DIY
+configurations, structuring, or processing of the dataset, and offer means to share or ship configurations together with a dataset.
+They can be applied already at creation of a dataset with \sphinxcode{\sphinxupquote{datalad create \sphinxhyphen{}c \textless{}procedure\textgreater{}}},
+or executed later with a \sphinxcode{\sphinxupquote{datalad run\sphinxhyphen{}procedure}} command.
+
+\end{itemize}
+
+
+\subsection{Now what can I do with it?}
+\label{\detokenize{basics/101-125-summary:now-what-can-i-do-with-it}}
+\sphinxAtStartPar
+Configurations are not a closed book for you anymore. What will probably be
+especially helpful is your new knowledge about \sphinxcode{\sphinxupquote{.gitattributes}} and
+DataLad’s \sphinxcode{\sphinxupquote{run\sphinxhyphen{}procedure}} command that allow you to configure the behavior
+of git\sphinxhyphen{}annex in your dataset.
+
+\sphinxstepscope
+
+

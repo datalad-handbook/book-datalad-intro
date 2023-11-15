@@ -1,0 +1,1054 @@
+\chapter{Git things done}
+\label{\detokenize{basics/101-137-history:git-things-done}}\label{\detokenize{basics/101-137-history:history}}\label{\detokenize{basics/101-137-history::doc}}
+\noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{versioncontrol}.pdf}\hspace*{\fill}}
+
+\sphinxAtStartPar
+Almost everyone inadvertently deleted or overwrote files at some point with
+a hasty operation that caused data fatalities or at least troubles to
+reobtain or restore data.
+With DataLad, no mistakes are forever: One powerful feature of datasets
+is the ability to revert data to a previous state and thus view earlier content or
+correct mistakes. As long as the content was version controlled (i.e., tracked),
+it is possible to look at previous states of the data, or revert changes \textendash{}
+even years after they happened \textendash{} thanks to the underlying version control
+system {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}}.
+
+\sphinxAtStartPar
+To get a glimpse into how to work with the history of a dataset, today’s lecture
+has an external Git\sphinxhyphen{}expert as a guest lecturer.
+“I do not have enough time to go through all the details in only
+one lecture. But I’ll give you the basics, and an idea of what is possible.
+Always remember: Just google what you need. You will find thousands of helpful tutorials
+or questions on \dlhbhref{S7}{Stack Overflow} right away.
+Even experts will \sphinxstyleemphasis{constantly} seek help to find out which Git command to
+use, and how to use it.”, he reassures with a wink.
+
+\sphinxAtStartPar
+The basis of working with the history is to \sphinxstyleemphasis{look at it} with tools such
+as {\hyperref[\detokenize{glossary:term-tig}]{\sphinxtermref{\DUrole{xref,std,std-term}{tig}}}}, {\hyperref[\detokenize{glossary:term-gitk}]{\sphinxtermref{\DUrole{xref,std,std-term}{gitk}}}}, or simply the \sphinxcode{\sphinxupquote{git log}} command.
+The most important information in an entry (commit) in the history is
+the {\hyperref[\detokenize{glossary:term-shasum}]{\sphinxtermref{\DUrole{xref,std,std-term}{shasum}}}} (or hash) associated with it.
+This hash is how dataset modifications in the history are identified,
+and with this hash you can communicate with DataLad or {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}} about these
+modifications or version states%
+\begin{footnote}\sphinxAtStartFootnote
+For example, the \sphinxcode{\sphinxupquote{datalad rerun}} command introduced in section
+{\hyperref[\detokenize{basics/101-109-rerun:run2}]{\sphinxcrossref{\DUrole{std,std-ref}{DataLad, rerun!}}}} (\autopageref*{\detokenize{basics/101-109-rerun:run2}}) takes such a hash as an argument, and re\sphinxhyphen{}executes
+the \sphinxcode{\sphinxupquote{datalad run}} or \sphinxcode{\sphinxupquote{datalad rerun}} {\hyperref[\detokenize{glossary:term-run-record}]{\sphinxtermref{\DUrole{xref,std,std-term}{run record}}}} associated with
+this hash. Likewise, the \sphinxcode{\sphinxupquote{git diff}} command can work with commit hashes.
+%
+\end{footnote}.
+Here is an excerpt from the \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} history to show a
+few abbreviated hashes of the 15 most recent commits%
+\begin{footnote}\sphinxAtStartFootnote
+There are other alternatives to reference commits in the history of a dataset,
+for example, “counting” ancestors of the most recent commit using the notation
+\sphinxcode{\sphinxupquote{HEAD\textasciitilde{}2}}, \sphinxcode{\sphinxupquote{HEAD\textasciicircum{}2}} or \sphinxcode{\sphinxupquote{HEAD@\{2\}}}. However, using hashes to reference
+commits is a very fail\sphinxhyphen{}save method and saves you from accidentally miscounting.
+%
+\end{footnote}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}15\PYG{+w}{ }\PYGZhy{}\PYGZhy{}oneline
+\PYG{g+go}{996f459 remove obsolete subds}
+\PYG{g+go}{15acb2a [DATALAD] Added subdataset}
+\PYG{g+go}{c278f6a save cropped logos to Git}
+\PYG{g+go}{de2d23c move book back from midterm\PYGZus{}project}
+\PYG{g+go}{a648756 move book into midterm\PYGZus{}project}
+\PYG{g+go}{39e55c8 add container and execute analysis within container}
+\PYG{g+go}{c5c9017 finished my midterm project}
+\PYG{g+go}{0edd3ea [DATALAD] Recorded changes}
+\PYG{g+go}{08684a4 add note on DataLad\PYGZsq{}s procedures}
+\PYG{g+go}{c2400da add note on configurations and git config}
+\PYG{g+go}{e202e94 Add note on adding siblings}
+\PYG{g+go}{6ae8e71 Merge remote\PYGZhy{}tracking branch \PYGZsq{}roommate/main\PYGZsq{}}
+\PYG{g+go}{4bb5d39 add note about datalad update}
+\PYG{g+go}{5b6e19a Include nesting demo from datalad website}
+\PYG{g+go}{adb4b5d add note on git annex whereis}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+“I’ll let you people direct this lecture”, the guest lecturer proposes.
+“You tell me what you would be interested in doing, and I’ll show you how it’s
+done. For the rest of the lecture, call me Google!”
+
+
+\section{Fix commit messages}
+\label{\detokenize{basics/101-137-history:fix-commit-messages}}
+\sphinxAtStartPar
+From the back of the lecture hall comes a question you are really glad
+someone asked: “It has happened to me that I accidentally did a
+\sphinxcode{\sphinxupquote{datalad save}} and forgot to specify the commit message,
+how can I fix this?”.
+The room nods in agreement \textendash{} apparently, others have run into this
+premature slip of the \sphinxcode{\sphinxupquote{Enter}} key as well.
+
+\sphinxAtStartPar
+Let’s demonstrate a simple example. First, let’s create some random files.
+Do this right in your dataset.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }\PYGZlt{}\PYGZlt{}\PYG{+w}{ }EOT\PYG{+w}{ }\PYGZgt{}\PYG{+w}{ }Gitjoke1.txt
+\PYG{g+go}{Git knows what you did last summer!}
+\PYG{g+go}{EOT}
+
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }\PYGZlt{}\PYGZlt{}\PYG{+w}{ }EOT\PYG{+w}{ }\PYGZgt{}\PYG{+w}{ }Gitjoke2.txt
+\PYG{g+go}{Knock knock. Who\PYGZsq{}s there? Git.}
+\PYG{g+go}{Git\PYGZhy{}who?}
+\PYG{g+go}{Sorry, \PYGZsq{}who\PYGZsq{} is not a git command \PYGZhy{} did you mean \PYGZsq{}show\PYGZsq{}?}
+\PYG{g+go}{EOT}
+
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }\PYGZlt{}\PYGZlt{}\PYG{+w}{ }EOT\PYG{+w}{ }\PYGZgt{}\PYG{+w}{ }Gitjoke3.txt
+\PYG{g+go}{In Soviet Russia, git commits YOU!}
+\PYG{g+go}{EOT}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This will generate three new files in your dataset. Run a
+\sphinxcode{\sphinxupquote{datalad status}} to verify this:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{untracked: Gitjoke1.txt (file)}
+\PYG{g+go}{untracked: Gitjoke2.txt (file)}
+\PYG{g+go}{untracked: Gitjoke3.txt (file)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+And now:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save
+\PYG{g+go}{add(ok): Gitjoke1.txt (file)}
+\PYG{g+go}{add(ok): Gitjoke2.txt (file)}
+\PYG{g+go}{add(ok): Gitjoke3.txt (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Whooops! A \sphinxcode{\sphinxupquote{datalad save}} without a
+commit message that saved all of the files.
+
+\fvset{hllines={, 6,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}p\PYG{+w}{ }\PYGZhy{}1
+\PYG{g+go}{commit 58e40d9a✂SHA1}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    [DATALAD] Recorded changes}
+
+\PYG{g+go}{diff \PYGZhy{}\PYGZhy{}git a/Gitjoke1.txt b/Gitjoke1.txt}
+\PYG{g+go}{new file mode 100644}
+\PYG{g+go}{index 0000000..d7e1359}
+\PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{} /dev/null}
+\PYG{g+go}{+++ b/Gitjoke1.txt}
+\PYG{g+go}{@@ \PYGZhy{}0,0 +1 @@}
+\PYG{g+go}{+Git knows what you did last summer!}
+\PYG{g+go}{diff \PYGZhy{}\PYGZhy{}git a/Gitjoke2.txt b/Gitjoke2.txt}
+\PYG{g+go}{new file mode 100644}
+\PYG{g+go}{index 0000000..51beecb}
+\PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{} /dev/null}
+\PYG{g+go}{+++ b/Gitjoke2.txt}
+\PYG{g+go}{@@ \PYGZhy{}0,0 +1,3 @@}
+\PYG{g+go}{+Knock knock. Who\PYGZsq{}s there? Git.}
+\PYG{g+go}{+Git\PYGZhy{}who?}
+\PYG{g+go}{+Sorry, \PYGZsq{}who\PYGZsq{} is not a git command \PYGZhy{} did you mean \PYGZsq{}show\PYGZsq{}?}
+\PYG{g+go}{diff \PYGZhy{}\PYGZhy{}git a/Gitjoke3.txt b/Gitjoke3.txt}
+\PYG{g+go}{new file mode 100644}
+\PYG{g+go}{index 0000000..7b83d95}
+\PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{} /dev/null}
+\PYG{g+go}{+++ b/Gitjoke3.txt}
+\PYG{g+go}{@@ \PYGZhy{}0,0 +1 @@}
+\PYG{g+go}{+In Soviet Russia, git commits YOU!}
+\end{sphinxVerbatim}
+\sphinxresetverbatimhllines
+
+\sphinxAtStartPar
+As expected, all of the modifications present prior to the
+command are saved into the most recent commit, and the commit
+message DataLad provides by default, \sphinxcode{\sphinxupquote{{[}DATALAD{]} Recorded changes}},
+is not very helpful.
+
+\sphinxAtStartPar
+Changing the commit message of the most recent commit can be done with
+the command \sphinxcode{\sphinxupquote{git commit \sphinxhyphen{}\sphinxhyphen{}amend}}. Running this command will open
+an editor (the default, as configured in Git), and allow you
+to change the commit message. Make sure to read the {\hyperref[\detokenize{basics/101-137-history:fom-rebase1}]{\sphinxcrossref{\DUrole{std,std-ref}{find\sphinxhyphen{}out\sphinxhyphen{}more on changing other than the most recent commit}}}} (\autopageref*{\detokenize{basics/101-137-history:fom-rebase1}}) in case you want to improve the commit message of more commits than only the latest.
+
+\sphinxAtStartPar
+Try running the \sphinxcode{\sphinxupquote{git commit \sphinxhyphen{}\sphinxhyphen{}amend}} command right now and give
+the commit a new commit message (you can just delete the one created by
+DataLad in the editor)!
+
+\index{save \sphinxhyphen{}\sphinxhyphen{}amend@\spxentry{save \sphinxhyphen{}\sphinxhyphen{}amend}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!save \sphinxhyphen{}\sphinxhyphen{}amend@\spxentry{save \sphinxhyphen{}\sphinxhyphen{}amend}}\index{add changes to previous commit@\spxentry{add changes to previous commit}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!add changes to previous commit@\spxentry{add changes to previous commit}}\index{change the last commit message@\spxentry{change the last commit message}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!change the last commit message@\spxentry{change the last commit message}}\ignorespaces \begin{gitusernote}[label={index-0}, before title={\thetcbcounter\ }, check odd page=true]{‘git commit –amend’ versus ‘datalad save –amend’}
+\label{\detokenize{basics/101-137-history:index-0}}
+
+\sphinxAtStartPar
+Similar to \sphinxcode{\sphinxupquote{git commit}}, \sphinxcode{\sphinxupquote{datalad save}} also has an \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}amend}} option.
+Like its Git equivalent, it can be used to record changes not in a new, separate commit, but integrate them with the previously saved state.
+Though this has not been the use case for \sphinxcode{\sphinxupquote{git commit \sphinxhyphen{}\sphinxhyphen{}amend}} here, experienced Git users will be accustomed to using \sphinxcode{\sphinxupquote{git commit \sphinxhyphen{}\sphinxhyphen{}amend}} to achieve something similar in their Git workflows.
+In contrast to \sphinxcode{\sphinxupquote{git commit \sphinxhyphen{}\sphinxhyphen{}amend}}, \sphinxcode{\sphinxupquote{datalad save \sphinxhyphen{}\sphinxhyphen{}amend}} will not open up an interactive editor to potentially change a commit message (unless the configuration \sphinxcode{\sphinxupquote{datalad.save.no\sphinxhyphen{}message}} is set to \sphinxcode{\sphinxupquote{interactive}}), but a new commit message can be supplied with the \sphinxcode{\sphinxupquote{\sphinxhyphen{}m}}/\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}message}} option.
+
+
+\end{gitusernote}
+
+\index{change historical commit messages@\spxentry{change historical commit messages}!with Git@\spxentry{with Git}}\index{with Git@\spxentry{with Git}!change historical commit messages@\spxentry{change historical commit messages}}\index{rebase@\spxentry{rebase}!Git command@\spxentry{Git command}}\index{Git command@\spxentry{Git command}!rebase@\spxentry{rebase}}\index{rewrite history@\spxentry{rewrite history}!with Git@\spxentry{with Git}}\index{with Git@\spxentry{with Git}!rewrite history@\spxentry{rewrite history}}\ignorespaces \begin{findoutmore}[label={fom-rebase1}, before title={\thetcbcounter\ }, float, check odd page=true]{Changing the commit messages of not-the-most-recent commits}
+\label{\detokenize{basics/101-137-history:fom-rebase1}}
+
+\sphinxAtStartPar
+The \sphinxcode{\sphinxupquote{git commit \sphinxhyphen{}\sphinxhyphen{}amend}} command will let you
+rewrite the commit message of the most recent commit. However, if you
+need to rewrite commit messages of older commits, you
+can do with an “interactive rebase”:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }rebase\PYG{+w}{ }\PYGZhy{}\PYGZhy{}interactive\PYG{+w}{ }HEAD\PYGZti{}N
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+where \sphinxcode{\sphinxupquote{N}} specifies how far back you want to rewrite commits.
+\sphinxcode{\sphinxupquote{git rebase \sphinxhyphen{}i HEAD\textasciitilde{}3}}, for example, lets you apply changes to the
+any number of commit messages within the last three commits.
+
+\sphinxAtStartPar
+Be aware that an interactive rebase lets you \sphinxstyleemphasis{rewrite} history.
+This can lead to confusion or worse if the history you are rewriting
+is shared with others, for example, in a collaborative project. Be also aware
+that rewriting history that is \sphinxstyleemphasis{pushed}/\sphinxstyleemphasis{published} to another location
+will require a force\sphinxhyphen{}push!
+
+\sphinxAtStartPar
+Running this command yields a list of the N most recent commits
+in a text editor (which may be {\hyperref[\detokenize{glossary:term-vim}]{\sphinxtermref{\DUrole{xref,std,std-term}{vim}}}}!), with
+the most recent commit at the bottom:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+pick 8503f26 Add note on adding siblings
+pick 23f0a52 add note on configurations and git config
+pick c42cba4 add note on DataLad\PYGZsq{}s procedures
+
+\PYGZsh{} Rebase b259ce8..c42cba4 onto b259ce8 (3 commands)
+\PYGZsh{}
+\PYGZsh{} Commands:
+\PYGZsh{} p, pick \PYGZlt{}commit\PYGZgt{} = use commit
+\PYGZsh{} r, reword \PYGZlt{}commit\PYGZgt{} = use commit, but edit the commit message
+\PYGZsh{} s, squash \PYGZlt{}commit\PYGZgt{} = use commit, but meld into previous commit
+\PYGZsh{} f, fixup \PYGZlt{}commit\PYGZgt{} = like \PYGZdq{}squash\PYGZdq{}, but discard this commit\PYGZsq{}s log message
+\PYGZhy{}✂\PYGZhy{}\PYGZhy{}✂\PYGZhy{}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+With an interactive rebase we can apply various modifications to any
+number of commits in the list. Below the list are examples for some of these
+actions. Among them is “reword”, which lets you “edit the commit
+message”. To apply this action and reword the top\sphinxhyphen{}most commit message in this list
+(\sphinxcode{\sphinxupquote{8503f26 Add note on adding siblings}}, three commits back in the history),
+exchange the word \sphinxcode{\sphinxupquote{pick}} in the beginning of the line with the word
+\sphinxcode{\sphinxupquote{reword}} or simply \sphinxcode{\sphinxupquote{r}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+r\PYG{+w}{ }8503f26\PYG{+w}{ }Add\PYG{+w}{ }note\PYG{+w}{ }on\PYG{+w}{ }adding\PYG{+w}{ }siblings
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+If you want to reword more than one commit message, exchange several
+\sphinxcode{\sphinxupquote{pick}}s. Any commit with the word \sphinxcode{\sphinxupquote{pick}} at the beginning of the line will
+be kept as is. Once you are done, save and close the editor. This will
+sequentially open up a new editor for each commit you want to reword. In
+it, you will be able to change the commit message. Save to proceed to
+the next commit message until the rebase is complete.
+
+\sphinxAtStartPar
+Be careful not to delete any lines in the above editor view \textendash{}
+\sphinxstylestrong{An interactive rebase can be dangerous, and if you remove a line, this commit will be lost!}
+
+
+\end{findoutmore}
+
+\index{stop content tracking@\spxentry{stop content tracking}!with Git@\spxentry{with Git}}\index{with Git@\spxentry{with Git}!stop content tracking@\spxentry{stop content tracking}}\ignorespaces 
+
+\section{Change history}
+\label{\detokenize{basics/101-137-history:change-history}}\label{\detokenize{basics/101-137-history:index-2}}
+
+\subsection{Untracking accidentally saved contents (tracked in Git)}
+\label{\detokenize{basics/101-137-history:untracking-accidentally-saved-contents-tracked-in-git}}
+\sphinxAtStartPar
+The next question comes from the front:
+“It happened that I forgot to give a path to the \sphinxcode{\sphinxupquote{datalad save}}
+command when I wanted to only start tracking a very specific file.
+Other times I just didn’t remember that
+additional, untracked files existed in the dataset and saved unaware of
+those. I know that it is good practice to only save
+those changes together that belong together, so is there a way to
+disentangle an accidental \sphinxcode{\sphinxupquote{datalad save}} again?”
+
+\sphinxAtStartPar
+Let’s say instead of saving \sphinxstyleemphasis{all three} previously untracked Git jokes
+you intended to save \sphinxstyleemphasis{only one} of those files. What we
+want to achieve is to keep all of the files and their contents
+in the dataset, but get them out of the history into an
+\sphinxstyleemphasis{untracked} state again, and save them \sphinxstyleemphasis{individually} afterwards.
+\begin{importantnote}[before title={\thetcbcounter\ }, check odd page=true]{Untracking is different for Git versus git-annex!}
+
+\sphinxAtStartPar
+Note that this is a case with \sphinxstyleemphasis{text files} (stored in Git)! For
+accidental annexing of files, please make sure to check out
+the next paragraph!
+
+
+\end{importantnote}
+
+\sphinxAtStartPar
+This is a task for the \sphinxcode{\sphinxupquote{git reset}} command. It essentially allows to
+undo commits by resetting the history of a dataset to an earlier version.
+\sphinxcode{\sphinxupquote{git reset}} comes with several \sphinxstyleemphasis{modes} that determine the
+exact behavior it, but the relevant one for this aim is \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}mixed}}%
+\begin{footnote}\sphinxAtStartFootnote
+The option \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}mixed}} is the default mode for a \sphinxcode{\sphinxupquote{git reset}}
+command, omitting it (i.e., running just \sphinxcode{\sphinxupquote{git reset}}) leads to the
+same behavior. It is explicitly stated in this book to make the mode
+clear, though.
+%
+\end{footnote}.
+Specifying the command:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }reset\PYG{+w}{ }\PYGZhy{}\PYGZhy{}mixed\PYG{+w}{ }COMMIT
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+will preserve all changes made to files since the specified
+commit in the dataset but remove them from the dataset’s history.
+This means all commits \sphinxstyleemphasis{since} \sphinxcode{\sphinxupquote{COMMIT}} (but \sphinxstyleemphasis{not including} \sphinxcode{\sphinxupquote{COMMIT}})
+will not be in your history anymore and become “untracked files” or
+“unsaved changes” instead. In other words, the modifications
+you made in these commits that are “undone” will still be present
+in your dataset \textendash{} just not written to the history anymore. Let’s
+try this to get a feel for it.
+
+\sphinxAtStartPar
+The COMMIT in the command can either be a hash or a reference
+with the HEAD pointer. Take a look at the \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-git-heads}} {\hyperref[\detokenize{basics/101-137-history:fom-git-heads}]{\sphinxcrossref{\DUrole{std,std-ref}{on terminology}}}} (\autopageref*{\detokenize{basics/101-137-history:fom-git-heads}}) for more on these Git concepts.
+
+\index{branch@\spxentry{branch}!Git concept@\spxentry{Git concept}}\index{Git concept@\spxentry{Git concept}!branch@\spxentry{branch}}\index{HEAD@\spxentry{HEAD}!Git concept@\spxentry{Git concept}}\index{Git concept@\spxentry{Git concept}!HEAD@\spxentry{HEAD}}\ignorespaces \begin{findoutmore}[label={fom-git-heads}, before title={\thetcbcounter\ }, float, floatplacement=tbp, check odd page=true]{Git terminology: branches and HEADs?}
+\label{\detokenize{basics/101-137-history:fom-git-heads}}
+
+\sphinxAtStartPar
+A Git repository (and thus any DataLad dataset) is built up as a tree of
+commits. A \sphinxstyleemphasis{branch} is a named pointer (reference) to a commit, and allows you
+to isolate developments. The default branch is called \sphinxcode{\sphinxupquote{main}}. \sphinxcode{\sphinxupquote{HEAD}} is
+a pointer to the branch you are currently on, and thus to the last commit
+in the given branch.
+
+\noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{git_branch_HEAD}.png}\hspace*{\fill}}
+
+\sphinxAtStartPar
+Using \sphinxcode{\sphinxupquote{HEAD}}, you can identify the most recent commit, or count backwards
+starting from the most recent commit. \sphinxcode{\sphinxupquote{HEAD\textasciitilde{}1}} is the ancestor of the most
+recent commit, i.e., one commit back (\sphinxcode{\sphinxupquote{f30ab}} in the figure above). Apart from
+the notation \sphinxcode{\sphinxupquote{HEAD\textasciitilde{}N}}, there is also \sphinxcode{\sphinxupquote{HEAD\textasciicircum{}N}} used to count backwards, but
+\dlhbhref{S7A}{less frequently used and of importance primarily in the case of merge
+commits}.
+
+
+\end{findoutmore}
+
+\sphinxAtStartPar
+Let’s stay with the hash, and reset to the commit prior to saving the Git jokes.
+
+\sphinxAtStartPar
+First, find out the shasum, and afterwards, reset it.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{3}\PYG{+w}{ }\PYGZhy{}\PYGZhy{}oneline
+\PYG{g+go}{58e40d9 [DATALAD] Recorded changes}
+\PYG{g+go}{996f459 remove obsolete subds}
+\PYG{g+go}{15acb2a [DATALAD] Added subdataset}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }reset\PYG{+w}{ }\PYGZhy{}\PYGZhy{}mixed\PYG{+w}{ }996f459a✂SHA1
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Let’s see what has happened. First, let’s check the history:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{2}\PYG{+w}{ }\PYGZhy{}\PYGZhy{}oneline
+\PYG{g+go}{996f459 remove obsolete subds}
+\PYG{g+go}{15acb2a [DATALAD] Added subdataset}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+As you can see, the commit in which the jokes were tracked
+is not in the history anymore! Go on to see what \sphinxcode{\sphinxupquote{datalad status}}
+reports:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{untracked: Gitjoke1.txt (file)}
+\PYG{g+go}{untracked: Gitjoke2.txt (file)}
+\PYG{g+go}{untracked: Gitjoke3.txt (file)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Nice, the files are present, and untracked again. Do they contain
+the content still? We will read all of them with \sphinxcode{\sphinxupquote{ cat}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }Gitjoke*
+\PYG{g+go}{Git knows what you did last summer!}
+\PYG{g+go}{Knock knock. Who\PYGZsq{}s there? Git.}
+\PYG{g+go}{Git\PYGZhy{}who?}
+\PYG{g+go}{Sorry, \PYGZsq{}who\PYGZsq{} is not a git command \PYGZhy{} did you mean \PYGZsq{}show\PYGZsq{}?}
+\PYG{g+go}{In Soviet Russia, git commits YOU!}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Great. Now we can go ahead and save only the file we intended
+to track:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}save my favorite Git joke\PYGZdq{}}\PYG{+w}{ }Gitjoke2.txt
+\PYG{g+go}{add(ok): Gitjoke2.txt (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Finally, let’s check how the history looks afterwards:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}2
+\PYG{g+go}{commit 4bdb06cf✂SHA1}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    save my favorite Git joke}
+
+\PYG{g+go}{commit 996f459a✂SHA1}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    remove obsolete subds}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Wow! You have rewritten history%
+\begin{footnote}\sphinxAtStartFootnote
+Note though that rewriting history can be dangerous, and you should
+be aware of what you are doing. For example, rewriting parts of the
+dataset’s history that have been published (e.g., to a GitHub repository)
+already or that other people have copies of, is not advised.
+%
+\end{footnote}!
+
+\index{stop content tracking@\spxentry{stop content tracking}!with git\sphinxhyphen{}annex@\spxentry{with git\sphinxhyphen{}annex}}\index{with git\sphinxhyphen{}annex@\spxentry{with git\sphinxhyphen{}annex}!stop content tracking@\spxentry{stop content tracking}}\ignorespaces 
+
+\subsection{Untracking accidentally saved contents (stored in git\sphinxhyphen{}annex)}
+\label{\detokenize{basics/101-137-history:untracking-accidentally-saved-contents-stored-in-git-annex}}\label{\detokenize{basics/101-137-history:index-4}}
+\sphinxAtStartPar
+The previous \sphinxcode{\sphinxupquote{git reset}} undid the tracking of \sphinxstyleemphasis{text} files.
+However, those files are stored in Git, and thus their content
+is also stored in Git. Files that are annexed, however, have
+their content stored in git\sphinxhyphen{}annex, and not the file itself is stored
+in the history, but a symlink pointing to the location of the file
+content in the dataset’s annex. This has consequences for
+a \sphinxcode{\sphinxupquote{git reset}} command: Reverting a save of a file that is
+annexed would revert the save of the symlink into Git, but it will
+not revert the \sphinxstyleemphasis{annexing} of the file.
+Thus, what will be left in the dataset is an untracked symlink.
+
+\sphinxAtStartPar
+To undo an accidental save of that annexed a file, the annexed file
+has to be “unlocked” first with a \sphinxcode{\sphinxupquote{datalad unlock}} command.
+
+\sphinxAtStartPar
+We will simulate such a situation by creating a PDF file that
+gets annexed with an accidental \sphinxcode{\sphinxupquote{datalad save}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} create an empty pdf file}
+\PYG{g+gp}{\PYGZdl{} }convert\PYG{+w}{ }xc:none\PYG{+w}{ }\PYGZhy{}page\PYG{+w}{ }Letter\PYG{+w}{ }apdffile.pdf
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} accidentally save it}
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save
+\PYG{g+go}{add(ok): Gitjoke1.txt (file)}
+\PYG{g+go}{add(ok): Gitjoke3.txt (file)}
+\PYG{g+go}{add(ok): apdffile.pdf (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This accidental \sphinxcode{\sphinxupquote{datalad save}} has thus added both text files
+stored in Git, but also a PDF file to the history of the dataset.
+As an \sphinxcode{\sphinxupquote{ ls \sphinxhyphen{}l}} reveals, the PDF file has been annexed and is
+thus a {\hyperref[\detokenize{glossary:term-symlink}]{\sphinxtermref{\DUrole{xref,std,std-term}{symlink}}}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }ls\PYG{+w}{ }\PYGZhy{}l\PYG{+w}{ }apdffile.pdf
+\PYG{g+go}{lrwxrwxrwx 1 elena elena 122 2019\PYGZhy{}06\PYGZhy{}18 16:13 apdffile.pdf \PYGZhy{}\PYGZgt{} .git/annex/objects/zZ/v7/✂/MD5E\PYGZhy{}s1216\PYGZhy{}\PYGZhy{}b954106f✂MD5.pdf}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Prior to resetting, the PDF file has to be unannexed.
+To unannex files, i.e., get the contents out of the object tree,
+the \sphinxcode{\sphinxupquote{datalad unlock}} command is relevant:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }unlock\PYG{+w}{ }apdffile.pdf
+\PYG{g+go}{unlock(ok): apdffile.pdf (file)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The file is now no longer symlinked:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }ls\PYG{+w}{ }\PYGZhy{}l\PYG{+w}{ }apdffile.pdf
+\PYG{g+go}{\PYGZhy{}rw\PYGZhy{}r\PYGZhy{}\PYGZhy{}r\PYGZhy{}\PYGZhy{} 1 elena elena 1216 2019\PYGZhy{}06\PYGZhy{}18 16:13 apdffile.pdf}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Finally, \sphinxcode{\sphinxupquote{git reset \sphinxhyphen{}\sphinxhyphen{}mixed}} can be used to revert the
+accidental \sphinxcode{\sphinxupquote{datalad save}}. Again, find out the shasum first, and
+afterwards, reset it.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{3}\PYG{+w}{ }\PYGZhy{}\PYGZhy{}oneline
+\PYG{g+go}{9b3495b [DATALAD] Recorded changes}
+\PYG{g+go}{4bdb06c save my favorite Git joke}
+\PYG{g+go}{996f459 remove obsolete subds}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }reset\PYG{+w}{ }\PYGZhy{}\PYGZhy{}mixed\PYG{+w}{ }4bdb06cf✂SHA1
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+To see what has happened, let’s check the history:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{2}\PYG{+w}{ }\PYGZhy{}\PYGZhy{}oneline
+\PYG{g+go}{4bdb06c save my favorite Git joke}
+\PYG{g+go}{996f459 remove obsolete subds}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+… and also the status of the dataset:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{untracked: Gitjoke1.txt (file)}
+\PYG{g+go}{untracked: Gitjoke3.txt (file)}
+\PYG{g+go}{untracked: apdffile.pdf (file)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The accidental save has been undone, and the file is present
+as untracked content again.
+As before, this action has not been recorded in your history.
+
+
+\subsection{Viewing previous versions of files and datasets}
+\label{\detokenize{basics/101-137-history:viewing-previous-versions-of-files-and-datasets}}
+\sphinxAtStartPar
+The next question is truly magical: How does one \sphinxstyleemphasis{see}
+data as it was at a previous state in history?
+
+\sphinxAtStartPar
+This magic trick can be performed with the \sphinxcode{\sphinxupquote{git checkout}}.
+It is a very heavily used command for various tasks, but among
+many it can send you back in time to view the state of a dataset
+at the time of a specific commit.
+
+\sphinxAtStartPar
+Let’s say you want to find out which notes you took in the first
+few chapters of this book. Find a commit {\hyperref[\detokenize{glossary:term-shasum}]{\sphinxtermref{\DUrole{xref,std,std-term}{shasum}}}} in your history
+to specify the point in time you want to go back to:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{16}\PYG{+w}{ }\PYGZhy{}\PYGZhy{}oneline
+\PYG{g+go}{4bdb06c save my favorite Git joke}
+\PYG{g+go}{996f459 remove obsolete subds}
+\PYG{g+go}{15acb2a [DATALAD] Added subdataset}
+\PYG{g+go}{c278f6a save cropped logos to Git}
+\PYG{g+go}{de2d23c move book back from midterm\PYGZus{}project}
+\PYG{g+go}{a648756 move book into midterm\PYGZus{}project}
+\PYG{g+go}{39e55c8 add container and execute analysis within container}
+\PYG{g+go}{c5c9017 finished my midterm project}
+\PYG{g+go}{0edd3ea [DATALAD] Recorded changes}
+\PYG{g+go}{08684a4 add note on DataLad\PYGZsq{}s procedures}
+\PYG{g+go}{c2400da add note on configurations and git config}
+\PYG{g+go}{e202e94 Add note on adding siblings}
+\PYG{g+go}{6ae8e71 Merge remote\PYGZhy{}tracking branch \PYGZsq{}roommate/main\PYGZsq{}}
+\PYG{g+go}{4bb5d39 add note about datalad update}
+\PYG{g+go}{5b6e19a Include nesting demo from datalad website}
+\PYG{g+go}{adb4b5d add note on git annex whereis}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Let’s go 15 commits back in time:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }checkout\PYG{+w}{ }1e73592e✂SHA1
+\PYG{g+go}{warning: unable to rmdir \PYGZsq{}midterm\PYGZus{}project\PYGZsq{}: Directory not empty}
+\PYG{g+go}{Note: switching to \PYGZsq{}1e73592e✂SHA1\PYGZsq{}.}
+
+\PYG{g+go}{You are in \PYGZsq{}detached HEAD\PYGZsq{} state. You can look around, make experimental}
+\PYG{g+go}{changes and commit them, and you can discard any commits you make in this}
+\PYG{g+go}{state without impacting any branches by switching back to a branch.}
+
+\PYG{g+go}{If you want to create a new branch to retain commits you create, you may}
+\PYG{g+go}{do so (now or later) by using \PYGZhy{}c with the switch command. Example:}
+
+\PYG{g+go}{  git switch \PYGZhy{}c \PYGZlt{}new\PYGZhy{}branch\PYGZhy{}name\PYGZgt{}}
+
+\PYG{g+go}{Or undo this operation with:}
+
+\PYG{g+go}{  git switch \PYGZhy{}}
+
+\PYG{g+go}{Turn off this advice by setting config variable advice.detachedHead to false}
+
+\PYG{g+go}{HEAD is now at 1e73592 add note about cloning from paths and recursive datalad get}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+How did your \sphinxcode{\sphinxupquote{notes.txt}} file look at this point?
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }tail\PYG{+w}{ }notes.txt
+\PYG{g+go}{registered in the superdataset \PYGZhy{}\PYGZhy{} you will have to do a}
+\PYG{g+go}{\PYGZdq{}datalad get \PYGZhy{}n PATH/TO/SUBDATASET\PYGZdq{} to install the subdataset for file}
+\PYG{g+go}{availability meta data. The \PYGZhy{}n/\PYGZhy{}\PYGZhy{}no\PYGZhy{}data options prevents that file}
+\PYG{g+go}{contents are also downloaded.}
+
+\PYG{g+go}{Note that a recursive \PYGZdq{}datalad get\PYGZdq{} would install all further}
+\PYG{g+go}{registered subdatasets underneath a subdataset, so a safer way to}
+\PYG{g+go}{proceed is to set a decent \PYGZhy{}\PYGZhy{}recursion\PYGZhy{}limit:}
+\PYG{g+go}{\PYGZdq{}datalad get \PYGZhy{}n \PYGZhy{}r \PYGZhy{}\PYGZhy{}recursion\PYGZhy{}limit 2 \PYGZlt{}subds\PYGZgt{}\PYGZdq{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Neat, isn’t it? By checking out a commit shasum you can explore a previous
+state of a datasets history. And this does not only apply to simple text
+files, but every type of file in your dataset, regardless of size.
+The checkout command however led to something that Git calls a “detached HEAD state”.
+While this sounds scary, a \sphinxcode{\sphinxupquote{git checkout main}} will bring you
+back into the most recent version of your dataset and get you out of the
+“detached HEAD state”:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }checkout\PYG{+w}{ }main
+\PYG{g+go}{Previous HEAD position was 1e73592 add note about cloning from paths and recursive datalad get}
+\PYG{g+go}{Switched to branch \PYGZsq{}main\PYGZsq{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Note one very important thing: The previously untracked files are still
+there.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{untracked: Gitjoke1.txt (file)}
+\PYG{g+go}{untracked: Gitjoke3.txt (file)}
+\PYG{g+go}{untracked: apdffile.pdf (file)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The contents of \sphinxcode{\sphinxupquote{notes.txt}} will now be the most recent version again:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }tail\PYG{+w}{ }notes.txt
+\PYG{g+go}{configurations, create files or file hierarchies, or perform arbitrary}
+\PYG{g+go}{tasks in datasets. They can be shipped with DataLad, its extensions,}
+\PYG{g+go}{or datasets, and you can even write your own procedures and distribute}
+\PYG{g+go}{them.}
+\PYG{g+go}{The \PYGZdq{}datalad run\PYGZhy{}procedure\PYGZdq{} command is used to apply such a procedure}
+\PYG{g+go}{to a dataset. Procedures shipped with DataLad or its extensions}
+\PYG{g+go}{starting with a \PYGZdq{}cfg\PYGZdq{} prefix can also be applied at the creation of a}
+\PYG{g+go}{dataset with \PYGZdq{}datalad create \PYGZhy{}c \PYGZlt{}PROC\PYGZhy{}NAME\PYGZgt{} \PYGZlt{}PATH\PYGZgt{}\PYGZdq{} (omitting the}
+\PYG{g+go}{\PYGZdq{}cfg\PYGZdq{} prefix).}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+… Wow! You traveled back and forth in time!
+But an even more magical way to see the contents of files in previous
+versions is Git’s \sphinxcode{\sphinxupquote{ cat\sphinxhyphen{}file}} command: Among many other things, it lets
+you read a file’s contents as of any point in time in the history, without a
+prior \sphinxcode{\sphinxupquote{git checkout}} (note that the output is shortened for brevity and shows only the last few lines of the file):
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }cat\PYGZhy{}file\PYG{+w}{ }\PYGZhy{}\PYGZhy{}textconv\PYG{+w}{ }1e73592e✂SHA1:notes.txt
+
+\PYG{g+go}{Note that subdatasets will not be installed by default, but are only}
+\PYG{g+go}{registered in the superdataset \PYGZhy{}\PYGZhy{} you will have to do a}
+\PYG{g+go}{\PYGZdq{}datalad get \PYGZhy{}n PATH/TO/SUBDATASET\PYGZdq{} to install the subdataset for file}
+\PYG{g+go}{availability meta data. The \PYGZhy{}n/\PYGZhy{}\PYGZhy{}no\PYGZhy{}data options prevents that file}
+\PYG{g+go}{contents are also downloaded.}
+
+\PYG{g+go}{Note that a recursive \PYGZdq{}datalad get\PYGZdq{} would install all further}
+\PYG{g+go}{registered subdatasets underneath a subdataset, so a safer way to}
+\PYG{g+go}{proceed is to set a decent \PYGZhy{}\PYGZhy{}recursion\PYGZhy{}limit:}
+\PYG{g+go}{\PYGZdq{}datalad get \PYGZhy{}n \PYGZhy{}r \PYGZhy{}\PYGZhy{}recursion\PYGZhy{}limit 2 \PYGZlt{}subds\PYGZgt{}\PYGZdq{}}
+\end{sphinxVerbatim}
+
+\index{cat\sphinxhyphen{}file@\spxentry{cat\sphinxhyphen{}file}!Git command@\spxentry{Git command}}\index{Git command@\spxentry{Git command}!cat\sphinxhyphen{}file@\spxentry{cat\sphinxhyphen{}file}}\ignorespaces 
+\sphinxAtStartPar
+The cat\sphinxhyphen{}file command is very versatile, and
+\dlhbhref{G1H}{it’s documentation} will list all
+of its functionality. To use it to see the contents of a file at a previous
+state as done above, this is how the general structure looks like:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }cat\PYGZhy{}file\PYG{+w}{ }\PYGZhy{}\PYGZhy{}textconv\PYG{+w}{ }SHASUM:\PYGZlt{}path/to/file\PYGZgt{}
+\end{sphinxVerbatim}
+
+
+\subsection{Undoing latest modifications of files}
+\label{\detokenize{basics/101-137-history:undoing-latest-modifications-of-files}}
+\sphinxAtStartPar
+Previously, we saw how to remove files from a datasets history that
+were accidentally saved and thus tracked for the first time.
+How does one undo a \sphinxstyleemphasis{modification} to a tracked file?
+
+\sphinxAtStartPar
+Let’s modify the saved \sphinxcode{\sphinxupquote{Gitjoke1.txt}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{echo}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}this is by far my favorite joke!\PYGZdq{}}\PYG{+w}{ }\PYGZgt{}\PYGZgt{}\PYG{+w}{ }Gitjoke2.txt
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }Gitjoke2.txt
+\PYG{g+go}{Knock knock. Who\PYGZsq{}s there? Git.}
+\PYG{g+go}{Git\PYGZhy{}who?}
+\PYG{g+go}{Sorry, \PYGZsq{}who\PYGZsq{} is not a git command \PYGZhy{} did you mean \PYGZsq{}show\PYGZsq{}?}
+\PYG{g+go}{this is by far my favorite joke!}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{untracked: Gitjoke1.txt (file)}
+\PYG{g+go}{untracked: Gitjoke3.txt (file)}
+\PYG{g+go}{untracked: apdffile.pdf (file)}
+\PYG{g+go}{ modified: Gitjoke2.txt (file)}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}add joke evaluation to joke\PYGZdq{}}\PYG{+w}{ }Gitjoke2.txt
+\PYG{g+go}{add(ok): Gitjoke2.txt (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+How could this modification to \sphinxcode{\sphinxupquote{Gitjoke2.txt}} be undone?
+With the \sphinxcode{\sphinxupquote{git reset}} command again. If you want to
+“unsave” the modification but keep it in the file, use
+\sphinxcode{\sphinxupquote{git reset \sphinxhyphen{}\sphinxhyphen{}mixed}} as before. However, if you want to
+get rid of the modifications entirely, use the option \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}hard}}
+instead of \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}mixed}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{2}\PYG{+w}{ }\PYGZhy{}\PYGZhy{}oneline
+\PYG{g+go}{a4ab359 add joke evaluation to joke}
+\PYG{g+go}{4bdb06c save my favorite Git joke}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }reset\PYG{+w}{ }\PYGZhy{}\PYGZhy{}hard\PYG{+w}{ }4bdb06cf✂SHA1
+\PYG{g+go}{HEAD is now at 4bdb06c save my favorite Git joke}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }Gitjoke2.txt
+\PYG{g+go}{Knock knock. Who\PYGZsq{}s there? Git.}
+\PYG{g+go}{Git\PYGZhy{}who?}
+\PYG{g+go}{Sorry, \PYGZsq{}who\PYGZsq{} is not a git command \PYGZhy{} did you mean \PYGZsq{}show\PYGZsq{}?}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The change has been undone completely. This method will work with
+files stored in Git and annexed files.
+
+\sphinxAtStartPar
+Note that this operation only restores this one file, because the commit that
+was undone only contained modifications to this one file. This is a
+demonstration of one of the reasons why one should strive for commits to
+represent meaningful logical units of change \textendash{} if necessary, they can be
+undone easily.
+
+
+\subsection{Undoing past modifications of files}
+\label{\detokenize{basics/101-137-history:undoing-past-modifications-of-files}}
+\sphinxAtStartPar
+What \sphinxcode{\sphinxupquote{git reset}} did was to undo commits from
+the most recent version of your dataset. How
+would one undo a change that happened a while ago, though,
+with important changes being added afterwards that you want
+to keep?
+
+\sphinxAtStartPar
+Let’s save a bad modification to \sphinxcode{\sphinxupquote{Gitjoke2.txt}},
+but also a modification to \sphinxcode{\sphinxupquote{notes.txt}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{echo}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}bad modification\PYGZdq{}}\PYG{+w}{ }\PYGZgt{}\PYGZgt{}\PYG{+w}{ }Gitjoke2.txt
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}did a bad modification\PYGZdq{}}\PYG{+w}{ }Gitjoke2.txt
+\PYG{g+go}{add(ok): Gitjoke2.txt (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }\PYGZlt{}\PYGZlt{}\PYG{+w}{ }EOT\PYG{+w}{ }\PYGZgt{}\PYGZgt{}\PYG{+w}{ }notes.txt
+
+\PYG{g+go}{Git has many handy tools to go back in forth in time and work with the}
+\PYG{g+go}{history of datasets. Among many other things you can rewrite commit}
+\PYG{g+go}{messages, undo changes, or look at previous versions of datasets.}
+\PYG{g+go}{A superb resource to find out more about this and practice such Git}
+\PYG{g+go}{operations is this chapter in the Pro\PYGZhy{}git book:}
+\PYG{g+go}{https://git\PYGZhy{}scm.com/book/en/v2/Git\PYGZhy{}Tools\PYGZhy{}Rewriting\PYGZhy{}History}
+\PYG{g+go}{EOT}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}add note on helpful git resource\PYGZdq{}}\PYG{+w}{ }notes.txt
+\PYG{g+go}{add(ok): notes.txt (file)}
+\PYG{g+go}{save(ok): . (dataset)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The objective is to remove the first, “bad” modification, but
+keep the more recent modification of \sphinxcode{\sphinxupquote{notes.txt}}. A \sphinxcode{\sphinxupquote{git reset}}
+command is not convenient, because resetting would need to reset
+the most recent, “good” modification as well.
+
+\sphinxAtStartPar
+One way to accomplish it is with an \sphinxstyleemphasis{interactive rebase}, using the
+\sphinxcode{\sphinxupquote{git rebase \sphinxhyphen{}i}} command%
+\begin{footnote}\sphinxAtStartFootnote
+When in need to interactively rebase, please consult further documentation
+and tutorials. It is out of scope of this book to be a complete
+guide on rebasing, and not all interactive rebasing operations are
+complication\sphinxhyphen{}free. However, you can always undo mistakes that occur
+during rebasing with the help of the \dlhbhref{G1N}{reflog}.
+%
+\end{footnote}. Experienced Git\sphinxhyphen{}users will know
+under which situations and how to perform such an interactive rebase.
+
+\sphinxAtStartPar
+However, outlining an interactive rebase here in this book could lead to
+problems for readers without (much) Git experience: An interactive rebase,
+even if performed successfully, can lead to many problems if it is applied with
+too little experience, for example, in any collaborative real\sphinxhyphen{}world project.
+
+\index{revert@\spxentry{revert}!Git command@\spxentry{Git command}}\index{Git command@\spxentry{Git command}!revert@\spxentry{revert}}\ignorespaces 
+\sphinxAtStartPar
+Instead, we demonstrate a different, less intrusive way to revert one or more
+changes at any point in the history of a dataset: the \sphinxcode{\sphinxupquote{git revert}}
+command.
+Instead of \sphinxstyleemphasis{rewriting} the history, it will add an additional commit in which
+the changes of an unwanted commit are reverted.
+
+\sphinxAtStartPar
+The command looks like this:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }revert\PYG{+w}{ }SHASUM
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+where \sphinxcode{\sphinxupquote{SHASUM}} specifies the commit hash of the modification that should
+be reverted. The \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-revert}} {\hyperref[\detokenize{basics/101-137-history:fom-revert}]{\sphinxcrossref{\DUrole{std,std-ref}{on reverting}}}} (\autopageref*{\detokenize{basics/101-137-history:fom-revert}}) shows how to revert
+more than one commit.
+
+\index{revert multiple commit@\spxentry{revert multiple commit}!with Git@\spxentry{with Git}}\index{with Git@\spxentry{with Git}!revert multiple commit@\spxentry{revert multiple commit}}\ignorespaces \begin{findoutmore}[label={fom-revert}, before title={\thetcbcounter\ }, float, floatplacement=tbp, check odd page=true]{Reverting more than a single commit}
+\label{\detokenize{basics/101-137-history:fom-revert}}
+
+\sphinxAtStartPar
+You can also specify a range of commits like this:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }revert\PYG{+w}{ }OLDER\PYGZus{}SHASUM..NEWERSHASUM
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This command will revert all commits starting with the one after
+\sphinxcode{\sphinxupquote{OLDER\_SHASUM}} (i.e. \sphinxstylestrong{not including} this commit) until and \sphinxstylestrong{including}
+the one specified with \sphinxcode{\sphinxupquote{NEWERSHASUM}}.
+For each reverted commit, one new commit will be added to the history that
+reverts it. Thus, if you revert a range of three commits, there will be three
+reversal commits. If you however want the reversal of a range of commits
+saved in a single commit, supply the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}no\sphinxhyphen{}commit}} option as in
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }revert\PYG{+w}{ }\PYGZhy{}\PYGZhy{}no\PYGZhy{}commit\PYG{+w}{ }OLDER\PYGZus{}SHASUM..NEWERSHASUM
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+After running this command, run a single \sphinxcode{\sphinxupquote{git commit}} to conclude the
+reversal and save it in a single commit.
+
+
+\end{findoutmore}
+
+\sphinxAtStartPar
+Let’s see how it looks like:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }revert\PYG{+w}{ }713e79d3✂SHA1
+\PYG{g+go}{[main 6d3d93b] Revert \PYGZdq{}did a bad modification\PYGZdq{}}
+\PYG{g+go}{ Date: Tue Jun 18 16:13:00 2019 +0000}
+\PYG{g+go}{ 1 file changed, 1 deletion(\PYGZhy{})}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This is the state of the file in which we reverted a modification:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }Gitjoke2.txt
+\PYG{g+go}{Knock knock. Who\PYGZsq{}s there? Git.}
+\PYG{g+go}{Git\PYGZhy{}who?}
+\PYG{g+go}{Sorry, \PYGZsq{}who\PYGZsq{} is not a git command \PYGZhy{} did you mean \PYGZsq{}show\PYGZsq{}?}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+It does not contain the bad modification anymore. And this is what happened in
+the history of the dataset:
+
+\fvset{hllines={, 6, 7, 8, 20,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}n\PYG{+w}{ }\PYG{l+m}{3}
+\PYG{g+go}{commit 6d3d93b9✂SHA1}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    Revert \PYGZdq{}did a bad modification\PYGZdq{}}
+
+\PYG{g+go}{    This reverts commit 713e79d3✂SHA1.}
+
+\PYG{g+go}{commit 04536a1e✂SHA1}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    add note on helpful git resource}
+
+\PYG{g+go}{commit 713e79d3✂SHA1}
+\PYG{g+go}{Author: Elena Piscopia \PYGZlt{}elena@example.net\PYGZgt{}}
+\PYG{g+go}{Date:   Tue Jun 18 16:13:00 2019 +0000}
+
+\PYG{g+go}{    did a bad modification}
+\end{sphinxVerbatim}
+\sphinxresetverbatimhllines
+
+\sphinxAtStartPar
+The commit that introduced the bad modification is still present, but it
+transparently gets undone with the most recent commit. At the same time, the
+good modification of \sphinxcode{\sphinxupquote{notes.txt}} was not influenced in any way. The
+\sphinxcode{\sphinxupquote{git revert}} command is thus a transparent and safe way of undoing past
+changes. Note though that this command can only be used efficiently if the
+commits in your datasets history are meaningful, independent units \textendash{} having
+several unrelated modifications in a single commit may make an easy solution
+with \sphinxcode{\sphinxupquote{git revert}} impossible and instead require a complex
+\sphinxcode{\sphinxupquote{ checkout}}, \sphinxcode{\sphinxupquote{ revert}}, or \sphinxcode{\sphinxupquote{ rebase}} operation.
+
+\sphinxAtStartPar
+Finally, let’s take a look at the state of the dataset after this operation:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{untracked: Gitjoke1.txt (file)}
+\PYG{g+go}{untracked: Gitjoke3.txt (file)}
+\PYG{g+go}{untracked: apdffile.pdf (file)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+As you can see, unsurprisingly, the \sphinxcode{\sphinxupquote{git revert}} command had no
+effects on anything else but the specified commit, and previously untracked
+files are still present.
+
+\index{resolve merge conflict@\spxentry{resolve merge conflict}!with Git@\spxentry{with Git}}\index{with Git@\spxentry{with Git}!resolve merge conflict@\spxentry{resolve merge conflict}}\ignorespaces 
+
+\section{Oh no! I’m in a merge conflict!}
+\label{\detokenize{basics/101-137-history:oh-no-i-m-in-a-merge-conflict}}\label{\detokenize{basics/101-137-history:index-8}}
+\sphinxAtStartPar
+When working with the history of a dataset, especially when rewriting
+the history with an interactive rebase or when reverting commits, it is
+possible to run into so\sphinxhyphen{}called \sphinxstyleemphasis{merge conflicts}.
+Merge conflicts happen when Git needs assistance in deciding
+which changes to keep and which to apply. It will require
+you to edit the file the merge conflict is happening in with
+a text editor, but such merge conflict are by far not as scary as
+they may seem during the first few times of solving merge conflicts.
+
+\sphinxAtStartPar
+This section is not a guide on how to solve merge\sphinxhyphen{}conflicts, but a broad
+overview on the necessary steps, and a pointer to a more comprehensive guide.
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+The first thing to do if you end up in a merge conflict is
+to read the instructions Git is giving you \textendash{} they are a useful guide.
+
+\item {} 
+\sphinxAtStartPar
+Also, it is reassuring to remember that you can always get out of
+a merge conflict by aborting the operation that led to it (e.g.,
+\sphinxcode{\sphinxupquote{git rebase \sphinxhyphen{}\sphinxhyphen{}abort}}).
+
+\item {} 
+\sphinxAtStartPar
+To actually solve a merge conflict, you will have to edit files: In the
+documents the merge conflict applies to, Git marks the sections it needs
+help with with markers that consists of \sphinxcode{\sphinxupquote{\textgreater{}}}, \sphinxcode{\sphinxupquote{\textless{}}}, and \sphinxcode{\sphinxupquote{=}}
+signs and commit shasums or branch names.
+There will be two marked parts, and you have to delete the one you do not
+want to keep, as well as all markers.
+
+\item {} 
+\sphinxAtStartPar
+Afterwards, run \sphinxcode{\sphinxupquote{git add \textless{}path/to/file\textgreater{}}} and finally a \sphinxcode{\sphinxupquote{git commit}}.
+
+\end{itemize}
+
+\sphinxAtStartPar
+GitHub has an \dlhbhref{G3E}{excellent resource on how to deal with merge conflicts}.
+
+
+\section{Summary}
+\label{\detokenize{basics/101-137-history:summary}}
+\sphinxAtStartPar
+This guest lecture has given you a glimpse into how to work with the
+history of your DataLad datasets.
+To conclude this section, let’s remove all untracked contents from
+the dataset. This can be done with \sphinxcode{\sphinxupquote{git clean}}: The command
+\sphinxcode{\sphinxupquote{git clean \sphinxhyphen{}f}} swipes your dataset clean and removes any untracked
+file.
+\sphinxstylestrong{Careful! This is not revertible, and content lost with this commands cannot be recovered!}
+If you want to be extra sure, run \sphinxcode{\sphinxupquote{git clean \sphinxhyphen{}fn}} beforehand \textendash{} this will
+give you a list of the files that would be deleted.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }clean\PYG{+w}{ }\PYGZhy{}f
+\PYG{g+go}{Removing Gitjoke1.txt}
+\PYG{g+go}{Removing Gitjoke3.txt}
+\PYG{g+go}{Removing apdffile.pdf}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Afterwards, the \sphinxcode{\sphinxupquote{datalad status}} returns nothing, indicating a
+clean dataset state with no untracked files or modifications.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }status
+\PYG{g+go}{nothing to save, working tree clean}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Finally, if you want, apply your new knowledge about reverting commits
+to remove the \sphinxcode{\sphinxupquote{Gitjoke2.txt}} file.
+
+\sphinxstepscope
+
+

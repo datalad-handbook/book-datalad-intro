@@ -1,0 +1,519 @@
+\chapter{Under the hood: git\sphinxhyphen{}annex}
+\label{\detokenize{basics/basics-annex:under-the-hood-git-annex}}\label{\detokenize{basics/basics-annex:chapter-gitannex}}\label{\detokenize{basics/basics-annex::doc}}
+\noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{security}.pdf}\hspace*{\fill}}
+
+\sphinxstepscope
+
+
+\section{Data safety}
+\label{\detokenize{basics/101-114-txt2git:data-safety}}\label{\detokenize{basics/101-114-txt2git:text2git}}\label{\detokenize{basics/101-114-txt2git::doc}}
+\sphinxAtStartPar
+Later in the day, after seeing and solving so many DataLad error messages,
+you fall tired into your
+bed. Just as you are about to fall asleep, a thought crosses your mind:
+
+\sphinxAtStartPar
+“I now know that tracked content in a dataset is protected by {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}}.
+Whenever tracked contents are \sphinxcode{\sphinxupquote{saved}}, they get locked and should not be
+modifiable. But… what about the notes that I have been taking since the first day?
+Should I not need to unlock them before I can modify them? And also the script!
+I was able to modify this despite giving it to DataLad to track, with
+no permission denied errors whatsoever! How does that work?”
+
+\sphinxAtStartPar
+This night, though, your question stays unanswered and you fall into a restless
+sleep filled with bad dreams about “permission denied” errors. The next day you are
+the first student in your lecturer’s office hours.
+
+\sphinxAtStartPar
+“Oh, you are really attentive. This is a great question!” our lecturer starts
+to explain.
+
+\index{dataset procedure@\spxentry{dataset procedure}!text2git@\spxentry{text2git}|spxpagem}\ignorespaces 
+\sphinxAtStartPar
+Do you remember that we created the \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} dataset with a
+specific configuration template? It was the \sphinxcode{\sphinxupquote{\sphinxhyphen{}c text2git}} option we
+provided in the beginning of {\hyperref[\detokenize{basics/101-101-create:createds}]{\sphinxcrossref{\DUrole{std,std-ref}{Create a dataset}}}} (\autopageref*{\detokenize{basics/101-101-create:createds}}). It is because of this configuration
+that we can modify \sphinxcode{\sphinxupquote{notes.txt}} without unlocking its content first.
+
+\sphinxAtStartPar
+The second commit message in our datasets history summarizes this (outputs are shortened):
+
+\fvset{hllines={, 3,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}\PYGZhy{}reverse\PYG{+w}{ }\PYGZhy{}\PYGZhy{}oneline
+\PYG{g+go}{4ce681d [DATALAD] new dataset}
+\PYG{g+go}{e0ff3a7 Instruct annex to add text files to Git}
+\PYG{g+go}{b40316a add books on Python and Unix to read later}
+\PYG{g+go}{a875e49 add reference book about git}
+\PYG{g+go}{59ac8d3 add beginners guide on bash}
+\PYG{g+go}{874d766 Add notes on datalad create}
+\PYG{g+go}{e310b46 add note on datalad save}
+\PYG{g+go}{3c016f7 [DATALAD] Added subdataset}
+\PYG{g+go}{87609a3 Add note on datalad clone}
+\end{sphinxVerbatim}
+\sphinxresetverbatimhllines
+
+\sphinxAtStartPar
+Instead of giving text files such as your notes or your script
+to git\sphinxhyphen{}annex, the dataset stores it in {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}}.
+But what does it mean if files are in Git instead of git\sphinxhyphen{}annex?
+
+\sphinxAtStartPar
+Well, procedurally it means that everything that is stored in git\sphinxhyphen{}annex is
+content\sphinxhyphen{}locked, and everything that is stored in Git is not. You can modify
+content stored in Git straight away, without unlocking it first.
+This is easy enough, and illustrated in \hyperref[\detokenize{basics/101-114-txt2git:fig-gitvsannex}]{Fig.\@ \ref{\detokenize{basics/101-114-txt2git:fig-gitvsannex}}}.
+
+\begin{figure}[tbp]
+\centering
+\capstart
+
+\noindent\sphinxincludegraphics[width=0.700\linewidth]{{git_vs_gitannex}.pdf}
+\caption{A simplified overview of the tools that manage data in your dataset.}\label{\detokenize{basics/101-114-txt2git:id2}}\label{\detokenize{basics/101-114-txt2git:fig-gitvsannex}}\end{figure}
+
+\sphinxAtStartPar
+“So, first of all: If we hadn’t provided the \sphinxcode{\sphinxupquote{\sphinxhyphen{}c text2git}} argument, text files
+would get content\sphinxhyphen{}locked, too?”. “Yes, indeed. However, there are also ways to
+later change how file content is handled based on its type or size. It can be specified
+in the \sphinxcode{\sphinxupquote{.gitattributes}} file, using \sphinxcode{\sphinxupquote{annex.largefile}} options.
+But there will be a lecture on that%
+\begin{footnote}\sphinxAtStartFootnote
+If you cannot wait to read about \sphinxcode{\sphinxupquote{.gitattributes}} and other
+configuration files, jump ahead to chapter {\hyperref[\detokenize{basics/basics-configuration:chapter-config}]{\sphinxcrossref{\DUrole{std,std-ref}{Tuning datasets to your needs}}}} (\autopageref*{\detokenize{basics/basics-configuration:chapter-config}}),
+starting with section {\hyperref[\detokenize{basics/101-122-config:config}]{\sphinxcrossref{\DUrole{std,std-ref}{Local configuration}}}} (\autopageref*{\detokenize{basics/101-122-config:config}}).
+%
+\end{footnote}.”
+
+\sphinxAtStartPar
+“Okay, well, second: Isn’t it much easier to just not bother with locking and
+unlocking, and have everything ‘stored in Git’? Even if \sphinxcode{\sphinxupquote{datalad run}} takes care
+of unlocking content, I do not see the point of git\sphinxhyphen{}annex”, you continue.
+
+\sphinxAtStartPar
+Here it gets tricky. To begin with the most important, and most straight\sphinxhyphen{}forward fact:
+It is not possible to store
+large files in Git. This is because Git would very quickly run into severe performance
+issues. And hosting sites for projects using Git, such as {\hyperref[\detokenize{glossary:term-GitHub}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitHub}}}} or {\hyperref[\detokenize{glossary:term-GitLab}]{\sphinxtermref{\DUrole{xref,std,std-term}{GitLab}}}}
+also do not allow files larger than a few dozen MB of size.
+
+\sphinxAtStartPar
+For now, we have solved the mystery of why text files can be modified
+without unlocking, and this is a small
+improvement in the vast amount of questions that have piled up in our curious
+minds. Essentially, git\sphinxhyphen{}annex protects your data from accidental modifications
+and thus keeps it safe. \sphinxcode{\sphinxupquote{datalad run}} commands mitigate any technical
+complexity of this completely if \sphinxcode{\sphinxupquote{\sphinxhyphen{}o/\sphinxhyphen{}\sphinxhyphen{}output}} is specified properly, and
+\sphinxcode{\sphinxupquote{datalad unlock}} commands can be used to unlock content “by hand” if
+modifications are performed outside of a \sphinxcode{\sphinxupquote{datalad run}}.
+
+\index{adjusted mode@\spxentry{adjusted mode}!git\sphinxhyphen{}annex concept@\spxentry{git\sphinxhyphen{}annex concept}}\index{git\sphinxhyphen{}annex concept@\spxentry{git\sphinxhyphen{}annex concept}!adjusted mode@\spxentry{adjusted mode}}\ignorespaces 
+\sphinxAtStartPar
+But there comes the second, tricky part: There are ways to get rid of locking and
+unlocking within git\sphinxhyphen{}annex, using so\sphinxhyphen{}called {\hyperref[\detokenize{glossary:term-adjusted-branch}]{\sphinxtermref{\DUrole{xref,std,std-term}{adjusted branch}}}}es.
+This functionality is dependent on the git\sphinxhyphen{}annex version one has installed, the git\sphinxhyphen{}annex version of the repository, and a use\sphinxhyphen{}case dependent comparison of the pros and cons.
+On Windows systems, this {\hyperref[\detokenize{glossary:term-adjusted-mode}]{\sphinxtermref{\DUrole{xref,std,std-term}{adjusted mode}}}} is even the \sphinxstyleemphasis{only} mode of operation.
+In later sections we will see how to use this feature.
+The next lecture, in any way, will guide us deeper into git\sphinxhyphen{}annex, and improve our understanding a slight bit further.
+
+\sphinxstepscope
+
+
+\section{Data integrity}
+\label{\detokenize{basics/101-115-symlinks:data-integrity}}\label{\detokenize{basics/101-115-symlinks:symlink}}\label{\detokenize{basics/101-115-symlinks:id1}}\label{\detokenize{basics/101-115-symlinks::doc}}
+\sphinxAtStartPar
+So far, we mastered quite a number of challenges:
+Creating and populating a dataset with large and small files, modifying content and saving the changes to history, installing datasets, even as subdatasets within datasets, recording the impact of commands on a dataset with the \sphinxcode{\sphinxupquote{datalad run}} and \sphinxcode{\sphinxupquote{datalad rerun}} commands, and capturing plenty of {\hyperref[\detokenize{glossary:term-provenance}]{\sphinxtermref{\DUrole{xref,std,std-term}{provenance}}}} on the way.
+We further noticed that when we modified content in \sphinxcode{\sphinxupquote{notes.txt}} or \sphinxcode{\sphinxupquote{list\_titles.sh}}, the modified content was in a \sphinxstyleemphasis{text file}.
+We learned that this precise type of file, in conjunction with the initial configuration template \sphinxcode{\sphinxupquote{text2git}} we gave to \sphinxcode{\sphinxupquote{datalad create}}, is meaningful:
+As the text file is stored in Git and not git\sphinxhyphen{}annex, no content unlocking is necessary.
+As we saw within the demonstrations of \sphinxcode{\sphinxupquote{datalad run}}, modifying content of non\sphinxhyphen{}text files, such as \sphinxcode{\sphinxupquote{.jpg}}s, typically requires the additional step of \sphinxstyleemphasis{unlocking} file content, either by hand with the \sphinxcode{\sphinxupquote{datalad unlock}} command, or within \sphinxcode{\sphinxupquote{datalad run}} using the \sphinxcode{\sphinxupquote{\sphinxhyphen{}o}}/\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}output}} flag.
+
+\sphinxAtStartPar
+There is one detail about DataLad datasets that we have not covered yet.
+It is a crucial component to understanding certain aspects of a dataset, but it is also a potential source of confusion that we want to eradicate.
+
+\sphinxAtStartPar
+You might have noticed already that an \sphinxcode{\sphinxupquote{ls \sphinxhyphen{}l}} or \sphinxcode{\sphinxupquote{tree}} command in your dataset shows small arrows and quite cryptic paths following each non\sphinxhyphen{}text file.
+Maybe your shell also displays these files in a different color than text files when listing them.
+We’ll take a look together, using the \sphinxcode{\sphinxupquote{books/}} directory as an example.
+Also check the \textit{Windows-wit}~{\windowswiticoninline}\textit{\ref{ww-directories}} {\hyperref[\detokenize{basics/101-115-symlinks:ww-directories}]{\sphinxcrossref{\DUrole{std,std-ref}{on directory appearance}}}} (\autopageref*{\detokenize{basics/101-115-symlinks:ww-directories}}) for comparison:
+
+\index{no symlinks@\spxentry{no symlinks}!on Windows@\spxentry{on Windows}}\index{on Windows@\spxentry{on Windows}!no symlinks@\spxentry{no symlinks}}\index{tree@\spxentry{tree}!terminal command@\spxentry{terminal command}}\index{terminal command@\spxentry{terminal command}!tree@\spxentry{tree}}\ignorespaces \begin{windowswit}[label={ww-directories}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{Dataset directories look different on Windows}
+\label{\detokenize{basics/101-115-symlinks:ww-directories}}
+
+\sphinxAtStartPar
+First of all, the Windows \sphinxcode{\sphinxupquote{tree}} command lists only directories by default, unless you parametrize it with \sphinxcode{\sphinxupquote{/f}}.
+And, secondly, even if you list the individual files, you would not see the {\hyperref[\detokenize{glossary:term-symlink}]{\sphinxtermref{\DUrole{xref,std,std-term}{symlink}}}}s shown below.
+Due to insufficient support for symlinks on Windows, git\sphinxhyphen{}annex does not use them.
+The \textit{Windows-wit}~{\windowswiticoninline}\textit{\ref{ww-adjusted-mode}} {\hyperref[\detokenize{basics/101-115-symlinks:ww-adjusted-mode}]{\sphinxcrossref{\DUrole{std,std-ref}{on git\sphinxhyphen{}annex\textquotesingle{}s adjusted mode}}}} (\autopageref*{\detokenize{basics/101-115-symlinks:ww-adjusted-mode}}) has more on that.
+
+
+\end{windowswit}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} in the root of DataLad\PYGZhy{}101}
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }books
+\PYG{g+gp}{\PYGZdl{} }tree
+\PYG{g+go}{.}
+\PYG{g+go}{├── bash\PYGZus{}guide.pdf \PYGZhy{}\PYGZgt{} ../.git/annex/objects/WF/Gq/✂/MD5E\PYGZhy{}s1198170\PYGZhy{}\PYGZhy{}0ab2c121✂MD5.pdf}
+\PYG{g+go}{├── byte\PYGZhy{}of\PYGZhy{}python.pdf \PYGZhy{}\PYGZgt{} ../.git/annex/objects/xF/42/✂/MD5E\PYGZhy{}s4161086\PYGZhy{}\PYGZhy{}c832fc13✂MD5.pdf}
+\PYG{g+go}{├── progit.pdf \PYGZhy{}\PYGZgt{} ../.git/annex/objects/G6/Gj/✂/MD5E\PYGZhy{}s12465653\PYGZhy{}\PYGZhy{}05cd7ed5✂MD5.pdf}
+\PYG{g+go}{└── TLCL.pdf \PYGZhy{}\PYGZgt{} ../.git/annex/objects/jf/3M/✂/MD5E\PYGZhy{}s2120211\PYGZhy{}\PYGZhy{}06d1efcb✂MD5.pdf}
+
+\PYG{g+go}{0 directories, 4 files}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+If you do not know what you are looking at,
+this looks weird, if not worse: intimidating, wrong, or broken.
+First of all: no, \sphinxstylestrong{it is all fine}. But let’s start with the basics of what is displayed
+here to understand it.
+
+\sphinxAtStartPar
+The small \sphinxcode{\sphinxupquote{\sphinxhyphen{}\textgreater{}}} symbol connecting one path (the book’s name) to another path (the weird
+sequence of characters ending in \sphinxcode{\sphinxupquote{.pdf}}) is what is called a
+\sphinxstyleemphasis{symbolic link}, {\hyperref[\detokenize{glossary:term-symlink}]{\sphinxtermref{\DUrole{xref,std,std-term}{symlink}}}} or \sphinxstyleemphasis{softlink} for short.
+It is a term for any file that contains a reference to another file or directory as
+a {\hyperref[\detokenize{glossary:term-relative-path}]{\sphinxtermref{\DUrole{xref,std,std-term}{relative path}}}} or {\hyperref[\detokenize{glossary:term-absolute-path}]{\sphinxtermref{\DUrole{xref,std,std-term}{absolute path}}}}.
+If you use Windows, you are familiar with a related, although more basic concept: a shortcut. But see the \textit{Windows-wit}~{\windowswiticoninline}\textit{\ref{ww-adjusted-mode}} {\hyperref[\detokenize{basics/101-115-symlinks:ww-adjusted-mode}]{\sphinxcrossref{\DUrole{std,std-ref}{on how the actual behavior is there}}}} (\autopageref*{\detokenize{basics/101-115-symlinks:ww-adjusted-mode}}).
+
+\sphinxAtStartPar
+This means that the files that are in the locations in which you saved content
+and are named as you named your files (e.g., \sphinxcode{\sphinxupquote{TLCL.pdf}}),
+do \sphinxstyleemphasis{not actually contain your files’ content}:
+they just point to the place where the actual file content resides.
+
+\sphinxAtStartPar
+This sounds weird, and like an unnecessary complication of things. But we will
+get to why this is relevant and useful shortly. First, however,
+where exactly are the contents of the files you created or saved?
+
+\sphinxAtStartPar
+The start of the link path is \sphinxcode{\sphinxupquote{../.git}}. The section {\hyperref[\detokenize{basics/101-101-create:createds}]{\sphinxcrossref{\DUrole{std,std-ref}{Create a dataset}}}} (\autopageref*{\detokenize{basics/101-101-create:createds}}) contained
+a note that strongly advised that you to not tamper with
+(or in the worst case, delete) the \sphinxcode{\sphinxupquote{.git}}
+repository in the root of any dataset. One reason
+why you should not do this is because \sphinxstyleemphasis{this} \sphinxcode{\sphinxupquote{.git}} directory is where all of your file content
+is actually stored.
+
+\sphinxAtStartPar
+But why is that? We have to talk a bit git\sphinxhyphen{}annex now in order to understand it.
+
+\sphinxAtStartPar
+When a file is saved into a dataset to be tracked,
+by default \textendash{} that is in a dataset created without any configuration template \textendash{}
+DataLad gives this file to git\sphinxhyphen{}annex. Exceptions to this behavior can be
+defined based on
+\begin{enumerate}
+\sphinxsetlistlabels{\arabic}{enumi}{enumii}{}{.}%
+\item {} 
+\sphinxAtStartPar
+file size
+
+\item {} 
+\sphinxAtStartPar
+and/or path/pattern, and thus, for example, file extensions,
+or names, or file types (e.g., text files, as with the
+\sphinxcode{\sphinxupquote{text2git}} configuration template).
+
+\end{enumerate}
+
+\sphinxAtStartPar
+git\sphinxhyphen{}annex, in order to version control the data, takes the file content
+and moves it under \sphinxcode{\sphinxupquote{.git/annex/objects}} \textendash{} the so called {\hyperref[\detokenize{glossary:term-object-tree}]{\sphinxtermref{\DUrole{xref,std,std-term}{object\sphinxhyphen{}tree}}}}.
+It further renames the file into the sequence of characters you can see
+in the path, and in its place
+creates a symlink with the original file name, pointing to the new location.
+This process is often referred to as a file being \sphinxstyleemphasis{annexed}, and the object
+tree is also known as the \sphinxstyleemphasis{annex} of a dataset.
+
+\index{elevated storage demand@\spxentry{elevated storage demand}!in adjusted mode@\spxentry{in adjusted mode}}\index{in adjusted mode@\spxentry{in adjusted mode}!elevated storage demand@\spxentry{elevated storage demand}}\index{no symlinks@\spxentry{no symlinks}!on Windows@\spxentry{on Windows}}\index{on Windows@\spxentry{on Windows}!no symlinks@\spxentry{no symlinks}}\index{adjusted mode@\spxentry{adjusted mode}!on Windows@\spxentry{on Windows}}\index{on Windows@\spxentry{on Windows}!adjusted mode@\spxentry{adjusted mode}}\ignorespaces \begin{windowswit}[label={ww-adjusted-mode}, before title={\thetcbcounter\ }, float, floatplacement=tbp, check odd page=true]{File content management on Windows (adjusted mode)}
+\label{\detokenize{basics/101-115-symlinks:ww-adjusted-mode}}
+
+\sphinxAtStartPar
+Windows has insufficient support for {\hyperref[\detokenize{glossary:term-symlink}]{\sphinxtermref{\DUrole{xref,std,std-term}{symlink}}}}s and revoking write {\hyperref[\detokenize{glossary:term-permissions}]{\sphinxtermref{\DUrole{xref,std,std-term}{permissions}}}} on files.
+Therefore, {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}} classifies it as a {\hyperref[\detokenize{glossary:term-crippled-file-system}]{\sphinxtermref{\DUrole{xref,std,std-term}{crippled file system}}}} and has to stray from its default behavior: it enters {\hyperref[\detokenize{glossary:term-adjusted-mode}]{\sphinxtermref{\DUrole{xref,std,std-term}{adjusted mode}}}}.
+While git\sphinxhyphen{}annex on Unix\sphinxhyphen{}based file operating systems stores data in the annex and creates a symlink in the data’s original place, on Windows it moves data into the {\hyperref[\detokenize{glossary:term-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{annex}}}} and creates a \sphinxstyleemphasis{copy} of the data in its original place. This behavior is not specific to Windows, but is done for any impaired file system, such as a dataset on a USB\sphinxhyphen{}stick plugged into a Mac.
+
+\sphinxAtStartPar
+\sphinxstylestrong{Why is that?}
+Data \sphinxstyleemphasis{needs} to be in the annex for version control and transport logistics \textendash{} the annex is able to store all previous versions of the data, and manage the transport to other storage locations if you want to publish your dataset.
+But as the {\hyperref[\detokenize{basics/101-115-symlinks:fom-objecttree}]{\sphinxcrossref{\DUrole{std,std-ref}{Findoutmore in this section}}}} (\autopageref*{\detokenize{basics/101-115-symlinks:fom-objecttree}}) shows, the {\hyperref[\detokenize{glossary:term-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{annex}}}} is a non\sphinxhyphen{}human readable tree structure, and data thus also needs to exist in its original location.
+Thus, it exists in both places: it has moved into the annex, and copied back into its original location.
+Once you edit an annexed file, the most recent version of the file is available in its original location, and past versions are stored and readily available in the annex.
+If you reset your dataset to a previous state, as is shown in the section {\hyperref[\detokenize{basics/101-137-history:history}]{\sphinxcrossref{\DUrole{std,std-ref}{Git things done}}}} (\autopageref*{\detokenize{basics/101-137-history:history}}), the respective version of your data is taken from the annex and copied to replace the newer version, and vice versa.
+
+\sphinxAtStartPar
+\sphinxstylestrong{But doesn’t a copy mean data duplication?}
+Yes, absolutely!
+And that is a big downside to DataLad and {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{git\sphinxhyphen{}annex}}}} on Windows.
+If you have a dataset with annexed file contents (be that a dataset you created and populated yourself, or one that you cloned and got file contents with \sphinxcode{\sphinxupquote{datalad get}} from), it will take up more space than on a Unix\sphinxhyphen{}based system.
+How much more?
+Every file that exists in your file hierarchy exists twice.
+A fresh dataset with one version of each file is thus twice as big as it would be on a Linux computer.
+Any past version of data does not exist in duplication.
+
+\sphinxAtStartPar
+\sphinxstylestrong{Step\sphinxhyphen{}by\sphinxhyphen{}step demonstration}:
+Let’s take a concrete example to explain the last point in more detail.
+How much space, do you think, is taken up in your dataset by the resized \sphinxcode{\sphinxupquote{salt\_logo\_small.jpg}} image?
+As a reminder: It exists in two versions, a 400 by 400 pixel version (about 250Kb in size), and a 450 by 450 pixel version (about 310Kb in size).
+The 400 by 400 pixel version is the most recent one.
+The answer is: about 810Kb (\textasciitilde{}0.8 MB).
+The most recent 400x400px version exists twice (in the annex and as a copy), and the 450x450px copy exists once in the annex.
+If you would reset your dataset to the state when we created the 450x450px version, this file would instead exist twice.
+
+\index{unused@\spxentry{unused}!git\sphinxhyphen{}annex command@\spxentry{git\sphinxhyphen{}annex command}}\index{git\sphinxhyphen{}annex command@\spxentry{git\sphinxhyphen{}annex command}!unused@\spxentry{unused}}\index{dropunused@\spxentry{dropunused}!git\sphinxhyphen{}annex command@\spxentry{git\sphinxhyphen{}annex command}}\index{git\sphinxhyphen{}annex command@\spxentry{git\sphinxhyphen{}annex command}!dropunused@\spxentry{dropunused}}\ignorespaces 
+\sphinxAtStartPar
+\sphinxstylestrong{Can I at least get unused or irrelevant data out of the dataset?}
+Yes, either with convenience commands (e.g., \sphinxcode{\sphinxupquote{git annex unused}} followed by \sphinxcode{\sphinxupquote{git annex dropunused}}), or by explicitly using \sphinxcode{\sphinxupquote{drop}} on files (or their past versions) that you don’t want to keep anymore.
+Alternatively, you can transfer data you don’t need but want to preserve to a different storage location.
+Later parts of the book will demonstrate each of these alternatives.
+
+
+\end{windowswit}
+
+\sphinxAtStartPar
+For a demonstration that this file path is not complete gibberish,
+take the target path of any of the book’s symlinks and
+open it, for example with \sphinxcode{\sphinxupquote{evince \textless{}path\textgreater{}}}, or any other PDF reader in exchange for \sphinxcode{\sphinxupquote{evince}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+go}{evince ../.git/annex/objects/jf/3M/✂/MD5E\PYGZhy{}s2120211\PYGZhy{}\PYGZhy{}06d1efcb✂MD5.pdf}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Even though the path looks cryptic, it works and opens the file. Whenever you
+use a command like \sphinxcode{\sphinxupquote{evince TLCL.pdf}}, internally, programs will follow
+the same cryptic symlink like the one you have just opened.
+
+\sphinxAtStartPar
+But \sphinxstyleemphasis{why} does this symlink\sphinxhyphen{}ing happen? Up until now, it still seems like a very
+unnecessary, superfluous thing to do, right?
+
+\sphinxAtStartPar
+The resulting symlinks that look like
+your files but only point to the actual content in \sphinxcode{\sphinxupquote{.git/annex/objects}} are
+small in size. An \sphinxcode{\sphinxupquote{ls \sphinxhyphen{}lh}} reveals that all of these symlinks have roughly the same,
+small size of \textasciitilde{}130 Bytes:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }ls\PYG{+w}{ }\PYGZhy{}lh
+\PYG{g+go}{total 16K}
+\PYG{g+go}{lrwxrwxrwx 1 elena elena 131 2019\PYGZhy{}06\PYGZhy{}18 16:13 bash\PYGZus{}guide.pdf \PYGZhy{}\PYGZgt{} ../.git/annex/objects/WF/Gq/✂/MD5E\PYGZhy{}s1198170\PYGZhy{}\PYGZhy{}0ab2c121✂MD5.pdf}
+\PYG{g+go}{lrwxrwxrwx 1 elena elena 131 2019\PYGZhy{}06\PYGZhy{}18 16:13 byte\PYGZhy{}of\PYGZhy{}python.pdf \PYGZhy{}\PYGZgt{} ../.git/annex/objects/xF/42/✂/MD5E\PYGZhy{}s4161086\PYGZhy{}\PYGZhy{}c832fc13✂MD5.pdf}
+\PYG{g+go}{lrwxrwxrwx 1 elena elena 133 2019\PYGZhy{}06\PYGZhy{}18 16:13 progit.pdf \PYGZhy{}\PYGZgt{} ../.git/annex/objects/G6/Gj/✂/MD5E\PYGZhy{}s12465653\PYGZhy{}\PYGZhy{}05cd7ed5✂MD5.pdf}
+\PYG{g+go}{lrwxrwxrwx 1 elena elena 131 2019\PYGZhy{}06\PYGZhy{}18 16:13 TLCL.pdf \PYGZhy{}\PYGZgt{} ../.git/annex/objects/jf/3M/✂/MD5E\PYGZhy{}s2120211\PYGZhy{}\PYGZhy{}06d1efcb✂MD5.pdf}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Here you can see the reason why content is symlinked: Small file size means that
+\sphinxstyleemphasis{Git can handle those symlinks}!
+Therefore, instead of large file content, only the symlinks are committed into
+Git, and the Git repository thus stays lean. Simultaneously, still, all
+files stored in Git as symlinks can point to arbitrarily large files in the
+object tree. Within the object tree, git\sphinxhyphen{}annex handles file content tracking,
+and is busy creating and maintaining appropriate symlinks so that your data
+can be version controlled just as any text file.
+
+\sphinxAtStartPar
+This comes with two very important advantages:
+
+\sphinxAtStartPar
+One, should you have copies of the
+same data in different places of your dataset, the symlinks of these files
+point to the same place \sphinxhyphen{} in order to understand why this is the case, you
+will need to read the \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-objecttree}} {\hyperref[\detokenize{basics/101-115-symlinks:fom-objecttree}]{\sphinxcrossref{\DUrole{std,std-ref}{on how git\sphinxhyphen{}annex manages file content}}}} (\autopageref*{\detokenize{basics/101-115-symlinks:fom-objecttree}}).
+Therefore, any amount of copies of a piece of data
+is only one single piece of data in your object tree. This, depending on
+how much identical file content lies in different parts of your dataset,
+can save you much disk space and time.
+
+\sphinxAtStartPar
+The second advantage is less intuitive but clear for users familiar with Git.
+Compared to copying and deleting huge data files, small symlinks can be written very very fast, for example, when switching dataset versions, or {\hyperref[\detokenize{glossary:term-branch}]{\sphinxtermref{\DUrole{xref,std,std-term}{branch}}}}es.
+\begin{gitusernote}[before title={\thetcbcounter\ }, check odd page=true]{Speedy branch switches}
+
+\sphinxAtStartPar
+Switching branches fast, even when they track vasts amounts of data, lets you work with data using the same routines as in software development workflows.
+
+
+\end{gitusernote}
+
+\sphinxAtStartPar
+This leads to a few conclusions:
+
+\sphinxAtStartPar
+The first is that you should not be worried
+to see cryptic looking symlinks in your repository \textendash{} this is how it should look.
+Again, you can read the \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-objecttree}} {\hyperref[\detokenize{basics/101-115-symlinks:fom-objecttree}]{\sphinxcrossref{\DUrole{std,std-ref}{on why these paths look so weird}}}} (\autopageref*{\detokenize{basics/101-115-symlinks:fom-objecttree}}) and what all of this has to do with data integrity, if you want to.
+It has additional information that can help to establish trust in that your data are safely stored and tracked, and understanding more about the object tree and knowing bits of the git\sphinxhyphen{}annex basics can make you more confident in working with your datasets.
+
+\sphinxAtStartPar
+The second is that it should now be clear to you why the \sphinxcode{\sphinxupquote{.git}} directory
+should not be deleted or in any way modified by hand. This place is where
+your data are stored, and you can trust git\sphinxhyphen{}annex to be better able to
+work with the paths in the object tree than you or any other human are.
+
+\sphinxAtStartPar
+Lastly, understanding that annexed files in your dataset are symlinked
+will be helpful to understand how common file system operations such as
+moving, renaming, or copying content translate to dataset modifications
+in certain situations. Later in this book, the section {\hyperref[\detokenize{basics/101-136-filesystem:file-system}]{\sphinxcrossref{\DUrole{std,std-ref}{Dataset ops}}}} (\autopageref*{\detokenize{basics/101-136-filesystem:file-system}})
+will take a closer look at that.
+
+\index{key@\spxentry{key}!git\sphinxhyphen{}annex concept@\spxentry{git\sphinxhyphen{}annex concept}}\index{git\sphinxhyphen{}annex concept@\spxentry{git\sphinxhyphen{}annex concept}!key@\spxentry{key}}\ignorespaces \phantomsection\label{\detokenize{basics/101-115-symlinks:objecttree}}\begin{findoutmore}[label={fom-objecttree}, before title={\thetcbcounter\ }, float, floatplacement=tbp, check odd page=true]{Data integrity and annex keys}
+\label{\detokenize{basics/101-115-symlinks:fom-objecttree}}
+
+\sphinxAtStartPar
+So how do these cryptic paths and names in the object tree come into existence?
+It’s not malicious intent that leads to these paths and file names \sphinxhyphen{} its checksums.
+
+\sphinxAtStartPar
+When a file is annexed, git\sphinxhyphen{}annex typically generates a \sphinxstyleemphasis{key} (or {\hyperref[\detokenize{glossary:term-annex-key}]{\sphinxtermref{\DUrole{xref,std,std-term}{annex key}}}}) from the \sphinxstylestrong{file content}.
+It uses this key (in part) as a name for the file and as the path
+in the object tree.
+Thus, the key is associated with the content of the file (the \sphinxstyleemphasis{value}),
+and therefore, using this key, file content can be identified.
+
+\sphinxAtStartPar
+Most key types contain a {\hyperref[\detokenize{glossary:term-checksum}]{\sphinxtermref{\DUrole{xref,std,std-term}{checksum}}}}. This is a string of a fixed number of characters
+computed from some input, for example the content of a PDF file,
+by a \sphinxstyleemphasis{hash} function.
+
+\sphinxAtStartPar
+This checksum \sphinxstyleemphasis{uniquely} identifies a file’s content.
+A hash function will generate the same character sequence for the same file content, and once file content changes, the generated checksum changes, too.
+Basing the file name on its contents thus becomes a way of ensuring data integrity:
+File content cannot be changed without git\sphinxhyphen{}annex noticing, because the file’s checksum, and thus its key in its symlink, will change.
+Furthermore, if two files have identical checksums, the content in these files is identical.
+Consequently, if two files have the same symlink, and thus link the same file in the object\sphinxhyphen{}tree, they are identical in content.
+This can save disk space if a dataset contains many identical files: Copies of the same data only need one instance of that content in the object tree, and all copies will symlink to it.
+If you want to read more about the computer science basics about hash functions check out the \dlhbhref{W1F}{Wikipedia page}.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} take a look at the last part of the target path:}
+\PYG{g+gp}{\PYGZdl{} }ls\PYG{+w}{ }\PYGZhy{}lh\PYG{+w}{ }TLCL.pdf
+\PYG{g+go}{lrwxrwxrwx 1 elena elena 131 2019\PYGZhy{}06\PYGZhy{}18 16:13 TLCL.pdf \PYGZhy{}\PYGZgt{} ../.git/annex/objects/jf/3M/✂/MD5E\PYGZhy{}s2120211\PYGZhy{}\PYGZhy{}06d1efcb✂MD5.pdf}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Let’s take a closer look at the structure of the symlink.
+The key from the hash function is the last part of the name of the file the symlink links to (in which the actual data content is stored).
+
+\index{compute checksum@\spxentry{compute checksum}!in a terminal@\spxentry{in a terminal}}\index{in a terminal@\spxentry{in a terminal}!compute checksum@\spxentry{compute checksum}}\ignorespaces 
+\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-115-symlinks:index-4}}}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} compare it to the checksum (here of type md5sum) of the PDF file and the subdirectory name}
+\PYG{g+gp}{\PYGZdl{} }md5sum\PYG{+w}{ }TLCL.pdf
+\PYG{g+go}{06d1efcb✂MD5  TLCL.pdf}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The extension (e.g., \sphinxcode{\sphinxupquote{.pdf}}) is appended, because some programs require it, and would fail when not working directly with the symlink, but the file that it points to.
+Right at the beginning, the symlink starts with two directories just after \sphinxcode{\sphinxupquote{.git/annex/objects/}},
+consisting of two letters each.
+These two letters are derived from the md5sum of the key, and their sole purpose to exist is to avoid issues with too many files in one directory (which is a situation that certain file systems have problems with).
+The next subdirectory in the symlink helps to prevent accidental deletions and changes, as it does not have write {\hyperref[\detokenize{glossary:term-permissions}]{\sphinxtermref{\DUrole{xref,std,std-term}{permissions}}}}, so that users cannot modify any of its underlying contents.
+This is the reason that annexed files need to be unlocked prior to modifications, and this information will be helpful to understand some file system management operations such as removing files or datasets. Section {\hyperref[\detokenize{basics/101-136-filesystem:file-system}]{\sphinxcrossref{\DUrole{std,std-ref}{Dataset ops}}}} (\autopageref*{\detokenize{basics/101-136-filesystem:file-system}}) takes a look at that.
+
+\sphinxAtStartPar
+The next part of the symlink contains the actual checksum.
+There are different {\hyperref[\detokenize{glossary:term-annex-key}]{\sphinxtermref{\DUrole{xref,std,std-term}{annex key}}}} backends that use different checksums.
+Depending on which is used, the resulting {\hyperref[\detokenize{glossary:term-checksum}]{\sphinxtermref{\DUrole{xref,std,std-term}{checksum}}}} has a certain length and structure, and the first part of the symlink actually states which hash function is used.
+By default, DataLad uses the \sphinxcode{\sphinxupquote{MD5E}} git\sphinxhyphen{}annex backend (the \sphinxcode{\sphinxupquote{E}} adds file extensions to annex keys), but should you want to, you can change this default to \dlhbhref{B1A}{one of many other types}.
+The reason why MD5E is used is the relatively short length of the underlying MD5 checksums \textendash{} which facilitates cross\sphinxhyphen{}platform compatibility for sharing datasets also with users on operating systems that have restrictions on total path length, such as Windows.
+
+\sphinxAtStartPar
+The one remaining unidentified bit in the file name is the one after the checksum identifier.
+This part is the size of the content in bytes.
+An annexed file in the object tree thus has a file name following this structure
+(but see \dlhbhref{B1L}{the git\sphinxhyphen{}annex documentation on keys} for the complete details):
+
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{\textless{}backend type\textgreater{}\sphinxhyphen{}s\textless{}size\textgreater{}\sphinxhyphen{}\sphinxhyphen{}\textless{}checksum\textgreater{}.\textless{}extension\textgreater{}}}
+
+\sphinxAtStartPar
+You now know a great deal more about git\sphinxhyphen{}annex and the object tree.
+Maybe you are as amazed as we are about some of the ingenuity used behind the scenes.
+Even more mesmerizing things about git\sphinxhyphen{}annex can be found in its \dlhbhref{B1C}{documentation}.
+
+
+\end{findoutmore}
+
+\vspace{1cm}
+
+\noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{teacher}.pdf}\hspace*{\fill}}
+
+\index{broken symlink@\spxentry{broken symlink}|spxpagem}\index{symlink@\spxentry{symlink}!broken@\spxentry{broken}|spxpagem}\ignorespaces 
+
+\subsection{Broken symlinks}
+\label{\detokenize{basics/101-115-symlinks:broken-symlinks}}\label{\detokenize{basics/101-115-symlinks:wslfiles}}\label{\detokenize{basics/101-115-symlinks:index-5}}
+\sphinxAtStartPar
+Whenever a symlink points to a non\sphinxhyphen{}existent target, this symlink is called
+\sphinxstyleemphasis{broken} or \sphinxstyleemphasis{dangling}, and opening the symlink would not work as it does not resolve. The
+section {\hyperref[\detokenize{basics/101-136-filesystem:file-system}]{\sphinxcrossref{\DUrole{std,std-ref}{Dataset ops}}}} (\autopageref*{\detokenize{basics/101-136-filesystem:file-system}}) will give a thorough demonstration of how symlinks can
+break, and how one can fix them again. Even though \sphinxstyleemphasis{broken} sounds
+troublesome, most types of broken symlinks you will encounter can be fixed,
+or are not problematic. At this point, you actually have already seen broken
+symlinks: Back in section {\hyperref[\detokenize{basics/101-105-install:installds}]{\sphinxcrossref{\DUrole{std,std-ref}{Install datasets}}}} (\autopageref*{\detokenize{basics/101-105-install:installds}}) we explored
+the file hierarchy in an installed subdataset that contained many annexed
+\sphinxcode{\sphinxupquote{mp3}} files. Upon the initial \sphinxcode{\sphinxupquote{datalad clone}}, the annexed files were not present locally.
+Instead, their symlinks (stored in Git) existed and allowed to explore which
+file’s contents could be retrieved. These symlinks point to nothing, though, as
+the content isn’t yet present locally, and are thus \sphinxstyleemphasis{broken}. This state,
+however, is not problematic at all. Once the content is retrieved via
+\sphinxcode{\sphinxupquote{datalad get}}, the symlink is functional again.
+
+\sphinxAtStartPar
+Nevertheless, it may be important to know that some tools that you would expect to work in a dataset with not yet retrieved file contents can encounter unintuitive problems.
+Some \sphinxstylestrong{file managers} (e.g., OSX’s Finder) may not display broken symlinks.
+In these cases, it will be impossible to browse and explore the file hierarchy of not\sphinxhyphen{}yet\sphinxhyphen{}retrieved files with the file manager.
+You can make sure to always be able to see the file hierarchy in two separate ways:
+Upgrade your file manager to display file types in DataLad datasets (e.g., the \sphinxhref{https://github.com/andrewringler/git-annex-turtle}{git\sphinxhyphen{}annex\sphinxhyphen{}turtle extension} for Finder), or use the \dlhbhref{D1F}{DataLad Gooey} to browse datasets.
+Alternatively, use the \sphinxcode{\sphinxupquote{ ls}} command in a terminal instead of a file manager GUI.
+Other tools may be more more specialized, smaller, or domain\sphinxhyphen{}specific, and may fail to correctly work with broken symlinks, or display unhelpful error messages when handling them, or require additional flags to modify their behavior.
+When encountering unexpected behavior or failures, try to keep in mind that a dataset without retrieved content appears to be a pile of broken symlinks to a range of tools, consult a tools documentation with regard to symlinks, and check whether data retrieval fixes persisting problems.
+
+\sphinxAtStartPar
+A last special case on symlinks exists if you are using DataLad on the Windows Subsystem for Linux. Take a look at the \textit{Windows-wit}~{\windowswiticoninline}\textit{\ref{ww-wsl2-symlinks}} {\hyperref[\detokenize{basics/101-115-symlinks:ww-wsl2-symlinks}]{\sphinxcrossref{\DUrole{std,std-ref}{on WSL2 symlink access}}}} (\autopageref*{\detokenize{basics/101-115-symlinks:ww-wsl2-symlinks}})
+for that.
+
+\index{access WSL2 symlinked files@\spxentry{access WSL2 symlinked files}!on Windows@\spxentry{on Windows}}\index{on Windows@\spxentry{on Windows}!access WSL2 symlinked files@\spxentry{access WSL2 symlinked files}}\index{WSL2@\spxentry{WSL2}!symlink access@\spxentry{symlink access}}\index{log@\spxentry{log}!Git command@\spxentry{Git command}}\index{Git command@\spxentry{Git command}!log@\spxentry{log}}\ignorespaces \begin{windowswit}[label={ww-wsl2-symlinks}, before title={\thetcbcounter\ }, float, floatplacement=tbp, check odd page=true]{Accessing symlinked files from your Windows system}
+\label{\detokenize{basics/101-115-symlinks:ww-wsl2-symlinks}}
+
+\sphinxAtStartPar
+If you are using WSL2 you have access to a Linux kernel and POSIX file system, including symlink support.
+Your DataLad experience has therefore been exactly as it has been for macOS or Linux users.
+But one thing that bears the need for additional information is sharing files in dataset between your Linux and Windows system.
+
+\sphinxAtStartPar
+It’s fantastic that files created under Linux can be shared to Windows and used by Windows tools.
+Usually, you should be able to open an explorer and type \sphinxcode{\sphinxupquote{\textbackslash{}\textbackslash{}wsl\$\textbackslash{}\textless{}distro\textgreater{}\textbackslash{}\textless{}path\textgreater{}}} in the address bar to navigate to files under Linux, or type \sphinxcode{\sphinxupquote{explorer.exe}} into the WSL2 terminal.
+Some core limitations of Windows can’t be overcome, though: Windows usually isn’t capable of handling symlinks.
+So while WSL2 can expose your dataset filled with symlinked files to Windows, your Windows tools can fail to open them.
+How can this be fixed?
+
+\index{checkout@\spxentry{checkout}!Git command@\spxentry{Git command}}\index{Git command@\spxentry{Git command}!checkout@\spxentry{checkout}}\index{check out particular version@\spxentry{check out particular version}!with Git@\spxentry{with Git}}\index{with Git@\spxentry{with Git}!check out particular version@\spxentry{check out particular version}}\ignorespaces 
+\sphinxAtStartPar
+Whenever you need to work with files from your datasets under Windows, you should \sphinxstyleemphasis{unlock} with \sphinxcode{\sphinxupquote{datalad unlock}}.
+This operation copies the file from the annex back to its original location, and thus removes the symlink (and also returns write {\hyperref[\detokenize{glossary:term-permissions}]{\sphinxtermref{\DUrole{xref,std,std-term}{permissions}}}} to the file).
+Alternatively, use \dlhbhref{B1D}{git\sphinxhyphen{}annex adjust \textendash{}unlock} to switch to a new dataset {\hyperref[\detokenize{glossary:term-branch}]{\sphinxtermref{\DUrole{xref,std,std-term}{branch}}}} in which all files are unlocked.
+The branch is called \sphinxcode{\sphinxupquote{adjusted/\textless{}branchname\textgreater{}(unlocked)}} (e.g., if the original branch name was \sphinxcode{\sphinxupquote{main}}, the new, adjusted branch will be called \sphinxcode{\sphinxupquote{adjusted/main(unlocked)}}).
+You can switch back to your original branch using \sphinxcode{\sphinxupquote{git checkout \textless{}branchname\textgreater{}}}.
+
+
+\end{windowswit}
+
+\sphinxAtStartPar
+Finally, if you are still in the \sphinxcode{\sphinxupquote{books/}} directory, go back into the root of
+the superdataset.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }../
+\end{sphinxVerbatim}
+
+\sphinxstepscope
+
+

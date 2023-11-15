@@ -1,0 +1,462 @@
+\chapter{The command line}
+\label{\detokenize{intro/howto:the-command-line}}\label{\detokenize{intro/howto:howto}}\label{\detokenize{intro/howto:index-0}}\label{\detokenize{intro/howto::doc}}
+\noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{typewriter}.pdf}\hspace*{\fill}}
+
+\sphinxAtStartPar
+This chapter aims at providing novices with general basics about the shell, common Unix
+commands and their Windows equivalent, and some general file system facts.
+This chapter is also a place to return to and (re\sphinxhyphen{})read if you come across a
+non\sphinxhyphen{}DataLad command or principle you want to remind yourself of.
+If you are already familiar with the shell and know the difference between an absolute
+and a relative path, you can safely skip this chapter.
+
+\sphinxAtStartPar
+While there is a graphical user interface for DataLad (the {\hyperref[\detokenize{glossary:term-DataLad-Gooey}]{\sphinxtermref{\DUrole{xref,std,std-term}{DataLad Gooey}}}}), this book will first and foremost focus on teaching DataLad concepts without the overhead of a user\sphinxhyphen{}interface, using DataLad’s most powerful interface on the \sphinxstyleemphasis{command line}.
+This means that the code examples in this book show no buttons to click on, but a set of commands and options users type into their \sphinxstyleemphasis{terminal}.
+If you are not used to working with command\sphinxhyphen{}line tools, DataLad can appear intimidating.
+Luckily, the set of possible commands is limited, and even without prior experience with a shell, one can get used to it fairly quickly.
+
+\begin{figure}[tbp]
+\centering
+\capstart
+
+\noindent\sphinxincludegraphics[width=0.500\linewidth]{{shell}.png}
+\caption{A terminal window in a standard desktop environment.}\label{\detokenize{intro/howto:id1}}\end{figure}
+
+\sphinxAtStartPar
+The shell (also called a terminal, console, or CLI) is an interactive,
+text based interface. If you have used Matlab or IPython, then you are already familiar
+with the basics of a command line interface.
+On Unix\sphinxhyphen{}like systems (e.g., running Linux or macOS), the shell application is usually called “terminal”.
+On Windows systems, several different interfaces exist: The “CMD” Command Prompt and the Powershell are natively installed, and the Git Bash (provided by Git for Windows) or Anaconda prompt CLI (provided by Anaconda or Miniconda) can come with the installation of the respective software tool.
+We recommend using CMD, or, if you have them installed already and prefer them over the CMD, the Git Bash or Anaconda prompt.
+As later parts in this section will show, shells under Windows may use different commands than shells under Linux and macOS systems.
+
+
+\section{Command syntax}
+\label{\detokenize{intro/howto:command-syntax}}
+\sphinxAtStartPar
+Interactions with the shell take the form of commands, text\sphinxhyphen{}based instructions to your computer.
+Commands are case sensitive and follow the syntax of:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{command} \PYG{p}{[}\PYG{n}{options}\PYG{o}{.}\PYG{o}{.}\PYG{o}{.}\PYG{p}{]} \PYG{o}{\PYGZlt{}}\PYG{n}{arguments}\PYG{o}{.}\PYG{o}{.}\PYG{o}{.}\PYG{o}{\PYGZgt{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Whenever you see some example code in the code snippets of this book, make sure
+that you capitalize exactly as shown if you try it out yourself.
+The options modify the behavior of the program, and are usually preceded by \sphinxcode{\sphinxupquote{\sphinxhyphen{}}} or \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}}} on Unix\sphinxhyphen{}like systems.
+In this example
+
+\index{use command options@\spxentry{use command options}!in a terminal@\spxentry{in a terminal}}\index{in a terminal@\spxentry{in a terminal}!use command options@\spxentry{use command options}}\ignorespaces 
+\def\sphinxLiteralBlockLabel{\label{\detokenize{intro/howto:index-1}}}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }ls\PYG{+w}{ }\PYGZhy{}l\PYG{+w}{ }output.txt
+\PYG{g+go}{\PYGZhy{}rw\PYGZhy{}r\PYGZhy{}\PYGZhy{}r\PYGZhy{}\PYGZhy{} 1 me me 25165824 Dec 14 17:15 output.txt}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{ls}} is the \sphinxstyleemphasis{command}. The \sphinxstyleemphasis{option} \sphinxcode{\sphinxupquote{\sphinxhyphen{}l}} tells \sphinxcode{\sphinxupquote{ls}} to use a long listing format and
+thus display more information.
+\sphinxcode{\sphinxupquote{output.txt}} is the \sphinxstyleemphasis{argument} — the file that \sphinxcode{\sphinxupquote{ls}} is listing.
+The difference between options preceded by \sphinxcode{\sphinxupquote{\sphinxhyphen{}}} and \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}}} is their length:
+Usually, all options starting with a single dash are single letters. Often,
+a long, double\sphinxhyphen{}dashed option exists for these short options as well. For example,
+to list the size of a file in a \sphinxstyleemphasis{human\sphinxhyphen{}readable} format, supply the short option
+\sphinxcode{\sphinxupquote{\sphinxhyphen{}h}}, or, alternatively, its longer form, \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}human\sphinxhyphen{}readable}}.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }ls\PYG{+w}{ }\PYGZhy{}lh\PYG{+w}{ }output.txt\PYG{+w}{    }\PYG{c+c1}{\PYGZsh{} note that short options can be combined!}
+\PYG{g+gp}{\PYGZsh{} }or\PYG{+w}{ }alternatively
+\PYG{g+gp}{\PYGZdl{} }ls\PYG{+w}{ }\PYGZhy{}l\PYG{+w}{ }\PYGZhy{}\PYGZhy{}human\PYGZhy{}readable\PYG{+w}{ }output.txt
+\PYG{g+go}{\PYGZhy{}rw\PYGZhy{}r\PYGZhy{}\PYGZhy{}r\PYGZhy{}\PYGZhy{} 1 me me 24M Dec 14 17:15 output.txt}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+A command may have many of those options (often called “flags”) that modify their behavior.
+On Windows, options of native Windows commands can be preceded by a \sphinxcode{\sphinxupquote{/}} instead of dashes, for example, \sphinxcode{\sphinxupquote{dir /p output.txt}}.
+There are too many to even consider memorizing. Remember the ones you use often,
+and the rest you will lookup in their documentation or via your favorite search engine.
+DataLad commands naturally also come with many options, and in the next chapters
+and later examples you will get to see many of them.
+
+
+\section{Basic commands}
+\label{\detokenize{intro/howto:basic-commands}}
+\sphinxAtStartPar
+The following commands, split between Unix\sphinxhyphen{}like (e.g., Linux, macOS) and Windows environments, can appear in our examples or are generally useful to know:
+They can help you to \sphinxstyleemphasis{explore and navigate} in your file system, copy, move, or remove files, or create new directories.
+Note that the Git Bash on Windows emulates a Unix environment in which you could use Unix commands despite being on Windows.
+
+\index{terminal commands@\spxentry{terminal commands}!on Unix\sphinxhyphen{}like systems@\spxentry{on Unix\sphinxhyphen{}like systems}}\index{on Unix\sphinxhyphen{}like systems@\spxentry{on Unix\sphinxhyphen{}like systems}!terminal commands@\spxentry{terminal commands}}\ignorespaces 
+
+\subsection{Unix\sphinxhyphen{}like systems or environments}
+\label{\detokenize{intro/howto:unix-like-systems-or-environments}}\label{\detokenize{intro/howto:index-2}}\begin{description}
+\sphinxlineitem{\sphinxcode{\sphinxupquote{ls \sphinxhyphen{}lah \textless{}folder\textgreater{}}}}
+\sphinxAtStartPar
+list the contents of a folder, including hidden files (\sphinxhyphen{}a), and all their information (\sphinxhyphen{}l);
+print file sizes in human readable units (\sphinxhyphen{}h)
+
+\sphinxlineitem{\sphinxcode{\sphinxupquote{cd \textless{}folder\textgreater{}}}}
+\sphinxAtStartPar
+change to another folder
+
+\sphinxlineitem{\sphinxcode{\sphinxupquote{cp \textless{}from\textgreater{} \textless{}to\textgreater{}}}}
+\sphinxAtStartPar
+copy a file
+
+\sphinxlineitem{\sphinxcode{\sphinxupquote{cp \sphinxhyphen{}R \textless{}from\textgreater{} \textless{}to\textgreater{}}}}
+\sphinxAtStartPar
+copy a folder and its contents (\sphinxhyphen{}R)
+
+\sphinxlineitem{\sphinxcode{\sphinxupquote{mv \textless{}from\textgreater{} \textless{}to\textgreater{}}}}
+\sphinxAtStartPar
+move/rename a file or folder
+
+\sphinxlineitem{\sphinxcode{\sphinxupquote{rm \textless{}file\textgreater{}}}}
+\sphinxAtStartPar
+delete a file
+
+\sphinxlineitem{\sphinxcode{\sphinxupquote{rm \sphinxhyphen{}Rv \textless{}folder\textgreater{}}}}
+\sphinxAtStartPar
+delete a folder and its contents (\sphinxhyphen{}R) and list each file as it’s being deleted (\sphinxhyphen{}v)
+
+\sphinxlineitem{\sphinxcode{\sphinxupquote{mkdir \textless{}folder\textgreater{}}}}
+\sphinxAtStartPar
+create a folder
+
+\sphinxlineitem{\sphinxcode{\sphinxupquote{rmdir \textless{}folder\textgreater{}}}}
+\sphinxAtStartPar
+delete an empty folder
+
+\sphinxlineitem{\sphinxcode{\sphinxupquote{export NAME=Value}}}
+\sphinxAtStartPar
+Set an {\hyperref[\detokenize{glossary:term-environment-variable}]{\sphinxtermref{\DUrole{xref,std,std-term}{environment variable}}}} \sphinxcode{\sphinxupquote{NAME}} to \sphinxcode{\sphinxupquote{Value}} for your current terminal session
+
+\end{description}
+
+\index{terminal commands@\spxentry{terminal commands}!on Windows@\spxentry{on Windows}}\index{on Windows@\spxentry{on Windows}!terminal commands@\spxentry{terminal commands}}\ignorespaces 
+
+\subsection{Windows systems}
+\label{\detokenize{intro/howto:windows-systems}}\label{\detokenize{intro/howto:index-3}}\begin{description}
+\sphinxlineitem{\sphinxcode{\sphinxupquote{dir \textless{}folder\textgreater{}}}}
+\sphinxAtStartPar
+list the contents of a folder including hidden files
+
+\sphinxlineitem{\sphinxcode{\sphinxupquote{cd \textless{}folder\textgreater{}}}}
+\sphinxAtStartPar
+change to another folder
+
+\sphinxlineitem{\sphinxcode{\sphinxupquote{copy \textless{}from\textgreater{} \textless{}to\textgreater{}}}}
+\sphinxAtStartPar
+copy a file
+
+\sphinxlineitem{\sphinxcode{\sphinxupquote{ren \textless{}oldname\textgreater{} \textless{}newname\textgreater{}}}}
+\sphinxAtStartPar
+rename a file or folder
+
+\sphinxlineitem{\sphinxcode{\sphinxupquote{mv \textless{}from\textgreater{} \textless{}to\textgreater{}}}}
+\sphinxAtStartPar
+move a file or folder
+
+\sphinxlineitem{\sphinxcode{\sphinxupquote{del \textless{}file\textgreater{}}}}
+\sphinxAtStartPar
+delete a file
+
+\sphinxlineitem{\sphinxcode{\sphinxupquote{rmdir /s \textless{}folder\textgreater{}}}}
+\sphinxAtStartPar
+delete a folder and its contents (\sphinxcode{\sphinxupquote{/s}})
+
+\sphinxlineitem{\sphinxcode{\sphinxupquote{md \textless{}folder\textgreater{}}}}
+\sphinxAtStartPar
+create a folder
+
+\sphinxlineitem{\sphinxcode{\sphinxupquote{rmdir \textless{}folder\textgreater{}}}}
+\sphinxAtStartPar
+delete an empty folder
+
+\sphinxlineitem{\sphinxcode{\sphinxupquote{set NAME=Value}}}
+\sphinxAtStartPar
+Set an {\hyperref[\detokenize{glossary:term-environment-variable}]{\sphinxtermref{\DUrole{xref,std,std-term}{environment variable}}}} \sphinxcode{\sphinxupquote{NAME}} to \sphinxcode{\sphinxupquote{Value}} for your current terminal session
+
+\end{description}
+
+
+\section{The prompt}
+\label{\detokenize{intro/howto:the-prompt}}
+\sphinxAtStartPar
+When you first login on the command line, you are greeted with “the prompt”,
+and it will likely look similar to this:
+
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{me@muninn: \textasciitilde{}\$}}
+
+\sphinxAtStartPar
+This says I am the user \sphinxcode{\sphinxupquote{me}} on the machine \sphinxcode{\sphinxupquote{muninn}} and I am in the folder \sphinxcode{\sphinxupquote{\textasciitilde{}}},
+which is shorthand for the current user’s home folder (in this case \sphinxcode{\sphinxupquote{/home/me}}).
+
+\sphinxAtStartPar
+The \sphinxcode{\sphinxupquote{\$}} sign indicates that the prompt is interactive and awaiting user input.
+In this book, we will use \sphinxcode{\sphinxupquote{\$}} as a shorthand for the prompt, to allow
+the reader to quickly differentiate between lines containing commands vs the
+output of those commands.
+
+\index{paths@\spxentry{paths}|spxpagem}\ignorespaces 
+
+\section{Paths}
+\label{\detokenize{intro/howto:paths}}\label{\detokenize{intro/howto:index-4}}
+\sphinxAtStartPar
+Paths look different on Unix\sphinxhyphen{}like and Windows systems.
+Most prominently, the \sphinxstyleemphasis{path separators}, i.e., the symbol distinguishing directories in path, are back slashes (\sphinxcode{\sphinxupquote{\textbackslash{}}}) on Windows and front slashes (\sphinxcode{\sphinxupquote{/}}) on Unix\sphinxhyphen{}like systems.
+On Windows systems, paths are also usually prefixed with a “disk designator” such as \sphinxcode{\sphinxupquote{C:}} or \sphinxcode{\sphinxupquote{d:}}.
+Let’s say I want to create a new folder in my home folder on a Unix system,
+I can run the following command:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }mkdir\PYG{+w}{ }/home/me/awesome\PYGZus{}datalad\PYGZus{}project
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+If I want to do the same in Windows CMD, I’d do
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYGZdl{} mkdir C:\PYGZbs{}Users\PYGZbs{}me\PYGZbs{}awesome\PYGZus{}datalad\PYGZus{}project
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+And that both works on the respective system. \sphinxcode{\sphinxupquote{/home/me/awesome\_datalad\_project}} and \sphinxcode{\sphinxupquote{\textbackslash{}Users\textbackslash{}me\textbackslash{}awesome\_datalad\_project}} are what is called an \sphinxstyleemphasis{absolute}
+path.
+Absolute paths \sphinxstyleemphasis{always} start with a \sphinxcode{\sphinxupquote{/}} (on Unix\sphinxhyphen{}like systems) or a \sphinxcode{\sphinxupquote{\textbackslash{}}} (on Windows systems), and define the folder’s location with no ambiguity.
+
+\sphinxAtStartPar
+However, much like in spoken language, using someone’s full proper name every
+time would be exhausting, and thus pronouns are used.
+
+\sphinxAtStartPar
+This shorthand is called \sphinxstyleemphasis{relative} paths, because they are defined (wait for it…)
+\sphinxstyleemphasis{relative} to your current location on the file system. Relative paths \sphinxstyleemphasis{never} start
+with a \sphinxcode{\sphinxupquote{/}} or \sphinxcode{\sphinxupquote{\textbackslash{}}}.
+For example, \sphinxcode{\sphinxupquote{myfile.txt}} is a relative path to the file \sphinxcode{\sphinxupquote{myfile.txt}} in the current directory on Unix\sphinxhyphen{}like systems.
+The Windows equivalent for \sphinxcode{\sphinxupquote{myfile.txt}} in the current directory on the \sphinxcode{\sphinxupquote{C}} disk is \sphinxcode{\sphinxupquote{C:myfile.txt}}.
+
+\sphinxAtStartPar
+Unix knows a few shortcuts to refer to file system related directories, and you will
+come across them often. Whenever you see a \sphinxcode{\sphinxupquote{.}}, \sphinxcode{\sphinxupquote{..}}, or \sphinxcode{\sphinxupquote{\textasciitilde{}}} in a DataLad command,
+here is the translation to this cryptic punctuation:
+\begin{description}
+\sphinxlineitem{\sphinxcode{\sphinxupquote{.}}}
+\sphinxAtStartPar
+the current directory
+
+\sphinxlineitem{\sphinxcode{\sphinxupquote{..}}}
+\sphinxAtStartPar
+the parent directory
+
+\sphinxlineitem{\sphinxcode{\sphinxupquote{\textasciitilde{}}}}
+\sphinxAtStartPar
+the current user’s home directory
+
+\end{description}
+
+\sphinxAtStartPar
+So, taking the above example again: given that I am in my home (\sphinxcode{\sphinxupquote{\textasciitilde{}}}) folder,
+the following commands all would create the new folder in the exact same place.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }mkdir\PYG{+w}{ }/home/me/awesome\PYGZus{}datalad\PYGZus{}project
+\PYG{g+gp}{\PYGZdl{} }mkdir\PYG{+w}{ }\PYGZti{}/awesome\PYGZus{}datalad\PYGZus{}project
+\PYG{g+gp}{\PYGZdl{} }mkdir\PYG{+w}{ }awesome\PYGZus{}datalad\PYGZus{}project
+\PYG{g+gp}{\PYGZdl{} }mkdir\PYG{+w}{ }./awesome\PYGZus{}datalad\PYGZus{}project
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+To demonstrate this further, consider the following: In my home directory
+\sphinxcode{\sphinxupquote{/home/me}} I have added a folder for my current project,
+\sphinxcode{\sphinxupquote{awesome\_datalad\_project/}}. Let’s take a look at how this folder is organized:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }tree
+\PYG{g+go}{└── home}
+\PYG{g+go}{    └── me}
+\PYG{g+go}{         └── awesome\PYGZus{}datalad\PYGZus{}project}
+\PYG{g+go}{            ├── aligned}
+\PYG{g+go}{                ├── code}
+\PYG{g+go}{            └── sub\PYGZhy{}01}
+\PYG{g+go}{                └── bold3T}
+\PYG{g+go}{            ├── ...}
+\PYG{g+go}{            └── sub\PYGZhy{}xx}
+\PYG{g+go}{                └── bold3T}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Now let’s say I want to change from my home directory \sphinxcode{\sphinxupquote{/home/me}} into the \sphinxcode{\sphinxupquote{code/}}
+folder of the project. I could use absolute paths:
+
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{cd /home/me/awesome\_datalad\_project/aligned/code}}
+
+\sphinxAtStartPar
+But that is a bit wordy. It is much easier with a relative path:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }awesome\PYGZus{}datalad\PYGZus{}project/aligned/code
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Relative to my starting location (\sphinxcode{\sphinxupquote{/home/me}}), I navigated into the subfolders.
+
+\sphinxAtStartPar
+I can change back to my home directory also with a relative path:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }../../../
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The first \sphinxcode{\sphinxupquote{../}} takes me from \sphinxcode{\sphinxupquote{code/}} to its parent \sphinxcode{\sphinxupquote{aligned/}}, the
+second \sphinxcode{\sphinxupquote{../}} to \sphinxcode{\sphinxupquote{awesome\_datalad\_project/}}, and the last \sphinxcode{\sphinxupquote{../}}
+back to my home directory \sphinxcode{\sphinxupquote{me/}}.
+
+\sphinxAtStartPar
+However, since I want to go back to my home folder, it’s much faster to run:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }\PYGZti{}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Windows similarly knows the \sphinxcode{\sphinxupquote{.}} and \sphinxcode{\sphinxupquote{..}} shortcuts, but cannot handle the \sphinxcode{\sphinxupquote{\textasciitilde{}}} shortcut.
+In order to quickly get home, you could use
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }\PYGZpc{}userprofile\PYGZpc{}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+More information on Windows paths can be found \dlhbhref{M1A}{here}.
+
+
+\section{Text editors}
+\label{\detokenize{intro/howto:text-editors}}
+\sphinxAtStartPar
+Text editors are a crucial tool for any Linux user, but regardless of your operating system,
+if you use DataLad, you will occasionally find yourself in your default text editor to write
+a {\hyperref[\detokenize{glossary:term-commit-message}]{\sphinxtermref{\DUrole{xref,std,std-term}{commit message}}}} to describe a change you performed in your DataLad dataset.
+
+\sphinxAtStartPar
+Religious wars have been fought over which is “the best” editor. From the smoldering ashes,
+this is the breakdown:
+\begin{description}
+\sphinxlineitem{\sphinxcode{\sphinxupquote{nano}}}
+\sphinxAtStartPar
+Easy to use; medium features. If you do not know which to use, start with this.
+
+\sphinxlineitem{\sphinxcode{\sphinxupquote{vim}}}
+\sphinxAtStartPar
+Powerful and light; lots of features and many plugins; steep learning curve.
+Two resources to help get the most out of vim are the vimtutor program
+and vimcasts.org. If you accidentally enter \sphinxcode{\sphinxupquote{vim}} unprepared, typing \sphinxcode{\sphinxupquote{:q}}
+will get you out of there.
+
+\sphinxlineitem{\sphinxcode{\sphinxupquote{emacs}}}
+\sphinxAtStartPar
+Powerful; tons of features; written in Lisp; huge ecosystem; advanced learning curve.
+
+\end{description}
+
+\sphinxAtStartPar
+The text editors above are all command\sphinxhyphen{}line editors.
+They will open up directly in your terminal.
+
+\index{configure default editor@\spxentry{configure default editor}!with Git@\spxentry{with Git}}\index{with Git@\spxentry{with Git}!configure default editor@\spxentry{configure default editor}}\ignorespaces 
+\sphinxAtStartPar
+While those text editors can also be installed on Windows, command\sphinxhyphen{}line editors are rarely used on Windows.
+Git for Windows might set {\hyperref[\detokenize{glossary:term-vim}]{\sphinxtermref{\DUrole{xref,std,std-term}{vim}}}} as the default editor upon installation, which can require some acclimatization.
+A good graphical alternative is Notepad++, a powerful Windows\sphinxhyphen{}native text editor.
+You may either be able to configure this during the installation, of afterwards by running \sphinxcode{\sphinxupquote{git config core.editor notepad}}.
+
+
+\section{Shells}
+\label{\detokenize{intro/howto:shells}}
+\sphinxAtStartPar
+Whenever you use the command line on a Unix\sphinxhyphen{}based system, you do that in a command\sphinxhyphen{}line
+interpreter that is referred to as a \sphinxcode{\sphinxupquote{shell}}.
+
+\sphinxAtStartPar
+The shell is used to start commands and display the output of those commands.
+It also comes with its own primitive (yet surprisingly powerful) scripting language.
+
+\sphinxAtStartPar
+Many shells exist, though most belong to a family of shells called “Bourne Shells”
+that descend from the original \sphinxcode{\sphinxupquote{sh}}. This is relevant, because they share (mostly)
+a common syntax.
+
+\sphinxAtStartPar
+Two common shells are:
+\begin{description}
+\sphinxlineitem{\sphinxcode{\sphinxupquote{Bash}}}
+\sphinxAtStartPar
+The bourne\sphinxhyphen{}again shell (\sphinxcode{\sphinxupquote{bash}}) is the default shell on many *nix systems (most Linux distros, macOS).
+
+\sphinxlineitem{\sphinxcode{\sphinxupquote{zsh}}}
+\sphinxAtStartPar
+The Z shell (\sphinxcode{\sphinxupquote{zsh}}) comes with many additional features, the highlights being:
+shared history across running shells, smarter tab\sphinxhyphen{}completion, spelling correction, and better theming.
+
+\end{description}
+
+\sphinxAtStartPar
+To determine what shell you’re in, run the following:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{echo}\PYG{+w}{ }\PYG{n+nv}{\PYGZdl{}SHELL}
+\PYG{g+go}{/usr/bin/bash}
+\end{sphinxVerbatim}
+
+\index{tab completion@\spxentry{tab completion}|spxpagem}\ignorespaces 
+
+\section{Tab completion}
+\label{\detokenize{intro/howto:tab-completion}}\label{\detokenize{intro/howto:index-6}}
+\sphinxAtStartPar
+One of the best features ever invented is tab completion. Imagine your favorite animal sitting
+on your shoulder. Now imagine that animal shouting “TAB!” every time you’ve typed the first
+3 letters of a word. Listen to that animal.
+
+\sphinxAtStartPar
+Tab completion autocompletes commands and paths when you press the Tab key.
+If there are multiple matching options, pressing Tab twice will list them.
+
+\sphinxAtStartPar
+The greatest advantage of tab completion is not increased speed (though that is a nice benefit)
+but rather the near elimination of typos — and the resulting reduction of cognitive load.
+You can actually focus on the task you’re working on, rather than your typing. Tab\sphinxhyphen{}completion
+will autocomplete a DataLad command, options you give to it, or paths.
+
+\sphinxAtStartPar
+For an example of tab\sphinxhyphen{}completion with paths, consider the following directory structure:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+go}{├── Desktop}
+\PYG{g+go}{├── Documents}
+\PYG{g+go}{│   ├── my\PYGZus{}awesome\PYGZus{}project}
+\PYG{g+go}{│   └── my\PYGZus{}comics}
+\PYG{g+go}{│      └── xkcd}
+\PYG{g+go}{│      │   └── is\PYGZus{}it\PYGZus{}worth\PYGZus{}the\PYGZus{}time.png}
+\PYG{g+go}{├── Downloads}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+You’re in your home directory, and you want to navigate to your \dlhbhref{X1A}{xkcd}
+comic selection in \sphinxcode{\sphinxupquote{Documents/my\_comics/xkcd}}.
+Instead of typing the full path error\sphinxhyphen{}free, you can press Tab after the first few letters.
+If it is unambiguous, such as \sphinxcode{\sphinxupquote{cd Doc \textless{}Tab\textgreater{}}}, it will expand to \sphinxcode{\sphinxupquote{cd Documents}}.
+If there are multiple matching options, such as \sphinxcode{\sphinxupquote{cd Do}}, you will be prompted for more letters.
+Pressing Tab again will list the matching options (\sphinxcode{\sphinxupquote{Documents}} and \sphinxcode{\sphinxupquote{Downloads}} in this case).
+
+\sphinxAtStartPar
+\sphinxstylestrong{That’s it \textendash{} equipped with the basics of the command line, you are good to go on your DataLad adventure!}
+
+\sphinxstepscope
+
+
