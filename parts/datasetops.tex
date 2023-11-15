@@ -1,6 +1,6 @@
 \chapter{Dataset ops}
 \label{\detokenize{basics/101-136-filesystem:dataset-ops}}\label{\detokenize{basics/101-136-filesystem:file-system}}\label{\detokenize{basics/101-136-filesystem::doc}}
-\noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{help}.pdf}\hspace*{\fill}}
+\noindent{\hspace*{\fill}\sphinxincludegraphics[height=.3\textheight]{{help_bw}.pdf}\hspace*{\fill}}
 
 \sphinxAtStartPar
 After all of the DataLad\sphinxhyphen{}101 lectures and tutorials so far, you really begin to
@@ -92,6 +92,9 @@ all of this up. Therefore, do not panic if you rename a file,
 and see a dirty dataset status with deleted and untracked files
 \textendash{} \sphinxcode{\sphinxupquote{datalad save}} handles these and other cases really well
 under the hood.
+
+% beauty page break
+\newpage
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}rename the book\PYGZdq{}}
@@ -462,7 +465,7 @@ At this point, this does not look that different to the result of moving
 and therein lies the problem: What was moved was not the file content (which is
 still in the annex of the top\sphinxhyphen{}level dataset, \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}}), but its symlink that
 was stored in Git. After moving the file, the symlink is broken, and git\sphinxhyphen{}annex
-has no way of finding out where the file content could be:
+has no way of finding out where the file content is:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }midterm\PYGZus{}project
@@ -754,8 +757,6 @@ Moving or renaming subdirectories, especially if they are subdatasets,
 the Unix \sphinxcode{\sphinxupquote{ mv}} command to move or rename, and the \sphinxcode{\sphinxupquote{datalad save}}
 to clean up afterwards, just as in the examples above. Make sure to
 \sphinxstylestrong{not} use \sphinxcode{\sphinxupquote{git mv}}, especially for subdatasets.
-
-\sphinxAtStartPar
 Let’s, for example, rename the \sphinxcode{\sphinxupquote{books}} directory:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
@@ -878,6 +879,9 @@ be fixed easily though. Let’s demo this.
 As section {\hyperref[\detokenize{basics/101-122-config:config}]{\sphinxcrossref{\DUrole{std,std-ref}{Local configuration}}}} (\autopageref*{\detokenize{basics/101-122-config:config}}) explains, each
 sibling is registered in \sphinxcode{\sphinxupquote{.git/config}} in a “submodule” section.
 Let’s look at how our sibling “roommate” is registered there:
+
+% beauty page break
+\newpage
 
 \fvset{hllines={, 18, 19,}}%
 \begin{sphinxVerbatim}[commandchars=\\\{\}]

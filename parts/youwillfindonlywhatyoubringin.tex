@@ -1,6 +1,6 @@
-\chapter{You will find only what you bring in}
+\chapter{Find you will only what you bring}
 \label{\detokenize{basics/basics-yoda:you-will-find-only-what-you-bring-in}}\label{\detokenize{basics/basics-yoda:chapter-yoda}}\label{\detokenize{basics/basics-yoda::doc}}
-\noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{yoda}.pdf}\hspace*{\fill}}
+\noindent{\hspace*{\fill}\sphinxincludegraphics[height=.25\textheight]{{yoda_bw}.pdf}\hspace*{\fill}}
 \begin{quote}
 
 \sphinxAtStartPar
@@ -20,8 +20,6 @@ Each choice, the branch of a tree is: What looked like a decision, is after only
 Time flies and the semester rapidly approaches the midterms.
 In DataLad\sphinxhyphen{}101, students are not given an exam \textendash{} instead, they are
 asked to complete and submit a data analysis project with DataLad.
-
-\sphinxAtStartPar
 The lecturer hands out the requirements: The project…
 \begin{itemize}
 \item {} 
@@ -54,7 +52,7 @@ principles and DataLad’s Python API.
 
 \index{YODA principles@\spxentry{YODA principles}|spxpagem}\ignorespaces 
 
-\section{YODA: Best practices for data analyses in a dataset}
+\section{YODA: Best practices for data processing}
 \label{\detokenize{basics/101-127-yoda:yoda-best-practices-for-data-analyses-in-a-dataset}}\label{\detokenize{basics/101-127-yoda:yoda}}\label{\detokenize{basics/101-127-yoda:id1}}\label{\detokenize{basics/101-127-yoda:index-0}}\label{\detokenize{basics/101-127-yoda::doc}}
 \sphinxAtStartPar
 The last requirement for the midterm projects reads “needs to comply to the
@@ -85,6 +83,7 @@ such as \sphinxcode{\sphinxupquote{results/}}, \sphinxcode{\sphinxupquote{result
 \sphinxcode{\sphinxupquote{now\_with\_nicer\_plots/}}. Something like this is a very
 common shape a data science project may take after a while:
 
+\enlargethispage{.5\baselineskip}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{g+go}{├── code/}
 \PYG{g+go}{│   ├── code\PYGZus{}final/}
@@ -111,9 +110,7 @@ common shape a data science project may take after a while:
 \PYG{g+go}{│   │   ├── results\PYGZus{}for\PYGZus{}paper/}
 \PYG{g+go}{│   │   ├── results\PYGZus{}for\PYGZus{}paper\PYGZus{}revised/}
 \PYG{g+go}{│   │   └── results\PYGZus{}new\PYGZus{}data/}
-\PYG{g+go}{│   ├── random\PYGZus{}results\PYGZus{}file.tsv}
 \PYG{g+go}{│   ├── random\PYGZus{}results\PYGZus{}file\PYGZus{}v2.tsv}
-\PYG{g+go}{...}
 \end{sphinxVerbatim}
 
 \sphinxAtStartPar
@@ -323,7 +320,7 @@ project, to make sharing paper, code, data, and results easy.
 \centering
 \capstart
 
-\noindent\sphinxincludegraphics[width=1.000\linewidth]{{dataset_modules}.pdf}
+\noindent\sphinxincludegraphics[width=1.000\linewidth]{{dataset_modules_bw}.pdf}
 \caption{Data are modular components that can be re\sphinxhyphen{}used easily.}\label{\detokenize{basics/101-127-yoda:dataset-modules}}\end{figure}
 
 \sphinxAtStartPar
@@ -406,7 +403,7 @@ reproducible analysis concepts as being obvious”, you think with a grin.
 \centering
 \capstart
 
-\noindent\sphinxincludegraphics[width=0.500\linewidth]{{data_origin}.pdf}
+\noindent\sphinxincludegraphics[width=0.500\linewidth]{{data_origin_bw}.pdf}
 \caption{Schematic illustration of two standalone data datasets installed as subdatasets
 into an analysis project.}\label{\detokenize{basics/101-127-yoda:id6}}\label{\detokenize{basics/101-127-yoda:fig-subds}}\end{figure}
 
@@ -441,7 +438,7 @@ with principle 1, this means that you can distribute your analysis projects
 \centering
 \capstart
 
-\noindent\sphinxincludegraphics{{decentralized_publishing}.pdf}
+\noindent\sphinxincludegraphics{{decentralized_publishing_bw}.pdf}
 \caption{In a dataset that complies to the YODA principles, modular components
 (data, analysis results, papers) can be shared or published easily.}\label{\detokenize{basics/101-127-yoda:id7}}\label{\detokenize{basics/101-127-yoda:fig-yodads}}\end{figure}
 
@@ -500,7 +497,6 @@ to your dataset:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }create\PYG{+w}{ }\PYGZhy{}c\PYG{+w}{ }yoda\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}my\PYGZus{}analysis\PYGZdq{}}
-
 \PYG{g+go}{[INFO   ] Creating a new annex repo at /home/me/repos/testing/my\PYGZus{}analysis}
 \PYG{g+go}{create(ok): /home/me/repos/testing/my\PYGZus{}analysis (dataset)}
 \PYG{g+go}{[INFO   ] Running procedure cfg\PYGZus{}yoda}
@@ -596,139 +592,6 @@ language of your choice. But because you are already familiar with
 the \dlhbhref{P8}{Python} programming language, you decide
 to script your analysis in Python. Delighted, you find out that there is even
 a Python API for DataLad’s functionality that you can read about in {\hyperref[\detokenize{basics/101-130-yodaproject:fom-pythonapi}]{\sphinxcrossref{\DUrole{std,std-ref}{a Find\sphinxhyphen{}out\sphinxhyphen{}more on DataLad in Python}}}} (\autopageref*{\detokenize{basics/101-130-yodaproject:fom-pythonapi}}).
-
-\index{use DataLad API@\spxentry{use DataLad API}!with Python@\spxentry{with Python}}\index{with Python@\spxentry{with Python}!use DataLad API@\spxentry{use DataLad API}}\ignorespaces \phantomsection\label{\detokenize{basics/101-130-yodaproject:pythonapi}}\begin{findoutmore}[label={fom-pythonapi}, before title={\thetcbcounter\ }, float, check odd page=true]{DataLad’s Python API}
-\label{\detokenize{basics/101-130-yodaproject:fom-pythonapi}}
-\phantomsection\label{\detokenize{basics/101-130-yodaproject:python}}
-\sphinxAtStartPar
-Whatever you can do with DataLad from the command line, you can also do it with
-DataLad’s Python API.
-Thus, DataLad’s functionality can also be used within interactive Python sessions
-or Python scripts.
-All of DataLad’s user\sphinxhyphen{}oriented commands are exposed via \sphinxcode{\sphinxupquote{datalad.api}}.
-Thus, any command can be imported as a stand\sphinxhyphen{}alone command like this:
-
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{from} \PYG{n+nn}{datalad}\PYG{n+nn}{.}\PYG{n+nn}{api} \PYG{k+kn}{import} \PYG{o}{\PYGZlt{}}\PYG{n}{COMMAND}\PYG{o}{\PYGZgt{}}
-\end{sphinxVerbatim}
-
-\sphinxAtStartPar
-Alternatively, to import all commands, one can use
-
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{import} \PYG{n+nn}{datalad}\PYG{n+nn}{.}\PYG{n+nn}{api} \PYG{k}{as} \PYG{n+nn}{dl}
-\end{sphinxVerbatim}
-
-\sphinxAtStartPar
-and subsequently access commands as \sphinxcode{\sphinxupquote{dl.get()}}, \sphinxcode{\sphinxupquote{dl.clone()}}, and so forth.
-
-\sphinxAtStartPar
-The \dlhbhref{D1D}{developer documentation}
-of DataLad lists an overview of all commands, but naming is congruent to the
-command line interface. The only functionality that is not available at the
-command line is \sphinxcode{\sphinxupquote{datalad.api.Dataset}}, DataLad’s core Python data type.
-Just like any other command, it can be imported like this:
-
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{from} \PYG{n+nn}{datalad}\PYG{n+nn}{.}\PYG{n+nn}{api} \PYG{k+kn}{import} \PYG{n}{Dataset}
-\end{sphinxVerbatim}
-
-\sphinxAtStartPar
-or like this:
-
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{import} \PYG{n+nn}{datalad}\PYG{n+nn}{.}\PYG{n+nn}{api} \PYG{k}{as} \PYG{n+nn}{dl}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{dl}\PYG{o}{.}\PYG{n}{Dataset}\PYG{p}{(}\PYG{p}{)}
-\end{sphinxVerbatim}
-
-\sphinxAtStartPar
-A \sphinxcode{\sphinxupquote{Dataset}} is a \dlhbhref{P1B}{class}
-that represents a DataLad dataset. In addition to the
-stand\sphinxhyphen{}alone commands, all of DataLad’s functionality is also available via
-\dlhbhref{P1C}{methods}
-of this class. Thus, these are two equally valid ways to create a new
-dataset with DataLad in Python:
-
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{from} \PYG{n+nn}{datalad}\PYG{n+nn}{.}\PYG{n+nn}{api} \PYG{k+kn}{import} \PYG{n}{create}\PYG{p}{,} \PYG{n}{Dataset}
-\PYG{g+go}{\PYGZsh{} create as a stand\PYGZhy{}alone command}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{create}\PYG{p}{(}\PYG{n}{path}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{scratch/test}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
-\PYG{g+go}{[INFO   ] Creating a new annex repo at /.../scratch/test}
-\PYG{g+go}{Out[3]: \PYGZlt{}Dataset path=/home/me/scratch/test\PYGZgt{}}
-\PYG{g+go}{\PYGZsh{} create as a dataset method}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{ds} \PYG{o}{=} \PYG{n}{Dataset}\PYG{p}{(}\PYG{n}{path}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{scratch/test}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{ds}\PYG{o}{.}\PYG{n}{create}\PYG{p}{(}\PYG{p}{)}
-\PYG{g+go}{[INFO   ] Creating a new annex repo at /.../scratch/test}
-\PYG{g+go}{Out[3]: \PYGZlt{}Dataset path=/home/me/scratch/test\PYGZgt{}}
-\end{sphinxVerbatim}
-
-\sphinxAtStartPar
-As shown above, the only required parameter for a Dataset is the \sphinxcode{\sphinxupquote{path}} to
-its location, and this location may or may not exist yet.
-
-\sphinxAtStartPar
-Stand\sphinxhyphen{}alone functions have a \sphinxcode{\sphinxupquote{dataset=}} argument, corresponding to the
-\sphinxcode{\sphinxupquote{\sphinxhyphen{}d/\sphinxhyphen{}\sphinxhyphen{}dataset}} option in their command\sphinxhyphen{}line equivalent. You can specify
-the \sphinxcode{\sphinxupquote{dataset=}} argument with a path (string) to your dataset (such as
-\sphinxcode{\sphinxupquote{dataset=\textquotesingle{}.\textquotesingle{}}} for the current directory, or \sphinxcode{\sphinxupquote{dataset=\textquotesingle{}path/to/ds\textquotesingle{}}} to
-another location). Alternatively, you can pass a \sphinxcode{\sphinxupquote{Dataset}} instance to it:
-
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{from} \PYG{n+nn}{datalad}\PYG{n+nn}{.}\PYG{n+nn}{api} \PYG{k+kn}{import} \PYG{n}{save}\PYG{p}{,} \PYG{n}{Dataset}
-\PYG{g+go}{\PYGZsh{} use save with dataset specified as a path}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{save}\PYG{p}{(}\PYG{n}{dataset}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{path/to/dataset/}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
-\PYG{g+go}{\PYGZsh{} use save with dataset specified as a dataset instance}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{ds} \PYG{o}{=} \PYG{n}{Dataset}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{path/to/dataset}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{save}\PYG{p}{(}\PYG{n}{dataset}\PYG{o}{=}\PYG{n}{ds}\PYG{p}{,} \PYG{n}{message}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{saving all modifications}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-\PYG{g+go}{\PYGZsh{} use save as a dataset method (no dataset argument)}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{ds}\PYG{o}{.}\PYG{n}{save}\PYG{p}{(}\PYG{n}{message}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{saving all modifications}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-\end{sphinxVerbatim}
-
-\sphinxAtStartPar
-\sphinxstylestrong{Use cases for DataLad’s Python API}
-
-\sphinxAtStartPar
-Using the command line or the Python API of DataLad are both valid ways to accomplish the same results.
-Depending on your workflows, using the Python API can help to automate dataset operations, provides an alternative
-to the command line, or could be useful for scripting reproducible data analyses.
-One unique advantage of the Python API is the \sphinxcode{\sphinxupquote{Dataset}}:
-As the Python API does not suffer from the startup time cost of the command line,
-there is the potential for substantial speed\sphinxhyphen{}up when doing many calls to the API,
-and using a persistent Dataset object instance.
-You will also notice that the output of Python commands can be more verbose as the result records returned by each command do not get filtered by command\sphinxhyphen{}specific result renderers.
-Thus, the outcome of \sphinxcode{\sphinxupquote{dl.status(\textquotesingle{}myfile\textquotesingle{})}} matches that of \sphinxcode{\sphinxupquote{datalad status}} only when \sphinxcode{\sphinxupquote{\sphinxhyphen{}f}}/\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}output\sphinxhyphen{}format}} is set to \sphinxcode{\sphinxupquote{json}} or \sphinxcode{\sphinxupquote{json\_pp}}, as illustrated below.
-
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{import} \PYG{n+nn}{datalad}\PYG{n+nn}{.}\PYG{n+nn}{api} \PYG{k}{as} \PYG{n+nn}{dl}
-\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{dl}\PYG{o}{.}\PYG{n}{status}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{myfile}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
-\PYG{g+go}{[\PYGZob{}\PYGZsq{}type\PYGZsq{}: \PYGZsq{}file\PYGZsq{},}
-\PYG{g+go}{\PYGZsq{}gitshasum\PYGZsq{}: \PYGZsq{}915983d6576b56792b4647bf0d9fa04d83ce948d\PYGZsq{},}
-\PYG{g+go}{\PYGZsq{}bytesize\PYGZsq{}: 85,}
-\PYG{g+go}{\PYGZsq{}prev\PYGZus{}gitshasum\PYGZsq{}: \PYGZsq{}915983d6576b56792b4647bf0d9fa04d83ce948d\PYGZsq{},}
-\PYG{g+go}{\PYGZsq{}state\PYGZsq{}: \PYGZsq{}clean\PYGZsq{},}
-\PYG{g+go}{\PYGZsq{}path\PYGZsq{}: \PYGZsq{}/home/me/my\PYGZhy{}ds/myfile\PYGZsq{},}
-\PYG{g+go}{\PYGZsq{}parentds\PYGZsq{}: \PYGZsq{}/home/me/my\PYGZhy{}ds\PYGZsq{},}
-\PYG{g+go}{\PYGZsq{}status\PYGZsq{}: \PYGZsq{}ok\PYGZsq{},}
-\PYG{g+go}{\PYGZsq{}refds\PYGZsq{}: \PYGZsq{}/home/me/my\PYGZhy{}ds\PYGZsq{},}
-\PYG{g+go}{\PYGZsq{}action\PYGZsq{}: \PYGZsq{}status\PYGZsq{}\PYGZcb{}]}
-\end{sphinxVerbatim}
-
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }\PYGZhy{}f\PYG{+w}{ }json\PYGZus{}pp\PYG{+w}{ }status\PYG{+w}{ }myfile
-\PYG{g+go}{ \PYGZob{}\PYGZdq{}action\PYGZdq{}: \PYGZdq{}status\PYGZdq{},}
-\PYG{g+go}{  \PYGZdq{}bytesize\PYGZdq{}: 85,}
-\PYG{g+go}{  \PYGZdq{}gitshasum\PYGZdq{}: \PYGZdq{}915983d6576b56792b4647bf0d9fa04d83ce948d\PYGZdq{},}
-\PYG{g+go}{  \PYGZdq{}parentds\PYGZdq{}: \PYGZdq{}/home/me/my\PYGZhy{}ds\PYGZdq{},}
-\PYG{g+go}{  \PYGZdq{}path\PYGZdq{}: \PYGZdq{}/home/me/my\PYGZhy{}ds/myfile\PYGZdq{},}
-\PYG{g+go}{  \PYGZdq{}prev\PYGZus{}gitshasum\PYGZdq{}: \PYGZdq{}915983d6576b56792b4647bf0d9fa04d83ce948d\PYGZdq{},}
-\PYG{g+go}{  \PYGZdq{}refds\PYGZdq{}: \PYGZdq{}/home/me/my\PYGZhy{}ds/\PYGZdq{},}
-\PYG{g+go}{  \PYGZdq{}state\PYGZdq{}: \PYGZdq{}clean\PYGZdq{},}
-\PYG{g+go}{  \PYGZdq{}status\PYGZdq{}: \PYGZdq{}ok\PYGZdq{},}
-\PYG{g+go}{  \PYGZdq{}type\PYGZdq{}: \PYGZdq{}file\PYGZdq{}\PYGZcb{}}
-\end{sphinxVerbatim}
-
-
-\end{findoutmore}
 
 \index{use DataLad API@\spxentry{use DataLad API}!with Matlab@\spxentry{with Matlab}}\index{with Matlab@\spxentry{with Matlab}!use DataLad API@\spxentry{use DataLad API}}\index{use DataLad API@\spxentry{use DataLad API}!with R@\spxentry{with R}}\index{with R@\spxentry{with R}!use DataLad API@\spxentry{use DataLad API}}\ignorespaces \begin{importantnote}[label={index-1}, before title={\thetcbcounter\ }, check odd page=true]{Use DataLad in languages other than Python}
 \label{\detokenize{basics/101-130-yodaproject:index-1}}
@@ -840,6 +703,8 @@ input dataset, and I can install it as a modular component”, you think as you
 mentally tick off YODA principle number 1 and 2. “But before I can install it,
 I need an analysis superdataset first.”
 
+\vspace{2cm}
+\noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{reproduced_bw}.pdf}\hspace*{\fill}}
 
 \subsection{Building an analysis dataset}
 \label{\detokenize{basics/101-130-yodaproject:building-an-analysis-dataset}}
@@ -953,11 +818,11 @@ Importantly, all of the subdatasets are linked to the higher\sphinxhyphen{}level
 and despite being inside of \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}}, your \sphinxcode{\sphinxupquote{midterm\_project}} is an independent
 dataset, as is its \sphinxcode{\sphinxupquote{input/}} subdataset. An overview is shown in \hyperref[\detokenize{basics/101-130-yodaproject:fig-linkeddl101}]{Fig.\@ \ref{\detokenize{basics/101-130-yodaproject:fig-linkeddl101}}}.
 
-\begin{figure}[tbp]
+\begin{figure}[bp]
 \centering
 \capstart
 
-\noindent\sphinxincludegraphics[width=0.500\linewidth]{{virtual_dstree_dl101_midterm}.pdf}
+\noindent\sphinxincludegraphics[width=0.500\linewidth]{{virtual_dstree_dl101_midterm_bw}.pdf}
 \caption{Overview of (linked) datasets in DataLad\sphinxhyphen{}101.}\label{\detokenize{basics/101-130-yodaproject:id8}}\label{\detokenize{basics/101-130-yodaproject:fig-linkeddl101}}\end{figure}
 
 
@@ -1000,10 +865,9 @@ Your final result should be a statistical summary of this prediction.
 \sphinxAtStartPar
 To compute the analysis you create the following Python script inside of \sphinxcode{\sphinxupquote{code/}}:
 
-\fvset{hllines={, 11, 12, 13, 23, 43,}}%
+\fvset{hllines={, 10, 11, 12, 22, 41,}}%
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }\PYGZlt{}\PYGZlt{}\PYG{+w}{ }EOT\PYG{+w}{ }\PYGZgt{}\PYG{+w}{ }code/script.py
-
 \PYG{g+go}{import argparse}
 \PYG{g+go}{import pandas as pd}
 \PYG{g+go}{import seaborn as sns}
@@ -1041,11 +905,9 @@ To compute the analysis you create the following Python script inside of \sphinx
 \PYG{g+go}{knn = KNeighborsClassifier()}
 \PYG{g+go}{knn.fit(X\PYGZus{}train, Y\PYGZus{}train)}
 \PYG{g+go}{predictions = knn.predict(X\PYGZus{}test)}
-
 \PYG{g+gp}{\PYGZsh{} }Step\PYG{+w}{ }\PYG{l+m}{3}:\PYG{+w}{ }Save\PYG{+w}{ }the\PYG{+w}{ }classification\PYG{+w}{ }report
 \PYG{g+go}{report = classification\PYGZus{}report(Y\PYGZus{}test, predictions, output\PYGZus{}dict=True)}
 \PYG{g+go}{df\PYGZus{}report = pd.DataFrame(report).transpose().to\PYGZus{}csv(args.output\PYGZus{}report)}
-
 \PYG{g+go}{EOT}
 \end{sphinxVerbatim}
 \sphinxresetverbatimhllines
@@ -1104,6 +966,9 @@ Let’s run a quick \sphinxcode{\sphinxupquote{datalad status}}…
 analysis setup, we \sphinxstyleemphasis{tag} the state of the dataset to refer to it easily at a later
 point with the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}version\sphinxhyphen{}tag}} option of \sphinxcode{\sphinxupquote{datalad save}}. Check the
 \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-what-is-a-tag}} {\hyperref[\detokenize{basics/101-130-yodaproject:fom-what-is-a-tag}]{\sphinxcrossref{\DUrole{std,std-ref}{on tags}}}} (\autopageref*{\detokenize{basics/101-130-yodaproject:fom-what-is-a-tag}}) for details.
+
+% beauty pagebreak
+\newpage
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}add script for kNN classification and plotting\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
@@ -1165,7 +1030,7 @@ simply executing the script would work as well \textendash{} thanks to DataLad�
 But using \sphinxcode{\sphinxupquote{datalad run}} will capture full provenance, and will make
 re\sphinxhyphen{}execution with \sphinxcode{\sphinxupquote{datalad rerun}} easy.
 In case you run into trouble, check the \textit{Windows-wit}~{\windowswiticoninline}\textit{\ref{ww-python-not-3}} {\hyperref[\detokenize{basics/101-130-yodaproject:ww-python-not-3}]{\sphinxcrossref{\DUrole{std,std-ref}{on different Python command names}}}} (\autopageref*{\detokenize{basics/101-130-yodaproject:ww-python-not-3}}).
-\begin{importantnote}[before title={\thetcbcounter\ }, check odd page=true]{Additional software requirements: pandas, seaborn, sklearn}
+\begin{importantnote}[before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{Additional software requirements: pandas, seaborn, sklearn}
 
 \sphinxAtStartPar
 Note that you need to have the following Python packages installed to run the
@@ -1189,20 +1054,20 @@ install the required Python packages inside of it:
 \end{sphinxVerbatim}
 %
 \end{footnote}:
-\begin{itemize}
-\item {} 
-\sphinxAtStartPar
-\dlhbhref{P3}{pandas}
-
-\item {} 
-\sphinxAtStartPar
-\dlhbhref{P7}{seaborn}
-
-\item {} 
-\sphinxAtStartPar
+%\begin{itemize}
+%\item {} 
+%\sphinxAtStartPar
+\dlhbhref{P3}{pandas},
+%
+%\item {} 
+%\sphinxAtStartPar
+\dlhbhref{P7}{seaborn},
+%
+%\item {} 
+%\sphinxAtStartPar
 \dlhbhref{S4}{sklearn}
 
-\end{itemize}
+%\end{itemize}
 
 \sphinxAtStartPar
 The packages can be installed via {\hyperref[\detokenize{glossary:term-pip}]{\sphinxtermref{\DUrole{xref,std,std-term}{pip}}}}.
@@ -1231,6 +1096,9 @@ Please run the following instead (adjusted for line breaks, you should be able t
 
 
 \end{windowswit}
+
+% beauty pagebreak
+\newpage
 
 \index{run command with provenance capture@\spxentry{run command with provenance capture}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!run command with provenance capture@\spxentry{run command with provenance capture}}\ignorespaces 
 \def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-130-yodaproject:index-8}}}
@@ -1396,15 +1264,18 @@ users can install directly from GitHub/GitLab and seemingly also obtain large fi
 content from GitHub. GitHub can also resolve subdataset links to other GitHub
 repositories, which lets you navigate through nested datasets in the web\sphinxhyphen{}interface.
 
-\noindent{\hspace*{\fill}\sphinxincludegraphics{{screenshot_midtermproject}.png}\hspace*{\fill}}
+\vspace{1mm}
+\noindent{\hspace*{\fill}\sphinxincludegraphics[width=.92\linewidth]{{screenshot_midtermproject_bw}.png}\hspace*{\fill}}
+\vspace{1mm}
 
 \sphinxAtStartPar
 The above screenshot shows the linkage between the analysis project you will create
 and its subdataset. Clicking on the subdataset (highlighted) will take you to the iris dataset
 the online\sphinxhyphen{}handbook provides, shown below.
 
-\noindent{\hspace*{\fill}\sphinxincludegraphics{{screenshot_submodule}.png}\hspace*{\fill}}
-
+\vspace{1mm}
+\noindent{\hspace*{\fill}\sphinxincludegraphics[width=.92\linewidth]{{screenshot_midtermproject_submodule_bw}.png}\hspace*{\fill}}
+\vspace{1mm}
 
 \end{findoutmore}
 
@@ -1721,8 +1592,6 @@ Applying the YODA principles to your data analysis was very beneficial indeed.
 Proud of your midterm project you cannot wait to use those principles the
 next time again.
 
-\noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{reproduced}.pdf}\hspace*{\fill}}
-
 \index{push@\spxentry{push}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!push@\spxentry{push}}\ignorespaces \begin{gitusernote}[label={index-20}, before title={\thetcbcounter\ }, check odd page=true]{Push internals}
 \label{\detokenize{basics/101-130-yodaproject:index-20}}
 
@@ -1823,6 +1692,142 @@ What should have become clear in this section is that you are already
 equipped with enough DataLad tools and knowledge that complying to these
 standards felt completely natural and effortless in your midterm analysis
 project.
+
+
+\index{use DataLad API@\spxentry{use DataLad API}!with Python@\spxentry{with Python}}\index{with Python@\spxentry{with Python}!use DataLad API@\spxentry{use DataLad API}}\ignorespaces \phantomsection\label{\detokenize{basics/101-130-yodaproject:pythonapi}}\begin{findoutmore}[label={fom-pythonapi}, before title={\thetcbcounter\ }, float, check odd page=true]{DataLad’s Python API}
+\label{\detokenize{basics/101-130-yodaproject:fom-pythonapi}}
+\phantomsection\label{\detokenize{basics/101-130-yodaproject:python}}
+\sphinxAtStartPar
+Whatever you can do with DataLad from the command line, you can also do it with
+DataLad’s Python API.
+Thus, DataLad’s functionality can also be used within interactive Python sessions
+or Python scripts.
+All of DataLad’s user\sphinxhyphen{}oriented commands are exposed via \sphinxcode{\sphinxupquote{datalad.api}}.
+Thus, any command can be imported as a stand\sphinxhyphen{}alone command like this:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{from} \PYG{n+nn}{datalad}\PYG{n+nn}{.}\PYG{n+nn}{api} \PYG{k+kn}{import} \PYG{o}{\PYGZlt{}}\PYG{n}{COMMAND}\PYG{o}{\PYGZgt{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Alternatively, to import all commands, one can use
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{import} \PYG{n+nn}{datalad}\PYG{n+nn}{.}\PYG{n+nn}{api} \PYG{k}{as} \PYG{n+nn}{dl}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+and subsequently access commands as \sphinxcode{\sphinxupquote{dl.get()}}, \sphinxcode{\sphinxupquote{dl.clone()}}, and so forth.
+
+\sphinxAtStartPar
+The \dlhbhref{D1D}{developer documentation}
+of DataLad lists an overview of all commands, but naming is congruent to the
+command line interface. The only functionality that is not available at the
+command line is \sphinxcode{\sphinxupquote{datalad.api.Dataset}}, DataLad’s core Python data type.
+Just like any other command, it can be imported like this:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{from} \PYG{n+nn}{datalad}\PYG{n+nn}{.}\PYG{n+nn}{api} \PYG{k+kn}{import} \PYG{n}{Dataset}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+or like this:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{import} \PYG{n+nn}{datalad}\PYG{n+nn}{.}\PYG{n+nn}{api} \PYG{k}{as} \PYG{n+nn}{dl}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{dl}\PYG{o}{.}\PYG{n}{Dataset}\PYG{p}{(}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+A \sphinxcode{\sphinxupquote{Dataset}} is a \dlhbhref{P1B}{class}
+that represents a DataLad dataset. In addition to the
+stand\sphinxhyphen{}alone commands, all of DataLad’s functionality is also available via
+\dlhbhref{P1C}{methods}
+of this class. Thus, these are two equally valid ways to create a new
+dataset with DataLad in Python:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{from} \PYG{n+nn}{datalad}\PYG{n+nn}{.}\PYG{n+nn}{api} \PYG{k+kn}{import} \PYG{n}{create}\PYG{p}{,} \PYG{n}{Dataset}
+\PYG{g+go}{\PYGZsh{} create as a stand\PYGZhy{}alone command}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{create}\PYG{p}{(}\PYG{n}{path}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{scratch/test}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+\PYG{g+go}{[INFO   ] Creating a new annex repo at /.../scratch/test}
+\PYG{g+go}{Out[3]: \PYGZlt{}Dataset path=/home/me/scratch/test\PYGZgt{}}
+\PYG{g+go}{\PYGZsh{} create as a dataset method}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{ds} \PYG{o}{=} \PYG{n}{Dataset}\PYG{p}{(}\PYG{n}{path}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{scratch/test}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{ds}\PYG{o}{.}\PYG{n}{create}\PYG{p}{(}\PYG{p}{)}
+\PYG{g+go}{[INFO   ] Creating a new annex repo at /.../scratch/test}
+\PYG{g+go}{Out[3]: \PYGZlt{}Dataset path=/home/me/scratch/test\PYGZgt{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+As shown above, the only required parameter for a Dataset is the \sphinxcode{\sphinxupquote{path}} to
+its location, and this location may or may not exist yet.
+
+\sphinxAtStartPar
+Stand\sphinxhyphen{}alone functions have a \sphinxcode{\sphinxupquote{dataset=}} argument, corresponding to the
+\sphinxcode{\sphinxupquote{\sphinxhyphen{}d/\sphinxhyphen{}\sphinxhyphen{}dataset}} option in their command\sphinxhyphen{}line equivalent. You can specify
+the \sphinxcode{\sphinxupquote{dataset=}} argument with a path (string) to your dataset (such as
+\sphinxcode{\sphinxupquote{dataset=\textquotesingle{}.\textquotesingle{}}} for the current directory, or \sphinxcode{\sphinxupquote{dataset=\textquotesingle{}path/to/ds\textquotesingle{}}} to
+another location). Alternatively, you can pass a \sphinxcode{\sphinxupquote{Dataset}} instance to it:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{from} \PYG{n+nn}{datalad}\PYG{n+nn}{.}\PYG{n+nn}{api} \PYG{k+kn}{import} \PYG{n}{save}\PYG{p}{,} \PYG{n}{Dataset}
+\PYG{g+go}{\PYGZsh{} use save with dataset specified as a path}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{save}\PYG{p}{(}\PYG{n}{dataset}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{path/to/dataset/}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+\PYG{g+go}{\PYGZsh{} use save with dataset specified as a dataset instance}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{ds} \PYG{o}{=} \PYG{n}{Dataset}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{path/to/dataset}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{save}\PYG{p}{(}\PYG{n}{dataset}\PYG{o}{=}\PYG{n}{ds}\PYG{p}{,} \PYG{n}{message}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{saving all modifications}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+go}{\PYGZsh{} use save as a dataset method (no dataset argument)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{ds}\PYG{o}{.}\PYG{n}{save}\PYG{p}{(}\PYG{n}{message}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{saving all modifications}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+\sphinxstylestrong{Use cases for DataLad’s Python API}
+
+\sphinxAtStartPar
+Using the command line or the Python API of DataLad are both valid ways to accomplish the same results.
+Depending on your workflows, using the Python API can help to automate dataset operations, provides an alternative
+to the command line, or could be useful for scripting reproducible data analyses.
+One unique advantage of the Python API is the \sphinxcode{\sphinxupquote{Dataset}}:
+As the Python API does not suffer from the startup time cost of the command line,
+there is the potential for substantial speed\sphinxhyphen{}up when doing many calls to the API,
+and using a persistent Dataset object instance.
+You will also notice that the output of Python commands can be more verbose as the result records returned by each command do not get filtered by command\sphinxhyphen{}specific result renderers.
+Thus, the outcome of \sphinxcode{\sphinxupquote{dl.status(\textquotesingle{}myfile\textquotesingle{})}} matches that of \sphinxcode{\sphinxupquote{datalad status}} only when \sphinxcode{\sphinxupquote{\sphinxhyphen{}f}}/\sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}output\sphinxhyphen{}format}} is set to \sphinxcode{\sphinxupquote{json}} or \sphinxcode{\sphinxupquote{json\_pp}}, as illustrated below.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{import} \PYG{n+nn}{datalad}\PYG{n+nn}{.}\PYG{n+nn}{api} \PYG{k}{as} \PYG{n+nn}{dl}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{dl}\PYG{o}{.}\PYG{n}{status}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{myfile}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+\PYG{g+go}{[\PYGZob{}\PYGZsq{}type\PYGZsq{}: \PYGZsq{}file\PYGZsq{},}
+\PYG{g+go}{\PYGZsq{}gitshasum\PYGZsq{}: \PYGZsq{}915983d6576b56792b4647bf0d9fa04d83ce948d\PYGZsq{},}
+\PYG{g+go}{\PYGZsq{}bytesize\PYGZsq{}: 85,}
+\PYG{g+go}{\PYGZsq{}prev\PYGZus{}gitshasum\PYGZsq{}: \PYGZsq{}915983d6576b56792b4647bf0d9fa04d83ce948d\PYGZsq{},}
+\PYG{g+go}{\PYGZsq{}state\PYGZsq{}: \PYGZsq{}clean\PYGZsq{},}
+\PYG{g+go}{\PYGZsq{}path\PYGZsq{}: \PYGZsq{}/home/me/my\PYGZhy{}ds/myfile\PYGZsq{},}
+\PYG{g+go}{\PYGZsq{}parentds\PYGZsq{}: \PYGZsq{}/home/me/my\PYGZhy{}ds\PYGZsq{},}
+\PYG{g+go}{\PYGZsq{}status\PYGZsq{}: \PYGZsq{}ok\PYGZsq{},}
+\PYG{g+go}{\PYGZsq{}refds\PYGZsq{}: \PYGZsq{}/home/me/my\PYGZhy{}ds\PYGZsq{},}
+\PYG{g+go}{\PYGZsq{}action\PYGZsq{}: \PYGZsq{}status\PYGZsq{}\PYGZcb{}]}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }\PYGZhy{}f\PYG{+w}{ }json\PYGZus{}pp\PYG{+w}{ }status\PYG{+w}{ }myfile
+\PYG{g+go}{ \PYGZob{}\PYGZdq{}action\PYGZdq{}: \PYGZdq{}status\PYGZdq{},}
+\PYG{g+go}{  \PYGZdq{}bytesize\PYGZdq{}: 85,}
+\PYG{g+go}{  \PYGZdq{}gitshasum\PYGZdq{}: \PYGZdq{}915983d6576b56792b4647bf0d9fa04d83ce948d\PYGZdq{},}
+\PYG{g+go}{  \PYGZdq{}parentds\PYGZdq{}: \PYGZdq{}/home/me/my\PYGZhy{}ds\PYGZdq{},}
+\PYG{g+go}{  \PYGZdq{}path\PYGZdq{}: \PYGZdq{}/home/me/my\PYGZhy{}ds/myfile\PYGZdq{},}
+\PYG{g+go}{  \PYGZdq{}prev\PYGZus{}gitshasum\PYGZdq{}: \PYGZdq{}915983d6576b56792b4647bf0d9fa04d83ce948d\PYGZdq{},}
+\PYG{g+go}{  \PYGZdq{}refds\PYGZdq{}: \PYGZdq{}/home/me/my\PYGZhy{}ds/\PYGZdq{},}
+\PYG{g+go}{  \PYGZdq{}state\PYGZdq{}: \PYGZdq{}clean\PYGZdq{},}
+\PYG{g+go}{  \PYGZdq{}status\PYGZdq{}: \PYGZdq{}ok\PYGZdq{},}
+\PYG{g+go}{  \PYGZdq{}type\PYGZdq{}: \PYGZdq{}file\PYGZdq{}\PYGZcb{}}
+\end{sphinxVerbatim}
+
+
+\end{findoutmore}
+
+
 
 \sphinxstepscope
 

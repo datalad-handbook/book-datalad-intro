@@ -1,0 +1,8 @@
+latex.out
+book.pdf
+main.pdf
+cover/**.pdf
+figures/**.pdf
+figures/**/*.pdf
+build
+*.swp

@@ -1,6 +1,6 @@
 \chapter{Git things done}
 \label{\detokenize{basics/101-137-history:git-things-done}}\label{\detokenize{basics/101-137-history:history}}\label{\detokenize{basics/101-137-history::doc}}
-\noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{versioncontrol}.pdf}\hspace*{\fill}}
+\noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{versioncontrol_bw}.pdf}\hspace*{\fill}}
 
 \sphinxAtStartPar
 Almost everyone inadvertently deleted or overwrote files at some point with
@@ -23,6 +23,7 @@ or questions on \dlhbhref{S7}{Stack Overflow} right away.
 Even experts will \sphinxstyleemphasis{constantly} seek help to find out which Git command to
 use, and how to use it.”, he reassures with a wink.
 
+\enlargethispage{\baselineskip}
 \sphinxAtStartPar
 The basis of working with the history is to \sphinxstyleemphasis{look at it} with tools such
 as {\hyperref[\detokenize{glossary:term-tig}]{\sphinxtermref{\DUrole{xref,std,std-term}{tig}}}}, {\hyperref[\detokenize{glossary:term-gitk}]{\sphinxtermref{\DUrole{xref,std,std-term}{gitk}}}}, or simply the \sphinxcode{\sphinxupquote{git log}} command.
@@ -341,7 +342,7 @@ to isolate developments. The default branch is called \sphinxcode{\sphinxupquote
 a pointer to the branch you are currently on, and thus to the last commit
 in the given branch.
 
-\noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{git_branch_HEAD}.png}\hspace*{\fill}}
+\noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{git_branch_HEAD_bw}.pdf}\hspace*{\fill}}
 
 \sphinxAtStartPar
 Using \sphinxcode{\sphinxupquote{HEAD}}, you can identify the most recent commit, or count backwards
@@ -357,6 +358,8 @@ commits}.
 \sphinxAtStartPar
 Let’s stay with the hash, and reset to the commit prior to saving the Git jokes.
 
+% add page break for beauty reasons
+\newpage
 \sphinxAtStartPar
 First, find out the shasum, and afterwards, reset it.
 
@@ -532,6 +535,8 @@ To see what has happened, let’s check the history:
 \PYG{g+go}{996f459 remove obsolete subds}
 \end{sphinxVerbatim}
 
+% add page break for beauty reasons
+\newpage
 \sphinxAtStartPar
 … and also the status of the dataset:
 
@@ -653,6 +658,8 @@ there.
 \PYG{g+go}{untracked: apdffile.pdf (file)}
 \end{sphinxVerbatim}
 
+% add page break for beauty reasons
+\newpage
 \sphinxAtStartPar
 The contents of \sphinxcode{\sphinxupquote{notes.txt}} will now be the most recent version again:
 
@@ -710,6 +717,8 @@ Previously, we saw how to remove files from a datasets history that
 were accidentally saved and thus tracked for the first time.
 How does one undo a \sphinxstyleemphasis{modification} to a tracked file?
 
+% add page break for beauty reasons
+\newpage
 \sphinxAtStartPar
 Let’s modify the saved \sphinxcode{\sphinxupquote{Gitjoke1.txt}}:
 

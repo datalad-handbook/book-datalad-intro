@@ -1,6 +1,6 @@
 \chapter{Tuning datasets to your needs}
 \label{\detokenize{basics/basics-configuration:tuning-datasets-to-your-needs}}\label{\detokenize{basics/basics-configuration:chapter-config}}\label{\detokenize{basics/basics-configuration:id1}}\label{\detokenize{basics/basics-configuration::doc}}
-\noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{settings}.pdf}\hspace*{\fill}}
+\noindent{\hspace*{\fill}\sphinxincludegraphics[height=.33\textheight]{{settings_bw}.pdf}\hspace*{\fill}}
 
 \sphinxstepscope
 
@@ -689,6 +689,9 @@ Below is a minimally functional example on how to apply the configuration and ho
 
 \sphinxAtStartPar
 Let’s create a dataset hierarchy to work with (note that we concatenate multiple commands into a single line using bash’s “and” \sphinxcode{\sphinxupquote{\&\&}} operator):
+
+% beauty pagebreak
+\newpage
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} create a superdataset with two subdatasets}
@@ -1475,8 +1478,6 @@ This is how it can be executed and what it does:
 \PYG{g+go}{├── example2 \PYGZhy{}\PYGZgt{} .git/annex/objects/G6/zw/✂/MD5E\PYGZhy{}s40\PYGZhy{}\PYGZhy{}2ed1bce0✂MD5}
 \PYG{g+go}{└── somedir}
 \PYG{g+go}{    └── example}
-
-\PYG{g+go}{1 directory, 2 files}
 \end{sphinxVerbatim}
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]

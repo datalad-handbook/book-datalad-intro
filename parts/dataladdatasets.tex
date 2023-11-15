@@ -1,6 +1,6 @@
 \chapter{DataLad datasets}
 \label{\detokenize{basics/basics-datasets:datalad-datasets}}\label{\detokenize{basics/basics-datasets:chapter-datasets}}\label{\detokenize{basics/basics-datasets::doc}}
-\noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{datasets}.pdf}\hspace*{\fill}}
+\noindent{\hspace*{\fill}\sphinxincludegraphics[height=.25\textheight]{{datasets_bw}.pdf}\hspace*{\fill}}
 
 \sphinxstepscope
 
@@ -820,6 +820,8 @@ to accomplish this, but you can take any editor of your choice.
 \PYG{g+go}{EOT}
 \end{sphinxVerbatim}
 
+% beauty page break
+\newpage
 \sphinxAtStartPar
 Let’s check the dataset’s current state:
 
@@ -937,6 +939,7 @@ of a DataLad dataset! Shall we try whether we can install that?”
 now instead of looking at slides for hours is my preferred type of learning anyway”,
 you think as you fire up your terminal and navigate into your \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} dataset.
 
+\enlargethispage{0.5\baselineskip}
 \sphinxAtStartPar
 In this demonstration, we are using one of the many openly available datasets that
 DataLad provides in a public registry that anyone can access. One of these datasets is a
@@ -1299,7 +1302,7 @@ retrieved data in this dataset:
 
 \sphinxAtStartPar
 We drop a single recording’s content that we previously downloaded with
-\sphinxcode{\sphinxupquote{datalad get}} …
+\sphinxcode{\sphinxupquote{datalad get}}:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }drop\PYG{+w}{ }Long\PYGZus{}Now\PYGZus{}\PYGZus{}Seminars\PYGZus{}About\PYGZus{}Long\PYGZus{}term\PYGZus{}Thinking/2004\PYGZus{}01\PYGZus{}10\PYGZus{}\PYGZus{}George\PYGZus{}Dyson\PYGZus{}\PYGZus{}There\PYGZus{}s\PYGZus{}Plenty\PYGZus{}of\PYGZus{}Room\PYGZus{}at\PYGZus{}the\PYGZus{}Top\PYGZus{}\PYGZus{}Long\PYGZus{}term\PYGZus{}Thinking\PYGZus{}About\PYGZus{}Large\PYGZus{}scale\PYGZus{}Computing.mp3
@@ -1455,6 +1458,7 @@ Remember how we had to navigate into \sphinxcode{\sphinxupquote{recordings/longn
 and how this history was completely independent of the \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}}
 superdataset history? This was the subdataset’s own history.
 
+\enlargethispage{.5\baselineskip}
 \sphinxAtStartPar
 Apart from stand\sphinxhyphen{}alone histories of super\sphinxhyphen{} or subdatasets, this highlights another
 very important advantage that nesting provides: Note that the \sphinxcode{\sphinxupquote{longnow}} dataset
@@ -1530,42 +1534,7 @@ mentioned before, and it is the identifier that
 DataLad internally used to identify the files and the changes to the files in the subdataset. Exactly this
 {\hyperref[\detokenize{glossary:term-shasum}]{\sphinxtermref{\DUrole{xref,std,std-term}{shasum}}}} is what identifies the state of the subdataset.
 
-\sphinxAtStartPar
-Navigate back into \sphinxcode{\sphinxupquote{longnow}} and try to find the highlighted shasum in the
-subdataset’s history:
-
-\fvset{hllines={, 3,}}%
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }recordings/longnow
-\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}\PYGZhy{}oneline
-\PYG{g+go}{dcc34fb Update aggregated metadata}
-\PYG{g+go}{36a30a1 [DATALAD RUNCMD] Update from feed}
-\PYG{g+go}{bafdc04 Uniformize JSON\PYGZhy{}LD context with DataLad\PYGZsq{}s internal extractors}
-\PYG{g+go}{004e484 [DATALAD RUNCMD] .datalad/maint/make\PYGZus{}readme.py}
-\PYG{g+go}{7ee3ded Sort episodes newest\PYGZhy{}first}
-\PYG{g+go}{e829615 Link to the handbook as a source of wisdom}
-\PYG{g+go}{4b37790 Fix README generator to parse correct directory}
-\end{sphinxVerbatim}
-\sphinxresetverbatimhllines
-
-\sphinxAtStartPar
-We can see that it is the most recent commit shasum of the subdataset
-(albeit we can see only the first seven characters here \textendash{} a \sphinxcode{\sphinxupquote{git log}}
-would show you the full shasum). Thus, your dataset does not only know the origin
-of its subdataset, but also which version of the subdataset to use,
-i.e., it has the identifier of the stage/version in the subdataset’s evolution to be used.
-This is what is meant by “the top\sphinxhyphen{}level DataLad dataset (the \sphinxstyleemphasis{superdataset}) only stores
-\sphinxstyleemphasis{which version} of the subdataset is currently used through an identifier”.
-
-\sphinxAtStartPar
-Importantly, once we learn how to make use of the history of a dataset,
-we can set subdatasets to previous states, or \sphinxstyleemphasis{update} them.
-
-\sphinxAtStartPar
-By the way, there is actually no need to navigate into different directories all the time.
-Check the \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-tmp-cwd}} {\hyperref[\detokenize{basics/101-106-nesting:fom-tmp-cwd}]{\sphinxcrossref{\DUrole{std,std-ref}{on switching the working directory with Git}}}} (\autopageref*{\detokenize{basics/101-106-nesting:fom-tmp-cwd}}) for
-an alternative.
-
+% moved to be placed at the top of the page with the reference, and not cluster with the next figure
 \index{temporary working directory change@\spxentry{temporary working directory change}!with Git@\spxentry{with Git}}\index{with Git@\spxentry{with Git}!temporary working directory change@\spxentry{temporary working directory change}}\ignorespaces \begin{findoutmore}[label={fom-tmp-cwd}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{Do I have to navigate into the subdataset to see it’s history?}
 \label{\detokenize{basics/101-106-nesting:fom-tmp-cwd}}
 
@@ -1590,6 +1559,43 @@ subdataset’s history as well:
 
 \end{findoutmore}
 
+
+\sphinxAtStartPar
+Navigate into \sphinxcode{\sphinxupquote{longnow}} and try to find the highlighted shasum in the
+subdataset’s history:
+
+\fvset{hllines={, 3,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }recordings/longnow
+\PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}\PYGZhy{}oneline
+\PYG{g+go}{dcc34fb Update aggregated metadata}
+\PYG{g+go}{36a30a1 [DATALAD RUNCMD] Update from feed}
+\PYG{g+go}{bafdc04 Uniformize JSON\PYGZhy{}LD context with DataLad\PYGZsq{}s internal extractors}
+\PYG{g+go}{004e484 [DATALAD RUNCMD] .datalad/maint/make\PYGZus{}readme.py}
+\PYG{g+go}{7ee3ded Sort episodes newest\PYGZhy{}first}
+\PYG{g+go}{e829615 Link to the handbook as a source of wisdom}
+\PYG{g+go}{4b37790 Fix README generator to parse correct directory}
+\end{sphinxVerbatim}
+\sphinxresetverbatimhllines
+
+\sphinxAtStartPar
+We can see that it is the most recent commit shasum of the subdataset
+(albeit we can see only the first seven characters here \textendash{} a \sphinxcode{\sphinxupquote{git log}}
+would show you the full shasum). Thus, your dataset does not only know the origin
+of its subdataset, but also which version of the subdataset to use,
+i.e., it has the identifier of the stage/version in the subdataset’s evolution to be used.
+This is what is meant by “the top\sphinxhyphen{}level DataLad dataset (the \sphinxstyleemphasis{superdataset}) only stores
+\sphinxstyleemphasis{which version} of the subdataset is used via an identifier”.
+
+\sphinxAtStartPar
+Importantly, once we learn how to make use of the history of a dataset,
+we can set subdatasets to previous states, or \sphinxstyleemphasis{update} them.
+
+\sphinxAtStartPar
+By the way, there is actually no need to navigate into different directories all the time.
+Check the \textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-tmp-cwd}} {\hyperref[\detokenize{basics/101-106-nesting:fom-tmp-cwd}]{\sphinxcrossref{\DUrole{std,std-ref}{on switching the working directory with Git}}}} (\autopageref*{\detokenize{basics/101-106-nesting:fom-tmp-cwd}}) for
+an alternative.
+
 \sphinxAtStartPar
 In the upcoming sections, we’ll experience the perks of dataset nesting
 frequently, and everything that might seem vague at this point will become
@@ -1603,7 +1609,7 @@ subdataset within the superdataset  \sphinxcode{\sphinxupquote{DataLad\sphinxhyp
 \centering
 \capstart
 
-\noindent\sphinxincludegraphics[width=0.700\linewidth]{{virtual_dstree_dl101}.pdf}
+\noindent\sphinxincludegraphics[width=0.700\linewidth]{{virtual_dstree_dl101_bw}.pdf}
 \caption{Virtual directory tree of a nested DataLad dataset}\label{\detokenize{basics/101-106-nesting:id1}}\label{\detokenize{basics/101-106-nesting:fignesting}}\end{figure}
 
 \sphinxAtStartPar
@@ -1664,7 +1670,7 @@ modifying files, \sphinxstyleemphasis{save} the changes as meaningful units to t
 \centering
 \capstart
 
-\noindent\sphinxincludegraphics{{local_wf_simple}.png}
+  \noindent\sphinxincludegraphics[height=.2\textheight]{{local_wf_bw}.pdf}
 \caption{A simple, local version control workflow with DataLad.}\label{\detokenize{basics/101-107-summary:id1}}\label{\detokenize{basics/101-107-summary:fig-simple-workflow}}\end{figure}
 \begin{itemize}
 \item {} 

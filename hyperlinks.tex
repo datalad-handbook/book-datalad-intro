@@ -1,0 +1,26 @@
+\titlespacing*{\chapter}{0pt}{0pt}{40pt}
+\chapter*{Hyperlink URL index}
+\addcontentsline{toc}{chapter}{Hyperlink URL index}
+\fancyhead[LO]{\small Links}
+\fancyhead[RE]{\small Links}
+
+The following pages contain a list of URLs for all hyperlinks included in this
+book.  A referenced URL like \dlhbhref{D1}{this one}, can be identified by
+looking at item \textbf{D1} in this sorted list. Some URLs in this index are
+abbreviated.  Abbreviated URLs have identifiers with three characters. The full
+URL can be constructed by replacing the \texttt{...} with the URL whose
+identifier matches the first two characters of the abbreviated URL's
+identifier.  For example, to complete \textbf{B1A}, join it with \textbf{B1}.
+
+Updates to this URL index can be found on this book's companion web page at\\
+\url{https://handbook.datalad.org/perma/book-intro-v1.html}.
+
+% No 2-column layout for now. it only add one page, and it seemingly easier
+% to parse
+%\begin{multicols}{2}
+\begin{description}
+\setlength{\itemsep}{-2mm}
+\setlength{\itemindent}{-8.5mm}
+\input{hyperlink_items.tex}
+\end{description}
+%\end{multicols}

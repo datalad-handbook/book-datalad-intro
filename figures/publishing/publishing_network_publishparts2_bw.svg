@@ -1,0 +1,622 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="fb0462f1-4822-46c6-85a1-002b71cfcb82"
+   data-name="Layer 1"
+   width="881.5509"
+   height="639.23993"
+   viewBox="0 0 881.55091 639.23991"
+   version="1.1"
+   sodipodi:docname="publishing_network_publishparts2_bw.svg"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <metadata
+     id="metadata111">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>nakamoto</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs109">
+    <linearGradient
+       id="linearGradient3625"
+       inkscape:collect="always">
+      <stop
+         id="stop3621"
+         offset="0"
+         style="stop-color:#a8a8a8;stop-opacity:1" />
+      <stop
+         id="stop3623"
+         offset="1"
+         style="stop-color:#666666;stop-opacity:0" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient2229"
+       inkscape:collect="always">
+      <stop
+         id="stop2225"
+         offset="0"
+         style="stop-color:#383232;stop-opacity:1" />
+      <stop
+         id="stop2227"
+         offset="1"
+         style="stop-color:#666666;stop-opacity:0" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient1977"
+       inkscape:collect="always">
+      <stop
+         id="stop1973"
+         offset="0"
+         style="stop-color:#383232;stop-opacity:1" />
+      <stop
+         id="stop1975"
+         offset="1"
+         style="stop-color:#666666;stop-opacity:0" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient1165"
+       inkscape:collect="always">
+      <stop
+         id="stop1161"
+         offset="0"
+         style="stop-color:#919191;stop-opacity:1" />
+      <stop
+         id="stop1163"
+         offset="1"
+         style="stop-color:#919191;stop-opacity:0" />
+    </linearGradient>
+    <rect
+       x="207.90764"
+       y="462.21036"
+       width="322.47552"
+       height="169.12248"
+       id="rect1179-9" />
+    <linearGradient
+       gradientUnits="userSpaceOnUse"
+       y2="198.77266"
+       x2="620.26648"
+       y1="247.79816"
+       x1="576.52026"
+       id="linearGradient1979"
+       xlink:href="#linearGradient2229"
+       inkscape:collect="always"
+       gradientTransform="translate(0,80)" />
+    <rect
+       id="rect1179-9-8"
+       height="234.73762"
+       width="326.19546"
+       y="462.21036"
+       x="207.90764" />
+    <linearGradient
+       gradientUnits="userSpaceOnUse"
+       y2="92.636452"
+       x2="17.805147"
+       y1="47.91991"
+       x1="44.183636"
+       id="linearGradient1167-93"
+       xlink:href="#linearGradient1165-1"
+       inkscape:collect="always" />
+    <linearGradient
+       id="linearGradient1165-1"
+       inkscape:collect="always">
+      <stop
+         id="stop1161-9"
+         offset="0"
+         style="stop-color:#7f7f7f;stop-opacity:1" />
+      <stop
+         id="stop1163-4"
+         offset="1"
+         style="stop-color:#7c7c7c;stop-opacity:0" />
+    </linearGradient>
+    <linearGradient
+       gradientUnits="userSpaceOnUse"
+       y2="75.664383"
+       x2="101.69479"
+       y1="52.865578"
+       x1="69.451561"
+       id="linearGradient1175-7"
+       xlink:href="#linearGradient1173-8"
+       inkscape:collect="always" />
+    <linearGradient
+       id="linearGradient1173-8"
+       inkscape:collect="always">
+      <stop
+         id="stop1169-4"
+         offset="0"
+         style="stop-color:#383232;stop-opacity:1;" />
+      <stop
+         id="stop1171-5"
+         offset="1"
+         style="stop-color:#666666;stop-opacity:0" />
+    </linearGradient>
+    <rect
+       id="rect1179-0"
+       height="175.99967"
+       width="371.02892"
+       y="462.21036"
+       x="207.90764" />
+    <rect
+       x="207.90764"
+       y="462.21036"
+       width="322.47552"
+       height="169.12248"
+       id="rect1179-6-3" />
+    <rect
+       id="rect6459-3"
+       height="169.46055"
+       width="412.86938"
+       y="198.58871"
+       x="49.827503" />
+    <rect
+       id="rect6459-3-7"
+       height="236.1368"
+       width="450.06216"
+       y="198.58871"
+       x="49.827503" />
+    <linearGradient
+       gradientUnits="userSpaceOnUse"
+       y2="87.695175"
+       x2="20.37318"
+       y1="47.91991"
+       x1="44.183636"
+       id="linearGradient1167-9-5"
+       xlink:href="#linearGradient1165"
+       inkscape:collect="always"
+       gradientTransform="matrix(-0.9594456,0.51677106,-0.68566162,-0.74327657,128.77374,35.132313)" />
+    <linearGradient
+       gradientTransform="matrix(0.78871044,-0.56829353,0.61474678,0.73199504,-173.33771,255.77299)"
+       inkscape:collect="always"
+       xlink:href="#linearGradient1977"
+       id="linearGradient1979-3"
+       x1="557.87384"
+       y1="269.14835"
+       x2="622.84186"
+       y2="200.79175"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3625"
+       id="linearGradient2239"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(0,80)"
+       x1="576.52026"
+       y1="247.79816"
+       x2="620.26648"
+       y2="198.77266" />
+    <rect
+       id="rect1179-9-3"
+       height="171.71857"
+       width="354.18536"
+       y="462.21036"
+       x="207.90764" />
+    <rect
+       x="207.90764"
+       y="462.21036"
+       width="375.966"
+       height="240.98692"
+       id="rect1179-9-8-3" />
+  </defs>
+  <sodipodi:namedview
+     inkscape:document-rotation="0"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2560"
+     inkscape:window-height="1370"
+     id="namedview107"
+     showgrid="false"
+     inkscape:zoom="0.730602"
+     inkscape:cx="594.71504"
+     inkscape:cy="472.21333"
+     inkscape:window-x="0"
+     inkscape:window-y="30"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer2"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showguides="false">
+    <sodipodi:guide
+       position="29.21602,131.25511"
+       orientation="0,-1"
+       id="guide519"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="640.15978,332.43423"
+       orientation="0,-1"
+       id="guide532"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="417.00153,593.31938"
+       orientation="0,-1"
+       id="guide4626"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="616.6148,456.26206"
+       orientation="0,-1"
+       id="guide4784"
+       inkscape:locked="false" />
+  </sodipodi:namedview>
+  <title
+     id="title2">nakamoto</title>
+  <g
+     inkscape:label="background 1"
+     id="layer5"
+     inkscape:groupmode="layer" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer1"
+     inkscape:label="Logos"
+     style="display:inline"
+     transform="translate(-76.416283,32.138386)" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="network"
+     transform="translate(-76.416283,32.138386)">
+    <g
+       id="g843"
+       transform="rotate(32.740941,589.4054,266.63481)">
+      <path
+         sodipodi:nodetypes="csccc"
+         inkscape:connector-curvature="0"
+         id="path4840-7-6"
+         d="m 492.51052,420.56213 c 143.75492,-174.68978 -10.38467,9.41774 24.63527,-24.45308 21.60602,-20.89705 102.77945,-99.6127 121.22879,-121.60918 l -18.29673,-11.36162 c -71.53967,85.32025 -28.75884,38.1961 -127.56733,157.42388 z"
+         style="display:inline;fill:url(#linearGradient1979);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.43676px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         transform="translate(76.416283,-32.138386)" />
+      <path
+         inkscape:connector-curvature="0"
+         d="m 696.54619,265.51119 a 17,17 0 1 1 17,-17 17.019,17.019 0 0 1 -17,17 z m 0,-32 a 15,15 0 1 0 15,15 15.01672,15.01672 0 0 0 -15,-15 z"
+         fill="#3f3d56"
+         id="path46" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path2088"
+         d="M 578.37433,378.9027 685.40582,259.41033 Z"
+         style="fill:none;stroke:black;stroke-width:1.7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         sodipodi:nodetypes="ccc" />
+    </g>
+    <g
+       style="display:inline"
+       inkscape:label="background"
+       id="layer4"
+       inkscape:groupmode="layer" />
+    <g
+       id="g2237"
+       transform="matrix(-0.84112454,0.54084149,0.54084149,0.84112454,776.46083,-276.41316)">
+      <path
+         sodipodi:nodetypes="csccc"
+         inkscape:connector-curvature="0"
+         id="path2231"
+         d="m 492.51052,420.56213 c 143.75492,-174.68978 -10.38467,9.41774 24.63527,-24.45308 21.60602,-20.89705 102.77945,-99.6127 121.22879,-121.60918 l -18.29673,-11.36162 c -71.53967,85.32025 -28.75884,38.1961 -127.56733,157.42388 z"
+         style="display:inline;fill:url(#linearGradient2239);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.43676px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         transform="translate(76.416283,-32.138386)" />
+      <path
+         inkscape:connector-curvature="0"
+         d="m 696.54619,265.51119 a 17,17 0 1 1 17,-17 17.019,17.019 0 0 1 -17,17 z m 0,-32 a 15,15 0 1 0 15,15 15.01672,15.01672 0 0 0 -15,-15 z"
+         fill="#3f3d56"
+         id="path2233" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path2235"
+         d="M 578.37433,378.9027 685.40582,259.41033 Z"
+         style="fill:none;stroke:black;stroke-width:1.7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         sodipodi:nodetypes="ccc" />
+    </g>
+    <text
+       xml:space="preserve"
+       id="text1177-3"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:16px;line-height:1;font-family:Lato;-inkscape-font-specification:'Lato, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect1179-9);display:inline;fill:black;fill-opacity:1;stroke:none"
+       x="-71.38916"
+       y="0"
+       transform="translate(-107.30971,-204.31968)"><tspan
+         x="207.9082"
+         y="476.16424"
+         id="tspan5138"><tspan
+   style="font-weight:800;font-size:17.3333px;-inkscape-font-specification:'Lato, Ultra-Bold'"
+   id="tspan5136">Repository hosting</tspan>
+</tspan><tspan
+         x="207.9082"
+         y="492.42425"
+         id="tspan5140">- usually no annex support &amp;  
+</tspan><tspan
+         x="207.9082"
+         y="508.42425"
+         id="tspan5142">  can't hold large data for free
+</tspan><tspan
+         x="207.9082"
+         y="524.42425"
+         id="tspan5144">- exposes Git history and files
+</tspan><tspan
+         x="207.9082"
+         y="540.42425"
+         id="tspan5146">  stored in Git
+</tspan><tspan
+         x="207.9082"
+         y="556.42425"
+         id="tspan5148">- datasets can be cloned from there </tspan></text>
+    <text
+       transform="translate(510.66786,-203.72435)"
+       y="0"
+       x="-71.38916"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:16px;line-height:1;font-family:Lato;-inkscape-font-specification:'Lato, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect1179-9-8);display:inline;fill:black;fill-opacity:1;stroke:none"
+       id="text1177-3-7"
+       xml:space="preserve"><tspan
+         x="207.9082"
+         y="476.16424"
+         id="tspan5152"><tspan
+   style="font-weight:800;font-size:17.3333px;-inkscape-font-specification:'Lato, Ultra-Bold'"
+   id="tspan5150">Storage in a special remote</tspan>
+</tspan><tspan
+         x="207.9082"
+         y="492.42425"
+         id="tspan5154">- usually no Git repository hosting
+</tspan><tspan
+         x="207.9082"
+         y="508.42425"
+         id="tspan5156">- stores file contents
+</tspan><tspan
+         x="207.9082"
+         y="524.42425"
+         id="tspan5158">- datasets keep track of where
+</tspan><tspan
+         x="207.9082"
+         y="540.42425"
+         id="tspan5160">  data is stored, datalad get
+</tspan><tspan
+         x="207.9082"
+         y="556.42425"
+         id="tspan5162">  retrieves file contents from here </tspan></text>
+    <g
+       id="g13414-6"
+       transform="matrix(3.7795276,0,0,3.7795276,317.66883,223.08562)"
+       style="display:inline">
+      <path
+         sodipodi:nodetypes="cccc"
+         inkscape:connector-curvature="0"
+         id="path4840-1"
+         d="M 57.667646,27.674258 C 42.29232,64.480707 46.918378,77.434849 32.701489,101.26925 l -88.802819,0.33496 c 0,-58.175171 90.316184,-40.335919 113.768976,-73.929952 z"
+         style="fill:url(#linearGradient1167-93);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.380143px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         style="display:inline;fill:url(#linearGradient1175-7);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.380143px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="M 43.85189,29.523226 C 71.52594,59.80706 162.6651,42.793788 162.6651,101.60421 l -77.160011,0 C 67.165669,78.549019 69.17231,61.732979 43.85189,29.523226 Z"
+         id="path4840-5-0"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccc" />
+    </g>
+    <text
+       transform="translate(-102.2759,30.891515)"
+       y="0"
+       x="-71.38916"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:16px;line-height:1;font-family:Lato;-inkscape-font-specification:'Lato, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect1179-0);display:inline;fill:black;fill-opacity:1;stroke:none"
+       id="text1177-6"
+       xml:space="preserve"><tspan
+         x="207.9082"
+         y="476.16424"
+         id="tspan5166"><tspan
+   style="font-weight:800;font-size:17.3333px;-inkscape-font-specification:'Lato, Ultra-Bold'"
+   id="tspan5164">Git</tspan>
+</tspan><tspan
+         x="207.9082"
+         y="492.42425"
+         id="tspan5168">- dataset history (commit messages, run records)
+</tspan><tspan
+         x="207.9082"
+         y="508.42425"
+         id="tspan5170">- files with committed content (code, text, ...)
+</tspan><tspan
+         x="207.9082"
+         y="524.42425"
+         id="tspan5172">- file content identity of annexed files (name, key,
+</tspan><tspan
+         x="207.9082"
+         y="540.42425"
+         id="tspan5174">  where available)</tspan></text>
+    <text
+       xml:space="preserve"
+       id="text1177-2-1"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:16px;line-height:1;font-family:Lato;-inkscape-font-specification:'Lato, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect1179-6-3);display:inline;fill:black;fill-opacity:1;stroke:none"
+       x="-75.012215"
+       y="0"
+       transform="translate(432.92947,30.106333)"><tspan
+         x="207.9082"
+         y="476.16424"
+         id="tspan5178"><tspan
+   style="font-weight:800;font-size:17.3333px;-inkscape-font-specification:'Lato, Ultra-Bold'"
+   id="tspan5176">git-annex</tspan>
+</tspan><tspan
+         x="207.9082"
+         y="492.42425"
+         id="tspan5180">- contents of annexed files 
+</tspan><tspan
+         x="207.9082"
+         y="508.42425"
+         id="tspan5182">- organized in the &quot;annex&quot; or &quot;object tree&quot;
+</tspan><tspan
+         x="207.9082"
+         y="524.42425"
+         id="tspan5184">  of a dataset</tspan></text>
+    <text
+       transform="matrix(0.62484562,0,0,0.62484562,144.95615,11.780738)"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:25.6063px;line-height:1.25;font-family:Lato;-inkscape-font-specification:'Lato, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect6459-3);display:inline;fill:#666;fill-opacity:1;stroke:none"
+       id="text6457-6"
+       xml:space="preserve"><tspan
+         x="127.67422"
+         y="222.40175"
+         id="tspan5186">Git repository hosting, 
+</tspan><tspan
+         x="83.356065"
+         y="254.40962"
+         id="tspan5188">e.g., GitLab, GitHub, Bitbucket,
+</tspan><tspan
+         x="154.24719"
+         y="286.4175"
+         id="tspan5190">or GIN.g-node.org</tspan></text>
+    <text
+       transform="matrix(0.76850255,0,0,0.76850255,526.45791,-16.928527)"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:20.8197px;line-height:1.25;font-family:Lato;-inkscape-font-specification:'Lato, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect6459-3-7);display:inline;fill:#666;fill-opacity:1;stroke:none"
+       id="text6457-6-5"
+       xml:space="preserve"><tspan
+         x="126.83646"
+         y="217.95021"
+         id="tspan5192">Generic storage, e.g., owncloud, 
+</tspan><tspan
+         x="132.43175"
+         y="243.97484"
+         id="tspan5194">AWS, OSF, OpenDrive, Seafile, 
+</tspan><tspan
+         x="129.89692"
+         y="269.99947"
+         id="tspan5196">box.com, Dropbox, or OneDrive
+</tspan></text>
+    <g
+       id="g674"
+       transform="translate(89.32898,94.320517)">
+      <path
+         d="m 424.34023,65.794567 a 17,17 0 1 1 17,-17 17.019,17.019 0 0 1 -17,17 z m 0,-32 a 15,15 0 1 0 15,15 15.01672,15.01672 0 0 0 -15,-15 z"
+         fill="#3f3d56"
+         id="path46-9-7"
+         inkscape:connector-curvature="0"
+         style="display:inline;fill:#494949" />
+      <g
+         style="display:inline"
+         transform="matrix(3.7795276,0,0,3.7795276,227.82203,132.82436)"
+         id="g13414-2">
+        <path
+           sodipodi:nodetypes="csccc"
+           inkscape:connector-curvature="0"
+           id="path4840-7-9"
+           d="M 52.288662,37.939899 C 49.742453,15.032263 49.99623,8.3287625 48.16019,-3.2724333 47.027419,-10.429945 45.533937,-18.664689 45.382363,-25.541058 l 6.667262,0.710932 c 0.58262,26.6688082 -0.293401,25.68066302 0.239037,62.770025 z"
+           style="display:inline;fill:url(#linearGradient1167-9-5);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.392757px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      </g>
+      <path
+         style="display:inline;fill:url(#linearGradient1979-3);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.38309px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 422.58217,280.24422 c 9.96709,-88.36246 9.68376,-114.32034 16.48238,-159.01523 4.19444,-27.575093 9.62964,-59.281263 10.65864,-85.867213 l -21.41539,2.08128 c -3.97373,103.109523 -1.08924,99.374793 -5.72563,242.801163 z"
+         id="path4840-7-6-1"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="csccc" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path2088-1-7"
+         d="M 424.77514,232.88706 424.70744,61.981317 Z"
+         style="fill:none;stroke:black;stroke-width:1.514;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+    <text
+       transform="translate(-66.829103,-470.2859)"
+       y="0"
+       x="-71.38916"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:16px;line-height:1;font-family:Lato;-inkscape-font-specification:'Lato, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect1179-9-3);display:inline;fill:black;fill-opacity:1;stroke:none"
+       id="text1177-3-5"
+       xml:space="preserve"><tspan
+         x="207.9082"
+         y="476.16424"
+         id="tspan5200"><tspan
+   style="font-weight:800;font-size:17.3333px;-inkscape-font-specification:'Lato, Ultra-Bold'"
+   id="tspan5198">Repositories with annex support</tspan>
+</tspan><tspan
+         x="207.9082"
+         y="492.42425"
+         id="tspan5202">- examples: GIN (gin.g-node.org), GitLab instances 
+</tspan><tspan
+         x="207.9082"
+         y="508.42425"
+         id="tspan5204">  with enabled annex support  
+</tspan><tspan
+         x="207.9082"
+         y="524.42425"
+         id="tspan5206">- can hold large data
+</tspan><tspan
+         x="207.9082"
+         y="540.42425"
+         id="tspan5208">- exposes Git history and all files + content
+</tspan><tspan
+         x="207.9082"
+         y="556.42425"
+         id="tspan5210">- datasets can be cloned from here </tspan></text>
+    <text
+       xml:space="preserve"
+       id="text1177-3-7-6"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:16px;line-height:1;font-family:Lato;-inkscape-font-specification:'Lato, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect1179-9-8-3);display:inline;fill:black;fill-opacity:1;stroke:none"
+       x="-71.38916"
+       y="0"
+       transform="translate(364.00984,-470.78398)"><tspan
+         x="207.9082"
+         y="476.16424"
+         id="tspan5214"><tspan
+   style="font-weight:800;font-size:17.3333px;-inkscape-font-specification:'Lato, Ultra-Bold'"
+   id="tspan5212">Publish both components to a special remote</tspan>
+</tspan><tspan
+         x="207.9082"
+         y="492.42425"
+         id="tspan5216">- performed with DataLad extensions (e.g., 
+</tspan><tspan
+         x="207.9082"
+         y="508.42425"
+         id="tspan5218">  datalad-osf), or helpers (e.g., git-remote-rclone)
+</tspan><tspan
+         x="207.9082"
+         y="524.42425"
+         id="tspan5220">- deposit a Git clone (in two files) in addition
+</tspan><tspan
+         x="207.9082"
+         y="540.42425"
+         id="tspan5222">- allows cloning via a special remote </tspan></text>
+    <g
+       id="g680"
+       transform="translate(0,-84)">
+      <path
+         inkscape:connector-curvature="0"
+         d="M 513.21791,469.89152"
+         fill="none"
+         stroke="#3f3d56"
+         stroke-miterlimit="10"
+         stroke-width="2"
+         id="path14-6"
+         style="stroke:#494949" />
+      <path
+         inkscape:connector-curvature="0"
+         d="M 513.21791,467.89152"
+         fill="none"
+         stroke="#3f3d56"
+         stroke-miterlimit="10"
+         stroke-width="2"
+         id="path16-3"
+         style="stroke:#494949" />
+      <circle
+         style="fill:#eaeaea;stroke-width:2.09837"
+         cx="513.58667"
+         cy="435.67325"
+         r="33.573967"
+         fill="#ffa200"
+         id="circle44-2" />
+      <path
+         sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccscccccccccccc"
+         inkscape:connector-curvature="0"
+         id="path4436-0"
+         d="m 512.00351,410.9272 -7.9697,3.67669 c -4.3833,2.02216 -8.709,4.01245 -9.6128,4.42288 -6.6634,3.02621 -9.5234,4.40531 -9.69647,4.67574 -0.14374,0.22427 -0.1449,0.40135 -0.004,0.62098 0.15784,0.24676 26.31277,12.44983 27.35907,12.76505 h 7e-4 c 0.1595,0.0481 0.8258,0.0582 1.4808,0.023 1.1262,-0.0611 1.9211,-0.40175 14.6446,-6.27567 7.3994,-3.41604 13.541,-6.34778 13.648,-6.51514 0.1383,-0.21592 0.1363,-0.39539 0,-0.61782 -0.1731,-0.27068 -3.0331,-1.6495 -9.6965,-4.67574 -0.9037,-0.41041 -5.2295,-2.40072 -9.6128,-4.42289 l -7.9696,-3.67668 h -1.2845 z m 21.3747,21.71094 -9.3136,4.30794 -9.3137,4.3079 h -1.4657 -1.4656 l -9.3073,-4.30508 -9.3072,-4.30473 -1.3293,0.0663 c -1.2061,0.0599 -1.5961,0.19026 -4.1963,1.40211 -1.57668,0.73485 -2.91349,1.45638 -2.97076,1.60349 -0.0568,0.14702 -0.0575,0.41063 -0.002,0.58538 0.10652,0.33157 25.77326,12.27301 27.38706,12.74216 h 3e-4 c 0.4558,0.13145 1.1929,0.19602 1.6486,0.14327 0.5573,-0.0651 4.9201,-1.97285 13.4659,-5.88885 6.9528,-3.18599 13.0716,-5.99943 13.5973,-6.25236 1.6573,-0.79738 1.5271,-1.34145 -0.5475,-2.29118 -0.8293,-0.37979 -2.0847,-0.96991 -2.79,-1.31182 -1.0135,-0.49132 -1.577,-0.64091 -2.6866,-0.71306 z m -41.7064,12.06684 c -0.9572,0.0115 -1.3414,0.17988 -3.8327,1.33863 -3.00687,1.3985 -3.47097,1.74146 -3.11532,2.30205 0.16567,0.26088 26.28512,12.45023 27.32082,12.74995 0.1786,0.0516 0.8608,0.0669 1.5158,0.0349 1.1296,-0.058 1.8825,-0.37979 14.6386,-6.26374 7.3962,-3.41168 13.5382,-6.34521 13.6484,-6.51898 0.3556,-0.56062 -0.1089,-0.90357 -3.1156,-2.30208 -2.8473,-1.32392 -2.9417,-1.35376 -4.2855,-1.3369 l -1.374,0.0202 -9.0478,4.18945 c -4.9764,2.30418 -9.44,4.2787 -9.9191,4.38758 -0.6439,0.14615 -1.0916,0.14327 -1.7159,-0.0115 -0.4644,-0.1153 -4.9048,-2.08968 -9.8675,-4.38761 l -9.0231,-4.17813 -1.3741,-0.0144 c -0.168,-0.002 -0.316,-0.003 -0.453,-0.002 z"
+         style="fill:#333;fill-opacity:1;stroke-width:0.908175;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000" />
+    </g>
+  </g>
+</svg>

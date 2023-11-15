@@ -1,6 +1,6 @@
 \chapter{Distributing datasets}
 \label{\detokenize{basics/basics-thirdparty:distributing-datasets}}\label{\detokenize{basics/basics-thirdparty:chapter-thirdparty}}\label{\detokenize{basics/basics-thirdparty::doc}}
-\noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{clouds}.pdf}\hspace*{\fill}}
+\noindent{\hspace*{\fill}\sphinxincludegraphics[height=.3\textheight]{{clouds_bw}.pdf}\hspace*{\fill}}
 
 \sphinxstepscope
 
@@ -88,8 +88,9 @@ The third\sphinxhyphen{}party service of your choice may have support for both a
 \centering
 \capstart
 
-\noindent\sphinxincludegraphics[width=0.800\linewidth]{{publishing_network_publishparts2}.pdf}
-\caption{Schematic difference between the Git and git\sphinxhyphen{}annex aspect of your dataset, and where each part \sphinxstyleemphasis{usually} gets distributed to.}\label{\detokenize{basics/101-138-sharethirdparty:id5}}\end{figure}
+\noindent\sphinxincludegraphics[width=\linewidth]{{publishing_network_publishparts2_bw}.pdf}
+\caption{Schematic difference between the Git and git\sphinxhyphen{}annex aspect of your dataset, and where each part \sphinxstyleemphasis{usually} gets distributed to.
+Some hosting services have annex support \sphinxhyphen{} they can host both the Git and git\sphinxhyphen{}annex parts of your dataset. And with some {\hyperref[\detokenize{glossary:term-DataLad-extension}]{\sphinxtermref{\DUrole{xref,std,std-term}{datalad extension}}}}s, third party storage services can host Git repositories in addition to annexed contents.}\label{\detokenize{basics/101-138-sharethirdparty:id6}}\label{\detokenize{basics/101-138-sharethirdparty:fig-publishing}}\end{figure}
 
 
 \subsubsection{The common case: Repository hosting without annex support and special remotes}
@@ -193,16 +194,9 @@ Here is the complete list: \dlhbhref{B1N}{git\sphinxhyphen{}annex.branchable.com
 \subsubsection{The easy case: Repository hosting with annex support}
 \label{\detokenize{basics/101-138-sharethirdparty:the-easy-case-repository-hosting-with-annex-support}}
 \sphinxAtStartPar
-There are a few Git repository hosting services with support for annexed contents, as illustrated in \hyperref[\detokenize{basics/101-138-sharethirdparty:fig-specialpublishing}]{Fig.\@ \ref{\detokenize{basics/101-138-sharethirdparty:fig-specialpublishing}}}.
+There are a few Git repository hosting services with support for annexed contents, as illustrated in \hyperref[\detokenize{basics/101-138-sharethirdparty:fig-specialpublishing}]{Fig.\@ \ref{\detokenize{basics/101-138-sharethirdparty:fig-publishing}}}.
 One of them is {\hyperref[\detokenize{glossary:term-GIN}]{\sphinxtermref{\DUrole{xref,std,std-term}{GIN}}}}.
 What makes them extremely convenient is that there is no need to configure a special remote \textendash{} creating a {\hyperref[\detokenize{glossary:term-sibling}]{\sphinxtermref{\DUrole{xref,std,std-term}{sibling}}}} and running \sphinxcode{\sphinxupquote{datalad push}} is enough.
-
-\begin{figure}[tbp]
-\centering
-\capstart
-
-\noindent\sphinxincludegraphics[width=0.800\linewidth]{{publishing_network_publishgin}.pdf}
-\caption{Some repository hosting services have annex support \sphinxhyphen{} they can host both the Git and git\sphinxhyphen{}annex parts of your dataset. And with some {\hyperref[\detokenize{glossary:term-DataLad-extension}]{\sphinxtermref{\DUrole{xref,std,std-term}{datalad extension}}}}s third party storage services can host Git repositories in addition to annexed contents.}\label{\detokenize{basics/101-138-sharethirdparty:id6}}\label{\detokenize{basics/101-138-sharethirdparty:fig-specialpublishing}}\end{figure}
 
 
 \subsubsection{The uncommon case: Special remotes with repository hosting support}
@@ -211,7 +205,7 @@ What makes them extremely convenient is that there is no need to configure a spe
 Typically, storage hosting services such as cloud storage providers do not provide
 the ability to host Git repositories.
 Therefore, it is typically not possible to \sphinxcode{\sphinxupquote{datalad clone}} from a cloud storage.
-However, a number of {\hyperref[\detokenize{glossary:term-DataLad-extension}]{\sphinxtermref{\DUrole{xref,std,std-term}{datalad extension}}}}s have been created that equip cloud storage providers with the ability to also host Git repositories, as \hyperref[\detokenize{basics/101-138-sharethirdparty:fig-specialpublishing}]{Fig.\@ \ref{\detokenize{basics/101-138-sharethirdparty:fig-specialpublishing}}} illustrates.
+However, a number of {\hyperref[\detokenize{glossary:term-DataLad-extension}]{\sphinxtermref{\DUrole{xref,std,std-term}{datalad extension}}}}s have been created that equip cloud storage providers with the ability to also host Git repositories, as \hyperref[\detokenize{basics/101-138-sharethirdparty:fig-specialpublishing}]{Fig.\@ \ref{\detokenize{basics/101-138-sharethirdparty:fig-publishing}}} illustrates.
 While they do not get the ability to display repositories the same way that pure
 Git repository hosting services like GitHub do, they do get the super power of becoming clonable.
 
@@ -332,6 +326,11 @@ Use the URL to add the repository as a sibling. There are two commands that allo
 Push your dataset to the new sibling: \sphinxcode{\sphinxupquote{datalad push \sphinxhyphen{}\sphinxhyphen{}to \textless{}name\textgreater{}}}
 
 \end{enumerate}
+
+\begin{center}
+\vspace{2cm}
+\noindent\sphinxincludegraphics[height=.2\textheight]{{going_up_bw}.pdf}
+\end{center}
 
 \index{concepts@\spxentry{concepts}!SSH key@\spxentry{SSH key}}\index{SSH@\spxentry{SSH}!key@\spxentry{key}}\ignorespaces \phantomsection\label{\detokenize{basics/101-139-hostingservices:sshkey}}\begin{findoutmore}[label={fom-sshkey}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{What is an SSH key and how can I create one?}
 \label{\detokenize{basics/101-139-hostingservices:fom-sshkey}}
@@ -859,11 +858,6 @@ can also publish only selected contents’ data.
 
 \end{itemize}
 
-\begin{figure}[tbp]
-\centering
-
-\noindent\sphinxincludegraphics[width=0.400\linewidth]{{going_up}.pdf}
-\end{figure}
 
 
 \subsection{Now what can I do with it?}

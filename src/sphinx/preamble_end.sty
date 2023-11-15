@@ -3,6 +3,10 @@
 % by adding a small "dictionary" symbol
 \renewcommand{\sphinxtermref}[1]{\mbox{\textit{#1}\raisebox{.3em}{\tiny{\color{dataladlightgray}\faBook}}}}
 
+% replacement for sphinx URL footnote references
+% adds a pointer to a separately generated URL index
+\newcommand{\dlhbhref}[2]{#2\hspace{0.1em}\textsuperscript{{\color{gray}\scriptsize\faExternalLinkSquare}\hspace{0.1em}#1}}
+
 % better control over the spacing of list items
 % MIH: we cannot use enumitem, it messes with the (description) list
 % customizations done by sphinx
@@ -126,7 +130,7 @@
 \titleformat{\part}[hang]{\Huge\bfseries}{\thepart\hsp\textcolor{black}{|}\hsp}{0pt}{\Huge\bfseries}
 % Simplistic chapter titles
 \definecolor{gray75}{gray}{0.75}
-\newcommand{\hsp}{\hspace{20pt}}
+\newcommand{\hsp}{\hspace{15pt}}
 \titleformat{\chapter}[hang]{\huge\bfseries}{\thechapter\hsp\textcolor{gray75}{|}\hsp}{0pt}{\huge\bfseries}
 
 
