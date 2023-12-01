@@ -239,7 +239,9 @@ While git\sphinxhyphen{}annex on Unix\sphinxhyphen{}based file operating systems
 \sphinxAtStartPar
 \sphinxstylestrong{Why is that?}
 Data \sphinxstyleemphasis{needs} to be in the annex for version control and transport logistics \textendash{} the annex is able to store all previous versions of the data, and manage the transport to other storage locations if you want to publish your dataset.
-But as the {\hyperref[\detokenize{basics/101-115-symlinks:fom-objecttree}]{\sphinxcrossref{\DUrole{std,std-ref}{Findoutmore in this section}}}} (\autopageref*{\detokenize{basics/101-115-symlinks:fom-objecttree}}) shows, the {\hyperref[\detokenize{glossary:term-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{annex}}}} is a non\sphinxhyphen{}human readable tree structure, and data thus also needs to exist in its original location.
+But as the
+\textit{Find-out-more}~{\findoutmoreiconinline}\textit{\ref{fom-objecttree}} {\hyperref[\detokenize{basics/101-115-symlinks:fom-objecttree}]{\sphinxcrossref{\DUrole{std,std-ref}{on how git\sphinxhyphen{}annex manages file content}}}} (\autopageref*{\detokenize{basics/101-115-symlinks:fom-objecttree}}).
+shows, the {\hyperref[\detokenize{glossary:term-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{annex}}}} is a non\sphinxhyphen{}human readable tree structure, and data thus also needs to exist in its original location.
 Thus, it exists in both places: it has moved into the annex, and copied back into its original location.
 Once you edit an annexed file, the most recent version of the file is available in its original location, and past versions are stored and readily available in the annex.
 If you reset your dataset to a previous state, as is shown in the section {\hyperref[\detokenize{basics/101-137-history:history}]{\sphinxcrossref{\DUrole{std,std-ref}{Git things done}}}} (\autopageref*{\detokenize{basics/101-137-history:history}}), the respective version of your data is taken from the annex and copied to replace the newer version, and vice versa.
