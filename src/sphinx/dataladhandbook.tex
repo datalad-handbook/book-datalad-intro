@@ -82,8 +82,8 @@ cautionBgColor={named}{LightCyan}%
 \input{preamble_end.sty}
 
 \title{The DataLad Handbook}
-\date{Nov 15, 2023}
-\release{0.18+908.g9cec4945}
+\date{Dec 01, 2023}
+\release{0.18+909.gaabff48e}
 \author{}
 \newcommand{\sphinxlogo}{\sphinxincludegraphics{datalad_logo_wide_bw.pdf}\par}
 \renewcommand{\releasename}{Release}
@@ -1124,7 +1124,7 @@ And do not worry, you won’t get any emails from Git or DataLad.
 
 \sphinxstepscope
 
-\index{terminal@\spxentry{terminal}|spxpagem}\index{shell@\spxentry{shell}|spxpagem}\index{command Line@\spxentry{command Line}|spxpagem}\ignorespaces 
+\index{terminal@\spxentry{terminal}|spxpagem}\index{shell@\spxentry{shell}|spxpagem}\index{command Line@\spxentry{command Line}|spxpagem}\index{what is@\spxentry{what is}!command line@\spxentry{command line}}\index{command line@\spxentry{command line}!what is@\spxentry{what is}}\index{what is@\spxentry{what is}!terminal@\spxentry{terminal}}\index{terminal@\spxentry{terminal}!what is@\spxentry{what is}}\index{what is@\spxentry{what is}!shell@\spxentry{shell}}\index{shell@\spxentry{shell}!what is@\spxentry{what is}}\ignorespaces 
 
 \chapter{The command line}
 \label{\detokenize{intro/howto:the-command-line}}\label{\detokenize{intro/howto:howto}}\label{\detokenize{intro/howto:index-0}}\label{\detokenize{intro/howto::doc}}
@@ -1310,9 +1310,10 @@ Set an {\hyperref[\detokenize{glossary:term-environment-variable}]{\sphinxtermre
 
 \end{description}
 
+\index{paths@\spxentry{paths}|spxpagem}\index{what is@\spxentry{what is}!prompt@\spxentry{prompt}}\index{prompt@\spxentry{prompt}!what is@\spxentry{what is}}\ignorespaces 
 
 \section{The prompt}
-\label{\detokenize{intro/howto:the-prompt}}
+\label{\detokenize{intro/howto:the-prompt}}\label{\detokenize{intro/howto:index-4}}
 \sphinxAtStartPar
 When you first login on the command line, you are greeted with “the prompt”,
 and it will likely look similar to this:
@@ -1330,10 +1331,10 @@ In this book, we will use \sphinxcode{\sphinxupquote{\$}} as a shorthand for the
 the reader to quickly differentiate between lines containing commands vs the
 output of those commands.
 
-\index{paths@\spxentry{paths}|spxpagem}\ignorespaces 
+\index{paths@\spxentry{paths}|spxpagem}\index{what is@\spxentry{what is}!path@\spxentry{path}}\index{path@\spxentry{path}!what is@\spxentry{what is}}\ignorespaces 
 
 \section{Paths}
-\label{\detokenize{intro/howto:paths}}\label{\detokenize{intro/howto:index-4}}
+\label{\detokenize{intro/howto:paths}}\label{\detokenize{intro/howto:index-5}}
 \sphinxAtStartPar
 Paths look different on Unix\sphinxhyphen{}like and Windows systems.
 Most prominently, the \sphinxstyleemphasis{path separators}, i.e., the symbol distinguishing directories in path, are back slashes (\sphinxcode{\sphinxupquote{\textbackslash{}}}) on Windows and front slashes (\sphinxcode{\sphinxupquote{/}}) on Unix\sphinxhyphen{}like systems.
@@ -1464,9 +1465,10 @@ In order to quickly get home, you could use
 \sphinxAtStartPar
 More information on Windows paths can be found \sphinxhref{https://learn.microsoft.com/en-us/windows/win32/fileio/naming-a-file}{here}.
 
+\index{text editor@\spxentry{text editor}}\ignorespaces 
 
 \section{Text editors}
-\label{\detokenize{intro/howto:text-editors}}
+\label{\detokenize{intro/howto:text-editors}}\label{\detokenize{intro/howto:index-6}}
 \sphinxAtStartPar
 Text editors are a crucial tool for any Linux user, but regardless of your operating system,
 if you use DataLad, you will occasionally find yourself in your default text editor to write
@@ -1504,9 +1506,10 @@ Git for Windows might set {\hyperref[\detokenize{glossary:term-vim}]{\sphinxterm
 A good graphical alternative is Notepad++, a powerful Windows\sphinxhyphen{}native text editor.
 You may either be able to configure this during the installation, of afterwards by running \sphinxcode{\sphinxupquote{git config core.editor notepad}}.
 
+\index{shell@\spxentry{shell}}\ignorespaces 
 
 \section{Shells}
-\label{\detokenize{intro/howto:shells}}
+\label{\detokenize{intro/howto:shells}}\label{\detokenize{intro/howto:index-8}}
 \sphinxAtStartPar
 Whenever you use the command line on a Unix\sphinxhyphen{}based system, you do that in a command\sphinxhyphen{}line
 interpreter that is referred to as a \sphinxcode{\sphinxupquote{shell}}.
@@ -1545,7 +1548,7 @@ To determine what shell you’re in, run the following:
 \index{tab completion@\spxentry{tab completion}|spxpagem}\ignorespaces 
 
 \section{Tab completion}
-\label{\detokenize{intro/howto:tab-completion}}\label{\detokenize{intro/howto:index-6}}
+\label{\detokenize{intro/howto:tab-completion}}\label{\detokenize{intro/howto:index-9}}
 \sphinxAtStartPar
 One of the best features ever invented is tab completion. Imagine your favorite animal sitting
 on your shoulder. Now imagine that animal shouting “TAB!” every time you’ve typed the first
@@ -1587,9 +1590,10 @@ Pressing Tab again will list the matching options (\sphinxcode{\sphinxupquote{Do
 
 \sphinxstepscope
 
+\index{what is@\spxentry{what is}!DataLad@\spxentry{DataLad}}\index{DataLad@\spxentry{DataLad}!what is@\spxentry{what is}}\ignorespaces 
 
 \chapter{What you really need to know}
-\label{\detokenize{intro/executive_summary:what-you-really-need-to-know}}\label{\detokenize{intro/executive_summary:executive-summary}}\label{\detokenize{intro/executive_summary::doc}}
+\label{\detokenize{intro/executive_summary:what-you-really-need-to-know}}\label{\detokenize{intro/executive_summary:executive-summary}}\label{\detokenize{intro/executive_summary:index-0}}\label{\detokenize{intro/executive_summary::doc}}
 \sphinxAtStartPar
 DataLad is a data management multitool that can assist you in handling the entire
 life cycle of digital objects. It is a command\sphinxhyphen{}line tool, free and open source, and
@@ -1945,9 +1949,10 @@ reveals that Git has secretly done its work:
 
 \sphinxstepscope
 
+\index{populate dataset@\spxentry{populate dataset}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!populate dataset@\spxentry{populate dataset}}\ignorespaces 
 
 \section{Populate a dataset}
-\label{\detokenize{basics/101-102-populate:populate-a-dataset}}\label{\detokenize{basics/101-102-populate:populate}}\label{\detokenize{basics/101-102-populate::doc}}
+\label{\detokenize{basics/101-102-populate:populate-a-dataset}}\label{\detokenize{basics/101-102-populate:populate}}\label{\detokenize{basics/101-102-populate:index-0}}\label{\detokenize{basics/101-102-populate::doc}}
 \sphinxAtStartPar
 The first lecture in DataLad\sphinxhyphen{}101 referenced some useful literature.
 Even if we end up not reading those books at all, let’s download
@@ -2027,7 +2032,7 @@ If you are not using the Git Bash, you either need to copy multi\sphinxhyphen{}l
 \end{windowswit}
 
 \index{download file@\spxentry{download file}!with wget@\spxentry{with wget}}\index{with wget@\spxentry{with wget}!download file@\spxentry{download file}}\ignorespaces 
-\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-102-populate:index-2}}}
+\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-102-populate:index-3}}}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }books
 \PYG{g+gp}{\PYGZdl{} }wget\PYG{+w}{ }\PYGZhy{}q\PYG{+w}{ }https://sourceforge.net/projects/linuxcommand/files/TLCL/19.01/TLCL\PYGZhy{}19.01.pdf/download\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
@@ -2227,8 +2232,8 @@ Do not say nasty things about other people
 
 \end{findoutmore}
 
-\index{no staging@\spxentry{no staging}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!no staging@\spxentry{no staging}}\ignorespaces \begin{gitusernote}[label={index-9}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{There is no staging area in DataLad}
-\label{\detokenize{basics/101-102-populate:index-9}}
+\index{no staging@\spxentry{no staging}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!no staging@\spxentry{no staging}}\ignorespaces \begin{gitusernote}[label={index-10}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{There is no staging area in DataLad}
+\label{\detokenize{basics/101-102-populate:index-10}}
 
 \sphinxAtStartPar
 Just as in Git, new files are not tracked from their creation on, but only when
@@ -2307,7 +2312,7 @@ commands.
 A \sphinxcode{\sphinxupquote{datalad status}} should now be empty, and our dataset’s history should look like this:
 
 \index{show history (compact)@\spxentry{show history}\spxextra{compact}!with Git@\spxentry{with Git}}\index{with Git@\spxentry{with Git}!show history (compact)@\spxentry{show history}\spxextra{compact}}\ignorespaces 
-\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-102-populate:index-11}}}
+\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-102-populate:index-12}}}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} lets make the output a bit more concise with the \PYGZhy{}\PYGZhy{}oneline option}
 \PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }log\PYG{+w}{ }\PYGZhy{}\PYGZhy{}oneline
@@ -2421,9 +2426,10 @@ Well done! Your \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} dataset a
 
 \sphinxstepscope
 
+\index{modify dataset@\spxentry{modify dataset}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!modify dataset@\spxentry{modify dataset}}\ignorespaces 
 
 \section{Modify content}
-\label{\detokenize{basics/101-103-modify:modify-content}}\label{\detokenize{basics/101-103-modify:modify}}\label{\detokenize{basics/101-103-modify::doc}}
+\label{\detokenize{basics/101-103-modify:modify-content}}\label{\detokenize{basics/101-103-modify:modify}}\label{\detokenize{basics/101-103-modify:index-0}}\label{\detokenize{basics/101-103-modify::doc}}
 \sphinxAtStartPar
 So far, we’ve only added new content to the dataset. And we have not done
 much to that content up to this point, to be honest. Let’s see what happens if
@@ -2517,7 +2523,7 @@ If you are using Git Bash, however, here docs will work just fine.
 \end{windowswit}
 
 \index{create heredoc@\spxentry{create heredoc}!in a terminal@\spxentry{in a terminal}}\index{in a terminal@\spxentry{in a terminal}!create heredoc@\spxentry{create heredoc}}\ignorespaces 
-\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-103-modify:index-2}}}
+\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-103-modify:index-3}}}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZdl{} }cat\PYG{+w}{ }\PYGZlt{}\PYGZlt{}\PYG{+w}{ }EOT\PYG{+w}{ }\PYGZgt{}\PYG{+w}{ }notes.txt
 \PYG{g+go}{One can create a new dataset with \PYGZsq{}datalad create [\PYGZhy{}\PYGZhy{}description] PATH\PYGZsq{}.}
@@ -3512,9 +3518,10 @@ appear abstract, upcoming sections will demonstrate many examples of why this ca
 
 \sphinxstepscope
 
+\index{provenance tracking@\spxentry{provenance tracking}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!provenance tracking@\spxentry{provenance tracking}}\ignorespaces 
 
 \section{Keeping track}
-\label{\detokenize{basics/101-108-run:keeping-track}}\label{\detokenize{basics/101-108-run:run}}\label{\detokenize{basics/101-108-run::doc}}
+\label{\detokenize{basics/101-108-run:keeping-track}}\label{\detokenize{basics/101-108-run:run}}\label{\detokenize{basics/101-108-run:index-0}}\label{\detokenize{basics/101-108-run::doc}}
 \sphinxAtStartPar
 In previous examples, with the exception of \sphinxcode{\sphinxupquote{datalad download\sphinxhyphen{}url}}, all
 changes that happened to the dataset or the files it contains were
@@ -3828,7 +3835,7 @@ be helpful over the course of this chapter.
 
 \sphinxstepscope
 
-\index{rerun@\spxentry{rerun}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!rerun@\spxentry{rerun}}\ignorespaces 
+\index{rerun@\spxentry{rerun}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!rerun@\spxentry{rerun}}\index{reproducibility@\spxentry{reproducibility}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!reproducibility@\spxentry{reproducibility}}\ignorespaces 
 
 \section{DataLad, rerun!}
 \label{\detokenize{basics/101-109-rerun:datalad-rerun}}\label{\detokenize{basics/101-109-rerun:run2}}\label{\detokenize{basics/101-109-rerun:index-0}}\label{\detokenize{basics/101-109-rerun::doc}}
@@ -4247,9 +4254,10 @@ Finally, save this note.
 
 \sphinxstepscope
 
+\index{provenance tracking@\spxentry{provenance tracking}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!provenance tracking@\spxentry{provenance tracking}}\ignorespaces 
 
 \section{Input and output}
-\label{\detokenize{basics/101-110-run2:input-and-output}}\label{\detokenize{basics/101-110-run2:run3}}\label{\detokenize{basics/101-110-run2::doc}}
+\label{\detokenize{basics/101-110-run2:input-and-output}}\label{\detokenize{basics/101-110-run2:run3}}\label{\detokenize{basics/101-110-run2:index-0}}\label{\detokenize{basics/101-110-run2::doc}}
 \sphinxAtStartPar
 In the previous two sections, you created a simple \sphinxcode{\sphinxupquote{.tsv}} file of all
 speakers and talk titles in the \sphinxcode{\sphinxupquote{longnow/}} podcasts subdataset, and you have
@@ -4330,7 +4338,7 @@ for better readability \textendash{} in your terminal, you can always write the 
 a single line.
 
 \index{run command with provenance capture@\spxentry{run command with provenance capture}!with DataLad run@\spxentry{with DataLad run}}\index{with DataLad run@\spxentry{with DataLad run}!run command with provenance capture@\spxentry{run command with provenance capture}}\ignorespaces 
-\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-110-run2:index-1}}}
+\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-110-run2:index-2}}}
 \fvset{hllines={, 4,}}%
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }run\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}Resize logo for slides\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
@@ -4831,7 +4839,7 @@ this brace character by doubling it, i.e., \sphinxcode{\sphinxupquote{\{\{}} or 
 \index{dry\sphinxhyphen{}run@\spxentry{dry\sphinxhyphen{}run}!with DataLad run@\spxentry{with DataLad run}}\index{with DataLad run@\spxentry{with DataLad run}!dry\sphinxhyphen{}run@\spxentry{dry\sphinxhyphen{}run}}\ignorespaces 
 
 \subsection{Dry\sphinxhyphen{}running your run call}
-\label{\detokenize{basics/101-110-run2:dry-running-your-run-call}}\label{\detokenize{basics/101-110-run2:dryrun}}\label{\detokenize{basics/101-110-run2:index-12}}
+\label{\detokenize{basics/101-110-run2:dry-running-your-run-call}}\label{\detokenize{basics/101-110-run2:dryrun}}\label{\detokenize{basics/101-110-run2:index-13}}
 \sphinxAtStartPar
 \sphinxcode{\sphinxupquote{datalad run}} commands can become confusing and long, especially when you make heavy use of placeholders or wrap a complex bash commands.
 To better anticipate what you will be running, or help debug a failed command, you can make use of the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}dry\sphinxhyphen{}run}}  flag of \sphinxcode{\sphinxupquote{datalad run}}.
@@ -4842,9 +4850,10 @@ Apart from displaying the command that will be ran, you will learn \sphinxstylee
 
 \sphinxstepscope
 
+\index{provenance tracking@\spxentry{provenance tracking}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!provenance tracking@\spxentry{provenance tracking}}\ignorespaces 
 
 \section{Clean desk}
-\label{\detokenize{basics/101-112-run4:clean-desk}}\label{\detokenize{basics/101-112-run4:run5}}\label{\detokenize{basics/101-112-run4::doc}}
+\label{\detokenize{basics/101-112-run4:clean-desk}}\label{\detokenize{basics/101-112-run4:run5}}\label{\detokenize{basics/101-112-run4:index-0}}\label{\detokenize{basics/101-112-run4::doc}}
 \sphinxAtStartPar
 Just now you realize that you need to fit both logos onto the same slide.
 “Ah, damn, I might then really need to have them 400 by 400 pixel to fit”,
@@ -4969,8 +4978,8 @@ It does not warn if the repository is dirty, but importantly, it
 \sphinxstylestrong{only} saves modifications to the \sphinxstyleemphasis{listed outputs} (which is a problem in the
 vast amount of cases where one does not exactly know which outputs are produced).
 
-\index{explicit input/output declaration@\spxentry{explicit input/output declaration}!with DataLad run@\spxentry{with DataLad run}}\index{with DataLad run@\spxentry{with DataLad run}!explicit input/output declaration@\spxentry{explicit input/output declaration}}\ignorespaces \begin{importantnote}[label={index-1}, before title={\thetcbcounter\ }, check odd page=true]{Put explicit first!}
-\label{\detokenize{basics/101-112-run4:index-1}}
+\index{explicit input/output declaration@\spxentry{explicit input/output declaration}!with DataLad run@\spxentry{with DataLad run}}\index{with DataLad run@\spxentry{with DataLad run}!explicit input/output declaration@\spxentry{explicit input/output declaration}}\ignorespaces \begin{importantnote}[label={index-2}, before title={\thetcbcounter\ }, check odd page=true]{Put explicit first!}
+\label{\detokenize{basics/101-112-run4:index-2}}
 
 \sphinxAtStartPar
 The \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}explicit}} flag has to be given anywhere \sphinxstyleemphasis{prior} to the command that
@@ -5269,9 +5278,10 @@ The next lecture, in any way, will guide us deeper into git\sphinxhyphen{}annex,
 
 \sphinxstepscope
 
+\index{data file handling@\spxentry{data file handling}!with git\sphinxhyphen{}annex@\spxentry{with git\sphinxhyphen{}annex}}\index{with git\sphinxhyphen{}annex@\spxentry{with git\sphinxhyphen{}annex}!data file handling@\spxentry{data file handling}}\ignorespaces 
 
 \section{Data integrity}
-\label{\detokenize{basics/101-115-symlinks:data-integrity}}\label{\detokenize{basics/101-115-symlinks:symlink}}\label{\detokenize{basics/101-115-symlinks:id1}}\label{\detokenize{basics/101-115-symlinks::doc}}
+\label{\detokenize{basics/101-115-symlinks:data-integrity}}\label{\detokenize{basics/101-115-symlinks:symlink}}\label{\detokenize{basics/101-115-symlinks:id1}}\label{\detokenize{basics/101-115-symlinks:index-0}}\label{\detokenize{basics/101-115-symlinks::doc}}
 \sphinxAtStartPar
 So far, we mastered quite a number of challenges:
 Creating and populating a dataset with large and small files, modifying content and saving the changes to history, installing datasets, even as subdatasets within datasets, recording the impact of commands on a dataset with the \sphinxcode{\sphinxupquote{datalad run}} and \sphinxcode{\sphinxupquote{datalad rerun}} commands, and capturing plenty of {\hyperref[\detokenize{glossary:term-provenance}]{\sphinxtermref{\DUrole{xref,std,std-term}{provenance}}}} on the way.
@@ -5554,7 +5564,7 @@ Let’s take a closer look at the structure of the symlink.
 The key from the hash function is the last part of the name of the file the symlink links to (in which the actual data content is stored).
 
 \index{compute checksum@\spxentry{compute checksum}!in a terminal@\spxentry{in a terminal}}\index{in a terminal@\spxentry{in a terminal}!compute checksum@\spxentry{compute checksum}}\ignorespaces 
-\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-115-symlinks:index-4}}}
+\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-115-symlinks:index-5}}}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} compare it to the checksum (here of type md5sum) of the PDF file and the subdirectory name}
 \PYG{g+gp}{\PYGZdl{} }md5sum\PYG{+w}{ }TLCL.pdf
@@ -5600,7 +5610,7 @@ Even more mesmerizing things about git\sphinxhyphen{}annex can be found in its \
 \index{broken symlink@\spxentry{broken symlink}|spxpagem}\index{symlink@\spxentry{symlink}!broken@\spxentry{broken}|spxpagem}\ignorespaces 
 
 \subsection{Broken symlinks}
-\label{\detokenize{basics/101-115-symlinks:broken-symlinks}}\label{\detokenize{basics/101-115-symlinks:wslfiles}}\label{\detokenize{basics/101-115-symlinks:index-5}}
+\label{\detokenize{basics/101-115-symlinks:broken-symlinks}}\label{\detokenize{basics/101-115-symlinks:wslfiles}}\label{\detokenize{basics/101-115-symlinks:index-6}}
 \sphinxAtStartPar
 Whenever a symlink points to a non\sphinxhyphen{}existent target, this symlink is called
 \sphinxstyleemphasis{broken} or \sphinxstyleemphasis{dangling}, and opening the symlink would not work as it does not resolve. The
@@ -5674,9 +5684,10 @@ the superdataset.
 
 \sphinxstepscope
 
+\index{data sharing@\spxentry{data sharing}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!data sharing@\spxentry{data sharing}}\ignorespaces 
 
 \section{Looking without touching}
-\label{\detokenize{basics/101-116-sharelocal:looking-without-touching}}\label{\detokenize{basics/101-116-sharelocal:sharelocal1}}\label{\detokenize{basics/101-116-sharelocal::doc}}
+\label{\detokenize{basics/101-116-sharelocal:looking-without-touching}}\label{\detokenize{basics/101-116-sharelocal:sharelocal1}}\label{\detokenize{basics/101-116-sharelocal:index-0}}\label{\detokenize{basics/101-116-sharelocal::doc}}
 \sphinxAtStartPar
 Only now, several weeks into the DataLad\sphinxhyphen{}101 course does your room
 mate realize that he has enrolled in the course as well, but has not
@@ -6019,8 +6030,8 @@ Save this note.
 \PYG{g+go}{save(ok): . (dataset)}
 \end{sphinxVerbatim}
 
-\index{clone@\spxentry{clone}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!clone@\spxentry{clone}}\ignorespaces \begin{gitusernote}[label={index-3}, before title={\thetcbcounter\ }, check odd page=true]{Get a clone}
-\label{\detokenize{basics/101-116-sharelocal:index-3}}
+\index{clone@\spxentry{clone}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!clone@\spxentry{clone}}\ignorespaces \begin{gitusernote}[label={index-4}, before title={\thetcbcounter\ }, check odd page=true]{Get a clone}
+\label{\detokenize{basics/101-116-sharelocal:index-4}}
 
 \sphinxAtStartPar
 A dataset that is installed from an existing source, e.g., a path or URL,
@@ -6031,9 +6042,10 @@ is the DataLad equivalent of a \sphinxstyleemphasis{clone} in Git.
 
 \sphinxstepscope
 
+\index{data sharing@\spxentry{data sharing}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!data sharing@\spxentry{data sharing}}\index{data availability tracking@\spxentry{data availability tracking}!with git\sphinxhyphen{}annex@\spxentry{with git\sphinxhyphen{}annex}}\index{with git\sphinxhyphen{}annex@\spxentry{with git\sphinxhyphen{}annex}!data availability tracking@\spxentry{data availability tracking}}\ignorespaces 
 
 \section{Where’s Waldo?}
-\label{\detokenize{basics/101-117-sharelocal2:where-s-waldo}}\label{\detokenize{basics/101-117-sharelocal2:sharelocal2}}\label{\detokenize{basics/101-117-sharelocal2::doc}}
+\label{\detokenize{basics/101-117-sharelocal2:where-s-waldo}}\label{\detokenize{basics/101-117-sharelocal2:sharelocal2}}\label{\detokenize{basics/101-117-sharelocal2:index-0}}\label{\detokenize{basics/101-117-sharelocal2::doc}}
 \sphinxAtStartPar
 So far, you and your room mate have created a copy of the \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}}
 dataset on the same file system but a different place by installing
@@ -6059,7 +6071,7 @@ This information comes from git\sphinxhyphen{}annex.
 Before getting another PDF, let’s query git\sphinxhyphen{}annex where its content is stored:
 
 \index{whereis@\spxentry{whereis}!git\sphinxhyphen{}annex command@\spxentry{git\sphinxhyphen{}annex command}}\index{git\sphinxhyphen{}annex command@\spxentry{git\sphinxhyphen{}annex command}!whereis@\spxentry{whereis}}\index{show file content availability@\spxentry{show file content availability}!with git\sphinxhyphen{}annex@\spxentry{with git\sphinxhyphen{}annex}}\index{with git\sphinxhyphen{}annex@\spxentry{with git\sphinxhyphen{}annex}!show file content availability@\spxentry{show file content availability}}\ignorespaces 
-\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-117-sharelocal2:index-0}}}
+\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-117-sharelocal2:index-1}}}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} navigate back into the clone of DataLad\PYGZhy{}101}
 \PYG{g+gp}{\PYGZdl{} }\PYG{n+nb}{cd}\PYG{+w}{ }../mock\PYGZus{}user/DataLad\PYGZhy{}101
@@ -6228,9 +6240,10 @@ Again, do this in the original \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}
 
 \sphinxstepscope
 
+\index{reproducibility@\spxentry{reproducibility}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!reproducibility@\spxentry{reproducibility}}\ignorespaces 
 
 \section{Retrace and reenact}
-\label{\detokenize{basics/101-118-sharelocal3:retrace-and-reenact}}\label{\detokenize{basics/101-118-sharelocal3:sharelocal3}}\label{\detokenize{basics/101-118-sharelocal3::doc}}
+\label{\detokenize{basics/101-118-sharelocal3:retrace-and-reenact}}\label{\detokenize{basics/101-118-sharelocal3:sharelocal3}}\label{\detokenize{basics/101-118-sharelocal3:index-0}}\label{\detokenize{basics/101-118-sharelocal3::doc}}
 \sphinxAtStartPar
 “Thanks a lot for sharing your dataset with me! This
 is super helpful. I’m sure I’ll catch up in no time!”,
@@ -6332,9 +6345,10 @@ create it. “This is as reproducible as it can be!” you think in awe.
 
 \sphinxstepscope
 
+\index{update dataset@\spxentry{update dataset}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!update dataset@\spxentry{update dataset}}\ignorespaces 
 
 \section{Stay up to date}
-\label{\detokenize{basics/101-119-sharelocal4:stay-up-to-date}}\label{\detokenize{basics/101-119-sharelocal4:update}}\label{\detokenize{basics/101-119-sharelocal4:sharelocal4}}\label{\detokenize{basics/101-119-sharelocal4::doc}}
+\label{\detokenize{basics/101-119-sharelocal4:stay-up-to-date}}\label{\detokenize{basics/101-119-sharelocal4:update}}\label{\detokenize{basics/101-119-sharelocal4:sharelocal4}}\label{\detokenize{basics/101-119-sharelocal4:index-0}}\label{\detokenize{basics/101-119-sharelocal4::doc}}
 \sphinxAtStartPar
 All of what you have seen about sharing dataset was really
 cool, and for the most part also surprisingly intuitive.
@@ -6472,8 +6486,8 @@ If you are a Git\sphinxhyphen{}user and know about branches and merging you can 
 \sphinxcode{\sphinxupquote{Note for Git\sphinxhyphen{}users}}. However, a thorough explanation
 and demonstration will be in the next section.
 
-\index{update@\spxentry{update}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!update@\spxentry{update}}\ignorespaces \begin{gitusernote}[label={index-1}, before title={\thetcbcounter\ }, check odd page=true]{Update internals}
-\label{\detokenize{basics/101-119-sharelocal4:index-1}}
+\index{update@\spxentry{update}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!update@\spxentry{update}}\ignorespaces \begin{gitusernote}[label={index-2}, before title={\thetcbcounter\ }, check odd page=true]{Update internals}
+\label{\detokenize{basics/101-119-sharelocal4:index-2}}
 
 \sphinxAtStartPar
 \sphinxcode{\sphinxupquote{datalad update}} is the DataLad equivalent of a \sphinxcode{\sphinxupquote{git fetch}},
@@ -6490,9 +6504,10 @@ explore the changes and identify potential merge conflicts.
 
 \sphinxstepscope
 
+\index{update dataset@\spxentry{update dataset}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!update dataset@\spxentry{update dataset}}\ignorespaces 
 
 \section{Networking}
-\label{\detokenize{basics/101-121-siblings:networking}}\label{\detokenize{basics/101-121-siblings:sibling}}\label{\detokenize{basics/101-121-siblings::doc}}
+\label{\detokenize{basics/101-121-siblings:networking}}\label{\detokenize{basics/101-121-siblings:sibling}}\label{\detokenize{basics/101-121-siblings:index-0}}\label{\detokenize{basics/101-121-siblings::doc}}
 \sphinxAtStartPar
 To get a hang on the basics of sharing a dataset,
 you shared your \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}} dataset with your
@@ -6597,8 +6612,8 @@ No, luckily, it’s simpler and less convoluted. What we have to
 do is to \sphinxstyleemphasis{register} a DataLad {\hyperref[\detokenize{glossary:term-sibling}]{\sphinxtermref{\DUrole{xref,std,std-term}{sibling}}}}: A reference to our room mate’s
 dataset in our own, original dataset.
 
-\index{sibling@\spxentry{sibling}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!sibling@\spxentry{sibling}}\ignorespaces \begin{gitusernote}[label={index-1}, before title={\thetcbcounter\ }, check odd page=true]{Remote siblings}
-\label{\detokenize{basics/101-121-siblings:index-1}}
+\index{sibling@\spxentry{sibling}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!sibling@\spxentry{sibling}}\ignorespaces \begin{gitusernote}[label={index-2}, before title={\thetcbcounter\ }, check odd page=true]{Remote siblings}
+\label{\detokenize{basics/101-121-siblings:index-2}}
 
 \sphinxAtStartPar
 Git repositories can configure clones of a dataset as \sphinxstyleemphasis{remotes} in
@@ -6645,7 +6660,7 @@ As you can see in the command output, the addition of a {\hyperref[\detokenize{g
 is now known to your own dataset as “roommate”.
 
 \index{list dataset siblings@\spxentry{list dataset siblings}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!list dataset siblings@\spxentry{list dataset siblings}}\ignorespaces 
-\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-121-siblings:index-3}}}
+\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-121-siblings:index-4}}}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }siblings
 \PYG{g+go}{.: here(+) [git]}
@@ -7056,9 +7071,10 @@ of your own use cases.
 
 \sphinxstepscope
 
+\index{configuration@\spxentry{configuration}!with Git@\spxentry{with Git}}\index{with Git@\spxentry{with Git}!configuration@\spxentry{configuration}}\index{configuration@\spxentry{configuration}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!configuration@\spxentry{configuration}}\ignorespaces 
 
 \section{Local configuration}
-\label{\detokenize{basics/101-122-config:local-configuration}}\label{\detokenize{basics/101-122-config:config}}\label{\detokenize{basics/101-122-config::doc}}
+\label{\detokenize{basics/101-122-config:local-configuration}}\label{\detokenize{basics/101-122-config:config}}\label{\detokenize{basics/101-122-config:index-0}}\label{\detokenize{basics/101-122-config::doc}}
 \sphinxAtStartPar
 Back in section {\hyperref[\detokenize{basics/101-114-txt2git:text2git}]{\sphinxcrossref{\DUrole{std,std-ref}{Data safety}}}} (\autopageref*{\detokenize{basics/101-114-txt2git:text2git}}), you already learned that there
 are dataset configurations, and that these configurations can
@@ -7468,7 +7484,7 @@ to query the remote when it tries to retrieve data from annexed content.
 \index{configuration@\spxentry{configuration}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!configuration@\spxentry{configuration}}\index{set configuration@\spxentry{set configuration}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!set configuration@\spxentry{set configuration}}\ignorespaces 
 
 \subsection{The \sphinxstyleliteralintitle{\sphinxupquote{datalad configuration}} command}
-\label{\detokenize{basics/101-122-config:the-datalad-configuration-command}}\label{\detokenize{basics/101-122-config:index-5}}
+\label{\detokenize{basics/101-122-config:the-datalad-configuration-command}}\label{\detokenize{basics/101-122-config:index-6}}
 \sphinxAtStartPar
 Although this section put a focus on the \sphinxcode{\sphinxupquote{git config}} command, it is important to mention that there also is a \sphinxcode{\sphinxupquote{datalad configuration}} command.
 It is not identical to \sphinxcode{\sphinxupquote{git config}}, but while it lacks some feature of \sphinxcode{\sphinxupquote{git config}}, such as the ability to set system\sphinxhyphen{}wide configuration, it has additional features.
@@ -7511,9 +7527,10 @@ The next section will talk about them.
 
 \sphinxstepscope
 
+\index{dataset configuration@\spxentry{dataset configuration}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!dataset configuration@\spxentry{dataset configuration}}\ignorespaces 
 
 \section{Shipping and overriding configuration}
-\label{\detokenize{basics/101-123-config2:shipping-and-overriding-configuration}}\label{\detokenize{basics/101-123-config2:config2}}\label{\detokenize{basics/101-123-config2::doc}}
+\label{\detokenize{basics/101-123-config2:shipping-and-overriding-configuration}}\label{\detokenize{basics/101-123-config2:config2}}\label{\detokenize{basics/101-123-config2:index-0}}\label{\detokenize{basics/101-123-config2::doc}}
 \sphinxAtStartPar
 As the last section already suggest, within a Git repository,
 \sphinxcode{\sphinxupquote{.git/config}} is not the only configuration file.
@@ -7533,7 +7550,7 @@ section by looking into it.
 \index{configuration file@\spxentry{configuration file}!.gitattributes@\spxentry{.gitattributes}|spxpagem}\ignorespaces 
 
 \subsection{\sphinxstyleliteralintitle{\sphinxupquote{.gitattributes}}}
-\label{\detokenize{basics/101-123-config2:gitattributes}}\label{\detokenize{basics/101-123-config2:index-0}}
+\label{\detokenize{basics/101-123-config2:gitattributes}}\label{\detokenize{basics/101-123-config2:index-1}}
 \sphinxAtStartPar
 This file lies right in the root of your superdataset:
 
@@ -7708,7 +7725,7 @@ in the root \sphinxcode{\sphinxupquote{.gitattributes}} file.
 \index{configuration file@\spxentry{configuration file}!.gitmodules@\spxentry{.gitmodules}|spxpagem}\ignorespaces 
 
 \subsection{\sphinxstyleliteralintitle{\sphinxupquote{.gitmodules}}}
-\label{\detokenize{basics/101-123-config2:gitmodules}}\label{\detokenize{basics/101-123-config2:index-1}}
+\label{\detokenize{basics/101-123-config2:gitmodules}}\label{\detokenize{basics/101-123-config2:index-2}}
 \sphinxAtStartPar
 On last configuration file that Git creates is the \sphinxcode{\sphinxupquote{.gitmodules}} file.
 There is one right in the root of your dataset:
@@ -7861,7 +7878,7 @@ Nevertheless, if \sphinxcode{\sphinxupquote{subds1}} is provided with an explici
 \index{configuration file@\spxentry{configuration file}!.datalad/config@\spxentry{.datalad/config}|spxpagem}\ignorespaces 
 
 \subsection{\sphinxstyleliteralintitle{\sphinxupquote{.datalad/config}}}
-\label{\detokenize{basics/101-123-config2:datalad-config}}\label{\detokenize{basics/101-123-config2:index-2}}
+\label{\detokenize{basics/101-123-config2:datalad-config}}\label{\detokenize{basics/101-123-config2:index-3}}
 \sphinxAtStartPar
 DataLad adds a repository\sphinxhyphen{}specific configuration file as well.
 It can be found in the \sphinxcode{\sphinxupquote{.datalad}} directory, and just like \sphinxcode{\sphinxupquote{.gitattributes}}
@@ -7890,7 +7907,7 @@ Also, {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std
 \index{modify configuration@\spxentry{modify configuration}!with Git@\spxentry{with Git}}\index{with Git@\spxentry{with Git}!modify configuration@\spxentry{modify configuration}}\ignorespaces 
 
 \subsection{Writing to configuration files other than \sphinxstyleliteralintitle{\sphinxupquote{.git/config}}}
-\label{\detokenize{basics/101-123-config2:writing-to-configuration-files-other-than-git-config}}\label{\detokenize{basics/101-123-config2:index-3}}
+\label{\detokenize{basics/101-123-config2:writing-to-configuration-files-other-than-git-config}}\label{\detokenize{basics/101-123-config2:index-4}}
 \sphinxAtStartPar
 “Didn’t you say that knowing the \sphinxcode{\sphinxupquote{git config}} command is already
 half of what I need to know?” you ask. “Now there are three other configuration
@@ -7970,7 +7987,7 @@ has to be edited by hand, with an editor of your choice.
 \index{environment variable@\spxentry{environment variable}|spxpagem}\ignorespaces 
 
 \subsection{Environment variables}
-\label{\detokenize{basics/101-123-config2:environment-variables}}\label{\detokenize{basics/101-123-config2:envvars}}\label{\detokenize{basics/101-123-config2:index-4}}
+\label{\detokenize{basics/101-123-config2:environment-variables}}\label{\detokenize{basics/101-123-config2:envvars}}\label{\detokenize{basics/101-123-config2:index-5}}
 \sphinxAtStartPar
 An {\hyperref[\detokenize{glossary:term-environment-variable}]{\sphinxtermref{\DUrole{xref,std,std-term}{environment variable}}}} is a variable set up in your shell
 that affects the way the shell or certain software works \textendash{} for example,
@@ -8096,7 +8113,7 @@ Write a note about configurations in datasets into \sphinxcode{\sphinxupquote{no
 
 \sphinxstepscope
 
-\index{procedures@\spxentry{procedures}|spxpagem}\index{run\sphinxhyphen{}procedures@\spxentry{run\sphinxhyphen{}procedures}}\ignorespaces 
+\index{procedures@\spxentry{procedures}|spxpagem}\index{run\sphinxhyphen{}procedures@\spxentry{run\sphinxhyphen{}procedures}}\index{standardized configuration@\spxentry{standardized configuration}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!standardized configuration@\spxentry{standardized configuration}}\ignorespaces 
 
 \section{Configurations to go}
 \label{\detokenize{basics/101-124-procedures:configurations-to-go}}\label{\detokenize{basics/101-124-procedures:procedures}}\label{\detokenize{basics/101-124-procedures:index-0}}\label{\detokenize{basics/101-124-procedures::doc}}
@@ -8726,7 +8743,7 @@ principles and DataLad’s Python API.
 
 \sphinxstepscope
 
-\index{YODA principles@\spxentry{YODA principles}|spxpagem}\ignorespaces 
+\index{YODA principles@\spxentry{YODA principles}|spxpagem}\index{data organization@\spxentry{data organization}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!data organization@\spxentry{data organization}}\index{project management@\spxentry{project management}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!project management@\spxentry{project management}}\ignorespaces 
 
 \section{YODA: Best practices for data analyses in a dataset}
 \label{\detokenize{basics/101-127-yoda:yoda-best-practices-for-data-analyses-in-a-dataset}}\label{\detokenize{basics/101-127-yoda:yoda}}\label{\detokenize{basics/101-127-yoda:id1}}\label{\detokenize{basics/101-127-yoda:index-0}}\label{\detokenize{basics/101-127-yoda::doc}}
@@ -9255,9 +9272,10 @@ YODA principles.
 
 \sphinxstepscope
 
+\index{data analysis@\spxentry{data analysis}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!data analysis@\spxentry{data analysis}}\ignorespaces 
 
 \section{YODA\sphinxhyphen{}compliant data analysis projects}
-\label{\detokenize{basics/101-130-yodaproject:yoda-compliant-data-analysis-projects}}\label{\detokenize{basics/101-130-yodaproject:yoda-project}}\label{\detokenize{basics/101-130-yodaproject::doc}}
+\label{\detokenize{basics/101-130-yodaproject:yoda-compliant-data-analysis-projects}}\label{\detokenize{basics/101-130-yodaproject:yoda-project}}\label{\detokenize{basics/101-130-yodaproject:index-0}}\label{\detokenize{basics/101-130-yodaproject::doc}}
 \sphinxAtStartPar
 Now that you know about the YODA principles, it is time to start working on
 \sphinxcode{\sphinxupquote{DataLad\sphinxhyphen{}101}}’s midterm project. Because the midterm project guidelines
@@ -9404,8 +9422,8 @@ Thus, the outcome of \sphinxcode{\sphinxupquote{dl.status(\textquotesingle{}myfi
 
 \end{findoutmore}
 
-\index{use DataLad API@\spxentry{use DataLad API}!with Matlab@\spxentry{with Matlab}}\index{with Matlab@\spxentry{with Matlab}!use DataLad API@\spxentry{use DataLad API}}\index{use DataLad API@\spxentry{use DataLad API}!with R@\spxentry{with R}}\index{with R@\spxentry{with R}!use DataLad API@\spxentry{use DataLad API}}\ignorespaces \begin{importantnote}[label={index-1}, before title={\thetcbcounter\ }, check odd page=true]{Use DataLad in languages other than Python}
-\label{\detokenize{basics/101-130-yodaproject:index-1}}
+\index{use DataLad API@\spxentry{use DataLad API}!with Matlab@\spxentry{with Matlab}}\index{with Matlab@\spxentry{with Matlab}!use DataLad API@\spxentry{use DataLad API}}\index{use DataLad API@\spxentry{use DataLad API}!with R@\spxentry{with R}}\index{with R@\spxentry{with R}!use DataLad API@\spxentry{use DataLad API}}\ignorespaces \begin{importantnote}[label={index-2}, before title={\thetcbcounter\ }, check odd page=true]{Use DataLad in languages other than Python}
+\label{\detokenize{basics/101-130-yodaproject:index-2}}
 
 \sphinxAtStartPar
 While there is a dedicated API for Python, DataLad’s functions can of course
@@ -9429,8 +9447,8 @@ of the flowers in centimeters. It is often used in introductory data science
 courses for statistical classification techniques in machine learning, and
 widely available \textendash{} a perfect dataset for your midterm project!
 
-\index{reproducible paper@\spxentry{reproducible paper}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!reproducible paper@\spxentry{reproducible paper}}\ignorespaces \begin{importantnote}[label={index-2}, before title={\thetcbcounter\ }, check odd page=true]{Turn data analysis into dynamically generated documents}
-\label{\detokenize{basics/101-130-yodaproject:index-2}}
+\index{reproducible paper@\spxentry{reproducible paper}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!reproducible paper@\spxentry{reproducible paper}}\ignorespaces \begin{importantnote}[label={index-3}, before title={\thetcbcounter\ }, check odd page=true]{Turn data analysis into dynamically generated documents}
+\label{\detokenize{basics/101-130-yodaproject:index-3}}
 
 \sphinxAtStartPar
 Beyond the contents of this section, we have transformed the example analysis also into a template to write a reproducible paper.
@@ -9907,7 +9925,7 @@ Please run the following instead (adjusted for line breaks, you should be able t
 \end{windowswit}
 
 \index{run command with provenance capture@\spxentry{run command with provenance capture}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!run command with provenance capture@\spxentry{run command with provenance capture}}\ignorespaces 
-\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-130-yodaproject:index-8}}}
+\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-130-yodaproject:index-9}}}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }run\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}analyze iris data with classification analysis\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
 \PYG{+w}{  }\PYGZhy{}\PYGZhy{}input\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}input/iris.csv\PYGZdq{}}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
@@ -10085,7 +10103,7 @@ the online\sphinxhyphen{}handbook provides, shown below.
 \index{create\sphinxhyphen{}sibling\sphinxhyphen{}github@\spxentry{create\sphinxhyphen{}sibling\sphinxhyphen{}github}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!create\sphinxhyphen{}sibling\sphinxhyphen{}github@\spxentry{create\sphinxhyphen{}sibling\sphinxhyphen{}github}}\ignorespaces 
 
 \subsection{Publishing the dataset to GitHub}
-\label{\detokenize{basics/101-130-yodaproject:publishing-the-dataset-to-github}}\label{\detokenize{basics/101-130-yodaproject:publishtogithub}}\label{\detokenize{basics/101-130-yodaproject:index-11}}
+\label{\detokenize{basics/101-130-yodaproject:publishing-the-dataset-to-github}}\label{\detokenize{basics/101-130-yodaproject:publishtogithub}}\label{\detokenize{basics/101-130-yodaproject:index-12}}
 \sphinxAtStartPar
 For this, you need to
 \begin{itemize}
@@ -10120,8 +10138,8 @@ The command takes a repository name and GitHub authentication credentials
 (either in the command line call with options \sphinxcode{\sphinxupquote{github\sphinxhyphen{}login \textless{}TOKEN\textgreater{}}}, with an \sphinxstyleemphasis{oauth} \sphinxhref{https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens}{token} stored in the Git
 configuration, or interactively).
 
-\index{GitHub token@\spxentry{GitHub token}!credential@\spxentry{credential}}\index{credential@\spxentry{credential}!GitHub token@\spxentry{GitHub token}}\ignorespaces \begin{importantnote}[label={index-13}, before title={\thetcbcounter\ }, check odd page=true]{Generate a GitHub token}
-\label{\detokenize{basics/101-130-yodaproject:index-13}}
+\index{GitHub token@\spxentry{GitHub token}!credential@\spxentry{credential}}\index{credential@\spxentry{credential}!GitHub token@\spxentry{GitHub token}}\ignorespaces \begin{importantnote}[label={index-14}, before title={\thetcbcounter\ }, check odd page=true]{Generate a GitHub token}
+\label{\detokenize{basics/101-130-yodaproject:index-14}}
 
 \sphinxAtStartPar
 GitHub \sphinxhref{https://developer.github.com/changes/2020-02-14-deprecating-password-auth}{deprecated user\sphinxhyphen{}password authentication} and instead supports authentication via personal access token.
@@ -10177,8 +10195,8 @@ Verify that this worked by listing the siblings of the dataset:
 \PYG{g+go}{.: github(\PYGZhy{}) [https://github.com/adswa/midtermproject.git (git)]}
 \end{sphinxVerbatim}
 
-\index{sibling (GitHub)@\spxentry{sibling}\spxextra{GitHub}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!sibling (GitHub)@\spxentry{sibling}\spxextra{GitHub}}\ignorespaces \begin{gitusernote}[label={index-15}, before title={\thetcbcounter\ }, check odd page=true]{Create-sibling-github internals}
-\label{\detokenize{basics/101-130-yodaproject:index-15}}
+\index{sibling (GitHub)@\spxentry{sibling}\spxextra{GitHub}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!sibling (GitHub)@\spxentry{sibling}\spxextra{GitHub}}\ignorespaces \begin{gitusernote}[label={index-16}, before title={\thetcbcounter\ }, check odd page=true]{Create-sibling-github internals}
+\label{\detokenize{basics/101-130-yodaproject:index-16}}
 
 \sphinxAtStartPar
 Creating a sibling on GitHub will create a new empty repository under the
@@ -10254,13 +10272,13 @@ published tags can cause confusion or unwanted changes. In order to publish a ta
 an additional \sphinxcode{\sphinxupquote{git push}}  with the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}tags}} option is required:
 
 \index{push@\spxentry{push}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!push@\spxentry{push}}\index{push (tag)@\spxentry{push}\spxextra{tag}!with Git@\spxentry{with Git}}\index{with Git@\spxentry{with Git}!push (tag)@\spxentry{push}\spxextra{tag}}\ignorespaces 
-\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-130-yodaproject:index-17}}}
+\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-130-yodaproject:index-18}}}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }push\PYG{+w}{ }github\PYG{+w}{ }\PYGZhy{}\PYGZhy{}tags
 \end{sphinxVerbatim}
 
-\index{push (tag)@\spxentry{push}\spxextra{tag}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!push (tag)@\spxentry{push}\spxextra{tag}}\ignorespaces \begin{gitusernote}[label={index-18}, before title={\thetcbcounter\ }, check odd page=true]{Pushing tags}
-\label{\detokenize{basics/101-130-yodaproject:index-18}}
+\index{push (tag)@\spxentry{push}\spxextra{tag}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!push (tag)@\spxentry{push}\spxextra{tag}}\ignorespaces \begin{gitusernote}[label={index-19}, before title={\thetcbcounter\ }, check odd page=true]{Pushing tags}
+\label{\detokenize{basics/101-130-yodaproject:index-19}}
 
 \sphinxAtStartPar
 Note that this is a \sphinxcode{\sphinxupquote{git push}}, not \sphinxcode{\sphinxupquote{datalad push}}.
@@ -10297,7 +10315,7 @@ reproduce your data science project easily from scratch!
 \index{work on published YODA dataset@\spxentry{work on published YODA dataset}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!work on published YODA dataset@\spxentry{work on published YODA dataset}}\index{rerun command@\spxentry{rerun command}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!rerun command@\spxentry{rerun command}}\ignorespaces 
 
 \subsection{On the looks and feels of a published dataset}
-\label{\detokenize{basics/101-130-yodaproject:on-the-looks-and-feels-of-a-published-dataset}}\label{\detokenize{basics/101-130-yodaproject:index-19}}
+\label{\detokenize{basics/101-130-yodaproject:on-the-looks-and-feels-of-a-published-dataset}}\label{\detokenize{basics/101-130-yodaproject:index-20}}
 \sphinxAtStartPar
 Now that you have created and published such a YODA\sphinxhyphen{}compliant dataset, you
 are understandably excited how this dataset must look and feel for others.
@@ -10397,8 +10415,8 @@ next time again.
 
 \noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{reproduced}.pdf}\hspace*{\fill}}
 
-\index{push@\spxentry{push}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!push@\spxentry{push}}\ignorespaces \begin{gitusernote}[label={index-20}, before title={\thetcbcounter\ }, check odd page=true]{Push internals}
-\label{\detokenize{basics/101-130-yodaproject:index-20}}
+\index{push@\spxentry{push}!DataLad concept@\spxentry{DataLad concept}}\index{DataLad concept@\spxentry{DataLad concept}!push@\spxentry{push}}\ignorespaces \begin{gitusernote}[label={index-21}, before title={\thetcbcounter\ }, check odd page=true]{Push internals}
+\label{\detokenize{basics/101-130-yodaproject:index-21}}
 
 \sphinxAtStartPar
 The \sphinxcode{\sphinxupquote{datalad push}} uses \sphinxcode{\sphinxupquote{git push}}, and \sphinxcode{\sphinxupquote{git annex copy}} under
@@ -10811,9 +10829,10 @@ It can be “turtles all the way down”.
 
 \sphinxstepscope
 
+\index{containerized data analysis@\spxentry{containerized data analysis}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!containerized data analysis@\spxentry{containerized data analysis}}\ignorespaces 
 
 \section{Computational reproducibility with software containers}
-\label{\detokenize{basics/101-133-containersrun:computational-reproducibility-with-software-containers}}\label{\detokenize{basics/101-133-containersrun:containersrun}}\label{\detokenize{basics/101-133-containersrun::doc}}
+\label{\detokenize{basics/101-133-containersrun:computational-reproducibility-with-software-containers}}\label{\detokenize{basics/101-133-containersrun:containersrun}}\label{\detokenize{basics/101-133-containersrun:index-0}}\label{\detokenize{basics/101-133-containersrun::doc}}
 \sphinxAtStartPar
 Just after submitting your midterm data analysis project, you get together
 with your friends. “I’m curious: So what kind of analyses did y’all carry out?”
@@ -10874,7 +10893,7 @@ As with DataLad and other Python packages, you might want to do the installation
 \index{recipe@\spxentry{recipe}!software container concept@\spxentry{software container concept}}\index{software container concept@\spxentry{software container concept}!recipe@\spxentry{recipe}}\index{image@\spxentry{image}!software container concept@\spxentry{software container concept}}\index{software container concept@\spxentry{software container concept}!image@\spxentry{image}}\index{container@\spxentry{container}!software container concept@\spxentry{software container concept}}\index{software container concept@\spxentry{software container concept}!container@\spxentry{container}}\ignorespaces 
 
 \subsection{Containers}
-\label{\detokenize{basics/101-133-containersrun:containers}}\label{\detokenize{basics/101-133-containersrun:index-0}}
+\label{\detokenize{basics/101-133-containersrun:containers}}\label{\detokenize{basics/101-133-containersrun:index-1}}
 \sphinxAtStartPar
 To put it simple, computational containers are cut\sphinxhyphen{}down virtual machines that
 allow you to package all software libraries and their dependencies (all in the
@@ -10980,7 +10999,7 @@ If it can’t find the docker command, something went wrong during installation.
 \index{containers\sphinxhyphen{}add@\spxentry{containers\sphinxhyphen{}add}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!containers\sphinxhyphen{}add@\spxentry{containers\sphinxhyphen{}add}}\index{containers\sphinxhyphen{}run@\spxentry{containers\sphinxhyphen{}run}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!containers\sphinxhyphen{}run@\spxentry{containers\sphinxhyphen{}run}}\ignorespaces 
 
 \subsection{Using \sphinxstyleliteralintitle{\sphinxupquote{datalad containers}}}
-\label{\detokenize{basics/101-133-containersrun:using-datalad-containers}}\label{\detokenize{basics/101-133-containersrun:index-2}}
+\label{\detokenize{basics/101-133-containersrun:using-datalad-containers}}\label{\detokenize{basics/101-133-containersrun:index-3}}
 \sphinxAtStartPar
 One core feature of the \sphinxcode{\sphinxupquote{datalad containers}} extension is that it registers
 computational containers with a dataset. This is done with the
@@ -11097,7 +11116,7 @@ Thus, depending on the system and the location of the dataset on this system, a 
 To ensure that the dataset is correctly bind\sphinxhyphen{}mounted on all systems, let’s add a call\sphinxhyphen{}format specification with a bind\sphinxhyphen{}mount to the current working directory.
 
 \index{configuration.item@\spxentry{configuration.item}!datalad.containers.\textless{}name\textgreater{}.cmdexec@\spxentry{datalad.containers.\textless{}name\textgreater{}.cmdexec}}\ignorespaces 
-\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-133-containersrun:index-6}}}
+\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-133-containersrun:index-7}}}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }config\PYG{+w}{ }\PYGZhy{}f\PYG{+w}{ }.datalad/config\PYG{+w}{ }datalad.containers.midterm\PYGZhy{}software.cmdexec\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}singularity exec \PYGZhy{}B \PYGZob{}\PYGZob{}pwd\PYGZcb{}\PYGZcb{} \PYGZob{}img\PYGZcb{} \PYGZob{}cmd\PYGZcb{}\PYGZsq{}}
 \PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}Modify the container call format to bind\PYGZhy{}mount the working directory\PYGZdq{}}
@@ -11681,9 +11700,10 @@ In addition to this, the section {\hyperref[\detokenize{basics/101-139-privacy:p
 
 \sphinxstepscope
 
+\index{push to Git hosting@\spxentry{push to Git hosting}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!push to Git hosting@\spxentry{push to Git hosting}}\ignorespaces 
 
 \section{Publishing datasets to Git repository hosting}
-\label{\detokenize{basics/101-139-hostingservices:publishing-datasets-to-git-repository-hosting}}\label{\detokenize{basics/101-139-hostingservices:share-hostingservice}}\label{\detokenize{basics/101-139-hostingservices::doc}}
+\label{\detokenize{basics/101-139-hostingservices:publishing-datasets-to-git-repository-hosting}}\label{\detokenize{basics/101-139-hostingservices:share-hostingservice}}\label{\detokenize{basics/101-139-hostingservices:index-0}}\label{\detokenize{basics/101-139-hostingservices::doc}}
 \sphinxAtStartPar
 Because DataLad datasets are {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}} repositories, it is possible to
 \sphinxcode{\sphinxupquote{datalad push}} datasets to any Git repository hosting service, such as
@@ -11905,9 +11925,10 @@ Should you employ GitHub workflows, for example, a token without “workflow” 
 
 \sphinxstepscope
 
+\index{sensitive data handling@\spxentry{sensitive data handling}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!sensitive data handling@\spxentry{sensitive data handling}}\ignorespaces 
 
 \section{Keeping (some) dataset contents private}
-\label{\detokenize{basics/101-139-privacy:keeping-some-dataset-contents-private}}\label{\detokenize{basics/101-139-privacy:privacy}}\label{\detokenize{basics/101-139-privacy::doc}}
+\label{\detokenize{basics/101-139-privacy:keeping-some-dataset-contents-private}}\label{\detokenize{basics/101-139-privacy:privacy}}\label{\detokenize{basics/101-139-privacy:index-0}}\label{\detokenize{basics/101-139-privacy::doc}}
 \sphinxAtStartPar
 Datasets can contain information that you don’t want to share with others.
 Maybe the collection of pictures from your team\sphinxhyphen{}building event also contains those after\sphinxhyphen{}hour photos where you drunkenly kidnapped a tram.
@@ -11998,7 +12019,7 @@ Note, though, that \sphinxcode{\sphinxupquote{datalad push}} will publish the co
 
 \sphinxstepscope
 
-\index{push@\spxentry{push}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!push@\spxentry{push}}\ignorespaces 
+\index{push@\spxentry{push}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!push@\spxentry{push}}\index{distribute dataset@\spxentry{distribute dataset}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!distribute dataset@\spxentry{distribute dataset}}\ignorespaces 
 
 \section{The datalad push command}
 \label{\detokenize{basics/101-141-push:the-datalad-push-command}}\label{\detokenize{basics/101-141-push:push}}\label{\detokenize{basics/101-141-push:index-0}}\label{\detokenize{basics/101-141-push::doc}}
@@ -12299,9 +12320,10 @@ costs will likely influence your choice of service.
 
 \sphinxstepscope
 
+\index{dataset operations@\spxentry{dataset operations}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!dataset operations@\spxentry{dataset operations}}\ignorespaces 
 
 \chapter{Dataset ops}
-\label{\detokenize{basics/101-136-filesystem:dataset-ops}}\label{\detokenize{basics/101-136-filesystem:file-system}}\label{\detokenize{basics/101-136-filesystem::doc}}
+\label{\detokenize{basics/101-136-filesystem:dataset-ops}}\label{\detokenize{basics/101-136-filesystem:file-system}}\label{\detokenize{basics/101-136-filesystem:index-0}}\label{\detokenize{basics/101-136-filesystem::doc}}
 \noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{help}.pdf}\hspace*{\fill}}
 
 \sphinxAtStartPar
@@ -12353,7 +12375,7 @@ be sure to be in the correct dataset).
 \index{rename file@\spxentry{rename file}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!rename file@\spxentry{rename file}}\ignorespaces 
 
 \subsection{Rename files}
-\label{\detokenize{basics/101-136-filesystem:rename-files}}\label{\detokenize{basics/101-136-filesystem:index-0}}
+\label{\detokenize{basics/101-136-filesystem:rename-files}}\label{\detokenize{basics/101-136-filesystem:index-1}}
 \sphinxAtStartPar
 Let’s try it. In Unix, renaming a file is exactly the same as
 moving a file, and uses the \sphinxcode{\sphinxupquote{ mv}} command.
@@ -12531,7 +12553,7 @@ Let’s revert this now, to have a clean history.
 \index{move file@\spxentry{move file}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!move file@\spxentry{move file}}\ignorespaces 
 
 \subsection{Move files from or into subdirectories}
-\label{\detokenize{basics/101-136-filesystem:move-files-from-or-into-subdirectories}}\label{\detokenize{basics/101-136-filesystem:index-2}}
+\label{\detokenize{basics/101-136-filesystem:move-files-from-or-into-subdirectories}}\label{\detokenize{basics/101-136-filesystem:index-3}}
 \sphinxAtStartPar
 Let’s move an annexed file from within \sphinxcode{\sphinxupquote{books/}} into the root
 of the superdataset:
@@ -12652,7 +12674,7 @@ Finally, let’s clean up:
 \index{move file to other dataset@\spxentry{move file to other dataset}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!move file to other dataset@\spxentry{move file to other dataset}}\ignorespaces 
 
 \subsection{Moving files across dataset boundaries}
-\label{\detokenize{basics/101-136-filesystem:moving-files-across-dataset-boundaries}}\label{\detokenize{basics/101-136-filesystem:index-5}}
+\label{\detokenize{basics/101-136-filesystem:moving-files-across-dataset-boundaries}}\label{\detokenize{basics/101-136-filesystem:index-6}}
 \sphinxAtStartPar
 Generally speaking, moving files across dataset hierarchies is not advised.
 While DataLad blurs the dataset boundaries to ease working in nested dataset,
@@ -12865,7 +12887,7 @@ but one paragraph. Let’s quickly clean up by moving the file back:
 \index{copy file@\spxentry{copy file}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!copy file@\spxentry{copy file}}\ignorespaces 
 
 \subsection{Copy files}
-\label{\detokenize{basics/101-136-filesystem:copy-files}}\label{\detokenize{basics/101-136-filesystem:index-6}}
+\label{\detokenize{basics/101-136-filesystem:copy-files}}\label{\detokenize{basics/101-136-filesystem:index-7}}
 \sphinxAtStartPar
 Let’s create a copy of an annexed file, using the Unix
 command \sphinxcode{\sphinxupquote{cp}} to copy.
@@ -12954,7 +12976,7 @@ Finally, let’s clean up:
 \index{copy file to other dataset@\spxentry{copy file to other dataset}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!copy file to other dataset@\spxentry{copy file to other dataset}}\ignorespaces 
 
 \subsection{Copy files across dataset boundaries}
-\label{\detokenize{basics/101-136-filesystem:copy-files-across-dataset-boundaries}}\label{\detokenize{basics/101-136-filesystem:index-8}}\label{\detokenize{basics/101-136-filesystem:copyfilefs}}
+\label{\detokenize{basics/101-136-filesystem:copy-files-across-dataset-boundaries}}\label{\detokenize{basics/101-136-filesystem:index-9}}\label{\detokenize{basics/101-136-filesystem:copyfilefs}}
 \sphinxAtStartPar
 Instead of moving files across dataset boundaries, \sphinxstyleemphasis{copying} them is an easier
 and actually supported method.
@@ -13049,7 +13071,7 @@ Let’s clean up:
 \index{move subdataset@\spxentry{move subdataset}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!move subdataset@\spxentry{move subdataset}}\ignorespaces 
 
 \subsection{Move/rename a subdirectory or subdataset}
-\label{\detokenize{basics/101-136-filesystem:move-rename-a-subdirectory-or-subdataset}}\label{\detokenize{basics/101-136-filesystem:index-9}}
+\label{\detokenize{basics/101-136-filesystem:move-rename-a-subdirectory-or-subdataset}}\label{\detokenize{basics/101-136-filesystem:index-10}}
 \sphinxAtStartPar
 Moving or renaming subdirectories, especially if they are subdatasets,
 \sphinxstyleemphasis{can} be a minefield. But in principle, a safe way to proceed is using
@@ -13146,7 +13168,7 @@ a subsequent \sphinxcode{\sphinxupquote{datalad save}}.
 \index{move superdataset@\spxentry{move superdataset}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!move superdataset@\spxentry{move superdataset}}\ignorespaces 
 
 \subsection{Move/rename a superdataset}
-\label{\detokenize{basics/101-136-filesystem:move-rename-a-superdataset}}\label{\detokenize{basics/101-136-filesystem:index-10}}
+\label{\detokenize{basics/101-136-filesystem:move-rename-a-superdataset}}\label{\detokenize{basics/101-136-filesystem:index-11}}
 \sphinxAtStartPar
 Once created, a DataLad superdataset may not be in an optimal
 place on your file system, or have the best name.
@@ -13340,7 +13362,7 @@ modification in \sphinxcode{\sphinxupquote{.git/config}}.
 \index{stop tracking file@\spxentry{stop tracking file}!with git\sphinxhyphen{}annex@\spxentry{with git\sphinxhyphen{}annex}}\index{with git\sphinxhyphen{}annex@\spxentry{with git\sphinxhyphen{}annex}!stop tracking file@\spxentry{stop tracking file}}\ignorespaces 
 
 \subsection{Get contents out of git\sphinxhyphen{}annex}
-\label{\detokenize{basics/101-136-filesystem:get-contents-out-of-git-annex}}\label{\detokenize{basics/101-136-filesystem:index-12}}
+\label{\detokenize{basics/101-136-filesystem:get-contents-out-of-git-annex}}\label{\detokenize{basics/101-136-filesystem:index-13}}
 \sphinxAtStartPar
 Files in your dataset can either be handled by {\hyperref[\detokenize{glossary:term-Git}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git}}}} or {\hyperref[\detokenize{glossary:term-git-annex}]{\sphinxtermref{\DUrole{xref,std,std-term}{Git\sphinxhyphen{}annex}}}}.
 Self\sphinxhyphen{}made or predefined configurations to \sphinxcode{\sphinxupquote{.gitattributes}}, defaults, or the
@@ -13410,7 +13432,7 @@ If it is a lot of files or larger files that were accidentally annexed, you may 
 \index{remove dataset annex@\spxentry{remove dataset annex}!with git\sphinxhyphen{}annex@\spxentry{with git\sphinxhyphen{}annex}}\index{with git\sphinxhyphen{}annex@\spxentry{with git\sphinxhyphen{}annex}!remove dataset annex@\spxentry{remove dataset annex}}\ignorespaces 
 
 \subsection{Get all content out of the annex (remove the annex)}
-\label{\detokenize{basics/101-136-filesystem:get-all-content-out-of-the-annex-remove-the-annex}}\label{\detokenize{basics/101-136-filesystem:uninit}}\label{\detokenize{basics/101-136-filesystem:index-13}}
+\label{\detokenize{basics/101-136-filesystem:get-all-content-out-of-the-annex-remove-the-annex}}\label{\detokenize{basics/101-136-filesystem:uninit}}\label{\detokenize{basics/101-136-filesystem:index-14}}
 \sphinxAtStartPar
 In case you want to get all annexed contents out of a Dataset at once, you could turn to \sphinxhref{https://git-annex.branchable.com/git-annex-uninit}{git annex uninit}.
 It is a command that can be used to stop using git annex entirely in a given dataset.
@@ -13432,7 +13454,7 @@ history.
 \index{remove file@\spxentry{remove file}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!remove file@\spxentry{remove file}}\ignorespaces 
 
 \subsubsection{Removing a file, but keeping content in history}
-\label{\detokenize{basics/101-136-filesystem:removing-a-file-but-keeping-content-in-history}}\label{\detokenize{basics/101-136-filesystem:index-14}}
+\label{\detokenize{basics/101-136-filesystem:removing-a-file-but-keeping-content-in-history}}\label{\detokenize{basics/101-136-filesystem:index-15}}
 \sphinxAtStartPar
 An \sphinxcode{\sphinxupquote{rm \textless{}file\textgreater{}}} or \sphinxcode{\sphinxupquote{rm \sphinxhyphen{}rf \textless{}directory\textgreater{}}} with a subsequent \sphinxcode{\sphinxupquote{datalad save}}
 will remove a file or directory, and save its removal. The file content however will
@@ -13500,7 +13522,7 @@ the symlink is removed, but the content is retained in the history.
 \index{drop@\spxentry{drop}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!drop@\spxentry{drop}}\index{remove file@\spxentry{remove file}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!remove file@\spxentry{remove file}}\ignorespaces 
 
 \subsubsection{Remove annexed content entirely}
-\label{\detokenize{basics/101-136-filesystem:remove-annexed-content-entirely}}\label{\detokenize{basics/101-136-filesystem:remove}}\label{\detokenize{basics/101-136-filesystem:index-15}}
+\label{\detokenize{basics/101-136-filesystem:remove-annexed-content-entirely}}\label{\detokenize{basics/101-136-filesystem:remove}}\label{\detokenize{basics/101-136-filesystem:index-16}}
 \sphinxAtStartPar
 The command to remove file content entirely and irreversibly from a repository is
 the \sphinxcode{\sphinxupquote{datalad drop}} command.
@@ -13584,7 +13606,7 @@ Finally, let’s clean up:
 \index{remove file@\spxentry{remove file}!with Git@\spxentry{with Git}}\index{with Git@\spxentry{with Git}!remove file@\spxentry{remove file}}\ignorespaces 
 
 \subsection{Delete content stored in Git}
-\label{\detokenize{basics/101-136-filesystem:delete-content-stored-in-git}}\label{\detokenize{basics/101-136-filesystem:index-16}}
+\label{\detokenize{basics/101-136-filesystem:delete-content-stored-in-git}}\label{\detokenize{basics/101-136-filesystem:index-17}}
 \sphinxAtStartPar
 It is much harder to delete dataset content that is stored in Git compared to
 content stored in git\sphinxhyphen{}annex.
@@ -13613,7 +13635,7 @@ shows an example invocation.
 \index{uninstall dataset@\spxentry{uninstall dataset}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!uninstall dataset@\spxentry{uninstall dataset}}\index{drop dataset@\spxentry{drop dataset}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!drop dataset@\spxentry{drop dataset}}\index{drop@\spxentry{drop}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!drop@\spxentry{drop}}\ignorespaces 
 
 \subsection{Uninstall or delete subdatasets}
-\label{\detokenize{basics/101-136-filesystem:uninstall-or-delete-subdatasets}}\label{\detokenize{basics/101-136-filesystem:index-17}}
+\label{\detokenize{basics/101-136-filesystem:uninstall-or-delete-subdatasets}}\label{\detokenize{basics/101-136-filesystem:index-18}}
 \sphinxAtStartPar
 Depending on the exact aim, different commands are relevant for
 deleting a DataLad subdataset.
@@ -13691,7 +13713,7 @@ superdataset \textendash{} you need to execute the command from a higher\sphinxh
 \index{uninstall superdataset@\spxentry{uninstall superdataset}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!uninstall superdataset@\spxentry{uninstall superdataset}}\index{drop superdataset@\spxentry{drop superdataset}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!drop superdataset@\spxentry{drop superdataset}}\ignorespaces 
 
 \subsection{Delete a superdataset}
-\label{\detokenize{basics/101-136-filesystem:delete-a-superdataset}}\label{\detokenize{basics/101-136-filesystem:index-19}}
+\label{\detokenize{basics/101-136-filesystem:delete-a-superdataset}}\label{\detokenize{basics/101-136-filesystem:index-20}}
 \sphinxAtStartPar
 If for whatever reason you at one point tried to remove a DataLad dataset,
 whether with a GUI or the command line call \sphinxcode{\sphinxupquote{rm \sphinxhyphen{}rf \textless{}directory\textgreater{}}}, you likely
@@ -14812,9 +14834,10 @@ to remove the \sphinxcode{\sphinxupquote{Gitjoke2.txt}} file.
 
 \sphinxstepscope
 
+\index{get help@\spxentry{get help}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!get help@\spxentry{get help}}\ignorespaces 
 
 \chapter{When things go wrong}
-\label{\detokenize{basics/101-135-help:when-things-go-wrong}}\label{\detokenize{basics/101-135-help:help}}\label{\detokenize{basics/101-135-help::doc}}
+\label{\detokenize{basics/101-135-help:when-things-go-wrong}}\label{\detokenize{basics/101-135-help:help}}\label{\detokenize{basics/101-135-help:index-0}}\label{\detokenize{basics/101-135-help::doc}}
 \noindent{\hspace*{\fill}\sphinxincludegraphics[width=0.500\linewidth]{{reading}.pdf}\hspace*{\fill}}
 
 \sphinxAtStartPar
@@ -15006,7 +15029,7 @@ to find all of this information.
 \index{debugging@\spxentry{debugging}}\ignorespaces 
 
 \section{Debugging like a DataLad\sphinxhyphen{}developer}
-\label{\detokenize{basics/101-135-help:debugging-like-a-datalad-developer}}\label{\detokenize{basics/101-135-help:index-1}}
+\label{\detokenize{basics/101-135-help:debugging-like-a-datalad-developer}}\label{\detokenize{basics/101-135-help:index-2}}
 \sphinxAtStartPar
 If you have read a command’s help from start to end, checked all software versions twice, even \sphinxhref{https://xkcd.com/2083}{asked colleagues to reproduce your problem (unsuccessfully)}, and you still don’t have any clue what is going on, then welcome to the debugging section!
 
