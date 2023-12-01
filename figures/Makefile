@@ -28,6 +28,7 @@ figures: \
   late.pdf \
   local_wf_bw.pdf \
   origin.pdf \
+  personal_settings_bw.pdf \
   publishing_network_publishparts2_bw.pdf \
   reading_bw.pdf \
   remote_designteam_bw.pdf \
