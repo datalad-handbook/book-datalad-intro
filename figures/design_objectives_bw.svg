@@ -24,13 +24,13 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      showgrid="false"
-     inkscape:zoom="1.9833061"
-     inkscape:cx="254.87745"
-     inkscape:cy="271.76843"
+     inkscape:zoom="1.4024092"
+     inkscape:cx="150.09884"
+     inkscape:cy="243.86606"
      inkscape:window-width="2560"
-     inkscape:window-height="1403"
+     inkscape:window-height="1370"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="30"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg547" />
   <path
@@ -164,7 +164,7 @@
      transform="translate(-301.81156 -177.97946)"
      fill="#e4e4e4"
      id="path477"
-     style="fill:#e4e4e4" />
+     style="fill:#b3b3b3" />
   <path
      d="M732.64908,251.61253H678.02741a2.31653,2.31653,0,1,1,0-4.63307h54.62167a2.31654,2.31654,0,1,1,0,4.63307Z"
      transform="translate(-301.81156 -177.97946)"
@@ -247,7 +247,7 @@
      transform="translate(-301.81156 -177.97946)"
      fill="#e4e4e4"
      id="path505"
-     style="fill:#e4e4e4" />
+     style="fill:#b3b3b3" />
   <path
      d="M530.05323,537.41023h-128.391a2.72217,2.72217,0,1,1,0-5.44434h128.391a2.72217,2.72217,0,1,1,0,5.44434Z"
      transform="translate(-301.81156 -177.97946)"
@@ -301,19 +301,19 @@
      transform="translate(-301.81156 -177.97946)"
      fill="#e6e6e6"
      id="path523"
-     style="fill:#e6e6e6" />
+     style="fill:#b3b3b3" />
   <path
      d="M606.77462,658.80205a3.13178,3.13178,0,0,0-.01322,6.26355H751.32018a3.13178,3.13178,0,1,0,0-6.26355Z"
      transform="translate(-301.81156 -177.97946)"
      fill="#e6e6e6"
      id="path525"
-     style="fill:#e6e6e6" />
+     style="fill:#b3b3b3" />
   <path
      d="M881.80566,689.52373H560.38651V615.5533H881.80566Zm-316.13555-5.2836h310.852V620.8369H565.67011Z"
      transform="translate(-301.81156 -177.97946)"
      fill="#e5e5e5"
      id="path527"
-     style="fill:#e5e5e5" />
+     style="fill:#b3b3b3" />
   <path
      d="M375.32638,476.77757a13.42111,13.42111,0,1,1,13.42112-13.4211A13.42112,13.42112,0,0,1,375.32638,476.77757Z"
      transform="translate(-301.81156 -177.97946)"
@@ -345,7 +345,7 @@
      transform="translate(-301.81156 -177.97946)"
      fill="#e4e4e4"
      id="path537"
-     style="fill:#e4e4e4" />
+     style="fill:#b3b3b3" />
   <polygon
      points="433.936 136.289 244.223 136.289 433.936 279.289 433.936 136.289"
      fill="#f0f0f0"
