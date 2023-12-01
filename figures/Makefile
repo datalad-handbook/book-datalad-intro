@@ -53,10 +53,6 @@ figures: \
 %.pdf: ../src/handbook/docs/artwork/src/%.svg
 	inkscape --export-dpi=300 --export-filename "$@" "$<"
 
-datalad-cheatsheet.pdf: ../src/handbook/docs/artwork/src/datalad-cheatsheet_p1.svg
-	# removal links from PDF to avoid conversion core dump
-	sed -e 's,xlink:href="http://[^"]\+",,' < "$<" | inkscape -p --export-dpi=300 --export-filename "$@"
-
 clean:
 	-rm *.pdf
 
