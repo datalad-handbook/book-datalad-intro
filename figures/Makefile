@@ -5,9 +5,11 @@ figures: \
   cluster.pdf \
   collaboration_sketch_bw.pdf \
   contributing.pdf \
+  data_origin_bw.pdf \
   datasets_bw.pdf \
   dataset_modules_bw.pdf \
   debug_bw.pdf \
+  decentralized_publishing_bw.pdf \
   design_objectives_bw.pdf \
   forward_bw.pdf \
   funding.pdf \
@@ -43,7 +45,6 @@ figures: \
   virtual_dstree_dl101_bw.pdf \
   warning_bw.pdf \
   yoda_bw.pdf
-	$(MAKE) -C img
 
 # black&white figures are local
 %_bw.pdf: %_bw.svg
@@ -58,6 +59,5 @@ datalad-cheatsheet.pdf: ../src/handbook/docs/artwork/src/datalad-cheatsheet_p1.s
 
 clean:
 	-rm *.pdf
-	$(MAKE) -C img clean
 
 .PHONY: all figures clean
