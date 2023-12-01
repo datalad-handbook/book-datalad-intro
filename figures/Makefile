@@ -1,12 +1,14 @@
 all: figures
 
 figures: \
+  amend_bw.pdf \
   clouds_bw.pdf \
   cluster.pdf \
   collaboration_sketch_bw.pdf \
   contributing.pdf \
   data_origin_bw.pdf \
   datasets_bw.pdf \
+  dataset_ops_bw.pdf \
   dataset_modules_bw.pdf \
   debug_bw.pdf \
   decentralized_publishing_bw.pdf \
@@ -30,6 +32,7 @@ figures: \
   origin.pdf \
   personal_settings_bw.pdf \
   publishing_network_publishparts2_bw.pdf \
+  pull_request_bw.pdf \
   reading_bw.pdf \
   remote_designteam_bw.pdf \
   reproduced_bw.pdf \
