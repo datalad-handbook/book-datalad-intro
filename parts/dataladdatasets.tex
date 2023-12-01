@@ -601,6 +601,9 @@ To experience this, let’s add a final book,
 to the dataset. We provide the command with a URL, a pointer to the dataset the
 file should be saved in (\sphinxcode{\sphinxupquote{.}} denotes “current directory”), and a commit message.
 
+% beauty pagebreak
+\newpage
+
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }download\PYGZhy{}url\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
 \PYG{+w}{  }https://www.tldp.org/LDP/Bash\PYGZhy{}Beginners\PYGZhy{}Guide/Bash\PYGZhy{}Beginners\PYGZhy{}Guide.pdf\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
@@ -1444,11 +1447,9 @@ This was done by supplying the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinx
 At first glance, nesting does not seem particularly spectacular \textendash{}
 after all, any directory on a file system can have other directories inside of it.
 The possibility for nested Datasets, however, is one of many advantages
-DataLad datasets have:
-
-\sphinxAtStartPar
-One aspect of nested datasets is that any DataLad dataset
-(\sphinxstyleemphasis{subdataset} or \sphinxstyleemphasis{superdataset}) keeps their stand\sphinxhyphen{}alone
+DataLad datasets have.
+A key aspect dataset nesting is that each DataLad dataset
+(\sphinxstyleemphasis{subdataset} or \sphinxstyleemphasis{superdataset}) keeps its own stand\sphinxhyphen{}alone
 history. The top\sphinxhyphen{}level DataLad dataset (the \sphinxstyleemphasis{superdataset}) only stores
 \sphinxstyleemphasis{which version} of the subdataset is currently used through an identifier.
 
