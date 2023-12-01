@@ -26,6 +26,7 @@ figures: \
   late.pdf \
   local_wf_bw.pdf \
   origin.pdf \
+  publishing_network_publishparts2_bw.pdf \
   reading_bw.pdf \
   remote_designteam_bw.pdf \
   reproduced_bw.pdf \
@@ -33,6 +34,7 @@ figures: \
   run_bw.pdf \
   security_bw.pdf \
   settings_bw.pdf \
+  startingpoint_bw.pdf \
   student_bw.pdf \
   teacher_bw.pdf \
   typewriter_bw.pdf \
@@ -42,7 +44,6 @@ figures: \
   warning_bw.pdf \
   yoda_bw.pdf
 	$(MAKE) -C img
-	$(MAKE) -C publishing
 
 # black&white figures are local
 %_bw.pdf: %_bw.svg
@@ -58,6 +59,5 @@ datalad-cheatsheet.pdf: ../src/handbook/docs/artwork/src/datalad-cheatsheet_p1.s
 clean:
 	-rm *.pdf
 	$(MAKE) -C img clean
-	$(MAKE) -C publishing clean
 
 .PHONY: all figures clean
