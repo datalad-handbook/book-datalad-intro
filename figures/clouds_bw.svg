@@ -38,14 +38,14 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1280"
-     inkscape:window-height="1371"
+     inkscape:window-height="1369"
      id="namedview213"
      showgrid="false"
-     inkscape:zoom="1.0885567"
-     inkscape:cx="483.20864"
-     inkscape:cy="506.17483"
+     inkscape:zoom="0.76972582"
+     inkscape:cx="402.74081"
+     inkscape:cy="363.11631"
      inkscape:window-x="0"
-     inkscape:window-y="32"
+     inkscape:window-y="30"
      inkscape:window-maximized="0"
      inkscape:current-layer="9b8dff4b-368a-4ab8-bc0b-59c96572f6a5"
      inkscape:showpageshadow="2"
@@ -153,57 +153,6 @@
          id="stop689"
          style="stop-color:#808080" />
     </linearGradient>
-    <linearGradient
-       x1="199.26"
-       y1="162.3"
-       x2="199.26"
-       y2="0"
-       xlink:href="#linearGradient660"
-       id="linearGradient4238" />
-    <linearGradient
-       x1="2855.02"
-       y1="635.26"
-       x2="2855.02"
-       y2="635.22"
-       gradientTransform="matrix(-1, 0, 0, 1, 3466, 0)"
-       xlink:href="#linearGradient660"
-       id="linearGradient874" />
-    <linearGradient
-       x1="2849.78"
-       y1="664.28"
-       x2="2849.78"
-       y2="634.41"
-       gradientTransform="matrix(-1, 0, 0, 1, 3466, 0)"
-       xlink:href="#linearGradient660"
-       id="linearGradient432" />
-    <linearGradient
-       x1="902.47"
-       y1="538.96"
-       x2="902.47"
-       y2="500.17"
-       gradientTransform="translate(-157.49 -95.39) rotate(0.13)"
-       gradientUnits="userSpaceOnUse"
-       id="linearGradient1311">
-      <stop
-         offset="0"
-         stop-opacity="0.12"
-         id="stop695" />
-      <stop
-         offset="0.55"
-         stop-opacity="0.09"
-         id="stop697" />
-      <stop
-         offset="1"
-         stop-opacity="0.02"
-         id="stop699" />
-    </linearGradient>
-    <linearGradient
-       x1="910.63"
-       y1="452.78"
-       x2="910.63"
-       y2="204.14"
-       xlink:href="#linearGradient660"
-       id="linearGradient4623" />
   </defs>
   <title
      id="title22">air support</title>
@@ -246,7 +195,7 @@
      ry="9.96"
      fill="#f2f2f2"
      id="rect30"
-     style="fill:#f2f2f2" />
+     style="fill:#e6e6e6" />
   <rect
      x="337.45"
      y="291.66"
@@ -256,7 +205,7 @@
      ry="9.96"
      fill="#f2f2f2"
      id="rect32"
-     style="fill:#f2f2f2" />
+     style="fill:#e6e6e6" />
   <rect
      x="261.12"
      y="307.72"
@@ -266,7 +215,7 @@
      ry="9.96"
      fill="#f2f2f2"
      id="rect34"
-     style="fill:#f2f2f2" />
+     style="fill:#e6e6e6" />
   <g
      opacity="0.5"
      id="g38">
@@ -775,7 +724,7 @@
      points="765.08 412.86 757.92 407.38 738.97 432.1 728.44 424.02 722.95 431.18 737.06 441.98 737.06 441.98 740.68 444.69 765.08 412.86"
      fill="#69f0ae"
      id="polygon190"
-     style="fill:#acacac" />
+     style="fill:white" />
   <path
      d="M1031.67,328.46c0,68.66-57.36,124.32-118.43,124.32S789.58,397.12,789.58,328.46s62.59-124.32,123.67-124.32S1031.67,259.8,1031.67,328.46Z"
      transform="translate(-158.5 -94.07)"
@@ -805,13 +754,14 @@
   </g>
   <g
      opacity="0.2"
-     id="g204">
+     id="g204"
+     style="opacity:0.4">
     <path
-       d="M801.9,328.46c0-64.51,58-117,115.38-118.46-.83,0-1.66,0-2.49,0-58.21,0-117.88,53.05-117.88,118.5S856.57,447,914.78,447c.83,0,1.66,0,2.49,0C859.87,445.44,801.9,393,801.9,328.46Z"
-       transform="translate(-158.5 -94.07)"
+       d="m 801.9,328.46 c 0,-64.51 58,-117 115.38,-118.46 -0.83,0 -1.66,0 -2.49,0 -58.21,0 -117.88,53.05 -117.88,118.5 0,65.45 59.66,118.5 117.87,118.5 0.83,0 1.66,0 2.49,0 C 859.87,445.44 801.9,393 801.9,328.46 Z"
+       transform="translate(-158.5,-94.07)"
        fill="#fff"
        id="path202"
-       style="fill:#ffffff" />
+       style="fill:white" />
   </g>
   <rect
      x="713.25"
@@ -827,12 +777,12 @@
      fill="#fff"
      opacity="0.2"
      id="path208"
-     style="fill:#ffffff" />
+     style="fill:#ffffff;opacity:0.4" />
   <path
      d="M949.5,217s89.39,103.74,0,221.3l-29.52-.1s81.49-98,3.74-227.85l14.55,2.91Z"
      transform="translate(-158.5 -94.07)"
      fill="#fff"
      opacity="0.2"
      id="path210"
-     style="fill:#ffffff" />
+     style="fill:#ffffff;opacity:0.4" />
 </svg>

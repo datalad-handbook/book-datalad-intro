@@ -28,8 +28,8 @@
      inkscape:zoom="0.96278548"
      inkscape:cx="603.9767"
      inkscape:cy="346.91009"
-     inkscape:window-width="2160"
-     inkscape:window-height="1280"
+     inkscape:window-width="2560"
+     inkscape:window-height="1370"
      inkscape:window-x="0"
      inkscape:window-y="30"
      inkscape:window-maximized="1"
@@ -70,32 +70,6 @@
          stop-opacity="0.1"
          stop-color="gray"
          offset="1" />
-    </linearGradient>
-    <linearGradient
-       gradientUnits="userSpaceOnUse"
-       y2="284.81"
-       x2="320.96"
-       y1="796.01"
-       x1="320.96"
-       id="linearGradient9359">
-      <stop
-         id="stop356"
-         stop-opacity="0.25"
-         stop-color="gray"
-         offset="0"
-         style="stop-color:#808080" />
-      <stop
-         id="stop358"
-         stop-opacity="0.12"
-         stop-color="gray"
-         offset="0.54"
-         style="stop-color:#808080" />
-      <stop
-         id="stop360"
-         stop-opacity="0.1"
-         stop-color="gray"
-         offset="1"
-         style="stop-color:#808080" />
     </linearGradient>
   </defs>
   <title
@@ -365,7 +339,8 @@
   </g>
   <g
      id="g103"
-     opacity="0.1">
+     opacity="0.1"
+     style="opacity:0.3">
     <path
        id="path101"
        fill="#ffa200"
@@ -375,7 +350,8 @@
   </g>
   <g
      id="g107"
-     opacity="0.1">
+     opacity="0.1"
+     style="opacity:0.3">
     <path
        id="path105"
        fill="#ffa200"

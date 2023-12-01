@@ -43,8 +43,8 @@
      id="namedview67"
      showgrid="false"
      inkscape:zoom="0.83023483"
-     inkscape:cx="486.00707"
-     inkscape:cy="580.55863"
+     inkscape:cx="478.17796"
+     inkscape:cy="580.55864"
      inkscape:window-x="0"
      inkscape:window-y="30"
      inkscape:window-maximized="1"
@@ -81,7 +81,7 @@
      transform="translate(-101.69436 -47.99999)"
      fill="#ffa200"
      id="path10"
-     style="fill:#7f7f7f" />
+     style="fill:#b3b3b3" />
   <path
      d="M998.76387,822.51827l14.21541-19.8601-14.2512,22.04212-.03576,2.27862c-.99444-.02147-1.98173-.06795-2.95469-.13591l1.531-29.28221-.01072-.22892.025-.03936.14665-2.76868L983.14265,772.428l14.32987,20.02108.03578.58665,1.1554-22.12442L986.43357,748.0787l12.38036,18.9515,1.20548-45.8728L1000.023,721v.15381l-.20031,36.17169,12.17648-14.34063-12.22657,17.4563-.32192,19.81,11.37161-19.01232-11.41812,21.92765-.17885,11.01392L1015.7265,767.717l-16.56558,30.30525Z"
      transform="translate(-101.69436 -47.99999)"
@@ -212,42 +212,42 @@
      fill="#ffa200"
      opacity="0.3"
      id="path52"
-     style="fill:#7f7f7f" />
+     style="fill:#b3b3b3" />
   <circle
      cx="604.16474"
      cy="432.81963"
      r="24.63788"
      fill="#ffa200"
      id="circle54"
-     style="fill:#a3a3a3;fill-opacity:1" />
+     style="fill:#b3b3b3;fill-opacity:1" />
   <path
      d="M796.34787,538.11245l-289.1327,48.097a5.94707,5.94707,0,1,1-1.95176-11.73292l289.13269-48.097a5.94708,5.94708,0,0,1,1.95177,11.73292Z"
      transform="translate(-101.69436 -47.99999)"
      fill="#ffa200"
      opacity="0.3"
      id="path56"
-     style="fill:#7f7f7f" />
+     style="fill:#b3b3b3" />
   <circle
      cx="484.16118"
      cy="519.09892"
      r="24.63788"
      fill="#ffa200"
      id="circle58"
-     style="fill:#bebebe;fill-opacity:1" />
+     style="fill:#f9f9f9;fill-opacity:1" />
   <path
      d="M807.08257,602.64352l-289.1327,48.097a5.94707,5.94707,0,1,1-1.95176-11.73292l289.13269-48.097a5.94708,5.94708,0,1,1,1.95177,11.73292Z"
      transform="translate(-101.69436 -47.99999)"
      fill="#ffa200"
      opacity="0.3"
      id="path60"
-     style="fill:#7f7f7f" />
+     style="fill:#b3b3b3" />
   <circle
      cx="584.56892"
      cy="568.71294"
      r="24.63788"
      fill="#ffa200"
      id="circle62"
-     style="fill:#999;fill-opacity:1" />
+     style="fill:#b3b3b3;fill-opacity:1" />
   <circle
      cx="275.36982"
      cy="160.20126"
