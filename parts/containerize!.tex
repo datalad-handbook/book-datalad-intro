@@ -308,9 +308,10 @@ It can be “turtles all the way down”.
 
 \sphinxstepscope
 
+\index{containerized data analysis@\spxentry{containerized data analysis}!with DataLad@\spxentry{with DataLad}}\index{with DataLad@\spxentry{with DataLad}!containerized data analysis@\spxentry{containerized data analysis}}\ignorespaces 
 
 \section{Computational reproducibility with software containers}
-\label{\detokenize{basics/101-133-containersrun:computational-reproducibility-with-software-containers}}\label{\detokenize{basics/101-133-containersrun:containersrun}}\label{\detokenize{basics/101-133-containersrun::doc}}
+\label{\detokenize{basics/101-133-containersrun:computational-reproducibility-with-software-containers}}\label{\detokenize{basics/101-133-containersrun:containersrun}}\label{\detokenize{basics/101-133-containersrun:index-0}}\label{\detokenize{basics/101-133-containersrun::doc}}
 \sphinxAtStartPar
 Just after submitting your midterm data analysis project, you get together
 with your friends. “I’m curious: So what kind of analyses did y’all carry out?”
@@ -371,7 +372,7 @@ As with DataLad and other Python packages, you might want to do the installation
 \index{recipe@\spxentry{recipe}!software container concept@\spxentry{software container concept}}\index{software container concept@\spxentry{software container concept}!recipe@\spxentry{recipe}}\index{image@\spxentry{image}!software container concept@\spxentry{software container concept}}\index{software container concept@\spxentry{software container concept}!image@\spxentry{image}}\index{container@\spxentry{container}!software container concept@\spxentry{software container concept}}\index{software container concept@\spxentry{software container concept}!container@\spxentry{container}}\ignorespaces 
 
 \subsection{Containers}
-\label{\detokenize{basics/101-133-containersrun:containers}}\label{\detokenize{basics/101-133-containersrun:index-0}}
+\label{\detokenize{basics/101-133-containersrun:containers}}\label{\detokenize{basics/101-133-containersrun:index-1}}
 \sphinxAtStartPar
 To put it simple, computational containers are cut\sphinxhyphen{}down virtual machines that
 allow you to package all software libraries and their dependencies (all in the
@@ -477,7 +478,7 @@ If it can’t find the docker command, something went wrong during installation.
 \index{containers\sphinxhyphen{}add@\spxentry{containers\sphinxhyphen{}add}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!containers\sphinxhyphen{}add@\spxentry{containers\sphinxhyphen{}add}}\index{containers\sphinxhyphen{}run@\spxentry{containers\sphinxhyphen{}run}!DataLad command@\spxentry{DataLad command}}\index{DataLad command@\spxentry{DataLad command}!containers\sphinxhyphen{}run@\spxentry{containers\sphinxhyphen{}run}}\ignorespaces 
 
 \subsection{Using \sphinxstyleliteralintitle{\sphinxupquote{datalad containers}}}
-\label{\detokenize{basics/101-133-containersrun:using-datalad-containers}}\label{\detokenize{basics/101-133-containersrun:index-2}}
+\label{\detokenize{basics/101-133-containersrun:using-datalad-containers}}\label{\detokenize{basics/101-133-containersrun:index-3}}
 \sphinxAtStartPar
 One core feature of the \sphinxcode{\sphinxupquote{datalad containers}} extension is that it registers
 computational containers with a dataset. This is done with the
@@ -594,7 +595,7 @@ Thus, depending on the system and the location of the dataset on this system, a 
 To ensure that the dataset is correctly bind\sphinxhyphen{}mounted on all systems, let’s add a call\sphinxhyphen{}format specification with a bind\sphinxhyphen{}mount to the current working directory.
 
 \index{configuration.item@\spxentry{configuration.item}!datalad.containers.\textless{}name\textgreater{}.cmdexec@\spxentry{datalad.containers.\textless{}name\textgreater{}.cmdexec}}\ignorespaces 
-\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-133-containersrun:index-6}}}
+\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-133-containersrun:index-7}}}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZdl{} }git\PYG{+w}{ }config\PYG{+w}{ }\PYGZhy{}f\PYG{+w}{ }.datalad/config\PYG{+w}{ }datalad.containers.midterm\PYGZhy{}software.cmdexec\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}singularity exec \PYGZhy{}B \PYGZob{}\PYGZob{}pwd\PYGZcb{}\PYGZcb{} \PYGZob{}img\PYGZcb{} \PYGZob{}cmd\PYGZcb{}\PYGZsq{}}
 \PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }save\PYG{+w}{ }\PYGZhy{}m\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}Modify the container call format to bind\PYGZhy{}mount the working directory\PYGZdq{}}
