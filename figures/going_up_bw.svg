@@ -38,14 +38,14 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1280"
-     inkscape:window-height="1371"
+     inkscape:window-height="1369"
      id="namedview185"
      showgrid="false"
      inkscape:zoom="0.78"
-     inkscape:cx="519.23077"
-     inkscape:cy="392.30769"
+     inkscape:cx="510.25641"
+     inkscape:cy="392.94872"
      inkscape:window-x="0"
-     inkscape:window-y="32"
+     inkscape:window-y="30"
      inkscape:window-maximized="0"
      inkscape:current-layer="f6ed740f-4c53-497f-bfef-ebd7a0ab3453"
      inkscape:showpageshadow="2"
@@ -110,14 +110,6 @@
          id="stop601"
          style="stop-color:#808080" />
     </linearGradient>
-    <linearGradient
-       x1="517.81"
-       y1="472.14"
-       x2="647.31"
-       y2="472.14"
-       gradientTransform="translate(-58.47 81.57) rotate(-5.9)"
-       xlink:href="#linearGradient9639"
-       id="linearGradient2735" />
   </defs>
   <title
      id="title12">going up</title>
@@ -500,13 +492,13 @@
      transform="translate(-30.47 -58.05)"
      fill="#a0616a"
      id="path142"
-     style="fill:#808080" />
+     style="fill:#b3b3b3" />
   <path
      d="M521.29,399.35a45.62,45.62,0,0,0-4.44-16.83c-1-2-2.12-4-2.24-6.29a15.89,15.89,0,0,1,1.39-6.05,155.94,155.94,0,0,0,5.35-20.91l2.76-13.3a20.23,20.23,0,0,0,3.25-3.78,18.34,18.34,0,0,0,3.27-9.37,12.64,12.64,0,0,0-3.29-9.22,5.49,5.49,0,0,0-4.11-1.94,5,5,0,0,0-3.44,2,16.12,16.12,0,0,0-2.55,5.6c-1,3.3-2,6.73-1.56,10.15.4,2.83,1.8,5.9.37,8.38-4.69,8.15-7.92,17.29-11.4,26a43.78,43.78,0,0,0-2.17,6.46,34,34,0,0,0-.38,10.8,141.76,141.76,0,0,0,3.9,20c1,4.12,2.25,8.6,5.71,11.07C514.56,407.56,517.44,403.09,521.29,399.35Z"
      transform="translate(-30.47 -58.05)"
      fill="#a0616a"
      id="path144"
-     style="fill:#808080" />
+     style="fill:#b3b3b3" />
   <circle
      cx="510.33"
      cy="325.28"
