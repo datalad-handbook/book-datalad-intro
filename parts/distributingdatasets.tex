@@ -653,8 +653,7 @@ Create a sibling on a local or SSH accessible Unix machine with
 
 \sphinxAtStartPar
 In order to publish dataset content, DataLad needs to know to which sibling
-content shall be pushed. This can be specified with the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}to}} option directly
-from the command line:
+content shall be pushed. This can be specified with the \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}to}} command line option:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZdl{} }datalad\PYG{+w}{ }push\PYG{+w}{ }\PYGZhy{}\PYGZhy{}to\PYG{+w}{ }\PYGZlt{}sibling\PYGZgt{}
@@ -739,9 +738,10 @@ in the sibling, the changes in the sibling will be overwritten.
 \sphinxAtStartPar
 \sphinxcode{\sphinxupquote{datalad push}} can publish available subdatasets recursively if the
 \sphinxcode{\sphinxupquote{\sphinxhyphen{}r/\sphinxhyphen{}\sphinxhyphen{}recursive}} flag is specified. Note that this requires that all subdatasets
-that should be published have sibling names identical to the sibling specified in
+to be published have sibling names identical to the sibling specified in
 the top\sphinxhyphen{}level \sphinxcode{\sphinxupquote{datalad push}} command, or that appropriate default publication
-targets are configured throughout the dataset hierarchy.
+targets are configured for all subdatasets.
+\enlargethispage{.5\baselineskip}
 
 \index{configure which branches to push@\spxentry{configure which branches to push}!with Git@\spxentry{with Git}}\index{with Git@\spxentry{with Git}!configure which branches to push@\spxentry{configure which branches to push}}\ignorespaces \begin{findoutmore}[label={fom-push-branch}, before title={\thetcbcounter\ }, float, floatplacement=tb, check odd page=true]{Push more than the current branch}
 \label{\detokenize{basics/101-141-push:fom-push-branch}}
@@ -786,7 +786,7 @@ automatically as well. This configuration was achieved by specifying these branc
 \end{findoutmore}
 
 
-\subsection{Pushing errors}
+\subsection{Push errors}
 \label{\detokenize{basics/101-141-push:pushing-errors}}
 \sphinxAtStartPar
 If you are unfamiliar with Git, please be aware that cloning a dataset to a different place and subsequently pushing to it can lead to Git error messages if changes are pushed to a currently checked out {\hyperref[\detokenize{glossary:term-branch}]{\sphinxtermref{\DUrole{xref,std,std-term}{branch}}}} of the sibling (in technical Git terms: When pushing to a checked\sphinxhyphen{}out branch of a non\sphinxhyphen{}bare repository remote).
