@@ -1,4 +1,8 @@
-# Project DataLad HandBOOK
+# Sources for the book 
+
+For more information see
+https://handbook.datalad.org/perma/book-intro-v1.html
+
 
 ## Dataset structure
 
@@ -11,7 +15,7 @@
 
 All there is to do is ``make UPGRAYEDD``.
 
-This requires an installed submodule ``src/handbook`` that is set up in a way that a ``git pull`` obtains the latest state of the ``print`` branch.
+This requires an installed submodule ``src/handbook`` that is set up in a way that a ``git pull`` obtains the latest state of the ``book-intro`` branch.
 
 If the local clone is outdated, i.e., changes to upstream and
 upstream-processed branches where pushed by others in the meantime, a `make
