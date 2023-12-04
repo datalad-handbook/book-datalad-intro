@@ -3,9 +3,7 @@ all: figures
 figures: \
   amend_bw.pdf \
   clouds_bw.pdf \
-  cluster.pdf \
   collaboration_sketch_bw.pdf \
-  contributing.pdf \
   data_origin_bw.pdf \
   datasets_bw.pdf \
   dataset_ops_bw.pdf \
@@ -14,22 +12,15 @@ figures: \
   decentralized_publishing_bw.pdf \
   design_objectives_bw.pdf \
   forward_bw.pdf \
-  funding.pdf \
-  further.pdf \
-  gists.pdf \
   gitidentity_bw.pdf \
   git_branch_HEAD_bw.pdf \
   git_vs_gitannex_bw.pdf \
-  gobig.pdf \
   going_up_bw.pdf \
   help_bw.pdf \
-  hero.pdf \
   install_bw.pdf \
   interior_design_bw.pdf \
   keeptrack_bw.pdf \
-  late.pdf \
   local_wf_bw.pdf \
-  origin.pdf \
   personal_settings_bw.pdf \
   publishing_network_publishparts2_bw.pdf \
   pull_request_bw.pdf \
