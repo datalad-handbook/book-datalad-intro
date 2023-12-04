@@ -118,9 +118,10 @@ The next lecture, in any way, will guide us deeper into git\sphinxhyphen{}annex,
 
 \sphinxstepscope
 
+\index{data file handling@\spxentry{data file handling}!with git\sphinxhyphen{}annex@\spxentry{with git\sphinxhyphen{}annex}}\index{with git\sphinxhyphen{}annex@\spxentry{with git\sphinxhyphen{}annex}!data file handling@\spxentry{data file handling}}\ignorespaces 
 
 \section{Data integrity}
-\label{\detokenize{basics/101-115-symlinks:data-integrity}}\label{\detokenize{basics/101-115-symlinks:symlink}}\label{\detokenize{basics/101-115-symlinks:id1}}\label{\detokenize{basics/101-115-symlinks::doc}}
+\label{\detokenize{basics/101-115-symlinks:data-integrity}}\label{\detokenize{basics/101-115-symlinks:symlink}}\label{\detokenize{basics/101-115-symlinks:id1}}\label{\detokenize{basics/101-115-symlinks:index-0}}\label{\detokenize{basics/101-115-symlinks::doc}}
 \sphinxAtStartPar
 So far, we mastered quite a number of challenges:
 Creating and populating a dataset with large and small files, modifying content and saving the changes to history, installing datasets, even as subdatasets within datasets, recording the impact of commands on a dataset with the \sphinxcode{\sphinxupquote{datalad run}} and \sphinxcode{\sphinxupquote{datalad rerun}} commands, and capturing plenty of {\hyperref[\detokenize{glossary:term-provenance}]{\sphinxtermref{\DUrole{xref,std,std-term}{provenance}}}} on the way.
@@ -405,7 +406,7 @@ Let’s take a closer look at the structure of the symlink.
 The key from the hash function is the last part of the name of the file the symlink links to (in which the actual data content is stored).
 
 \index{compute checksum@\spxentry{compute checksum}!in a terminal@\spxentry{in a terminal}}\index{in a terminal@\spxentry{in a terminal}!compute checksum@\spxentry{compute checksum}}\ignorespaces 
-\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-115-symlinks:index-4}}}
+\def\sphinxLiteralBlockLabel{\label{\detokenize{basics/101-115-symlinks:index-5}}}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZdl{} }\PYG{c+c1}{\PYGZsh{} compare it to the checksum (here of type md5sum) of the PDF file and the subdirectory name}
 \PYG{g+gp}{\PYGZdl{} }md5sum\PYG{+w}{ }TLCL.pdf
@@ -451,7 +452,7 @@ Even more mesmerizing things about git\sphinxhyphen{}annex can be found in its \
 \index{broken symlink@\spxentry{broken symlink}|spxpagem}\index{symlink@\spxentry{symlink}!broken@\spxentry{broken}|spxpagem}\ignorespaces 
 
 \subsection{Broken symlinks}
-\label{\detokenize{basics/101-115-symlinks:broken-symlinks}}\label{\detokenize{basics/101-115-symlinks:wslfiles}}\label{\detokenize{basics/101-115-symlinks:index-5}}
+\label{\detokenize{basics/101-115-symlinks:broken-symlinks}}\label{\detokenize{basics/101-115-symlinks:wslfiles}}\label{\detokenize{basics/101-115-symlinks:index-6}}
 \sphinxAtStartPar
 Whenever a symlink points to a non\sphinxhyphen{}existent target, this symlink is called
 \sphinxstyleemphasis{broken} or \sphinxstyleemphasis{dangling}, and opening the symlink would not work as it does not resolve. The
